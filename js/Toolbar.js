@@ -97,19 +97,21 @@ Toolbar.prototype.init = function()
         
         var eltss = this.addItems(['', 'outline']);
         eltss[1].setAttribute('title', 'Outline');
-        eltss[1].innerHTML = '<div class="fa fa-map-o" ></div>';
+        eltss[1].innerHTML = '<div class="fa fa-map" ></div>';
        
         
-        var elts = this.addItems(['zoomIn', 'zoomOut']);
-        elts[0].setAttribute('title', mxResources.get('zoomIn'));// + ' (' + this.editorUi.actions.get('zoomIn').shortcut + ')');
-        elts[0].innerHTML = '<div class="fa fa-search-plus" style="color:#000"></div>';//'Save';//('title', 'Save');
-        elts[1].setAttribute('title', mxResources.get('zoomOut'));//+ ' (' + this.editorUi.actions.get('zoomOut').shortcut + ')');
-        elts[1].innerHTML = '<div class="fa fa-search-minus" style="color:#000"></div>';//'Save';//('title', 'Save');
+        var elts = this.addItems(['zoomOut','zoomIn']);
+        
+        elts[0].setAttribute('title', mxResources.get('zoomOut'));//+ ' (' + this.editorUi.actions.get('zoomOut').shortcut + ')');
+        elts[0].innerHTML = '<div class="fa fa-search-minus" style="color:#000"></div>';//'Save';//('title', 'Save');
+        
+        elts[1].setAttribute('title', mxResources.get('zoomIn'));// + ' (' + this.editorUi.actions.get('zoomIn').shortcut + ')');
+        elts[1].innerHTML = '<div class="fa fa-search-plus" style="color:#000"></div>';//'Save';//('title', 'Save');
         
         var elts = this.addItems(['', 'resetView']);
         elts[1].setAttribute('title', 'ResetView');
         elts[1].setAttribute('type', 'button');
-        elts[1].innerHTML= '<div class="fa fa-step-backward" ></div>';    
+        elts[1].innerHTML= '<div class="fa fa-arrows-alt" ></div>';    
     
     
         if(mxCurrentfloorplanstatus !='viewer'){
@@ -175,7 +177,7 @@ Toolbar.prototype.init = function()
              
              var elts = this.addItems(['-', 'save']);
              elts[1].setAttribute('title', 'Save');
-             elts[1].innerHTML= '<div class="fa fa-floppy-o" style="color:#000"></div>';//'Save';//('title', 'Save');
+             elts[1].innerHTML= '<div class="fa fa-floppy-o" style="color:#016cf7"></div>';//'Save';//('title', 'Save');
              
              
              
@@ -193,7 +195,7 @@ Toolbar.prototype.init = function()
              elts[1].setAttribute('type', 'button');
             
             
-             elts[1].innerHTML= '<div class="fa fa-arrows-alt" ></div>';
+             elts[1].innerHTML= '<div class="fa fa-expand" ></div>';
              
              
              

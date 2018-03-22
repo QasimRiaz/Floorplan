@@ -256,11 +256,12 @@ function getExhibitordata() {
 
 
 function getAllusers_data(){
-    
+         global $wpdb;
         $args['role__not_in']= 'Administrator';
         $user_query = new WP_User_Query( $args );
         $authors = $user_query->get_results();
         $index = 1;
+        $site_prefix = $wpdb->get_blog_prefix();
         sort($authors);
         
         foreach ($authors as $aid) {
@@ -273,8 +274,8 @@ function getAllusers_data(){
             if (!in_array("administrator", $user_data->roles)) {
                 
                 
-                $allUsersData[$index]['companyname'] = $all_meta_for_user['company_name'][0];
-                $allUsersData[$index]['companylogourl'] = $all_meta_for_user['user_profile_url'][0];
+                $allUsersData[$index]['companyname'] = $all_meta_for_user[$site_prefix.'company_name'][0];
+                $allUsersData[$index]['companylogourl'] = $all_meta_for_user[$site_prefix.'user_profile_url'][0];
                 $allUsersData[$index]['exhibitorsid'] = $aid->ID;
                 
                 if(isset($all_meta_for_user['first_name'][0])){
@@ -405,11 +406,11 @@ function floorplan_shortcode( $atts, $content = null ) {
            
             $boothTypes ="[";
             
-            $boothTypes.='{"width":100,"height":100,"style":"DefaultStyle1;whiteSpace=wrap;shape=rectangle;html=1;fillColor=none;fontSize=18;uno=none;occ=none;gradientColor=#ffffff;glass=0;comic=0;shadow=0;"},';
+            $boothTypes.='{"width":100,"height":100,"style":"DefaultStyle1;whiteSpace=wrap;shape=rectangle;html=1;fillColor=none;fontSize=18;uno=none;occ=none;glass=0;comic=0;shadow=0;"},';
             
-            $boothTypes.='{"width":200,"height":200,"style":"DefaultStyle2;whiteSpace=wrap;shape=rectangle;html=1;fillColor=none;fontSize=18;uno=none;occ=none;gradientColor=#ffffff;glass=0;comic=0;shadow=0;"},';
+            $boothTypes.='{"width":200,"height":200,"style":"DefaultStyle2;whiteSpace=wrap;shape=rectangle;html=1;fillColor=none;fontSize=18;uno=none;occ=none;glass=0;comic=0;shadow=0;"},';
             
-            $boothTypes.='{"width":300,"height":200,"style":"DefaultStyle3;whiteSpace=wrap;shape=rectangle;html=1;fillColor=none;fontSize=18;uno=none;occ=none;gradientColor=#ffffff;glass=0;comic=0;shadow=0;"}';
+            $boothTypes.='{"width":300,"height":200,"style":"DefaultStyle3;whiteSpace=wrap;shape=rectangle;html=1;fillColor=none;fontSize=18;uno=none;occ=none;glass=0;comic=0;shadow=0;"}';
             
             $boothTypes.=']';
             

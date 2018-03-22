@@ -1066,7 +1066,7 @@ BaseFormatPanel.prototype.createColorOption = function(label, getColorFn, setCol
 	}));
 	
 	btn.style.position = 'absolute';
-	btn.style.marginTop = '-4px';
+	
 	btn.style.right = (mxClient.IS_QUIRKS) ? '0px' : '20px';
 	btn.style.height = '22px';
 	btn.className = 'geColorBtn';
@@ -6016,12 +6016,10 @@ DiagramFormatPanel.prototype.addView = function(div)
 		
 			
                        
-                        btn.style.float = 'right';
-			btn.className = 'geColorBtn';
-			btn.style.marginTop = '-6px';
+                        btn.style.marginLeft = '43%';
 			btn.className = 'myCustomeButton';
                         bg.style.width='194px';
-                        bg.style.height='22px';
+                        bg.style.height='30px';
                         
 			bg.appendChild(btn);
 		}

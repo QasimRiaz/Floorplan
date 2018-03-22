@@ -824,7 +824,7 @@ html td.mxWindowTitle {
 
 .customebgcolor{
     
-    background: #ccc !important;
+    background: #d8e8ff !important;
     color: #000 !important;
     font-weight: bolder !important;
     
@@ -832,7 +832,7 @@ html td.mxWindowTitle {
 }
 .geTitle{
     
-    background: #ccc !important;
+    background: #d8e8ff !important;
     color: #000 !important;
     font-weight: bolder !important;
     
@@ -887,4 +887,3 @@ html td.mxWindowTitle {
     float: right !important;
     margin-top: 36px !important;
 }
-    
