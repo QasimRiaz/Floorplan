@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -380,8 +379,20 @@ function getAllusers_data(){
 function floorplan_shortcode( $atts, $content = null ) {
     
     
-    
+    $floorplanstatus = false;
     if (current_user_can('administrator') || current_user_can('contentmanager')) {
+		$floorplanstatus = true;
+	}else if(is_user_logged_in()){
+		if($atts['status'] == 'viewer'){
+			
+			$floorplanstatus = true;
+			
+			
+		}
+		
+	}
+	if($floorplanstatus == true){
+		
 	extract(shortcode_atts(array("id" => '',"status" =>''), $atts));
         $getAllusers_data = json_encode(getAllusers_data());
         
