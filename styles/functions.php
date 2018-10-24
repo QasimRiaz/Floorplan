@@ -1,11 +1,13 @@
-        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-1.12.4.js"></script>
+ <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-1.12.4.js"></script>
 	<script type="text/javascript">
             
-            pluginBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>';
+            
+              
+                
+		pluginBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>';
 		mxBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>src';
 		mxPostID = '<?php echo $id; ?>';
 		mxBoothTypes = '<?php echo $boothTypes; ?>';
-                mxLegendLabelsTypes = '<?php echo $FloorplanLegends; ?>';
 		mxFloorBackground = '<?php echo $FloorBackground; ?>';
 		mxFloorPlanXml = '<?php echo $FloorplanXml; ?>';
 		mxCurrentSiteLogo = '<?php echo $current_site_logo; ?>';
@@ -14,17 +16,15 @@
                 mxgetAllusersData = '<?php echo $getAllusers_data; ?>';
                 mxgetjosnusersData = JSON.parse(mxgetAllusersData);
                 
+                
+                
                 baseCurrentSiteURl ='<?php echo  get_site_url(); ?>';
                 mxCurrentfloorplanstatus ='<?php echo  $current_floor_plan_status; ?>';
                 // console.log(mxgetAllusersData)
 		var ArrayOfObjects = [];
-                var LegendsOfObjects = [];
 		var json = {};
 		//console.log(mxFloorPlanXml);
 		var jsonBooth = JSON.parse(mxBoothTypes);
-                var jsonLegends = JSON.parse(mxLegendLabelsTypes);
-                var legendlabelID = "";
-             
 		//console.log(jsonBooth);
 		jQuery.each(jsonBooth, function(index, value) {
 			json = {};
@@ -34,28 +34,24 @@
 			json.style = jsonBooth[index].style;
 			ArrayOfObjects.push(json);
 		});
-                jQuery.each(jsonLegends, function(index1, value1) {
-			json1 = {};
-			json1.ID = jsonLegends[index1].ID;
-			json1.colorstatus = jsonLegends[index1].colorstatus;
-			json1.name = jsonLegends[index1].name,
-			json1.colorcode = jsonLegends[index1].colorcode;
-			LegendsOfObjects.push(json1);
-		});
                 
                
 	</script>
 
         <title><?php echo $current_site_name; ?> - Floor Plan Editor </title>
-        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/jquery-confirm.css?v=1.4">
-      
+        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/jquery-confirm.css?v=1.1">
+        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/select2-bootstrap.css?v=1.1">
+        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/select2.min.css?v=1.1">
         <?php if($current_floor_plan_status == 'viewer' ){?>
-        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/main.css">
+         
+         <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/main.css">
         <?php } ?>
-        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/grapheditor.css?v=1.40">
-        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/fontawesome-all.css?v=1.03">
-        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/sweetalert.css">
-        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mobile-detect.min.js?v=2.19"></script>
+        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/grapheditor.css?v=1.20">
+<link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/fontawesome-all.css?v=1.03">
+
+       
+ <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/sweetalert.css">
+ 
 
  
  
@@ -65,7 +61,7 @@
 		// - touch=1: Enables a touch-style user interface.
 		// - storage=local: Enables HTML5 local storage.
 		// - chrome=0: Chromeless mode.
-                 var md = new MobileDetect(window.navigator.userAgent);
+                
                 function iframeLoaded(){
     
     
@@ -100,26 +96,23 @@
 		// Default resources are included in grapheditor resources
 		mxLoadResources = false;
 	</script>
-        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-confirm.js?v=2.20"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Init.js?v=2.21"></script>
+        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-confirm.js?v=2.19"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Init.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>jscolor/jscolor.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>sanitizer/sanitizer.min.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=2.52"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=2.95"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.27"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=2.66"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.51"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=2.19"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=2.37"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.24"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=2.36"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.32"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=2.91"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=2.27"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=4.34"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=2.62"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=3.17"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=2.66"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=2.31"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=2.19"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.19"></script>
-         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery.printPage.js?v=2.19"></script>
-         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
-         <script type="text/javascript" src=" https://cdn.tinymce.com/4/tinymce.min.js"></script>
-      
+        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/select2.full.js?v=2.19"></script>
          <?php if($current_floor_plan_status == 'viewer' ){?>
         
          <?}?>
@@ -128,11 +121,6 @@
         
 	<script type="text/javascript">
 		// Extends EditorUi to update I/O action states based on availability of backend
-                
-             
-                jQuery(document).ready(function() {
-                    jQuery(".geSprite-print").printPage();
-                });
                 
 		(function()
 		{

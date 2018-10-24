@@ -68,6 +68,7 @@ Actions.prototype.init = function()
 			window.openFile = null;
 		});
 	}).isEnabled = isGraphEnabled;
+       
 	this.addAction('save', function() { ui.saveFile(false); }, null, null, 'Ctrl+S').isEnabled = isGraphEnabled;
 	this.addAction('saveAs...', function() { ui.saveFile(true); }, null, null, 'Ctrl+Shift+S').isEnabled = isGraphEnabled;
 	this.addAction('export...', function() { ui.showDialog(new ExportDialog(ui).container, 300, 230, true, true); });
@@ -79,7 +80,16 @@ Actions.prototype.init = function()
 	});
 	this.addAction('pageSetup...', function() { ui.showDialog(new PageSetupDialog(ui).container, 320, 220, true, true); }).isEnabled = isGraphEnabled;
 	this.addAction('print...', function() { ui.showDialog(new PrintDialog(ui).container, 300, 180, true, true); }, null, 'sprite-print', 'Ctrl+P');
-	this.addAction('preview', function() { mxUtils.show(graph, null, 10, 10); });
+	this.addAction('preview', function() { 
+            
+                var graph = editor.graph;
+                PrintDialog.prototype.create(graph);
+        
+        });
+                
+            
+            
+          
 	
 	// Edit actions
     if(mxCurrentfloorplanstatus !='viewer'){
@@ -167,6 +177,13 @@ Actions.prototype.init = function()
 		deleteCells(evt != null && mxEvent.isShiftDown(evt));
 	}, null, null, 'Delete');
         
+        this.addAction('print', function(evt)
+	{
+            
+           ui.showDialog(new PrintDialog(ui).container, 300, 180, true, true);
+            
+        });
+        
         this.addAction('embed', function(evt)
 	{
             
@@ -182,15 +199,53 @@ Actions.prototype.init = function()
             
             
         });
-        
+        this.addAction('publiclink', function(evt)
+	{
+            
+            swal({
+                title: "Public Link",
+                text: '',
+                type: 'input',
+                html:true,
+                inputValue: baseCurrentSiteURl+'/floor-plan-viewer/',
+                confirmButtonClass: "btn-success",
+                confirmButtonText: "Close"
+            });
+            
+            
+            
+        });
+        this.addAction('collapseexpand', function(evt)
+	{
+           console.log(ui.hsplitPosition);
+            if(ui.hsplitPosition == 0){
+                
+                ui.hsplitPosition = 208;
+               
+                jQuery( '.fa-angle-double-right' ).replaceWith( '<div class="fas fa-angle-double-left" ></div>');
+                
+            }else{
+                
+                ui.hsplitPosition = 0;
+                jQuery( '.fa-angle-double-left' ).replaceWith('<div class="fas fa-angle-double-right" ></div>' );
+            }
+          
+            ui.refresh();
+            
+        });
         this.addAction('save', function(evt)
 	{
 		
-               mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
-               
+                       mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
+                       console.log(mxFloorPlanXml)
                        var currentbgImage = ui.editor.graph.getBackgroundImage();
-                        
-                       mxFloorBackground = currentbgImage.src;
+                       console.log(currentbgImage);
+                       if(currentbgImage == null ){
+                            mxFloorBackground = "";
+                        }else{
+                            
+                            mxFloorBackground = currentbgImage.src;
+                        }
                        console.log(mxFloorBackground);
                        var data = new FormData();
                        data.append('post_id', mxPostID);
@@ -206,7 +261,8 @@ Actions.prototype.init = function()
                                 processData: false,
                                 type: 'POST',
                                 success: function(data) {
-                             
+                                    
+                                    ui.updateGraphStatus();
                                     swal({
                                        title: "Success",
                                        text: "Floor plan saved successfully.",
@@ -615,6 +671,11 @@ Actions.prototype.init = function()
                 }else{
                 
                  var topmargine = ch/20;
+                 if(cw <= 360){
+                           
+                           var scale = Math.floor(20 * Math.min(330 / fmt.width / ps, ch / fmt.height / ps)) / 20;
+                           
+                        }
                 }
                 
 		graph.zoomTo(scale);
@@ -680,14 +741,20 @@ Actions.prototype.init = function()
 		var ps = graph.pageScale;
 		var cw = graph.container.clientWidth - 10;
 		var ch = graph.container.clientHeight - 10;
+                var scale = Math.floor(20 * Math.min(cw / fmt.width / ps, ch / fmt.height / ps)) / 20;
                  if(mxCurrentfloorplanstatus !='viewer'){
                         var topmargine = ch/127;
                 }else{
                 
                   var topmargine = ch/20;
+                  if(cw <= 360){
+                           
+                           var scale = Math.floor(20 * Math.min(330 / fmt.width / ps, ch / fmt.height / ps)) / 20;
+                           
+                        }
                 }
                 
-		var scale = Math.floor(20 * Math.min(cw / fmt.width / ps, ch / fmt.height / ps)) / 20;
+		
 		graph.zoomTo(scale);
 		
 		if (mxUtils.hasScrollbars(graph.container))
@@ -703,7 +770,7 @@ Actions.prototype.init = function()
 		{
 			this.get('pageView').funct();
 		}
-		
+		console.log('10000');
 		var fmt = graph.pageFormat;
 		var ps = graph.pageScale;
 		var cw = graph.container.clientWidth - 10;

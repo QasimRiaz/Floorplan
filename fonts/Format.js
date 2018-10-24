@@ -4469,7 +4469,7 @@ var stylePanel = this.createPanel();
                             var labelvalue = "";
                             var boothdetailvalue = "";
                             var assigenduserID = "";
-                            var companydescripiton = "";
+                          
                             
                             if (mxUtils.isNode(cellvalue.value))
                                 {  
@@ -4477,7 +4477,6 @@ var stylePanel = this.createPanel();
                                      assigenduserID = cellvalue.getAttribute('boothOwner', '');
                                      labelvalue = cellvalue.getAttribute('mylabel', '');
                                      boothdetailvalue = cellvalue.getAttribute('boothDetail', '');
-                                     companydescripiton = cellvalue.getAttribute('companydescripiton', '');
                                     
                                 }
                                 
@@ -4490,7 +4489,7 @@ var stylePanel = this.createPanel();
                             
                             node.setAttribute('legendlabels', seletedlegendlabelsvalue);
                             node.setAttribute('legendlabelscolor', selectedlegendcolorcode);
-                            node.setAttribute('companydescripiton', companydescripiton);
+                            
                          
                                
                                   
@@ -4536,31 +4535,55 @@ var stylePanel = this.createPanel();
 };
 
 
-StyleFormatPanel.prototype.addfloorplancompanydescription = function floorplancompany_descripiton(){
+function floorplancompany_descripiton(value){
     
     
-        var ui = this.editorUi;
-	var editor = ui.editor;
-	var graph = editor.graph;
-	var ss = this.format.getSelectionState();
+    
        
-   
+      
         
        
-   
+   jQuery.confirm({
+        title: 'Company Descrpition',
+        content: '<textarea class="taskdescrpition"  >' + value + '</textarea>',
+        html: true,
+        columnClass: 'jconfirm-box-container-special-company-descripiton',
+        animation: 'rotateY',
+        closeIcon: true,
+        confirmButton: 'Update',
+        cancelButton: 'Close',
+        confirmButtonClass: 'btn mycustomwidth btn-lg btn-primary mysubmitemailbutton',
+        cancelButtonClass: 'btn mycustomwidth btn-lg btn-danger',
+        confirm: function () {
 
+
+
+        }
+
+    });
+        
+        
+  tinymce.init({
+  selector: '.taskdescrpition',
+  height: 300,
+  plugins: [
+    'table code link hr paste'
+  ],table_default_attributes: {
+    
+    
+           border:1, class:'table'
+  },
+  toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+  convert_urls: false,
+        content_css: [
+    '/wp-content/plugins/EGPL/css/editorstyle.css'
+  ]
+});
     
     
     
     
 }
-
-
-function getWords(str) {
-    return str.split(/\s+/).slice(0,10).join(" ");
-}
-
-
 
 /**
  * Adds the label menu items to the given menu and parent.
@@ -4596,35 +4619,23 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	var labelvalue = "";
         var boothdetailvalue = "";
         var boothownervalue = "";
-        var companydescripiton = "";
+        
         if (mxUtils.isNode(cell[0].value))
                 {   
                     
                      
                       labelvalue = cell[0].getAttribute('mylabel', '');
                       boothdetailvalue = cell[0].getAttribute('boothDetail', '');
-                      companydescripiton = cell[0].getAttribute('companydescripiton', '');
+                    
                       
                      
                      
                 }
-                
-        var getshowdescripiton = getWords(companydescripiton);
-        var companydescripitonInput = document.createElement('input');
-        
-        companydescripitonInput.type = 'hidden';
-        companydescripitonInput.id = 'currentcompanydescripiton';
-        companydescripitonInput.value = companydescripiton.replace(/\\/g, '');
-        
-        
-        stylePanel.appendChild(companydescripitonInput);
 	var boothtypename = document.createElement('input');
 	boothtypename.type = 'text';
 	//boothNumber.value = '';
         boothtypename.style.padding = '4px';
         boothtypename.style.width = '92%';
-         boothtypename.id = 'boothnumber';
-        
 	boothtypename.value = labelvalue.replace(/\\/g, '');//(cell != null)? cell[0].value : '';
 	
 	stylePanel.appendChild(boothtypename);
@@ -4650,15 +4661,8 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         
         var heading = document.createElement('div');
         
-        var icontegat = document.createElement('p');
-        
-        icontegat.innerHTML = '<i class="font-icon fa fa-edit"  style="cursor: pointer;color: #0082ff;" title="Edit company description"></i>';
-        icontegat.style.float="right";
-        icontegat.style.marginRight="35%";
-        icontegat.style.marginTop="-6%";
-       
-        
-        heading.innerHTML = 'Company Description:    ';
+     
+        heading.innerHTML = 'Company Description:    <i class="font-icon fa fa-edit"  style="cursor: pointer;color: #0082ff;" onclick="floorplancompany_descripiton()" title="Edit company description"></i>';
         
     
     
@@ -4670,7 +4674,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         heading.style. fontWeight = 'bold';
        
 	stylePanel.appendChild(heading);
-       stylePanel.appendChild(icontegat);
        
       
        
@@ -4678,11 +4681,9 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         
         var descripitiondetailhtml = document.createElement('p');
         descripitiondetailhtml.id="descripitonhtmltext";
-        if(getshowdescripiton !=""){
-            descripitiondetailhtml.innerHTML = getshowdescripiton+"....";
-        }
+	descripitiondetailhtml.innerHTML = "Provide your company name exactly as you want it displayed on printed materials...";
         
-       
+        descripitiondetailhtml.style.paddingTop = '10px';
         descripitiondetailhtml.style.whiteSpace = 'normal';
         descripitiondetailhtml.style.overflow = 'hidden';
         descripitiondetailhtml.style.width = '236px';
@@ -4830,163 +4831,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	listener();
         
         
-        
-        
-        
-        mxEvent.addListener(icontegat, 'click', function()
-	{
-            var getdescripitionvalue = jQuery("#currentcompanydescripiton").val();
-            jQuery.confirm({
-        title: 'Company Description',
-        content: '<textarea style="width:100%;height:200px;"class="companydescription"  >' + getdescripitionvalue + '</textarea>',
-        html: true,
-        columnClass: 'jconfirm-box-container-special-company-descripiton',
-   
-        closeIcon: true,
-        confirmButton: 'Apply',
-        cancelButton: 'Close',
-        confirmButtonClass: 'btn mycustomwidth btn-lg btn-primary mysubmitemailbutton',
-        cancelButtonClass: 'btn mycustomwidth btn-lg btn-danger',
-        confirm: function () {
-            
-            
-         var updatedescripionvalue = jQuery(".companydescription").val();
-         jQuery("#currentcompanydescripiton").val(updatedescripionvalue);
-        
-        jQuery("#descripitonhtmltext").empty();
-        jQuery("#descripitonhtmltext").append(getWords(updatedescripionvalue)+'....');
-        
-        
-                          var cell = graph.getSelectionCells();  
-                          document.getElementById("applybutton").focus();
-                          jQuery.each(cell,function(cellindex,cellvalue){
-                             
-                               var getdetailvalue = document.getElementById("boothdetail").value;
-                               var getboothnumber = document.getElementById("boothnumber").value;
-                              
-                               getdetailvalue = getdetailvalue.replace(/([,.!;"'])+/g, '');
-                               
-                                getboothnumber=getboothnumber.replace(/([,.!;"'])+/g, '');
-                                
-                                
-                               var currentcompanydescripiton = jQuery("#currentcompanydescripiton").val();
-                               currentcompanydescripiton = currentcompanydescripiton.replace(/([,.!;"'])+/g, '');
-                               var getexhibortervalue = "";
-                               
-                                if (getboothnumber) {
-                                    } else {
-                                        getboothnumber = "";
-                                    }
-                                if (getdetailvalue) {
-                                } else {
-
-
-                                    getdetailvalue = "";
-                                }
-                            
-                            
-                            
-                            
-                            
-                            var doc = mxUtils.createXmlDocument();
-                            var node = doc.createElement('MyNode');
-                            var legendlabels = "";
-                            var legendlabelscolor = "";
-                            
-                            node.setAttribute('mylabel', getboothnumber);
-                            node.setAttribute('boothDetail', getdetailvalue);
-                            node.setAttribute('companydescripiton', currentcompanydescripiton);
-                            
-                            if(cell.length == 1){
-                                
-                              legendlabels = cell[0].getAttribute('legendlabels', '');
-                              legendlabelscolor = cell[0].getAttribute('legendlabelscolor', '');
-                              
-                               node.setAttribute('legendlabels', legendlabels);
-                               node.setAttribute('legendlabelscolor', legendlabelscolor);
-                              
-                               var e = document.getElementById("exhibitorID");
-                               if (e.options[e.selectedIndex].value != "") {
-
-                                    getexhibortervalue = e.options[e.selectedIndex].value;
-
-                                } else {
-
-                                    getexhibortervalue = "";
-
-                                }
-                               node.setAttribute('boothOwner', getexhibortervalue);
-                               
-                                if(legendlabelscolor != "none" && legendlabelscolor !=""){
-                                    
-                                    graph.setCellStyles("fillColor", legendlabelscolor, graph.getSelectionCells());
-                                    
-                                }else{
-                              
-                                 if (getexhibortervalue != 'none') {
-                                        
-                                        graph.setCellStyles("fillColor", ss.style.occ, graph.getSelectionCells());
-                                    
-                                    } else {
-                                        graph.setCellStyles("fillColor", ss.style.uno, graph.getSelectionCells());
-                                    }  
-                                }
-                            }else{
-                               
-                                  
-                             
-                              
-                              
-                                
-                                var boothownerlastvalue  = "";
-                                if (mxUtils.isNode(cellvalue.value))
-                                {  
-                                     console.log(boothownerlastvalue);
-                                     boothownerlastvalue = cellvalue.getAttribute('boothOwner', '');
-                                     
-                                      legendlabels = cellvalue.getAttribute('legendlabels', '');
-                                      legendlabelscolor = cellvalue.getAttribute('legendlabelscolor', '');
-                                     
-                                    
-                                }
-                                
-                                if(legendlabelscolor != "none" && legendlabelscolor !=""){
-                                    
-                                    graph.setCellStyles("fillColor", legendlabelscolor, graph.getSelectionCells());
-                                    
-                                }
-                                
-                                
-                                node.setAttribute('boothOwner', boothownerlastvalue);
-                                node.setAttribute('legendlabels', legendlabels);
-                                node.setAttribute('legendlabelscolor', legendlabelscolor);
-                                
-                            }
-                            
-                               
-                                
-
-                                cellvalue.value = node;
-                                graph.cellLabelChanged(cellvalue, '');
-                                    
-                            });
-                            
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
-        }
-
-    });
-        
-            
-        });
         mxEvent.addListener(detailsubmit, 'click', function()
 	{
                           
@@ -5000,10 +4844,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                getdetailvalue = getdetailvalue.replace(/([,.!;"'])+/g, '');
                                var getboothnumber = boothtypename.value;
                                 getboothnumber=getboothnumber.replace(/([,.!;"'])+/g, '');
-                                
-                                
-                               var currentcompanydescripiton = jQuery("#currentcompanydescripiton").val();
-                               currentcompanydescripiton = currentcompanydescripiton.replace(/([,.!;"'])+/g, '');
                                var getexhibortervalue = "";
                                
                                 if (getboothnumber) {
@@ -5028,7 +4868,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                             
                             node.setAttribute('mylabel', getboothnumber);
                             node.setAttribute('boothDetail', getdetailvalue);
-                            node.setAttribute('companydescripiton', currentcompanydescripiton);
+                           
                             
                             if(cell.length == 1){
                                 
@@ -7011,7 +6851,7 @@ function getallboothtypes(){
                                                     title: '<b style="text-align:center;">Legend Labels</b>',
                                                     content: html,
                                                     html:true,
-                                               
+                                                    animation: 'rotateY',
                                                     closeIcon: true,
                                                     columnClass: 'jconfirm-box-container-special-boothtypes',
                                                    cancelButton: false ,// hides the cancel button.

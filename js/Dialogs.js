@@ -1029,28 +1029,20 @@ var PrintDialog = function(editorUi, title)
 /**
  * Constructs a new print dialog.
  */
-PrintDialog.prototype.create = function(editorUi)
+PrintDialog.prototype.create = function(graph)
 {
-	var graph = editorUi.editor.graph;
+	var graph = graph ;//editorUi.editor.graph;
 	var row, td;
 	
-	var table = document.createElement('table');
-	table.style.width = '100%';
-	table.style.height = '100%';
-	var tbody = document.createElement('tbody');
 	
-	row = document.createElement('tr');
 	
 	var onePageCheckBox = document.createElement('input');
 	onePageCheckBox.setAttribute('type', 'checkbox');
-	td = document.createElement('td');
-	td.setAttribute('colspan', '2');
-	td.style.fontSize = '10pt';
-	td.appendChild(onePageCheckBox);
+	
 	
 	var span = document.createElement('span');
-	mxUtils.write(span, ' ' + mxResources.get('fitPage'));
-	td.appendChild(span);
+	
+	
 	
 	mxEvent.addListener(span, 'click', function(evt)
 	{
@@ -1064,20 +1056,15 @@ PrintDialog.prototype.create = function(editorUi)
 		pageCountCheckBox.checked = !onePageCheckBox.checked;
 	});
 	
-	row.appendChild(td);
-	tbody.appendChild(row);
-
-	row = row.cloneNode(false);
+	
+	
 	
 	var pageCountCheckBox = document.createElement('input');
 	pageCountCheckBox.setAttribute('type', 'checkbox');
-	td = document.createElement('td');
-	td.style.fontSize = '10pt';
-	td.appendChild(pageCountCheckBox);
 	
 	var span = document.createElement('span');
-	mxUtils.write(span, ' ' + mxResources.get('posterPrint') + ':');
-	td.appendChild(span);
+	
+	
 	
 	mxEvent.addListener(span, 'click', function(evt)
 	{
@@ -1086,7 +1073,6 @@ PrintDialog.prototype.create = function(editorUi)
 		mxEvent.consume(evt);
 	});
 	
-	row.appendChild(td);
 	
 	var pageCountInput = document.createElement('input');
 	pageCountInput.setAttribute('value', '1');
@@ -1095,13 +1081,12 @@ PrintDialog.prototype.create = function(editorUi)
 	pageCountInput.setAttribute('size', '4');
 	pageCountInput.setAttribute('disabled', 'disabled');
 	pageCountInput.style.width = '50px';
-
-	td = document.createElement('td');
-	td.style.fontSize = '10pt';
-	td.appendChild(pageCountInput);
-	mxUtils.write(td, ' ' + mxResources.get('pages') + ' (max)');
-	row.appendChild(td);
-	tbody.appendChild(row);
+        
+        pageCountInput.style.display = 'none';
+        
+	
+	
+	
 
 	mxEvent.addListener(pageCountCheckBox, 'change', function()
 	{
@@ -1117,31 +1102,27 @@ PrintDialog.prototype.create = function(editorUi)
 		onePageCheckBox.checked = !pageCountCheckBox.checked;
 	});
 
-	row = row.cloneNode(false);
 	
-	td = document.createElement('td');
-	mxUtils.write(td, mxResources.get('pageScale') + ':');
-	row.appendChild(td);
 	
-	td = document.createElement('td');
+	
+	
+	
+	
+	
 	var pageScaleInput = document.createElement('input');
 	pageScaleInput.setAttribute('value', '100 %');
 	pageScaleInput.setAttribute('size', '5');
 	pageScaleInput.style.width = '50px';
+        
 	
-	td.appendChild(pageScaleInput);
-	row.appendChild(td);
-	tbody.appendChild(row);
+        
 	
-	row = document.createElement('tr');
-	td = document.createElement('td');
-	td.colSpan = 2;
-	td.style.paddingTop = '20px';
-	td.setAttribute('align', 'right');
 	
 	// Overall scale for print-out to account for print borders in dialogs etc
 	function preview(print)
-	{
+	{       
+            
+                
 		var autoOrigin = onePageCheckBox.checked || pageCountCheckBox.checked;
 		var printScale = parseInt(pageScaleInput.value) / 100;
 		
@@ -1190,9 +1171,17 @@ PrintDialog.prototype.create = function(editorUi)
 		{
 			autoOrigin = true;
 		}
+                
+                
 		
+               
 		var preview = PrintDialog.createPrintPreview(graph, scale, pf, border, x0, y0, autoOrigin);
-		preview.open();
+              
+                
+		var output = preview.open();
+                 
+                
+                console.log(output);
 	
 		if (print)
 		{
@@ -1200,53 +1189,27 @@ PrintDialog.prototype.create = function(editorUi)
 		}
 	};
 	
-	var cancelBtn = mxUtils.button(mxResources.get('cancel'), function()
-	{
-		editorUi.hideDialog();
-	});
-	cancelBtn.className = 'geBtn';
 	
-	if (editorUi.editor.cancelFirst)
-	{
-		td.appendChild(cancelBtn);
-	}
 	
-	if (!mxClient.IS_CHROMEAPP)
-	{
-		var previewBtn = mxUtils.button(mxResources.get('preview'), function()
-		{
-			editorUi.hideDialog();
 			preview(false);
-		});
-		previewBtn.className = 'geBtn';
-		td.appendChild(previewBtn);
-	}
 	
-	var printBtn = mxUtils.button(mxResources.get((mxClient.IS_CHROMEAPP) ? 'ok' : 'print'), function()
-	{
-		editorUi.hideDialog();
-		preview(true);
-	});
-	printBtn.className = 'geBtn gePrimaryBtn';
-	td.appendChild(printBtn);
-	
-	if (!editorUi.editor.cancelFirst)
-	{
-		td.appendChild(cancelBtn);
-	}
-
-	row.appendChild(td);
-	tbody.appendChild(row);
-	
-	table.appendChild(tbody);
-	this.container = table;
 };
+
+
+
+
+
+
+
+
+
+
 
 /**
  * Constructs a new print dialog.
  */
 PrintDialog.printPreview = function(preview)
-{
+{       
 	if (preview.wnd != null)
 	{
 		var printFn = function()
@@ -1276,6 +1239,9 @@ PrintDialog.printPreview = function(preview)
 PrintDialog.createPrintPreview = function(graph, scale, pf, border, x0, y0, autoOrigin)
 {
 	var preview = new mxPrintPreview(graph, scale, pf, border, x0, y0);
+        
+        console.log(preview);
+        
 	preview.title = mxResources.get('preview');
 	preview.printBackgroundImage = true;
 	preview.autoOrigin = autoOrigin;
@@ -1301,7 +1267,8 @@ PrintDialog.createPrintPreview = function(graph, scale, pf, border, x0, y0, auto
 		doc.writeln('}');
 		doc.writeln('</style>');
 	};
-	
+        
+	console.log(preview);
 	return preview;
 };
 
@@ -1781,6 +1748,9 @@ var EditDiagramDialog = function(editorUi)
 /**
  * Constructs a new export dialog.
  */
+
+
+
 var ExportDialog = function(editorUi)
 {
 	var graph = editorUi.editor.graph;
@@ -2117,6 +2087,9 @@ var ExportDialog = function(editorUi)
 			
 			ExportDialog.lastBorderValue = b;
 			ExportDialog.exportFile(editorUi, name, format, bg, s, b);
+                        
+                        
+                        
 		}
 	}));
 	saveBtn.className = 'geBtn gePrimaryBtn';
@@ -2166,15 +2139,24 @@ ExportDialog.showXmlOption = true;
  * key=value, where value should be URL encoded.
  */
 ExportDialog.exportFile = function(editorUi, name, format, bg, s, b)
-{
+{       
+    
+        bg='https://salesdemo17.staging.wpengine.com/yourevent/wp-content/uploads/sites/6/2018/06/me-1-1.png';
+    
+        
+        
+        
 	var graph = editorUi.editor.graph;
 	
 	if (format == 'xml')
 	{
-    	ExportDialog.saveLocalFile(editorUi, mxUtils.getXml(editorUi.editor.getGraphXml()), name, format);
+            ExportDialog.saveLocalFile(editorUi, mxUtils.getXml(editorUi.editor.getGraphXml()), name, format);
 	}
     else if (format == 'svg')
-	{
+	{       
+               
+               
+                console.log(mxUtils.getXml(graph.getSvg(bg, s, b)));
 		ExportDialog.saveLocalFile(editorUi, mxUtils.getXml(graph.getSvg(bg, s, b)), name, format);
 	}
     else

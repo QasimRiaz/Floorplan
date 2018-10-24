@@ -2227,6 +2227,11 @@ Graph.prototype.zoomOut = function()
 Graph.prototype.getTooltipForCell = function(cell)
 {
 	console.log(cell);
+        
+        
+        
+        
+       
 	var tip = '';
 	var cellStyle = cell.style;
         var labelvalue = cell.getAttribute('mylabel', '');
@@ -2242,6 +2247,9 @@ Graph.prototype.getTooltipForCell = function(cell)
             var boothlebabl = "Booth number: ";
         }
         if(boothOwner !="<None>" && boothOwner !=""){
+            
+            
+            
         jQuery.each(mxgetjosnusersData, function (key, valuee) {
                                
                              
@@ -5018,9 +5026,10 @@ if (typeof mxVertexHandler != 'undefined')
 				root.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', mxConstants.NS_XLINK);
 			}
 			
+                        var bgImg = this.backgroundImage;
 			var s = scale / vs;
-			root.setAttribute('width', Math.max(1, Math.ceil(bounds.width * s) + 2 * border) + 'px');
-			root.setAttribute('height', Math.max(1, Math.ceil(bounds.height * s) + 2 * border) + 'px');
+			root.setAttribute('width', bgImg.width + 'px');
+			root.setAttribute('height', bgImg.height + 'px');
 			root.setAttribute('version', '1.1');
 			
 		    // Adds group for anti-aliasing via transform
@@ -5092,21 +5101,25 @@ if (typeof mxVertexHandler != 'undefined')
 			};
 			
 			// Paints background image
-			var bgImg = this.backgroundImage;
+			
 			
 			if (bgImg != null)
 			{
 				var s2 = vs / scale;
+                                
 				var tr = this.view.translate;
 				var tmp = new mxRectangle(tr.x * s2, tr.y * s2, bgImg.width * s2, bgImg.height * s2);
-				
+				console.log(s2)
+                                console.log(tr)
+                               
 				// Checks if visible
 				if (mxUtils.intersects(bounds, tmp))
-				{
+				{       
+                                        console.log(tr.x+'------------'+tr.y);
 					svgCanvas.image(tr.x, tr.y, bgImg.width, bgImg.height, bgImg.src, true);
 				}
 			}
-			
+			console.log(svgCanvas);
 			svgCanvas.scale(s);
 			svgCanvas.textEnabled = showText;
 			

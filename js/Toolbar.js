@@ -60,10 +60,15 @@ Toolbar.prototype.init = function()
 	sw -= (screen.height > 740) ? 56 : 0;
 	
 	
-           
-                
-                
-                
+        if(md.phone() != null){
+                if(mxCurrentfloorplanstatus =='viewer'){  
+
+                     var eltsss = this.addItems(['', 'collapseexpand']);
+                     eltsss[1].setAttribute('title', 'Collapse/Expand');
+                     eltsss[1].innerHTML = '<div class="fas fa-angle-double-right" ></div>';
+
+                 }
+        }     
 	
         
         
@@ -97,21 +102,21 @@ Toolbar.prototype.init = function()
         
         var eltss = this.addItems(['', 'outline']);
         eltss[1].setAttribute('title', 'Outline');
-        eltss[1].innerHTML = '<div class="fa fa-map" ></div>';
+        eltss[1].innerHTML = '<div class="fas fa-map" ></div>';
        
         
         var elts = this.addItems(['zoomOut','zoomIn']);
         
         elts[0].setAttribute('title', mxResources.get('zoomOut'));//+ ' (' + this.editorUi.actions.get('zoomOut').shortcut + ')');
-        elts[0].innerHTML = '<div class="fa fa-search-minus" style="color:#000"></div>';//'Save';//('title', 'Save');
+        elts[0].innerHTML = '<div class="fas fa-search-minus" style="color:#000"></div>';//'Save';//('title', 'Save');
         
         elts[1].setAttribute('title', mxResources.get('zoomIn'));// + ' (' + this.editorUi.actions.get('zoomIn').shortcut + ')');
-        elts[1].innerHTML = '<div class="fa fa-search-plus" style="color:#000"></div>';//'Save';//('title', 'Save');
+        elts[1].innerHTML = '<div class="fas fa-search-plus" style="color:#000"></div>';//'Save';//('title', 'Save');
         
         var elts = this.addItems(['', 'resetView']);
         elts[1].setAttribute('title', 'ResetView');
         elts[1].setAttribute('type', 'button');
-        elts[1].innerHTML= '<div class="fa fa-arrows-alt" ></div>';    
+        elts[1].innerHTML= '<div class="fas fa-arrows-alt" ></div>';    
     
     
         if(mxCurrentfloorplanstatus !='viewer'){
@@ -140,9 +145,9 @@ Toolbar.prototype.init = function()
         
 	var elts = this.addItems(['-', 'undo', 'redo']);
 	elts[1].setAttribute('title', mxResources.get('undo'));// + ' (' + this.editorUi.actions.get('undo').shortcut + ')');
-        elts[1].innerHTML= '<div class="fa fa-undo" style="color:#000"></div>';//'Save';//('title', 'Save');
+        elts[1].innerHTML= '<div class="fas fa-undo" style="color:#000"></div>';//'Save';//('title', 'Save');
 	elts[2].setAttribute('title', mxResources.get('redo') );//+ ' (' + this.editorUi.actions.get('redo').shortcut + ')');
-        elts[2].innerHTML= '<div class="fa fa-repeat" style="color:#000"></div>';//'Save';//('title', 'Save');
+        elts[2].innerHTML= '<div class="fas fa-repeat" style="color:#000"></div>';//'Save';//('title', 'Save');
     }	
 	
 	
@@ -165,19 +170,29 @@ Toolbar.prototype.init = function()
              
              var elts = this.addItems(['-', 'insertImage']);
              elts[1].setAttribute('title', 'InsertImage');
-             elts[1].innerHTML= '<div class="fa fa-picture-o" ></div>';//'Save';//('title', 'Save');
+             elts[1].innerHTML= '<div class="fas fa-picture-o" ></div>';//'Save';//('title', 'Save');
              
              
              
             
              var eltss = this.addItems(['-', 'embed']);
              eltss[1].setAttribute('title', 'Embed');
-             eltss[1].innerHTML= '<div class="fa fa-code" style="color:#000"></div>';
+             eltss[1].innerHTML= '<div class="fas fa-code" style="color:#000"></div>';
              
+             var elts = this.addItems(['-', 'preview']);
+             
+             elts[1].setAttribute('title', 'Print');
+             elts[1].setAttribute('type', 'button');
+             elts[1].innerHTML= '<div class="fas fa-print test" ></div>';
+             
+             var eltss = this.addItems(['-', 'publiclink']);
+             eltss[1].setAttribute('title', 'Get Public Link');
+             eltss[1].innerHTML= '<div class="fas fa-link" style="color:#000"></div>';
              
              var elts = this.addItems(['-', 'save']);
              elts[1].setAttribute('title', 'Save');
-             elts[1].innerHTML= '<div class="fa fa-floppy-o" style="color:#016cf7"></div>';//'Save';//('title', 'Save');
+             elts[1].setAttribute('class', 'mycustomstylelink');
+             elts[1].innerHTML= '<button class="myCustomeButton">Save</button>';//'Save';//('title', 'Save');
              
              
              
@@ -189,13 +204,21 @@ Toolbar.prototype.init = function()
                
             
             
+             
+             var elts = this.addItems(['', 'preview']);
+             elts[1].setAttribute('title', 'Print');
+             elts[1].setAttribute('type', 'button');
+            
+            
+             elts[1].innerHTML= '<div class="fas fa-print" ></div>';
+             
             
              var elts = this.addItems(['', 'fullscreencustome']);
              elts[1].setAttribute('title', 'Fullscreen');
              elts[1].setAttribute('type', 'button');
             
             
-             elts[1].innerHTML= '<div class="fa fa-expand" ></div>';
+             elts[1].innerHTML= '<div class="fas fa-window-maximize" ></div>';
              
              
              

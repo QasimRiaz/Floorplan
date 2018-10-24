@@ -4,6 +4,8 @@
 /**
  * Constructs a new graph editor
  */
+var checkinitalstatus;
+
 EditorUi = function(editor, container, lightbox)
 {
 	mxEventSource.call(this);
@@ -245,7 +247,9 @@ EditorUi = function(editor, container, lightbox)
 	// Overrides cell editor to update toolbar
 	var cellEditorStartEditing = graph.cellEditor.startEditing;
 	graph.cellEditor.startEditing = function()
-	{
+	{       
+            
+                console.log('Testtooltip');
 		cellEditorStartEditing.apply(this, arguments);
 		updateToolbar();
 		
@@ -898,8 +902,10 @@ EditorUi = function(editor, container, lightbox)
                   mxDragSource.prototype.setEnabled(false);
                   mxGraph.prototype.cellsLocked=true ;
                   mxGraph.prototype.cellsMovable =  false;
-                 
-                  
+                  mxEditor.prototype.disableContextMenu = true;
+                  mxPopupMenu.prototype.enabled = false;
+
+
                   
                   //var highlight = new mxCellTracker(graph, '#00FF00');
 		  this.editor.graph.addListener(mxEvent.CLICK, function(sender, evt)
@@ -907,71 +913,95 @@ EditorUi = function(editor, container, lightbox)
 					var cell = evt.getProperty('cell');
                                         
                                         console.log(cell)
-                                        
+                                    if(typeof(cell) != "undefined"){
                                         var assignedboothname = "";
                                         
                                         assignedboothname = cell.getAttribute('mylabel', '');
                                         var valuessrting = cell.style;
+                                         var companydescription ="";
+                                         var htmlcompanydescription = "";
+                                        
+                                        
                                         var userid  = cell.getAttribute('boothOwner', '');
                                         var boothdetail  = cell.getAttribute('boothDetail', '');
+                                        var companydescription  = cell.getAttribute('companydescripiton', '');
                                         var reportData = jQuery.parseJSON(mxgetAllusersData);
-                                        var openhtml = "";  
-                                        if(userid){
-                                            if (reportData) {
+                                        var openhtml = "";
+                                        var tablehtml = '';
+                                        var curr_dat = '';
+                                        var companynameas="";
+                                        var companylogourlnew="";
+                                        var htmlforassignedbooth = '';
+                                        var htmlforaddress = '';
+                                        console.log(userid);
+                                        if(userid !="" && userid != "none" && reportData){
+                                           
+                                                
+                                            
+                                            jQuery.each(reportData, function(key,index){ 
+                                                if(index.exhibitorsid == userid){
 
-                                               var tablehtml = '';
-                                               var curr_dat = '';
-                                               if(reportData[userid]){
-                                                var companylogourlnew = reportData[userid].companylogourl;
-                                               }else{
-                                                   var companylogourlnew  = "";
-                                               }
-                                               var htmlforassignedbooth = '';
-                                               var htmlforaddress = '';
+                                                  console.log(index.companyname);
+                                                  companynameas = index.companyname;
+                                                  companylogourlnew = index.companylogourl;
+                                                 
+                                                 
 
-                                               if (companylogourlnew == null || companylogourlnew == '') {
+                                                      if (companylogourlnew == null || companylogourlnew == '') {
 
-                                                   companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
-                                               }
+                                                           companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
+                                                           }
+                                                      if(companydescription != ""){
+                                                
+                                                     htmlcompanydescription = '<h5 style="color:#7f7f7f">Company Description</h5><div style="color:#7f7f7f">'+companydescription.replace(/,\s*$/, "")+'</div><hr>';
+                                            
+                                                
+                                                        }
+                                                      
+                                                      if (assignedboothname != "") {
 
-                                               if (assignedboothname != "") {
-                                                  
-                                                    htmlforassignedbooth = '<h5 style="color:#7f7f7f">Assigned Booth(s)</h5><p style="color:#7f7f7f">' + assignedboothname.replace(/,\s*$/, "") + '</p>';
+                                                      htmlforassignedbooth = '<h5 style="color:#7f7f7f">Assigned Booth(s)</h5><p style="color:#7f7f7f">' + assignedboothname.replace(/,\s*$/, "") + '</p>';
+                                                      } else{
+
+                                                      htmlforassignedbooth = '<h5 style="color:#7f7f7f">Booth Number</h5><p style="color:#7f7f7f"></p>';
+                                                      }
+                                                      if (index.address_line_1 != "") {
+
+                                                        htmlforaddress = '<p>' + index.address_line_1 + ', ' + index.usercity + ', ' + index.usercountry + '</p>';
+
+                                                      }else{
+                                                            htmlforaddress = "";
+                                                            
+                                                        }
+                                                        if (companynameas == null || companynameas == '') {
+                                                            
+                                                            companynameas = "";
+                                                        }
+                                                  }
+                                              });
+                                              
+                                                openhtml = '<div class="maindiv" style="width:100%;margin-top:36px;min-height: 350px;"><div class="profiledive" style="width:50%;float:left;text-align:center"><img width="300" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:50%"><h1 style="color:#7f7f7f">' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'<p>'+boothdetail+'</p></div></div>';
+
                                                
-                                                }else{
-                                                   
-                                                   htmlforassignedbooth = '<h5 style="color:#7f7f7f">Booth Number</h5><p style="color:#7f7f7f"></p>';
-                                               }
-
-                                              if(reportData[userid]){
-                                                  
-                                               var companynameas = reportData[userid].companyname;
-                                               if (reportData[userid].address_line_1 != "") {
-
-                                                   htmlforaddress = '<p>' + reportData[userid].address_line_1 + ', ' + reportData[userid].usercity + ', ' + reportData[userid].usercountry + '</p>';
-
-                                               }
-                                            }else{
-                                                htmlforaddress = "";
-                                                var companynameas = "";
-                                            }
-
-                                                openhtml = '<div class="maindiv" style="width:100%;margin-top:36px;min-height: 350px;"><div class="profiledive" style="width:50%;float:left;text-align:center"><img width="300" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:50%"><h1 style="color:#7f7f7f">' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr><p>'+boothdetail+'</p></div></div>';
-
-
-                                               
-
-                                           }   
-                                       }else{
+                                           
+                                    }else{
                                            
                                                var tablehtml = '';
                                                var curr_dat = '';
                                                var companylogourlnew = '';
                                                var htmlforassignedbooth = '';
                                                var htmlforaddress = '';
-                                                htmlforassignedbooth = '<h5 style="color:#7f7f7f">Booth Number</h5><p style="color:#7f7f7f">' + assignedboothname + '</p>';
-                                                companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
-                                                 openhtml = '<div class="maindiv" style="width:100%;margin-top:36px;min-height: 350px;"><div class="profiledive" style="width:50%;float:left;text-align:center"><img width="300" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:50%"><h1 style="color:#7f7f7f"></h1>' + htmlforassignedbooth + '<hr><p>'+boothdetail+'</p></div></div>';
+                                                 if(companydescription != ""){
+                                                
+                                                     htmlcompanydescription = '<h5 style="color:#7f7f7f">Company Description</h5><div style="color:#7f7f7f">'+companydescription.replace(/,\s*$/, "")+'</div><hr>';
+                                            
+                                                
+                                                        }
+                                               
+                                               htmlforassignedbooth = '<h5 style="color:#7f7f7f">Booth Number</h5><p style="color:#7f7f7f">' + assignedboothname + '</p>';
+                                               companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
+                                               console.log(companylogourlnew);
+                                               openhtml = '<div class="maindiv" style="width:100%;margin-top:36px;min-height: 350px;"><div class="profiledive" style="width:50%;float:left;text-align:center"><img width="300" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:50%"><h1 style="color:#7f7f7f"></h1>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'<p>'+boothdetail+'</p></div></div>';
                                            
                                            
                                        }
@@ -987,9 +1017,9 @@ EditorUi = function(editor, container, lightbox)
                                                    columnClass: 'jconfirm-box-container-special'
 
                                                });    
-					
+				}	
 				});
-
+                            
                   
                  
                  
@@ -1009,13 +1039,24 @@ EditorUi = function(editor, container, lightbox)
 		var ch = graph.container.clientHeight - 10;
 		var scale = Math.floor(20 * Math.min(cw / fmt.width / ps, ch / fmt.height / ps)) / 20;
                 if(mxCurrentfloorplanstatus !='viewer'){
+                        
                         var topmargine = ch/127;
+                         
+                        
+                        
                 }else{
                 
-                    var topmargine = ch/20;
+                        var topmargine = ch/20;
+                      
+                        if(md.phone() != null){
+                           
+                           var scale = Math.floor(20 * Math.min(320 / fmt.width / ps, ch / fmt.height / ps)) / 20;
+                           
+                        }
+                        
                 }
                 
-                console.log(ch);
+                
 		graph.zoomTo(scale);
 		
 		if (mxUtils.hasScrollbars(graph.container))
@@ -1395,7 +1436,7 @@ EditorUi.prototype.initClipboard = function()
 EditorUi.prototype.initCanvas = function()
 {
 	var graph = this.editor.graph;
-
+        checkinitalstatus = true;
 	// Initial page layout view, scrollBuffer and timer-based scrolling
 	var graph = this.editor.graph;
 	graph.timerAutoScroll = true;
@@ -2850,12 +2891,19 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	this.formatContainer.style.top = '120px';//Editing BY Qasim Riaz tmp + 'px';
 	this.formatContainer.style.width = fw + 'px';
 	this.formatContainer.style.display = (this.format != null) ? '' : 'none';
-	
 	this.diagramContainer.style.left = (this.hsplit.parentNode != null) ? (effHsplitPosition + this.splitSize) + 'px' : '0px';
-	if(mxCurrentfloorplanstatus !='viewer'){
+	
+	
+    
+        if(mxCurrentfloorplanstatus !='viewer'){
+            
             this.diagramContainer.style.top = '120px'; //Editing BY Qasim Riaz this.sidebarContainer.style.top;
+            
+            
         }else{
-             this.diagramContainer.style.top = '0px'; 
+            
+             this.diagramContainer.style.top = '0px';
+            
         }
         this.footerContainer.style.height = this.footerHeight + 'px';
 	this.hsplit.style.top = this.sidebarContainer.style.top;
@@ -3135,11 +3183,30 @@ EditorUi.prototype.createUi = function()
 
 	// HSplit
 	if (this.sidebar != null)
-	{
+	{       
 		this.container.appendChild(this.hsplit);
-		
+                var widthscreensize = jQuery( window ).width();
+                console.log(widthscreensize);
+                if(md.phone() != null){
+                    if(checkinitalstatus != true){
+                        this.hsplitPosition = 0;
+                        this.refresh();
+                        checkinitalstatus = true;
+                    }
+                }
+               
+               
+               
 		this.addSplitHandler(this.hsplit, true, 0, mxUtils.bind(this, function(value)
-		{
+		{       
+                        
+                        if(value == 0){
+                            
+                            value = 208;
+                        }else{
+                            
+                            value = 0;
+                        }
 			this.hsplitPosition = value;
 			this.refresh();
 		}));
@@ -3249,10 +3316,15 @@ EditorUi.prototype.addSplitHandler = function(elt, horizontal, dx, onChange)
 	var initial = null;
 	var ignoreClick = true;
 	var last = null;
-
+        
+        
+        
+        
+        
 	// Disables built-in pan and zoom in IE10 and later
 	if (mxClient.IS_POINTER)
-	{
+	{       
+                 
 		elt.style.touchAction = 'none';
 	}
 	
@@ -3488,6 +3560,12 @@ EditorUi.prototype.isCompatibleString = function(data)
 /**
  * Adds the label menu items to the given menu and parent.
  */
+EditorUi.prototype.updateGraphStatus = function()
+{
+    
+    this.editor.setModified(false);
+    
+};
 EditorUi.prototype.saveFile = function(forceDialog)
 {
 	if (!forceDialog && this.editor.filename != null)

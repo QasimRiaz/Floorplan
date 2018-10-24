@@ -2,13 +2,37 @@
 
 /**
  * Plugin Name: Floor Plan
- * Plugin URI: http://www.convospark.com/
+ * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 1.0
- * Author: Feroze Ahmed
- * Author URI: http://www.convospark.com/
- * License: convospark
+ * Version: 1.00
+ * Author: E2ESP
+ * Author URI: http://expo-genie.com/
+ * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
+ * License: ExpoGenie
+ * Text Domain: ExpoGenie
+ * Network:           true
 */
+
+include_once('updater.php');
+
+
+if (is_admin()) { // note the use of is_admin() to double check that this is happening in the admin
+        $config = array(
+            'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+            'proper_folder_name' => 'floorplan', // this is the name of the folder your plugin lives in
+            'api_url' => 'https://api.github.com/repos/QasimRiaz/Floorplan', // the GitHub API url of your GitHub repo
+            'raw_url' => 'https://raw.github.com/QasimRiaz/Floorplan/master', // the GitHub raw url of your GitHub repo
+            'github_url' => 'https://github.com/QasimRiaz/Floorplan', // the GitHub url of your GitHub repo
+            'zip_url' => 'https://github.com/QasimRiaz/Floorplan/zipball/master', // the zip url of the GitHub repo
+            'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+            'requires' => '3.0', // which version of WordPress does your plugin require?
+            'tested' => '3.3', // which version of WordPress is your plugin tested up to?
+            'readme' => 'README.md', // which file to use as the readme for the version number
+            'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+        );
+        new WP_GitHub_Updater($config);
+    }
+
 
 if($_GET['floorplanRequest'] == "savedfloorplansettings") { 
     
@@ -18,8 +42,42 @@ if($_GET['floorplanRequest'] == "savedfloorplansettings") {
     die();
     
     
+}else if($_GET['floorplanRequest'] == "getallboothtypes"){
+    
+    
+    require_once('../../../wp-load.php');
+    
+    getBoothtypesList($_POST);
+    die();
+    
+}else if($_GET['floorplanRequest'] == "savedalllegendstypes"){
+    
+    
+    require_once('../../../wp-load.php');
+    
+    savedalllegendstypes($_POST);
+    die();
+    
 }
-				
+
+
+function savedalllegendstypes($Dataarray){
+    
+    try{
+	
+        $id = $Dataarray['post_id'];
+        update_post_meta( $id, 'legendlabels', $Dataarray['legendstypesArray'] );
+        echo 'update';
+    }catch (Exception $e) {
+       
+     
+        return $e;
+        
+    }
+    
+}
+
+
 add_action( 'wp_enqueue_scripts', 'ajax_test_enqueue_scripts' );
 function ajax_test_enqueue_scripts() {
 	
@@ -111,6 +169,37 @@ function getPresetList() {
 	die();
 }
 
+
+function getBoothtypesList($postdata) {
+	
+	//echo $boothTypes = get_post_meta( $_REQUEST['post_id'], 'booth_types', true );
+    try{
+	
+        $id = $postdata['post_id'];
+        
+        
+        $boothTypesLegend = get_post_meta($id, 'legendlabels', true );
+        
+        if(empty($boothTypesLegend)){
+           $singleuserdata = 'empty';
+        }else{
+            
+            $singleuserdata = json_encode($boothTypesLegend);
+            
+        }
+        
+        echo $singleuserdata;
+        
+    }catch (Exception $e) {
+       
+     
+        return $e;
+        
+    }
+	die();
+}
+
+
 function getBoothList($postdata) {
 	
 	//echo $boothTypes = get_post_meta( $_REQUEST['post_id'], 'booth_types', true );
@@ -121,13 +210,15 @@ function getBoothList($postdata) {
         $user_info = get_userdata($user_ID);  
         
         
-        $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Settings Saved',"Admin Action","",$user_ID,$user_info->user_email,serialize($postdata));
+        $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Settings Saved',"Admin Action","",$user_ID,$user_info->user_email,$postdata);
       
         
         
 	update_post_meta( $postdata['post_id'], 'booth_types', trim($boothTypes) );
 	update_post_meta( $postdata['post_id'], 'floor_background', $postdata['floorBG'] );
 	update_post_meta( $postdata['post_id'], 'floorplan_xml', $postdata['floorXml'] );
+        
+        
     }catch (Exception $e) {
        
         //contentmanagerlogging_file_upload ($lastInsertId,serialize($e));
@@ -262,15 +353,22 @@ function getAllusers_data(){
         $index = 1;
         $site_prefix = $wpdb->get_blog_prefix();
         sort($authors);
-        
+        $cart = array();
         foreach ($authors as $aid) {
         
             $user_data = get_userdata($aid->ID);
             $index = $aid->ID;
             $all_meta_for_user = get_user_meta($aid->ID);
-            
+           
              
             if (!in_array("administrator", $user_data->roles)) {
+                
+                if($all_meta_for_user[$site_prefix.'company_name'][0] == null || empty($all_meta_for_user[$site_prefix.'company_name'][0])){
+                    
+                    
+                }else{
+                    
+                    
                 
                 
                 $allUsersData[$index]['companyname'] = $all_meta_for_user[$site_prefix.'company_name'][0];
@@ -361,20 +459,56 @@ function getAllusers_data(){
 
                      $allUsersData[$index]['userzipcode'] = '';
                 }
-                       
+               
+                //array_push($cart,$allUsersData);
 
             }
             
-            
+           } 
             
         }
         
-       return $allUsersData;
+        
+        if(!empty($allUsersData)){ 
+        usort($allUsersData, 'compareByName');
+        
+        }
+       
+        return $allUsersData;
     
     
     
 }
 
+function compareByName($a, $b) {
+  return strcmp($a["companyname"], $b["companyname"]);
+}
+
+
+function array_msort($array, $cols)
+{
+    $colarr = array();
+    foreach ($cols as $col => $order) {
+        $colarr[$col] = array();
+        foreach ($array as $k => $row) { $colarr[$col]['_'.$k] = strtolower($row[$col]); }
+    }
+    $eval = 'array_multisort(';
+    foreach ($cols as $col => $order) {
+        $eval .= '$colarr[\''.$col.'\'],'.$order.',';
+    }
+    $eval = substr($eval,0,-1).');';
+    eval($eval);
+    $ret = array();
+    foreach ($colarr as $col => $arr) {
+        foreach ($arr as $k => $v) {
+            $k = substr($k,1);
+            if (!isset($ret[$k])) $ret[$k] = $array[$k];
+            $ret[$k][$col] = $array[$k][$col];
+        }
+    }
+    return $ret;
+
+}
 
 function floorplan_shortcode( $atts, $content = null ) {
     
@@ -382,7 +516,7 @@ function floorplan_shortcode( $atts, $content = null ) {
     $floorplanstatus = false;
     if (current_user_can('administrator') || current_user_can('contentmanager')) {
 		$floorplanstatus = true;
-	}else if(is_user_logged_in()){
+	}else{
 		if($atts['status'] == 'viewer'){
 			
 			$floorplanstatus = true;
@@ -394,7 +528,7 @@ function floorplan_shortcode( $atts, $content = null ) {
 	if($floorplanstatus == true){
 		
 	extract(shortcode_atts(array("id" => '',"status" =>''), $atts));
-        $getAllusers_data = json_encode(getAllusers_data());
+        $getAllusers_data = addslashes(json_encode(getAllusers_data()));
         
         $contentmanager_settings = get_option( 'ContenteManager_Settings' );
 	$id = $contentmanager_settings['ContentManager']['floorplanactiveid'];
@@ -428,12 +562,20 @@ function floorplan_shortcode( $atts, $content = null ) {
             $FloorBackground = '';
             
             
+            $legendlabel = "[";
+            $legendlabel.='{"ID":1,"colorstatus":true,"name":"Gold","colorcode":#00000},';
+            $legendlabel.='{"ID":2,"colorstatus":true,"name":"Sliver","colorcode":#00000},';
+            $legendlabel.='{"ID":3,"colorstatus":true,"name":"Red","colorcode":#00000}';
+           
+            $legendlabel .= "]";
+            
             $FloorplanXml = '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" pageWidth="2175" pageHeight="2175" ><root></root></mxGraphModel>';
             
                update_option( 'ContenteManager_Settings', $contentmanager_settings );
                update_post_meta( $id, 'booth_types', $boothTypes );
                update_post_meta( $id, 'floor_background', $FloorBackground);
                update_post_meta( $id, 'floorplan_xml', $FloorplanXml );
+               update_post_meta( $id, 'legendlabels', $legendlabel );
             
              
          }
@@ -444,6 +586,7 @@ function floorplan_shortcode( $atts, $content = null ) {
             $boothTypes = get_post_meta( $id, 'booth_types', true );
             $FloorBackground = get_post_meta( $id, 'floor_background', true );
             $FloorplanXml = get_post_meta( $id, 'floorplan_xml', true );
+            $FloorplanLegends = get_post_meta( $id, 'legendlabels', true );
 
         
         
@@ -471,7 +614,7 @@ function floorplan_contentmanagerlogging($acction_name,$action_type,$pre_action_
 
     
 //require_once('../../../wp-load.php');
-    
+   
 global $wpdb;
 $blog_id =get_current_blog_id();
    if(get_current_blog_id() == 1){
@@ -480,9 +623,9 @@ $blog_id =get_current_blog_id();
     
         $tablename = 'contentmanager_'.$blog_id.'_log';
     } 
-
+$_SERVER['currentuseremail'] = $email;
 $query = "INSERT INTO ".$tablename." (action_name, action_type,pre_action_data,user_id,user_email,result) VALUES (%s,%s,%s,%s,%s,%s)";
-$wpdb->query($wpdb->prepare($query, $acction_name, $action_type,$pre_action_data,$user_id,$email,$result));
+$wpdb->query($wpdb->prepare($query, $acction_name, $action_type,$pre_action_data,$user_id,$_SERVER,$result));
 $lastInsertId = $wpdb->insert_id;
 return $lastInsertId;
 

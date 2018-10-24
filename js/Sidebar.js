@@ -908,7 +908,9 @@ Sidebar.prototype.addGeneralPalette = function(expand)
             this.addPaletteFunctions('general', "Default Booth Types", (expand != null) ? expand : true, fns);
            // this.addPaletteFunctionsCustom('general1', "Custom Booth Types", (expand != null) ? expand : true, fns);
         }else{
-           this.addExhibitorsFunctions(graph, 'generalExhibitors', "Exhibitors", (expand != null) ? expand : true, mxgetjosnusersData); 
+           
+         this.addExhibitorsFunctions(graph, 'generalExhibitors', "Exhibitors", (expand != null) ? expand : true, mxgetjosnusersData); 
+         this.addLegendsFunctions(graph, 'generalLegends', "Legends", (expand != null) ? expand : true, LegendsOfObjects); 
             
         }
     
@@ -1878,7 +1880,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	{
 		var ds = this.createDragSource(elt, this.createDropHandler(cells, true, allowCellsInserted,
 			bounds), this.createDragPreview(width, height), cells, bounds);
-		this.addClickHandler(elt, ds, cells);
+		//this.addClickHandler(elt, ds, cells);
 	
 		// Uses guides for vertices only if enabled in graph
 		ds.isGuidesEnabled = mxUtils.bind(this, function()
@@ -1890,7 +1892,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	{
 		var ds = this.createDragSource(elt, this.createDropHandler(cells, false, allowCellsInserted,
 			bounds), this.createDragPreview(width, height), cells, bounds);
-		this.addClickHandler(elt, ds, cells);
+		//this.addClickHandler(elt, ds, cells);
 	}
 	
 	// Shows a tooltip with the rendered cell
@@ -2541,7 +2543,8 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 	// Shows/hides hover icons
 	var dragEnter = dragSource.dragEnter;
 	dragSource.dragEnter = function(graph, evt)
-	{
+	{       
+               
 		if (ui.hoverIcons != null)
 		{
 			ui.hoverIcons.setDisplay('none');
@@ -2552,7 +2555,8 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 	
 	var dragExit = dragSource.dragExit;
 	dragSource.dragExit = function(graph, evt)
-	{
+	{       
+               
 		if (ui.hoverIcons != null)
 		{
 			ui.hoverIcons.setDisplay('');
@@ -2562,7 +2566,8 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 	};
 	
 	dragSource.dragOver = function(graph, evt)
-	{
+	{       
+              
 		mxDragSource.prototype.dragOver.apply(this, arguments);
 
 		if (this.currentGuide != null && activeArrow != null)
@@ -3239,11 +3244,12 @@ Sidebar.prototype.addPaletteFunctions = function(id, title, expanded, fns,condit
 	}));
 };
 Sidebar.prototype.addPaletteFunctionsCustom = function(id, title, expanded, fns,condition)
-{
+{       
          if(condition){
         
          }
-         
+        
+        
 	this.addPalette(id, title, expanded, mxUtils.bind(this, function(content)
 	{       
             
@@ -3256,19 +3262,133 @@ Sidebar.prototype.addPaletteFunctionsCustom = function(id, title, expanded, fns,
 		}
 	}));
 };
+Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns,condition)
+{
+         if(condition){
+        
+         }
+        
+	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
+	{           
+                   
+                    
+                    var div = document.createElement('ul');
+                    div.className ="legendslist";
+                    var boothdetailleft = "";
+                    jQuery.each(LegendsOfObjects, function (key, value) {
+                        
+                        var li = document.createElement('li');
+                        li.className = 'legendslistLi';
+                        li.style.backgroundColor = value.colorcode;
+                        var anchor = document.createElement('a');
+                        anchor.innerHTML = value.name;
+                        anchor.id = value.ID;
+                        
+                      mxEvent.addListener(anchor, 'mouseenter', function(sender, evt)
+                            {
+                                    var cells = graph.getChildVertices(graph.getDefaultParent());
+                                    
+                                     jQuery(cells).each(function () {
+                                           
+                                            var cell = this; //abdd[i];
+                                            
+                                            if (cell != null)
+                                                {
+                                                    
+                                                   var usercurrentid = cell.getAttribute('legendlabels', ''); 
+                                                   
+
+                                                                    if (value.ID == usercurrentid) {
+
+                                                                        var overlays = graph.getCellOverlays(cell);
+                                                                            if (overlays == null)
+                                                                            {
+                                                                                // Creates a new overlay with an image and a tooltip
+                                                                                var overlay = new mxCellOverlay(
+                                                                                        new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
+                                                                                        'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
+
+                                                                                // Installs a handler for clicks on the overlay							
+                                                                                overlay.addListener(mxEvent.CLICK, function (sender, evt2)
+                                                                                {
+                                                                                    mxUtils.alert('Overlay clicked');
+                                                                                });
+
+                                                                                // Sets the overlay for the cell in the graph
+                                                                                graph.addCellOverlay(cell, overlay);
+                                                                            }
+
+
+                                                                    }
+
+                                                             
+                                                        
+                                                   
+                                                    
+                                                }
+                                            
+                                           
+                                        });
+                              
+                                
+                            });
+                            
+                            mxEvent.addListener(anchor, 'mouseleave', function()
+                            {
+                                var cells = graph.getChildVertices(graph.getDefaultParent());
+                                    
+                                     jQuery(cells).each(function () {
+                                           
+                                            var cell = this; //abdd[i];
+                                            
+                                            if (cell != null)
+                                                {
+                                                    
+                                                   var usercurrentid = cell.getAttribute('legendlabels', ''); 
+                                                   if (value.ID == usercurrentid) {
+
+                                                            graph.removeCellOverlays(cell);
+
+
+                                                    }
+                                               }
+                                            
+                                           
+                                        });    
+                                
+                                
+                               
+                            });
+        
+                            //div.innerHTML+='<li  class="pointedonmap '+pointclassname+'"><a onmouseover="bigImg('+mxgetjosnusersData[key].exhibitorsid+','+graph+')" onclick="getallDetialuser('+mxgetjosnusersData[key].exhibitorsid+')" >'+mxgetjosnusersData[key].companyname+'</a></li>';
+                            li.appendChild(anchor);
+                            div.appendChild(li);
+                        
+                    
+
+                });
+                    
+        
+              addcontent.appendChild(div);         
+            //  jQuery('.geSidebarContainer').append(div);         	
+		
+	}));
+};
+
+
 Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, fns,condition)
 {
          if(condition){
         
          }
-        console.log(graph);
+        
 	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
 	{           
                    
                     
                     var div = document.createElement('ul');
                     div.className ="exbitorlist";
-                    
+                    var boothdetailleft = "";
                     jQuery.each(mxgetjosnusersData, function (key, value) {
                         
                         if (mxgetjosnusersData[key].companyname != "") {
@@ -3285,8 +3405,8 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                    
                                    
                                      var usercurrentid = jQuery(this).attr('boothOwner');
-                                   
-                                   
+                                     
+                                    
                                                     
                                                     if (mxgetjosnusersData[key].exhibitorsid == usercurrentid) {
 
@@ -3301,11 +3421,12 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                   
                                 });
                                 
-                        if (mxgetjosnusersData[key].exhibitorsid == currentuseriD) {     
+                        if (mxgetjosnusersData[key].exhibitorsid == currentuseriD) {
+                            
                             var li = document.createElement('li');
                             li.className = pointclassname;
-                            
-                            
+                           
+                           
                             var anchor = document.createElement('a');
                             anchor.innerHTML = mxgetjosnusersData[key].companyname;
                             
@@ -3315,62 +3436,80 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                 var reportData = jQuery.parseJSON(mxgetAllusersData);
                                 var xmlDoc = jQuery.parseXML(mxFloorPlanXml);
                                 var assignedboothname = "";
-
+                                 var boothdetailleft = "";
+                                 var companydescription ="";
+                                 var htmlcompanydescription = "";
                                  $xml = jQuery(xmlDoc);
                                  
 
                                  jQuery($xml).find("MyNode").each(function () {
                                      
+                                    
                                      var usercurrentid = jQuery(this).attr('boothOwner');
                                      var valuessrting = jQuery(this).attr('style');
+                                      companydescription = jQuery(this).attr('companydescripiton');
+                                     
+                                      
+                                       
+                                      
                                   if (mxgetjosnusersData[key].exhibitorsid == usercurrentid) {
-                                     assignedboothname += jQuery(this).attr('mylabel')+', ';
+                                      
+                                      boothdetailleft  = jQuery(this).attr('boothDetail');
+                                      assignedboothname += jQuery(this).attr('mylabel')+', ';
                                   }
 
 
                                  });
                                 if(reportData){
+                                      
+                                     jQuery.each(reportData,function(key,index){
+                                      
+                                        if(index.exhibitorsid == userid){
+                                            var tablehtml = '';
+                                            var curr_dat = '';
+                                            var companylogourlnew = index.companylogourl;
+                                            var htmlforassignedbooth='';
+                                            var htmlforaddress = '' ;
+                                            if(companylogourlnew == null){
 
-                                     var tablehtml = '';
-                                     var curr_dat = '';
-                                     var companylogourlnew = reportData[userid].companylogourl;
-                                     var htmlforassignedbooth='';
-                                     var htmlforaddress = '' ;
+                                                companylogourlnew = baseCurrentSiteURl+'/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
+                                            }
+                                            
+                                            if(companydescription != ""){
+                                                
+                                                     htmlcompanydescription = '<h5 style="color:#7f7f7f">Company Description</h5><div style="color:#7f7f7f">'+companydescription.replace(/,\s*$/, "")+'</div><hr>';
+                                            
+                                                
+                                            }
+                                            
+                                            
+                                            if(assignedboothname != "" ){
+                                                htmlforassignedbooth = '<h5 style="color:#7f7f7f">Assigned Booth(s)</h5><p style="color:#7f7f7f">'+assignedboothname.replace(/,\s*$/, "")+'</p>';
+                                            }
+                                            if(index.address_line_1 !=""){
 
-                                     if(companylogourlnew == null){
+                                                htmlforaddress = '<p>'+index.address_line_1+', '+index.usercity+', '+index.usercountry+'</p>';
 
-                                         companylogourlnew = baseCurrentSiteURl+'/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
-                                     }
-
-                                     if(assignedboothname != "" ){
-                                          htmlforassignedbooth = '<h5 style="color:#7f7f7f">Assigned Booth(s)</h5><p style="color:#7f7f7f">'+assignedboothname.replace(/,\s*$/, "")+'</p>';
-                                     }
-
-
-                                     if(reportData[userid].address_line_1 !=""){
-
-                                       htmlforaddress = '<p>'+reportData[userid].address_line_1+', '+reportData[userid].usercity+', '+reportData[userid].usercountry+'</p>';
-
-                                     }
-
-
-                                     var openhtml = '<div class="maindiv" style="width:100%;margin-top:36px;min-height: 350px;"><div class="profiledive" style="width:50%;float:left;text-align:center"><img width="300" src="'+companylogourlnew+'" /></div><div class="descrpitiondiv" style="float:right;width:50%"><h1 style="color:#7f7f7f">'+reportData[userid].companyname+'</h1>'+htmlforaddress+'<hr>'+htmlforassignedbooth+'</div></div>';
+                                            }
+                                            var openhtml = '<div class="maindiv" style="width:100%;margin-top:36px;min-height: 350px;"><div class="profiledive" style="width:50%;float:left;text-align:center"><img width="300" src="'+companylogourlnew+'" /></div><div class="descrpitiondiv" style="float:right;width:50%"><h1 style="color:#7f7f7f">'+index.companyname+'</h1>'+htmlforaddress+'<hr>'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'<p>'+boothdetailleft+'</p></div></div>';
 
 
-                                     jQuery('body').css('cursor', 'default');
-                                     jQuery.confirm({
-                                         title: '',
-                                         content: openhtml,
-                                         confirmButton:false,
-                                         confirmButtonClass: 'mycustomwidth',
-                                         cancelButton: false,
-                                         animation: 'rotateY',
-                                         closeIcon: true,
-                                         columnClass: 'jconfirm-box-container-special'
+                                            jQuery('body').css('cursor', 'default');
+                                            jQuery.confirm({
+                                                title: '',
+                                                content: openhtml,
+                                                cancelButton: false ,// hides the cancel button.
+                                                confirmButton: false, // hides the confirm button.
+                                                closeIcon: true,
+                                                columnClass: 'jconfirm-box-container-special'
 
+                                            });
+                                            
+                                            
+                                        }
+                                         
                                      });
-
-                                 }   
+                                  }   
                             });
                             
                             mxEvent.addListener(anchor, 'mouseenter', function(sender, evt)
