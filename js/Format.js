@@ -6969,7 +6969,7 @@ function getallboothtypes(){
                                                
                                                
                                               // console.log(boothtypeslist);
-                                               html+='<div style="max-height: 350px;overflow: auto;"><table class="table mycustometable" id="listofalllegends">';
+                                               html+='<div style="max-height: 250px;overflow: auto;"><table class="table mycustometable" id="listofalllegends">';
                                                
                                                jQuery.each(LegendsOfObjects, function(index1, value) {
                                                   var IDCODE = "'"+value.ID+"'" ;
