@@ -351,7 +351,7 @@ div.mxWindow .geButton {
 	line-height:1.4em;
 }
 .geSidebarContainer .geTitle:hover {
-	background:#e5e5e5;
+	background-color:#e5e5e5;
 }
 .geTitle img {
 	opacity:0.5;
@@ -866,7 +866,7 @@ html td.mxWindowTitle {
 }
 .geTitle{
     
-    background: #dcdcdc!important;
+    background-color: #dcdcdc!important;
     color: #000 !important;
     font-weight: bolder !important;
     
@@ -1011,5 +1011,11 @@ input:checked + .slider:before {
 .jconfirm-box-container-special-company-descripiton{
     
     margin-top: -16% !important;
+    
+}
+.jconfirm-box-container-special-boothtypes{
+    
+    margin-left: 10% !important;
+    margin-right: 15% !important;
     
 }

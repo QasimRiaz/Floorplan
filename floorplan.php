@@ -4,7 +4,7 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 1.01
+ * Version: 1.2
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -633,7 +633,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
             'readme' => 'README.md', // which file to use as the readme for the version number
             'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
         );
-        new WP_GitHub_Updater($config);
+        new WP_GitHub_floorplan_Updater($config);
     }
 
 

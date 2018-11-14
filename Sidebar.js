@@ -35,7 +35,7 @@ function Sidebar(editorUi, container)
 		this.showTooltips = false;
 		this.hideTooltip();
 	});
-        
+	
 	mxEvent.addListener(document, (mxClient.IS_POINTER) ? 'pointerdown' : 'mousedown', this.pointerDownHandler);
 	
 	this.pointerMoveHandler = mxUtils.bind(this, function(evt)
@@ -315,8 +315,8 @@ Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel)
 					}
 					
 					this.tooltipTitle.style.display = '';
-					//mxUtils.write(this.tooltipTitle,title);
-					this.tooltipTitle.innerHTML = title;
+					mxUtils.write(this.tooltipTitle, title);
+					
 					var ddy = this.tooltipTitle.offsetHeight + 10;
 					height += ddy;
 					
@@ -500,7 +500,7 @@ Sidebar.prototype.searchEntries = function(searchTerms, count, page, success, er
 				}
 				else
 				{
-                                    results = [];
+					results = [];
 				}
 				
 				dict = tmpDict;
@@ -883,14 +883,11 @@ Sidebar.prototype.insertSearchHint = function(div, searchTerm, count, page, resu
  */
 Sidebar.prototype.addGeneralPalette = function(expand)
 {
-    var graph = this.editorUi.editor.graph;
 	var fns = [];
 	
 	for (var key in ArrayOfObjects) {
 	   var obj = ArrayOfObjects[key];
-	   var getboothNameData = obj.style ;
-           var getboothName = getboothNameData.split(';')
-           
+	   //console.log(obj.background);
 	   var bothtypeheight = ArrayOfObjects[key].height/mxPixelPerFeet;
 	   var bothtypewidth = ArrayOfObjects[key].width/mxPixelPerFeet;
            
@@ -898,24 +895,14 @@ Sidebar.prototype.addGeneralPalette = function(expand)
 	   var bothwidth = ArrayOfObjects[key].width;
            
            //console.log(bothtypeheight+'x'+bothtypewidth+' ft');
-	   fns.push(this.createVertexTemplateEntry(obj.style, parseInt(bothwidth), parseInt(bothheight), '', getboothName[0]+'</br>'+bothtypeheight+'x'+bothtypewidth+' ft', true, true, 'rect rectangle box'));
-           
-    
-        }
+	   fns.push(this.createVertexTemplateEntry(obj.style, parseInt(bothwidth), parseInt(bothheight), '', bothtypeheight+'x'+bothtypewidth+' ft', true, true, 'rect rectangle box'));
+	}
 	
         
-        if(mxCurrentfloorplanstatus !='viewer'){
-            this.addPaletteFunctions('general', "Default Booth Types", (expand != null) ? expand : true, fns);
-           // this.addPaletteFunctionsCustom('general1', "Custom Booth Types", (expand != null) ? expand : true, fns);
-        }else{
-           
         
-         this.addLegendsFunctions(graph, 'generalLegends', "Legends", (expand != null) ? expand : true, LegendsOfObjects); 
-         this.addExhibitorsFunctions(graph, 'generalExhibitors', "Exhibitors", (expand != null) ? expand : true, mxgetjosnusersData); 
-            
-        }
-    
-      
+	this.addPaletteFunctions('general', "Presets", (expand != null) ? expand : true, fns);
+        this.addExhibitorsFunctions('generalExhibitors', "Exhibitors", (expand != null) ? expand : true, mxgetjosnusersData);
+	
 	//var fns = [
 	 	//this.createVertexTemplateEntry('whiteSpace=wrap;shape=rectangle;html=1;fillColor=#FAFFCF;fontSize=18;', 5*mxPixelPerFeet, 5*mxPixelPerFeet, '', '5x5 ft', true, true, 'rect rectangle box'),
 	 	//this.createVertexTemplateEntry('whiteSpace=wrap;html=1;fillColor=#FAFFCF;fontSize=26;', 9*mxPixelPerFeet, 9*mxPixelPerFeet, '', '9x9 ft', null, null, 'rect rectangle box')
@@ -1765,7 +1752,7 @@ Sidebar.prototype.createTitle = function(label)
 {
 	var elt = document.createElement('a');
 	elt.setAttribute('href', 'javascript:void(0);');
-	
+	elt.setAttribute('title', mxResources.get('sidebarTooltip'));
 	elt.className = 'geTitle';
 	mxUtils.write(elt, label);
 
@@ -1870,7 +1857,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	
 	// Blocks default click action
 	mxEvent.addListener(elt, 'click', function(evt)
-	{       console.log('Helloo');
+	{
 		mxEvent.consume(evt);
 	});
 
@@ -1881,7 +1868,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	{
 		var ds = this.createDragSource(elt, this.createDropHandler(cells, true, allowCellsInserted,
 			bounds), this.createDragPreview(width, height), cells, bounds);
-		//this.addClickHandler(elt, ds, cells);
+		this.addClickHandler(elt, ds, cells);
 	
 		// Uses guides for vertices only if enabled in graph
 		ds.isGuidesEnabled = mxUtils.bind(this, function()
@@ -1893,7 +1880,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	{
 		var ds = this.createDragSource(elt, this.createDropHandler(cells, false, allowCellsInserted,
 			bounds), this.createDragPreview(width, height), cells, bounds);
-		//this.addClickHandler(elt, ds, cells);
+		this.addClickHandler(elt, ds, cells);
 	}
 	
 	// Shows a tooltip with the rendered cell
@@ -2544,8 +2531,7 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 	// Shows/hides hover icons
 	var dragEnter = dragSource.dragEnter;
 	dragSource.dragEnter = function(graph, evt)
-	{       
-               
+	{
 		if (ui.hoverIcons != null)
 		{
 			ui.hoverIcons.setDisplay('none');
@@ -2556,8 +2542,7 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 	
 	var dragExit = dragSource.dragExit;
 	dragSource.dragExit = function(graph, evt)
-	{       
-               
+	{
 		if (ui.hoverIcons != null)
 		{
 			ui.hoverIcons.setDisplay('');
@@ -2567,8 +2552,7 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 	};
 	
 	dragSource.dragOver = function(graph, evt)
-	{       
-              
+	{
 		mxDragSource.prototype.dragOver.apply(this, arguments);
 
 		if (this.currentGuide != null && activeArrow != null)
@@ -3215,393 +3199,40 @@ Sidebar.prototype.addPaletteFunctions = function(id, title, expanded, fns,condit
         
          }
          
-         jQuery('.geSidebar').remove();
-        jQuery('.geTitle').remove();
-         
 	this.addPalette(id, title, expanded, mxUtils.bind(this, function(content)
-	{       
-            
-               
-		for (var i = 0; i < 3; i++)
-		{
-                    
-                    content.appendChild(fns[i](content));   
-                    
-		}
-                
-                
-	}));
-        
-        this.addPalette(id, 'Custom Booth Types', expanded, mxUtils.bind(this, function(Addcontent)
-	{       
-            
-                
-		for (var i = 3; i < fns.length; i++)
-		{
-			
-                    Addcontent.appendChild(fns[i](Addcontent));   
-                    
-		}
-	}));
-};
-Sidebar.prototype.addPaletteFunctionsCustom = function(id, title, expanded, fns,condition)
-{       
-         if(condition){
-        
-         }
-        
-        
-	this.addPalette(id, title, expanded, mxUtils.bind(this, function(content)
-	{       
-            
-                
-		for (var i = 3; i < fns.length; i++)
+	{
+		for (var i = 0; i < fns.length; i++)
 		{
 			
                     content.appendChild(fns[i](content));   
-                    
+                   	
 		}
 	}));
 };
-Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns,condition)
+Sidebar.prototype.addExhibitorsFunctions = function(id, title, expanded, fns,condition)
 {
          if(condition){
         
          }
-        
-	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
+       
+	this.addPalette(id, title, expanded, mxUtils.bind(this, function(content)
 	{           
-                   
-                    
-                    var div = document.createElement('ul');
-                    div.className ="legendslist";
-                    var boothdetailleft = "";
-                    jQuery.each(LegendsOfObjects, function (key, value) {
-                        
-                        var li = document.createElement('li');
-                        li.className = 'legendslistLi';
-                        li.style.backgroundColor = value.colorcode;
-                        var anchor = document.createElement('a');
-                        anchor.innerHTML = value.name;
-                        anchor.id = value.ID;
-                        
-                      mxEvent.addListener(anchor, 'mouseenter', function(sender, evt)
-                            {
-                                    var cells = graph.getChildVertices(graph.getDefaultParent());
-                                    
-                                     jQuery(cells).each(function () {
-                                           
-                                            var cell = this; //abdd[i];
-                                            
-                                            if (cell != null)
-                                                {
-                                                    
-                                                   var usercurrentid = cell.getAttribute('legendlabels', ''); 
-                                                   
+                    this.last().addClass( "highlight" );
+                    console.log(this.last());
 
-                                                                    if (value.ID == usercurrentid) {
-
-                                                                        var overlays = graph.getCellOverlays(cell);
-                                                                            if (overlays == null)
-                                                                            {
-                                                                                // Creates a new overlay with an image and a tooltip
-                                                                                var overlay = new mxCellOverlay(
-                                                                                        new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
-                                                                                        'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
-
-                                                                                // Installs a handler for clicks on the overlay							
-                                                                                overlay.addListener(mxEvent.CLICK, function (sender, evt2)
-                                                                                {
-                                                                                    mxUtils.alert('Overlay clicked');
-                                                                                });
-
-                                                                                // Sets the overlay for the cell in the graph
-                                                                                graph.addCellOverlay(cell, overlay);
-                                                                            }
-
-
-                                                                    }
-
-                                                             
-                                                        
-                                                   
-                                                    
-                                                }
-                                            
-                                           
-                                        });
-                              
-                                
-                            });
-                            
-                            mxEvent.addListener(anchor, 'mouseleave', function()
-                            {
-                                var cells = graph.getChildVertices(graph.getDefaultParent());
-                                    
-                                     jQuery(cells).each(function () {
-                                           
-                                            var cell = this; //abdd[i];
-                                            
-                                            if (cell != null)
-                                                {
-                                                    
-                                                   var usercurrentid = cell.getAttribute('legendlabels', ''); 
-                                                   if (value.ID == usercurrentid) {
-
-                                                            graph.removeCellOverlays(cell);
-
-
-                                                    }
-                                               }
-                                            
-                                           
-                                        });    
-                                
-                                
-                               
-                            });
-        
-                            //div.innerHTML+='<li  class="pointedonmap '+pointclassname+'"><a onmouseover="bigImg('+mxgetjosnusersData[key].exhibitorsid+','+graph+')" onclick="getallDetialuser('+mxgetjosnusersData[key].exhibitorsid+')" >'+mxgetjosnusersData[key].companyname+'</a></li>';
-                            li.appendChild(anchor);
-                            div.appendChild(li);
-                        
-                    
-
-                });
-                    
-        
-              addcontent.appendChild(div);         
-            //  jQuery('.geSidebarContainer').append(div);         	
-		
-	}));
-};
-
-
-Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, fns,condition)
-{
-         if(condition){
-        
-         }
-        
-	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
-	{           
-                   
-                    
-                    var div = document.createElement('ul');
-                    div.className ="exbitorlist";
-                    var boothdetailleft = "";
                     jQuery.each(mxgetjosnusersData, function (key, value) {
-                        
+
                         if (mxgetjosnusersData[key].companyname != "") {
-                            
-                            
-                                var xmlDoc = jQuery.parseXML(mxFloorPlanXml);
-                                var  pointclassname = "";
-                                var currentuseriD ="";
-                                $xml = jQuery(xmlDoc);
-                                var i = 0;
-                               
-                        jQuery($xml).find("MyNode").each(function () {
-                                   
-                                   
-                                   
-                                     var usercurrentid = jQuery(this).attr('boothOwner');
-                                     
-                                    
-                                                    
-                                                    if (mxgetjosnusersData[key].exhibitorsid == usercurrentid) {
-
-                                                            currentuseriD = usercurrentid;
-                                                            pointclassname = 'occupied';
-                                                            return false;
-
-                                                    } else {
-
-                                                            pointclassname = 'unoccupied';
-                                                    }
-                                  
-                                });
-                                
-                        if (mxgetjosnusersData[key].exhibitorsid == currentuseriD) {
-                            
-                            var li = document.createElement('li');
-                            li.className = pointclassname;
                            
                            
-                            var anchor = document.createElement('a');
-                            anchor.innerHTML = mxgetjosnusersData[key].companyname;
-                            
-                            mxEvent.addListener(anchor, 'click', function()
-                            {
-                                var userid = mxgetjosnusersData[key].exhibitorsid;
-                                var reportData = jQuery.parseJSON(mxgetAllusersData);
-                                var xmlDoc = jQuery.parseXML(mxFloorPlanXml);
-                                var assignedboothname = "";
-                                 var boothdetailleft = "";
-                                 var companydescription ="";
-                                 var htmlcompanydescription = "";
-                                 $xml = jQuery(xmlDoc);
-                                 
+                            //jQuery(this).append('<li>' + mxgetjosnusersData[key].companyname + '</li>');   
+                        }
 
-                                 jQuery($xml).find("MyNode").each(function () {
-                                     
-                                    
-                                     var usercurrentid = jQuery(this).attr('boothOwner');
-                                     var valuessrting = jQuery(this).attr('style');
-                                     
-                                     
-                                      
-                                       
-                                      
-                                  if (mxgetjosnusersData[key].exhibitorsid == usercurrentid) {
-                                      
-                                      boothdetailleft  = jQuery(this).attr('boothDetail');
-                                      assignedboothname += jQuery(this).attr('mylabel')+', ';
-                                      companydescription = jQuery(this).attr('companydescripiton');
-                                  }
+                    });
 
-                                  console.log(companydescription);
-                                  
-                                 });
-                                if(reportData){
-                                      
-                                     jQuery.each(reportData,function(key,index){
-                                      
-                                        if(index.exhibitorsid == userid){
-                                            var tablehtml = '';
-                                            var curr_dat = '';
-                                            var companylogourlnew = index.companylogourl;
-                                            var htmlforassignedbooth='';
-                                            var htmlforaddress = '' ;
-                                            if(companylogourlnew == null){
-
-                                                companylogourlnew = baseCurrentSiteURl+'/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
-                                            }
-                                            
-                                            if(companydescription != "" && typeof companydescription !== "undefined" ){
-                                                
-                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
-                                            
-                                                
-                                            }
-                                            
-                                            
-                                            if(assignedboothname != "" ){
-                                                htmlforassignedbooth = '<h5 >Assigned Booth(s) :<span style="font-size:14px;">'+assignedboothname.replace(/,\s*$/, "")+'</span></h5>';
-                                            }
-                                            if(index.address_line_1 !=""){
-
-                                                htmlforaddress = '<p>'+index.address_line_1+', '+index.usercity+', '+index.usercountry+'</p>';
-
-                                            }
-                                            var openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top: 6%;float:left;text-align:center"><img width="200" src="'+companylogourlnew+'" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >'+index.companyname+'</h1>'+htmlforaddress+'<hr>'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div></div>';
-
-
-                                            jQuery('body').css('cursor', 'default');
-                                            jQuery.confirm({
-                                                title: '',
-                                                content: openhtml,
-                                                cancelButton: false ,// hides the cancel button.
-                                                confirmButton: false, // hides the confirm button.
-                                                closeIcon: true,
-                                                columnClass: 'jconfirm-box-container-special'
-
-                                            });
-                                            
-                                            
-                                        }
-                                         
-                                     });
-                                  }   
-                            });
-                            
-                            mxEvent.addListener(anchor, 'mouseenter', function(sender, evt)
-                            {
-                                    var cells = graph.getChildVertices(graph.getDefaultParent());
-                                    
-                                     jQuery(cells).each(function () {
-                                           
-                                            var cell = this; //abdd[i];
-                                            
-                                            if (cell != null)
-                                                {
-                                                    
-                                                   var usercurrentid = cell.getAttribute('boothOwner', ''); 
-                                                   
-
-                                                                    if (mxgetjosnusersData[key].exhibitorsid == usercurrentid) {
-
-                                                                        var overlays = graph.getCellOverlays(cell);
-                                                                            if (overlays == null)
-                                                                            {
-                                                                                // Creates a new overlay with an image and a tooltip
-                                                                                var overlay = new mxCellOverlay(
-                                                                                        new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
-                                                                                        'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
-
-                                                                                // Installs a handler for clicks on the overlay							
-                                                                                overlay.addListener(mxEvent.CLICK, function (sender, evt2)
-                                                                                {
-                                                                                    mxUtils.alert('Overlay clicked');
-                                                                                });
-
-                                                                                // Sets the overlay for the cell in the graph
-                                                                                graph.addCellOverlay(cell, overlay);
-                                                                            }
-
-
-                                                                    }
-
-                                                             
-                                                        
-                                                   
-                                                    
-                                                }
-                                            
-                                           
-                                        });
-                              
-                                
-                            });
-                            
-                            mxEvent.addListener(anchor, 'mouseleave', function()
-                            {
-                                var cells = graph.getChildVertices(graph.getDefaultParent());
-                                    
-                                     jQuery(cells).each(function () {
-                                           
-                                            var cell = this; //abdd[i];
-                                            
-                                            if (cell != null)
-                                                {
-                                                    
-                                                   var usercurrentid = cell.getAttribute('boothOwner', ''); 
-                                                   if (mxgetjosnusersData[key].exhibitorsid == usercurrentid) {
-
-                                                            graph.removeCellOverlays(cell);
-
-
-                                                    }
-                                               }
-                                            
-                                           
-                                        });    
-                                
-                                
-                               
-                            });
         
-                            //div.innerHTML+='<li  class="pointedonmap '+pointclassname+'"><a onmouseover="bigImg('+mxgetjosnusersData[key].exhibitorsid+','+graph+')" onclick="getallDetialuser('+mxgetjosnusersData[key].exhibitorsid+')" >'+mxgetjosnusersData[key].companyname+'</a></li>';
-                            li.appendChild(anchor);
-                            div.appendChild(li);
-                         }
-                    }
-
-                });
-                    
-        
-              addcontent.appendChild(div);         
-            //  jQuery('.geSidebarContainer').append(div);         	
+		   
+                   	
 		
 	}));
 };
@@ -3610,11 +3241,10 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
  */
 Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
 {
-       
-       
-        var elt = this.createTitle(title);
-      
-	
+        jQuery('.geSidebar').remove();
+        jQuery('.geTitle').remove();
+        
+	var elt = this.createTitle(title);
 	this.container.appendChild(elt);
 	
 	var div = document.createElement('div');

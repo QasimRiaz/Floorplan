@@ -1,6 +1,6 @@
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-1.12.4.js"></script>
 	<script type="text/javascript">
-            
+            var hex=new Array('0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f');
             pluginBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>';
 		mxBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>src';
 		mxPostID = '<?php echo $id; ?>';
@@ -20,13 +20,13 @@
 		var ArrayOfObjects = [];
                 var LegendsOfObjects = [];
 		var json = {};
+                var legendsdilog;
 		//console.log(mxFloorPlanXml);
 		var jsonBooth = JSON.parse(mxBoothTypes);
-                var jsonLegends = JSON.parse(mxLegendLabelsTypes);
                 var legendlabelID = "";
-             
-		//console.log(jsonBooth);
-		jQuery.each(jsonBooth, function(index, value) {
+                
+                
+                 jQuery.each(jsonBooth, function(index, value) {
 			json = {};
 			json.background = jsonBooth[index].background;
 			json.width = jsonBooth[index].width;
@@ -34,6 +34,11 @@
 			json.style = jsonBooth[index].style;
 			ArrayOfObjects.push(json);
 		});
+                if(mxLegendLabelsTypes !=""){
+                
+                var jsonLegends = JSON.parse(mxLegendLabelsTypes);
+                
+               
                 jQuery.each(jsonLegends, function(index1, value1) {
 			json1 = {};
 			json1.ID = jsonLegends[index1].ID;
@@ -43,16 +48,23 @@
 			LegendsOfObjects.push(json1);
 		});
                 
+                
+                }
+                
+             
+		//console.log(jsonBooth);
+		
+                
                
 	</script>
 
         <title><?php echo $current_site_name; ?> - Floor Plan Editor </title>
-        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/jquery-confirm.css?v=1.4">
+        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/jquery-confirm.css?v=1.5">
       
         <?php if($current_floor_plan_status == 'viewer' ){?>
         <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/main.css">
         <?php } ?>
-        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/grapheditor.css?v=1.40">
+        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/grapheditor.css?v=1.42">
         <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/fontawesome-all.css?v=1.03">
         <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/sweetalert.css">
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mobile-detect.min.js?v=2.19"></script>
@@ -105,14 +117,14 @@
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>jscolor/jscolor.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>sanitizer/sanitizer.min.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=2.52"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=2.95"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.27"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=2.66"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=3.07"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.28"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=2.95"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.51"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=2.91"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=4.35"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=4.72"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=2.62"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=3.17"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.19"></script>

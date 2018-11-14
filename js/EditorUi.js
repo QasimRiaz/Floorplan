@@ -951,19 +951,19 @@ EditorUi = function(editor, container, lightbox)
 
                                                            companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
                                                            }
-                                                      if(companydescription != ""){
+                                                      if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
-                                                     htmlcompanydescription = '<h5 style="color:#7f7f7f">Company Description</h5><div style="color:#7f7f7f">'+companydescription.replace(/,\s*$/, "")+'</div><hr>';
+                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
                                             
                                                 
                                                         }
                                                       
                                                       if (assignedboothname != "") {
 
-                                                      htmlforassignedbooth = '<h5 style="color:#7f7f7f">Assigned Booth(s)</h5><p style="color:#7f7f7f">' + assignedboothname.replace(/,\s*$/, "") + '</p>';
+                                                      htmlforassignedbooth = '<h5 >Assigned Booth(s):   <span style="font-size:14px;">' + assignedboothname.replace(/,\s*$/, "") + '</span></h5>';
                                                       } else{
 
-                                                      htmlforassignedbooth = '<h5 style="color:#7f7f7f">Booth Number</h5><p style="color:#7f7f7f"></p>';
+                                                      htmlforassignedbooth = '<h5 >Booth Number</h5><p ></p>';
                                                       }
                                                       if (index.address_line_1 != "") {
 
@@ -980,7 +980,7 @@ EditorUi = function(editor, container, lightbox)
                                                   }
                                               });
                                               
-                                                openhtml = '<div class="maindiv" style="width:100%;margin-top:36px;min-height: 350px;"><div class="profiledive" style="width:50%;float:left;text-align:center"><img width="300" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:50%"><h1 style="color:#7f7f7f">' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'<p>'+boothdetail+'</p></div></div>';
+                                                openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
 
                                                
                                            
@@ -991,17 +991,17 @@ EditorUi = function(editor, container, lightbox)
                                                var companylogourlnew = '';
                                                var htmlforassignedbooth = '';
                                                var htmlforaddress = '';
-                                                 if(companydescription != ""){
+                                                  if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
-                                                     htmlcompanydescription = '<h5 style="color:#7f7f7f">Company Description</h5><div style="color:#7f7f7f">'+companydescription.replace(/,\s*$/, "")+'</div><hr>';
+                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
                                             
                                                 
                                                         }
                                                
-                                               htmlforassignedbooth = '<h5 style="color:#7f7f7f">Booth Number</h5><p style="color:#7f7f7f">' + assignedboothname + '</p>';
+                                               htmlforassignedbooth = '<h5 >Booth Number:   <span style="font-size:14px;" >' + assignedboothname + '</span></h5>';
                                                companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
                                                console.log(companylogourlnew);
-                                               openhtml = '<div class="maindiv" style="width:100%;margin-top:36px;min-height: 350px;"><div class="profiledive" style="width:50%;float:left;text-align:center"><img width="300" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:50%"><h1 style="color:#7f7f7f"></h1>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'<p>'+boothdetail+'</p></div></div>';
+                                               openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 ></h1>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
                                            
                                            
                                        }
