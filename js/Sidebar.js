@@ -3482,7 +3482,7 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                             
                                             if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
-                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
+                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="text-align: justify;">'+unescape(companydescription)+'</div>';
                                             
                                                 
                                             }

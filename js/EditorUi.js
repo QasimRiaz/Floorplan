@@ -956,7 +956,7 @@ EditorUi = function(editor, container, lightbox)
                                                            }
                                                       if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
-                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
+                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="text-align: justify;">'+unescape(companydescription)+'</div>';
                                             
                                                 
                                                         }
@@ -1028,7 +1028,12 @@ EditorUi = function(editor, container, lightbox)
                                                         htmlforproductdetail += "<div class='row'><div class='col-sm-6'><p><a href='"+baseCurrentSiteURl+"/product/"+finalresultProduct.slug+"' target='_blank'><h2>"+finalresultProduct.title+"</h2></a></p><p><strong>Price : "+finalresultProduct.price+"</strong></p></div><div class='col-sm-3'><p style='text-align:center;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div><hr>";
                                                       
                                                         htmlforproductdetail += "<p>"+finalresultProduct.description+"</p><hr>";
-
+                                                         if(companydescription != "" && typeof companydescription !== "undefined" ){
+                                                
+                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="text-align: justify;">'+unescape(companydescription)+'</div>';
+                                            
+                                                
+                                                        }
                                                         if(finalresultProduct.stockstatus == 'instock'){
 
                                                             htmlforproductdetail += '<p style="float:right;" id="'+boothproductid+'"><a class="btn btn-small btn-info"  onclick="addToCart('+postid+')"  >ADD TO CART</a></p>';
