@@ -3437,9 +3437,10 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                 var reportData = jQuery.parseJSON(mxgetAllusersData);
                                 var xmlDoc = jQuery.parseXML(mxFloorPlanXml);
                                 var assignedboothname = "";
-                                 var boothdetailleft = "";
-                                 var companydescription ="";
-                                 var htmlcompanydescription = "";
+                                var boothdetailleft = "";
+                                var companydescription ="";
+                                var htmlcompanydescription = "";
+                                var boothproductid = "";
                                  $xml = jQuery(xmlDoc);
                                  
 
@@ -3458,9 +3459,10 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                       boothdetailleft  = jQuery(this).attr('boothDetail');
                                       assignedboothname += jQuery(this).attr('mylabel')+', ';
                                       companydescription = jQuery(this).attr('companydescripiton');
+                                      boothproductid = jQuery(this).attr('boothproductid');
                                   }
 
-                                  console.log(companydescription);
+                                  
                                   
                                  });
                                 if(reportData){
@@ -3474,8 +3476,8 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                             var htmlforassignedbooth='';
                                             var htmlforaddress = '' ;
                                             if(companylogourlnew == null){
-
-                                                companylogourlnew = baseCurrentSiteURl+'/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
+                                               
+                                                companylogourlnew = baseCurrentSiteURl+'/wp-content/plugins/woocommerce/assets/images/placeholder.png';
                                             }
                                             
                                             if(companydescription != "" && typeof companydescription !== "undefined" ){
@@ -3491,22 +3493,32 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                             }
                                             if(index.address_line_1 !=""){
 
-                                                htmlforaddress = '<p>'+index.address_line_1+', '+index.usercity+', '+index.usercountry+'</p>';
+                                                htmlforaddress = '<p>'+index.address_line_1+', '+index.usercity+', '+index.usercountry+'</p></hr>';
 
                                             }
-                                            var openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top: 6%;float:left;text-align:center"><img width="200" src="'+companylogourlnew+'" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >'+index.companyname+'</h1>'+htmlforaddress+'<hr>'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div></div>';
+                                            
+                                            
+                                          
+                                                
+                                              
+                                                 var openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top: 6%;float:left;text-align:center"><img width="200" src="'+companylogourlnew+'" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >'+index.companyname+'</h1>'+htmlforaddress+'<hr>'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div></div>';
+                                                    jQuery('body').css('cursor', 'default');
+                                                    jQuery.confirm({
+                                                        title: '',
+                                                        content: openhtml,
+                                                        cancelButton: false ,// hides the cancel button.
+                                                        confirmButton: false, // hides the confirm button.
+                                                        closeIcon: true,
+                                                        columnClass: 'jconfirm-box-container-special'
 
+                                                    });
+                                        
+                                            
+                                            
+                                            
+                                            
 
-                                            jQuery('body').css('cursor', 'default');
-                                            jQuery.confirm({
-                                                title: '',
-                                                content: openhtml,
-                                                cancelButton: false ,// hides the cancel button.
-                                                confirmButton: false, // hides the confirm button.
-                                                closeIcon: true,
-                                                columnClass: 'jconfirm-box-container-special'
-
-                                            });
+                                         
                                             
                                             
                                         }
@@ -3605,6 +3617,22 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
 		
 	}));
 };
+
+
+   
+
+       function addToCart(p_id) {
+          jQuery.get(baseCurrentSiteURl+'/?add-to-cart=' + p_id+'&quantity=1', function() {
+            
+             jQuery("#"+p_id).empty();
+             var enbutton = "<a class='btn btn-success btn-small' >Added</a>";
+             jQuery("#"+p_id).append(enbutton);
+            
+            
+          });
+       }
+
+
 /**
  * Adds the given palette.
  */

@@ -189,6 +189,13 @@ Toolbar.prototype.init = function()
              eltss[1].setAttribute('title', 'Get Public Link');
              eltss[1].innerHTML= '<div class="fas fa-link" style="color:#000"></div>';
              
+            
+             var eltss = this.addItems(['-', 'autogenerateproducts']);
+             eltss[1].setAttribute('title', 'Autogenerate Booth Products');
+             eltss[1].innerHTML= '<div class="fas fa-cogs" style="color:#000"></div>';
+             
+             
+             
              var elts = this.addItems(['-', 'save']);
              elts[1].setAttribute('title', 'Save');
              elts[1].setAttribute('class', 'mycustomstylelink');

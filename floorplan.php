@@ -4,7 +4,7 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 1.2
+ * Version: 2.00
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -39,8 +39,224 @@ if($_GET['floorplanRequest'] == "savedfloorplansettings") {
     savedalllegendstypes($_POST);
     die();
     
+}else if($_GET['floorplanRequest'] == "getproductdetail"){
+    
+    
+    require_once('../../../wp-load.php');
+    
+    getproductdetail($_REQUEST);
+    die();
+    
+}else if($_GET['floorplanRequest'] == "autogenerateproducts"){
+    
+    
+    require_once('../../../wp-load.php');
+    
+    autogenerateproducts();
+    die();
+    
 }
 
+function autogenerateproducts(){
+    
+    try{
+	
+        $FloorplanXml = stripslashes($_REQUEST['floorXml']);
+        $FloorplanXml = str_replace('"n<','<',$FloorplanXml);
+        $FloorplanXml= str_replace('>n"','>',$FloorplanXml);
+        $boothTypesLegend = json_decode(get_post_meta($_REQUEST['post_id'], 'legendlabels', true ));
+        $taxonomy     = 'product_cat';
+        $orderby      = 'name';  
+        $show_count   = 0;      // 1 for yes, 0 for no
+        $pad_counts   = 0;      // 1 for yes, 0 for no
+        $hierarchical = 1;      // 1 for yes, 0 for no  
+        $title        = '';  
+        $empty        = 0;
+
+        $args = array(
+               'taxonomy'     => $taxonomy,
+               'orderby'      => $orderby,
+               'show_count'   => $show_count,
+               'pad_counts'   => $pad_counts,
+               'hierarchical' => $hierarchical,
+               'title_li'     => $title,
+               'hide_empty'   => $empty
+        );
+       $all_categories = get_categories( $args );
+        
+        foreach ($all_categories as $catIndex=>$catValue){
+            
+            
+            if($catValue->name == "Booths"){
+                
+                $catID = $catValue->cat_ID;
+                
+            }
+            
+            
+        }
+        
+        
+        $default_settings = get_option( 'ContenteManager_Settings' );
+        $default_booth_price = $default_settings['ContentManager']['defaultboothprice'];
+        
+        $xml=simplexml_load_string($FloorplanXml) or die("Error: Cannot create object");
+        $currentIndex = 0;
+        
+        $att = "boothproductid";
+        
+       
+       
+        
+        
+        
+        foreach ($xml->root->MyNode as $cellIndex=>$CellValue){
+            
+          
+        
+          
+            $cellboothlabelvalue = $CellValue->attributes();
+            $getCellStylevalue = $xml->root->MyNode[$currentIndex]->mxCell->attributes();
+            $boothtitle = $cellboothlabelvalue['mylabel'];
+            
+          
+            
+           
+            
+            
+        if((!isset($cellboothlabelvalue['boothOwner']) || $cellboothlabelvalue['boothOwner'] == "none") &&  (!isset($cellboothlabelvalue['boothproductid']) || $cellboothlabelvalue['boothproductid'] == "none")){    
+            
+           
+               
+                if(isset($cellboothlabelvalue['legendlabels']) && !empty($cellboothlabelvalue['legendlabels'])){
+                    
+                    
+                    $getlabelID = $cellboothlabelvalue['legendlabels'];
+                    
+                    foreach ($boothTypesLegend as $boothlabelIndex=>$boothlabelValue){
+                        if($boothlabelValue->ID ==  $getlabelID){
+                            
+                            $createdproductPrice = $boothlabelValue->price;
+                            
+                            
+                        }
+                    }
+                }else{
+                    
+                    $createdproductPrice = $default_booth_price;
+                }
+           
+                $objProduct = new WC_Product();
+                $objProduct->set_name($boothtitle.'-'.$cellboothlabelvalue['id']); //Set product name.
+                $objProduct->set_status('publish'); //Set product status.
+                $objProduct->set_featured(TRUE); //Set if the product is featured.                          | bool
+                $objProduct->set_catalog_visibility('visible'); //Set catalog visibility.                   | string $visibility Options: 'hidden', 'visible', 'search' and 'catalog'.
+                $objProduct->set_description(''); //Set product description.
+                $objProduct->set_short_description(''); //Set product short description.
+
+                $objProduct->set_price($createdproductPrice); //Set the product's active price.
+                $objProduct->set_regular_price($createdproductPrice); //Set the product's regular price.
+
+                $objProduct->set_manage_stock(TRUE); //Set if product manage stock.                         | bool
+                $objProduct->set_stock_quantity(1); //Set number of items available for sale.
+                $objProduct->set_stock_status('instock'); //Set stock status.                               | string $status 'instock', 'outofstock' and 'onbackorder'
+                $objProduct->set_backorders('no'); //Set backorders.                                        | string $backorders Options: 'yes', 'no' or 'notify'.
+                $objProduct->set_sold_individually(FALSE);
+              
+              //  $objProduct->set_menu_order($menu_order); 
+
+                $objProduct->set_reviews_allowed(TRUE); //Set if reviews is allowed.                        | bool
+
+                $term_ids =[$catID];
+                $objProduct->set_category_ids($term_ids); //Set the product categories.                   | array $term_ids List of terms IDs.
+                $objProduct->set_tag_ids($term_ids); //Set the product tags.                              | array $term_ids List of terms IDs.
+               // $objProduct->set_image_id($productpicrul); //Set main image ID.                                         | int|string $image_id Product image id.
+                //Set gallery attachment ids.                       | array $image_ids List of image ids.
+                $new_product_id = $objProduct->save(); //Saving the data to create new product, it will return product ID.
+
+               $xml->root->MyNode[$currentIndex]->attributes()->$att = $new_product_id;
+               
+            
+        }   
+        $currentIndex++;
+        
+    
+    
+        }
+        
+        $getresultforupdat = str_replace('<?xml version="1.0"?>',"",$xml->asXML());
+        update_post_meta( $_REQUEST['post_id'], 'floorplan_xml', json_encode($getresultforupdat));
+        
+        
+        
+       
+       echo 'updated';
+       exit;
+        
+        
+        
+        
+        
+    }catch (Exception $e) {
+       
+     
+        return $e;
+        
+    }
+    
+}
+function getproductdetail($productID){
+    
+    try{
+	
+        $id = $productID['pro_id'];
+        $woocommerce_rest_api_keys = get_option( 'ContenteManager_Settings' );
+        $wooconsumerkey = $woocommerce_rest_api_keys['ContentManager']['wooconsumerkey'];
+        $wooseceretkey = $woocommerce_rest_api_keys['ContentManager']['wooseceretkey'];
+        
+        require_once( 'lib/woocommerce-api.php' );
+        $url = get_site_url();
+        $options = array(
+             'debug'           => true,
+             'return_as_array' => false,
+             'validate_url'    => false,
+             'timeout'         => 30,
+             'ssl_verify'      => false,
+         );
+        $client = new WC_API_Client( $url, $wooconsumerkey, $wooseceretkey, $options );
+        $get_product = wc_get_product( $id );
+        
+        $productdetail['title'] =  $get_product->name;
+        $productdetail['slug'] =  $get_product->slug;
+        $productdetail['description'] =  $get_product->description;
+        $productdetail['price'] =  wc_price( $get_product->regular_price);
+        $productdetail['stockstatus'] =  $get_product->stock_status;
+        
+        if(!empty($get_product->image_id)){
+            
+             $productdetail['src'] = wp_get_attachment_thumb_url($get_product->image_id);
+            
+        }else{
+            
+        
+        $productdetail['src'] =  $url.'/wp-content/plugins/woocommerce/assets/images/placeholder.png';
+        
+        }
+       echo json_encode($productdetail);
+       exit;
+        
+        
+        
+        
+        
+    }catch (Exception $e) {
+       
+     
+        return $e;
+        
+    }
+    
+}
 
 function savedalllegendstypes($Dataarray){
     
@@ -513,8 +729,11 @@ function floorplan_shortcode( $atts, $content = null ) {
         
         $contentmanager_settings = get_option( 'ContenteManager_Settings' );
 	$id = $contentmanager_settings['ContentManager']['floorplanactiveid'];
+       
+        $wooconsumerkey = $contentmanager_settings['ContentManager']['wooconsumerkey'];
+        $wooseceretkey = $contentmanager_settings['ContentManager']['wooseceretkey'];
         
-         if(empty($id)){
+        if(empty($id)){
               
             // Gather post data.
             $my_post = array(
@@ -550,12 +769,12 @@ function floorplan_shortcode( $atts, $content = null ) {
            
             $legendlabel .= "]";
             
-            $FloorplanXml = '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" pageWidth="2175" pageHeight="2175" ><root></root></mxGraphModel>';
+            $FloorplanXml[0] = '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" pageWidth="2175" pageHeight="2175" ><root></root></mxGraphModel>';
             
                update_option( 'ContenteManager_Settings', $contentmanager_settings );
                update_post_meta( $id, 'booth_types', $boothTypes );
                update_post_meta( $id, 'floor_background', $FloorBackground);
-               update_post_meta( $id, 'floorplan_xml', $FloorplanXml );
+               update_post_meta( $id, 'floorplan_xml', $FloorplanXml[0] );
                update_post_meta( $id, 'legendlabels', $legendlabel );
             
              
@@ -563,12 +782,43 @@ function floorplan_shortcode( $atts, $content = null ) {
         
         
        
-        
+         
             $boothTypes = get_post_meta( $id, 'booth_types', true );
             $FloorBackground = get_post_meta( $id, 'floor_background', true );
-            $FloorplanXml = get_post_meta( $id, 'floorplan_xml', true );
+            $FloorplanXml[0] = get_post_meta( $id, 'floorplan_xml', true );
             $FloorplanLegends = get_post_meta( $id, 'legendlabels', true );
-
+            if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
+                
+                require_once( 'lib/woocommerce-api.php' );
+                $url = get_site_url();
+                $options = array(
+                    'debug' => true,
+                    'return_as_array' => false,
+                    'validate_url' => false,
+                    'timeout' => 30,
+                    'ssl_verify' => false,
+                );
+                $woocommerce_object = new WC_API_Client( $url, $wooconsumerkey, $wooseceretkey, $options );
+                $all_products= $woocommerce_object->products->get( '', ['filter[limit]' => -1,'filter[post_status]' => 'any']);
+               
+                $indexProduct = 0;
+                 foreach ($all_products->products as $single_product) {
+                    
+                    
+                    if($single_product->categories[0] == 'Booths'){
+                     $boothsproductsData[$indexProduct]['title'] = $single_product->title;
+                     $boothsproductsData[$indexProduct]['id'] = $single_product->id;
+                     $indexProduct++;
+                    }
+                     
+                }
+                
+                 
+               $boothsproductsData = json_encode($boothsproductsData);
+               
+              
+                 
+            }
         
         
         $current_site_logo = $contentmanager_settings['ContentManager']['adminsitelogo'];
@@ -576,6 +826,8 @@ function floorplan_shortcode( $atts, $content = null ) {
         $current_site_url  = get_site_url();
         $current_floor_plan_status  = $status;
         
+        
+       
 	
 	include 'functions.php';
     
