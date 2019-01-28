@@ -1,11 +1,4 @@
-        
-<?php $FloorplanXml[0] = str_replace('"n<','<',$FloorplanXml[0]);
-      $FloorplanXml[0] = str_replace('>n"','>',$FloorplanXml[0]);
-
-
-?>
-
-       <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-1.12.4.js"></script>
+        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-1.12.4.js"></script>
 	<script type="text/javascript">
             var hex=new Array('0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f');
             pluginBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>';
@@ -14,19 +7,16 @@
 		mxBoothTypes = '<?php echo $boothTypes; ?>';
                 mxLegendLabelsTypes = '<?php echo $FloorplanLegends; ?>';
 		mxFloorBackground = '<?php echo $FloorBackground; ?>';
-		mxFloorPlanXml = '<?php echo $FloorplanXml[0]; ?>';
-               
+		mxFloorPlanXml = '<?php echo $FloorplanXml; ?>';
 		mxCurrentSiteLogo = '<?php echo $current_site_logo; ?>';
 		mxCurrentSiteTitle = '<?php echo $current_site_name; ?>';
 		mxCurrentSiteUrl = '<?php echo $current_site_url; ?>';
                 mxgetAllusersData = '<?php echo $getAllusers_data; ?>';
                 mxgetjosnusersData = JSON.parse(mxgetAllusersData);
-                boothsproducts ='<?php echo $boothsproductsData; ?>';
-                boothsproducts = JSON.parse(boothsproducts);
                 
                 baseCurrentSiteURl ='<?php echo  get_site_url(); ?>';
                 mxCurrentfloorplanstatus ='<?php echo  $current_floor_plan_status; ?>';
-                
+                // console.log(mxgetAllusersData)
 		var ArrayOfObjects = [];
                 var LegendsOfObjects = [];
 		var json = {};
@@ -55,7 +45,6 @@
 			json1.colorstatus = jsonLegends[index1].colorstatus;
 			json1.name = jsonLegends[index1].name,
 			json1.colorcode = jsonLegends[index1].colorcode;
-                        json1.price = jsonLegends[index1].price;
 			LegendsOfObjects.push(json1);
 		});
                 
@@ -76,7 +65,7 @@
         <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/main.css">
         <?php } ?>
         <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/grapheditor.css?v=1.42">
-        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/fontawesome-all.css?v=1.03">
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/sweetalert.css">
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mobile-detect.min.js?v=2.19"></script>
 
@@ -128,15 +117,15 @@
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>jscolor/jscolor.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>sanitizer/sanitizer.min.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=2.52"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=3.24"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=3.07"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.28"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.25"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=2.95"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.51"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.08"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=2.91"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=4.74"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=2.63"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=4.72"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=2.64"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=3.17"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.19"></script>
          <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery.printPage.js?v=2.19"></script>

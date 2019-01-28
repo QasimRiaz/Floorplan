@@ -887,7 +887,7 @@ EditorUi = function(editor, container, lightbox)
 	{
 		var data = this.editor.graph.zapGremlins(mxUtils.trim(mxFloorPlanXml));
                  
-                
+                 
                 
 		this.editor.setGraphXml(mxUtils.parseXml(data).documentElement);
                  mxGraph.prototype.cellsEditable =false;
@@ -915,7 +915,7 @@ EditorUi = function(editor, container, lightbox)
                                         console.log(cell)
                                     if(typeof(cell) != "undefined"){
                                         var assignedboothname = "";
-                                           jQuery('body').css('cursor', 'wait');
+                                        
                                         assignedboothname = cell.getAttribute('mylabel', '');
                                         var valuessrting = cell.style;
                                          var companydescription ="";
@@ -925,8 +925,6 @@ EditorUi = function(editor, container, lightbox)
                                         var userid  = cell.getAttribute('boothOwner', '');
                                         var boothdetail  = cell.getAttribute('boothDetail', '');
                                         var companydescription  = cell.getAttribute('companydescripiton', '');
-                                        var  boothproductid = cell.getAttribute('boothproductid', '');
-                                        
                                         var reportData = jQuery.parseJSON(mxgetAllusersData);
                                         var openhtml = "";
                                         var tablehtml = '';
@@ -934,7 +932,6 @@ EditorUi = function(editor, container, lightbox)
                                         var companynameas="";
                                         var companylogourlnew="";
                                         var htmlforassignedbooth = '';
-                                        var boothtitle ="";
                                         var htmlforaddress = '';
                                         console.log(userid);
                                         if(userid !="" && userid != "none" && reportData){
@@ -956,7 +953,7 @@ EditorUi = function(editor, container, lightbox)
                                                            }
                                                       if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
-                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="text-align: justify;">'+unescape(companydescription)+'</div>';
+                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
                                             
                                                 
                                                         }
@@ -966,10 +963,8 @@ EditorUi = function(editor, container, lightbox)
                                                       htmlforassignedbooth = '<h5 >Assigned Booth(s):   <span style="font-size:14px;">' + assignedboothname.replace(/,\s*$/, "") + '</span></h5>';
                                                       } else{
 
-                                                      htmlforassignedbooth = '<h5 >Assigned Booth(s): </h5><p ></p>';
+                                                      htmlforassignedbooth = '<h5 >Booth Number</h5><p ></p>';
                                                       }
-                                                      
-                                                      boothtitle = '<h5 >Booth Number:   <span style="font-size:14px;" >' + assignedboothname + '</span></h5>';
                                                       if (index.address_line_1 != "") {
 
                                                         htmlforaddress = '<p>' + index.address_line_1 + ', ' + index.usercity + ', ' + index.usercountry + '</p>';
@@ -984,93 +979,14 @@ EditorUi = function(editor, container, lightbox)
                                                         }
                                                   }
                                               });
-                                                 var imagesrc = "<div class='row'><div class='col-sm-6'><p><h5>"+companynameas+"</h5></a></p></div><div class='col-sm-3'><p style='text-align:center;'><img width='100' src='"+companylogourlnew+"' /></p></div></div><hr>";
-                                                      
-                                                //openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
-                                                var openhtml = '<div class="row"><div class="col-sm-4">'+boothtitle+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-6">' + imagesrc +  htmlforassignedbooth + '</div></div>';	
                                               
-                                                jQuery('body').css('cursor', 'default');
-                                                    jQuery.confirm({
-                                                        title: '',
-                                                        content: openhtml,
-                                                        confirmButton: false,
-                                                        confirmButtonClass: 'mycustomwidth',
-                                                        cancelButton: false,
-                                                     
-                                                        closeIcon: true,
-                                                        columnClass: 'jconfirm-box-container-special'
+                                                openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
 
-                                                    });   
+                                               
                                            
                                     }else{
                                            
-                                           
-                                           if(boothproductid !="" && boothproductid !="undefined" && boothproductid !="none"){
-                                                
-                                                
-                                                var data = new FormData();
-                                                data.append('pro_id', boothproductid);
-                                                console.log(boothproductid);
-                                                jQuery.ajax({
-                                                     url: baseCurrentSiteURl+'/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=getproductdetail',
-                                                    data: data,
-                                                    cache: false,
-                                                    contentType: false,
-                                                    processData: false,
-                                                    type: 'POST',
-                                                    success: function(data) {
-
-
-                                                        var finalresultProduct = jQuery.parseJSON(data);
-                                                        var htmlforproductdetail = "";
-                                                        var postid = "'"+boothproductid+"'";
-                                                         boothtitle = '<h5 >Booth Number:   <span style="font-size:14px;" >' + assignedboothname + '</span></h5>';
-                                                        htmlforproductdetail += "<div class='row'><div class='col-sm-6'><p><a href='"+baseCurrentSiteURl+"/product/"+finalresultProduct.slug+"' target='_blank'><h2>"+finalresultProduct.title+"</h2></a></p><p><strong>Price : "+finalresultProduct.price+"</strong></p></div><div class='col-sm-3'><p style='text-align:center;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div><hr>";
-                                                      
-                                                        htmlforproductdetail += "<p>"+finalresultProduct.description+"</p><hr>";
-                                                         if(companydescription != "" && typeof companydescription !== "undefined" ){
-                                                
-                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="text-align: justify;">'+unescape(companydescription)+'</div>';
-                                            
-                                                
-                                                        }
-                                                        if(finalresultProduct.stockstatus == 'instock'){
-
-                                                            htmlforproductdetail += '<p style="float:right;" id="'+boothproductid+'"><a class="btn btn-small btn-info"  onclick="addToCart('+postid+')"  >ADD TO CART</a></p>';
-                                                        
-                                                        }else{
-
-                                                            htmlforproductdetail += "<p style='float:right;'><strong style='color:red'>Stock Out</strong></p>";
-                                                        }
-
-                                                      
-
-                                                      //  var openhtml = '<div class="row" style="padding:30px;" ><div class="col-sm-5">'+imagesrc+''+htmlforaddress+''+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-5">'+htmlforproductdetail+'</div></div>';
-                                                        var openhtml = '<div class="row"><div class="col-sm-4">'+boothtitle+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-6">'+htmlforproductdetail+'</div></div>';	
-                                              
-                                                        jQuery('body').css('cursor', 'default');
-                                                        jQuery.confirm({
-                                                            title: '',
-                                                            content: openhtml,
-                                                            confirmButton: false,
-                                                            confirmButtonClass: 'mycustomwidth',
-                                                            cancelButton: false,
-                                                          
-                                                            closeIcon: true,
-                                                            columnClass: 'jconfirm-box-container-special'
-
-                                                        });    
-                                                    }
-                                                 });   
-                                                
-                                                
-                                              
-                                             
-                                                
-                                                
-                                            }else{
-                                                
-                                                var tablehtml = '';
+                                               var tablehtml = '';
                                                var curr_dat = '';
                                                var companylogourlnew = '';
                                                var htmlforassignedbooth = '';
@@ -1084,28 +1000,23 @@ EditorUi = function(editor, container, lightbox)
                                                
                                                htmlforassignedbooth = '<h5 >Booth Number:   <span style="font-size:14px;" >' + assignedboothname + '</span></h5>';
                                                companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
-                                              
-                                              // openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 ></h1>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
-                                               openhtml = '<div class="row"><div class="col-sm-4">'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-6"></div></div>';	
-                                                 jQuery('body').css('cursor', 'default');
-                                                    jQuery.confirm({
-                                                        title: '',
-                                                        content: openhtml,
-                                                        confirmButton: false,
-                                                        confirmButtonClass: 'mycustomwidth',
-                                                        cancelButton: false,
-                                                     
-                                                        closeIcon: true,
-                                                        columnClass: 'jconfirm-box-container-special'
-
-                                                    });   
-                                                
-                                                
-                                            }
-                                               
+                                               console.log(companylogourlnew);
+                                               openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 ></h1>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
+                                           
+                                           
                                        }
-                                   
-                                    
+                                    jQuery('body').css('cursor', 'default');
+                                               jQuery.confirm({
+                                                   title: '',
+                                                   content: openhtml,
+                                                   confirmButton: false,
+                                                   confirmButtonClass: 'mycustomwidth',
+                                                   cancelButton: false,
+                                                   animation: 'rotateY',
+                                                   closeIcon: true,
+                                                   columnClass: 'jconfirm-box-container-special'
+
+                                               });    
 				}	
 				});
                             
@@ -1159,18 +1070,6 @@ EditorUi = function(editor, container, lightbox)
         //Set canvas background on page load
 	this.SetbackgroundImageOnload();
 };
-
-
- function addToCart(p_id) {
-          jQuery.get(baseCurrentSiteURl+'/?add-to-cart=' + p_id+'&quantity=1', function() {
-            
-             jQuery("#"+p_id).empty();
-             var enbutton = "<a class='btn btn-success btn-small' >Added</a>";
-             jQuery("#"+p_id).append(enbutton);
-            
-            
-          });
-       }
 
 // Extends mxEventSource
 mxUtils.extend(EditorUi, mxEventSource);

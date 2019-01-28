@@ -147,7 +147,7 @@ Toolbar.prototype.init = function()
 	elts[1].setAttribute('title', mxResources.get('undo'));// + ' (' + this.editorUi.actions.get('undo').shortcut + ')');
         elts[1].innerHTML= '<div class="fas fa-undo" style="color:#000"></div>';//'Save';//('title', 'Save');
 	elts[2].setAttribute('title', mxResources.get('redo') );//+ ' (' + this.editorUi.actions.get('redo').shortcut + ')');
-        elts[2].innerHTML= '<div class="fas fa-repeat" style="color:#000"></div>';//'Save';//('title', 'Save');
+        elts[2].innerHTML= '<div class="fas fa-redo" style="color:#000"></div>';//'Save';//('title', 'Save');
     }	
 	
 	
@@ -170,7 +170,7 @@ Toolbar.prototype.init = function()
              
              var elts = this.addItems(['-', 'insertImage']);
              elts[1].setAttribute('title', 'InsertImage');
-             elts[1].innerHTML= '<div class="fas fa-picture-o" ></div>';//'Save';//('title', 'Save');
+             elts[1].innerHTML= '<div class="fas fa-image" ></div>';//'Save';//('title', 'Save');
              
              
              
@@ -188,13 +188,6 @@ Toolbar.prototype.init = function()
              var eltss = this.addItems(['-', 'publiclink']);
              eltss[1].setAttribute('title', 'Get Public Link');
              eltss[1].innerHTML= '<div class="fas fa-link" style="color:#000"></div>';
-             
-            
-             var eltss = this.addItems(['-', 'autogenerateproducts']);
-             eltss[1].setAttribute('title', 'Autogenerate Booth Products');
-             eltss[1].innerHTML= '<div class="fas fa-cogs" style="color:#000"></div>';
-             
-             
              
              var elts = this.addItems(['-', 'save']);
              elts[1].setAttribute('title', 'Save');

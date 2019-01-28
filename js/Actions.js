@@ -70,7 +70,6 @@ Actions.prototype.init = function()
 	}).isEnabled = isGraphEnabled;
        
 	this.addAction('save', function() { ui.saveFile(false); }, null, null, 'Ctrl+S').isEnabled = isGraphEnabled;
-        this.addAction('autogenerateproducts', function() { ui.saveFile(false); }, null, null, '').isEnabled = isGraphEnabled;
 	this.addAction('saveAs...', function() { ui.saveFile(true); }, null, null, 'Ctrl+Shift+S').isEnabled = isGraphEnabled;
 	this.addAction('export...', function() { ui.showDialog(new ExportDialog(ui).container, 300, 230, true, true); });
 	this.addAction('editDiagram...', function()
@@ -216,75 +215,6 @@ Actions.prototype.init = function()
             
             
         });
-        this.addAction('autogenerateproducts', function(evt)
-	{
-           
-           window.onbeforeunload = null;
-           jQuery('body').css({'cursor' : 'wait'});
-           mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
-           var data = new FormData();
-           data.append('floorXml', mxFloorPlanXml);
-           data.append('post_id', mxPostID);
-           
-           jQuery.ajax({
-                url: baseCurrentSiteURl+'/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=autogenerateproducts',
-                data:data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                type: 'POST',
-                success: function(data) {
-                           jQuery('body').css({'cursor' : 'default'});
-                           if(data == 'updated'){
-                               
-                               swal({
-                                    title: "Success",
-                                    text: "All booth products have been generated successfully.",
-                                    type: "success",
-                                    confirmButtonClass: "btn-success",
-                                    confirmButtonText: "Ok",
-                                    
-                                    
-                                },function(isConfirm) {
-                                    
-                                    
-                                     
-                                    
-                                        
-                                        location.reload();
-                                });
-                                  
-                                                
-                                
-   
-                                
-                               
-                                                    
-                               
-  
-                               
-                           }
-                           
-
-
-                },error: function (xhr, ajaxOptions, thrownError) {
-                                    swal({
-                                        title: "Error",
-                                        text: "There was an error during the requested operation. Please try again.",
-                                        type: "error",
-                                        confirmButtonClass: "btn-danger",
-                                        confirmButtonText: "Ok"
-                                    });
-                    }
-            });
-           
-           
-            
-            
-        }, null, null, 'Autogenerateproducts');
-        
-        
-        
         this.addAction('collapseexpand', function(evt)
 	{
            console.log(ui.hsplitPosition);
@@ -305,14 +235,11 @@ Actions.prototype.init = function()
         });
         this.addAction('save', function(evt)
 	{
-                    
-                  
-                    
-                       
+		
                        mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
-                       
+                       console.log(mxFloorPlanXml)
                        var currentbgImage = ui.editor.graph.getBackgroundImage();
-                     
+                       console.log(currentbgImage);
                        if(currentbgImage == null ){
                             mxFloorBackground = "";
                         }else{
@@ -343,7 +270,7 @@ Actions.prototype.init = function()
                                        confirmButtonClass: "btn-success",
                                        confirmButtonText: "Ok"
                                    });
-                                   
+                                    
                                     
                                 },error: function (xhr, ajaxOptions, thrownError) {
                                                     swal({

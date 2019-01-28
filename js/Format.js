@@ -4436,7 +4436,7 @@ var stylePanel = this.createPanel();
 	selectboothtypes.id = 'legendlabeltypedropdown';
         
          var option = document.createElement("option");
-         option.value = '';
+         option.value = 'none';
         
          option.text = 'None';
         
@@ -4503,7 +4503,8 @@ var stylePanel = this.createPanel();
         mxEvent.addListener(legendbuttonsubmit, 'click', function()
 	{
                           
-                          var cell = graph.getSelectionCells();  
+                          var cell = graph.getSelectionCells(); 
+                          console.log(cell);
                           document.getElementById("applybuttonlegend").focus();
                           jQuery.each(cell,function(cellindex,cellvalue){
                              
@@ -4524,9 +4525,8 @@ var stylePanel = this.createPanel();
                             
                             var labelvalue = "";
                             var boothdetailvalue = "";
-                            var assigenduserID = "none";
+                            var assigenduserID = "";
                             var companydescripiton = "";
-                            var boothproductid = "none";
                             
                             if (mxUtils.isNode(cellvalue.value))
                                 {  
@@ -4535,7 +4535,6 @@ var stylePanel = this.createPanel();
                                      labelvalue = cellvalue.getAttribute('mylabel', '');
                                      boothdetailvalue = cellvalue.getAttribute('boothDetail', '');
                                      companydescripiton = cellvalue.getAttribute('companydescripiton', '');
-                                     boothproductid = cellvalue.getAttribute('boothproductid', '');
                                     
                                 }
                                 
@@ -4549,15 +4548,16 @@ var stylePanel = this.createPanel();
                             node.setAttribute('legendlabels', seletedlegendlabelsvalue);
                             node.setAttribute('legendlabelscolor', selectedlegendcolorcode);
                             node.setAttribute('companydescripiton', companydescripiton);
-                            node.setAttribute('boothproductid', boothproductid);
+                         
                                
                                   
-                               if(selectedlegendcolorcode != "none"){
+                               if(seletedlegendlabelsvalue != "none"){
                                     console.log(selectedlegendcolorcode)
                                     graph.setCellStyles("fillColor", selectedlegendcolorcode, graph.getSelectionCells());
                                
                                }else{
-                              
+                                   
+                                 console.log(assigenduserID);
                                  if (assigenduserID != 'none') {
                                         
                                         graph.setCellStyles("fillColor", ss.style.occ, graph.getSelectionCells());
@@ -4752,75 +4752,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         stylePanel.appendChild(descripitiondetailhtml);
         
         
-        
-         var boothproduct = this.createTitle('Booth Product: ');
-	boothproduct.style.paddingTop = '6px';
-	boothproduct.style.paddingBottom = '6px';
-       
-        var seletetboothprduct = document.createElement('select');
-	
-	//gradientSelect.style.position = 'absolute';
-	//gradientSelect.style.marginTop = '-2px';
-	//gradientSelect.style.right = (mxClient.IS_QUIRKS) ? '52px' : '72px';
-	seletetboothprduct.style.width = '92%';
-	seletetboothprduct.id = 'boothproduct';
-        var seletedproductID = "";
-       
-	
-        
-        if (mxUtils.isNode(cell[0].value))
-                {   
-                    
-                     
-                     
-                      seletedproductID = cell[0].getAttribute('boothproductid', '');
-                      
-                     
-                     
-                }
-	
-        
-        var option = document.createElement("option");
-        option.value = 'none';
-        option.text = 'None';
-        
-       
-        if(seletedproductID == ""){
-            
-            option.setAttribute('selected', 'selected');
-            
-        }
-        seletetboothprduct.appendChild(option);
-        
-        jQuery.each(boothsproducts, function(index1, value) {
-            
-			 var option = document.createElement("option");
-                         option.value = value.id;
-                         option.text = value.title;
-                        
-                         if(seletedproductID == value.id){
-            
-                           option.setAttribute('selected', 'selected');
-            
-                        }
-                         
-                         
-                         seletetboothprduct.appendChild(option);
-        });
-        
-        
-        
-        if(cell.length == 1){
-	 stylePanel.appendChild(boothproduct);
-         stylePanel.appendChild(seletetboothprduct);
-        }
-        
-        
-        
-        
-        
-        
-        
         var detailsubmit = document.createElement('button');
 	detailsubmit.id = 'applybutton';
         detailsubmit.title = '';
@@ -4837,16 +4768,9 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	var title = this.createTitle('Exhibitors: ');
 	title.style.paddingTop = '6px';
 	title.style.paddingBottom = '6px';
-       
-        
-        
-         if(cell.length == 1){
+        if(cell.length == 1){
 	 stylePanel.appendChild(title);
         }
-        
-        
-        
-        
 	// Adds gradient direction option
 	var gradientSelect = document.createElement('select');
 	
@@ -4867,9 +4791,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	{
 		mxEvent.consume(evt);
 	});
-        
-       
-/*      
+/*
 	var gradientPanel = this.createCellColorOption(mxResources.get('gradient'), mxConstants.STYLE_GRADIENTCOLOR, '#ffffff', function(color)
 	{
 		if (color == null || color == mxConstants.NONE)
@@ -4936,9 +4858,8 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 		ss = this.format.getSelectionState();
                 var cell = graph.getSelectionCells();
 		var value = cell[0].getAttribute('boothOwner', '');
-              
                // jQuery("#exhibitorID").valu('none');
-		
+		console.log(value);
 		// Handles empty string which is not allowed as a value
 		if (value == '')
 		{
@@ -4950,11 +4871,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 		gradientSelect.value = value;
                
 		container.style.display = (ss.fill) ? '' : 'none';
-                
-              
-                
-                
-                
 		/*
 		var fillColor = mxUtils.getValue(ss.style, mxConstants.STYLE_FILLCOLOR, null);
 
@@ -5022,7 +4938,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                
                              
                                var getexhibortervalue = "";
-                               var boothproductvalue = "";
+                               
                                 if (getboothnumber) {
                                     } else {
                                         getboothnumber = "";
@@ -5066,18 +4982,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 
                                 }
                                node.setAttribute('boothOwner', getexhibortervalue);
-                               var boothproduct = document.getElementById("boothproduct");
-                               if (boothproduct.options[boothproduct.selectedIndex].value != "") {
-
-                                    boothproductvalue = boothproduct.options[boothproduct.selectedIndex].value;
-
-                                } else {
-
-                                    boothproductvalue = "";
-
-                                }
-                               node.setAttribute('boothproductid', boothproductvalue);
-                               
                                
                                 if(legendlabelscolor != "none" && legendlabelscolor !=""){
                                     
@@ -5101,14 +5005,13 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                               
                                 
                                 var boothownerlastvalue  = "";
-                                var boothproductlastvalue  = "";
                                 if (mxUtils.isNode(cellvalue.value))
                                 {  
                                      console.log(boothownerlastvalue);
                                      boothownerlastvalue = cellvalue.getAttribute('boothOwner', '');
-                                     legendlabels = cellvalue.getAttribute('legendlabels', '');
-                                     legendlabelscolor = cellvalue.getAttribute('legendlabelscolor', '');
-                                     boothproductlastvalue = cellvalue.getAttribute('boothproductid', '');
+                                     
+                                      legendlabels = cellvalue.getAttribute('legendlabels', '');
+                                      legendlabelscolor = cellvalue.getAttribute('legendlabelscolor', '');
                                      
                                     
                                 }
@@ -5123,7 +5026,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                 node.setAttribute('boothOwner', boothownerlastvalue);
                                 node.setAttribute('legendlabels', legendlabels);
                                 node.setAttribute('legendlabelscolor', legendlabelscolor);
-                                node.setAttribute('boothproductid', boothproductlastvalue);
                                 
                             }
                             
@@ -5172,7 +5074,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                
                                
                                var getexhibortervalue = "";
-                               var boothproductvalue ="";
                                
                                 if (getboothnumber) {
                                     } else {
@@ -5217,21 +5118,8 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 
                                 }
                                node.setAttribute('boothOwner', getexhibortervalue);
-                                var boothproduct = document.getElementById("boothproduct");
-                               if (boothproduct.options[boothproduct.selectedIndex].value != "") {
-                                  
-                                    boothproductvalue = boothproduct.options[boothproduct.selectedIndex].value;
-                                    
-                                    console.log(boothproductvalue);
-
-                                } else {
-
-                                    boothproductvalue = "";
-
-                                }
-                               node.setAttribute('boothproductid', boothproductvalue);
                                
-                                if(legendlabelscolor != "none" && legendlabelscolor !=""){
+                                if(legendlabels != "none" && legendlabelscolor !=""){
                                     
                                     graph.setCellStyles("fillColor", legendlabelscolor, graph.getSelectionCells());
                                     
@@ -5253,7 +5141,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                               
                                 
                                 var boothownerlastvalue  = "";
-                                var boothproductlastvalue  = "";
                                 if (mxUtils.isNode(cellvalue.value))
                                 {  
                                      console.log(boothownerlastvalue);
@@ -5261,13 +5148,11 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                      
                                       legendlabels = cellvalue.getAttribute('legendlabels', '');
                                       legendlabelscolor = cellvalue.getAttribute('legendlabelscolor', '');
-                                      boothproductlastvalue = cellvalue.getAttribute('boothproductid', '');
-                                     
                                      
                                     
                                 }
                                 
-                                if(legendlabelscolor != "none" && legendlabelscolor !=""){
+                                if(legendlabels != "none" && legendlabelscolor !=""){
                                     
                                     graph.setCellStyles("fillColor", legendlabelscolor, graph.getSelectionCells());
                                     
@@ -5277,7 +5162,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                 node.setAttribute('boothOwner', boothownerlastvalue);
                                 node.setAttribute('legendlabels', legendlabels);
                                 node.setAttribute('legendlabelscolor', legendlabelscolor);
-                                 node.setAttribute('boothproductid', boothproductlastvalue);
                                 
                             }
                             
@@ -5415,9 +5299,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	//stylePanel.appendChild(boothNumber);
       if(cell.length == 1){
 	stylePanel.appendChild(gradientSelect);
-       
-        
-        
         }
 	stylePanel.appendChild(detailsubmit);
         
@@ -6951,7 +6832,6 @@ function updatealllengends(){
     jQuery( ".lengendsrows" ).each(function( index ) {
            var currentrowID =  jQuery(this).attr("id");
            var currentrowName =  jQuery("#boothtypename_"+currentrowID).val();
-           var currentrowprice =  jQuery("#boothtypeprice_"+currentrowID).val();
            currentrowName = currentrowName.replace(/([,.!;"'])+/g, '');
            var currentrowLengendStatus =  jQuery().attr("id");
            
@@ -6974,7 +6854,6 @@ function updatealllengends(){
            saveddataarray.colorstatus =currentrowLengendStatus
            saveddataarray.name =currentrowName;
            saveddataarray.colorcode =currentrowColorCode;
-           saveddataarray.price =currentrowprice;
            LegendsOfObjects.push(saveddataarray);
     });
     
@@ -6982,7 +6861,7 @@ function updatealllengends(){
    jQuery("#legendlabeltypedropdown").empty();
     
     var option = document.createElement("option");
-       option.value = '';
+       option.value = 'none';
        option.text = 'None';
        if(legendlabelID == "" ){
            option.setAttribute('selected', 'selected');
@@ -7005,7 +6884,7 @@ function updatealllengends(){
     });
     
     
-    console.log(LegendsOfObjects)
+    
     data.append('legendstypesArray', JSON.stringify(LegendsOfObjects));
     jQuery.ajax({
         url: baseCurrentSiteURl+'/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=savedalllegendstypes',
@@ -7063,10 +6942,8 @@ function insertnewrowintolegendtypes(){
      
      var IDCODE = "'"+saveddataarray.ID+"'";
      var legendlabel = jQuery("#addnewlegendname").val();
-     var legendlabelprice = jQuery("#newboothtypeprice").val();
      saveddataarray.name  = legendlabel.replace(/([,.!;"'])+/g, '');
-     saveddataarray.price = legendlabelprice;
-     insertRowhtml+='<tr class="lengendsrows" id="'+saveddataarray.ID+'" ><td style="width:65px;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td style="width: 30%;"><input type="text" title="Label" value="'+saveddataarray.name+'" id="boothtypename_'+saveddataarray.ID+'" /></td><td style="width: 20%;"><input type="number" title="Price" value="'+saveddataarray.price+'" id="boothtypeprice_'+saveddataarray.ID+'" /></td>';
+     insertRowhtml+='<tr class="lengendsrows" id="'+saveddataarray.ID+'" ><td style="width:65px;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td style="width: 50%;"><input type="text" title="Label" value="'+saveddataarray.name+'" id="boothtypename_'+saveddataarray.ID+'" /></td>';
                                                  
      if (jQuery("#addnewlegendstatus").prop('checked')){
          
@@ -7086,7 +6963,6 @@ function insertnewrowintolegendtypes(){
      LegendsOfObjects.push(saveddataarray);
      jQuery("#addnewlegendcolorcode").val("#000000");
      jQuery("#addnewlegendname").val("");
-     jQuery("#newboothtypeprice").val("");
      jQuery("#addnewlegendstatus").removeAttr('checked');
      jQuery("#listofalllegends").prepend(insertRowhtml);
      jQuery('body').css({'cursor' : 'default'});
@@ -7166,7 +7042,7 @@ function getallboothtypes(){
                                                
                                                jQuery.each(LegendsOfObjects, function(index1, value) {
                                                   var IDCODE = "'"+value.ID+"'" ;
-                                                  html+='<tr class="lengendsrows" id="'+value.ID+'" ><td style="width:10%;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 30%;"><input type="text" title="Label" value="'+value.name+'" id="boothtypename_'+value.ID+'" /></td><td style="width: 20%;"><input type="number" title="Price" value="'+value.price+'" id="boothtypeprice_'+value.ID+'" /></td>';
+                                                  html+='<tr class="lengendsrows" id="'+value.ID+'" ><td style="width:10%;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 50%;"><input type="text" title="Label" value="'+value.name+'" id="boothtypename_'+value.ID+'" /></td>';
                                                   if(value.colorstatus == true){
                                                        
                                                        html+='<td style="width: 10%;text-align: center;"><label style="" title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td>';
@@ -7191,7 +7067,7 @@ function getallboothtypes(){
                                                
                                                
                                                html+='<table class="table mycustometable">';
-                                               html+='<tr><td style="width:10%;"><b>Add New</b></td><td style="width: 30%;"><input title="Label" type="text" id="addnewlegendname" ></td><td style="width: 20%;"><input type="number" title="Price"  id="newboothtypeprice" /></td>';
+                                               html+='<tr><td style="width:10%;"><b>Add New</b></td><td style="width: 50%;"><input title="Label" type="text" id="addnewlegendname" ></td>';
                                                html+='<td style="width: 10%;text-align: center;"><label  title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+addtext+')"  id="addnewlegendstatus" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color"  id="addnewlegendcolorcode" ></td><td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintolegendtypes()">Add</button></td></tr>';
                                               
                                                html+='</table>';
