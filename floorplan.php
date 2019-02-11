@@ -4,13 +4,14 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 1.3
+ * Version: 3.00
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
  * License: ExpoGenie
  * Text Domain: ExpoGenie
  * Network:           true
+ * Date 11-02-2019
 */
 
 
@@ -39,15 +40,139 @@ if($_GET['floorplanRequest'] == "savedfloorplansettings") {
     savedalllegendstypes($_POST);
     die();
     
+}else if($_GET['floorplanRequest'] == "savedallpricetegs"){
+    
+    
+    require_once('../../../wp-load.php');
+    
+    savedallpricetegs($_POST);
+    die();
+    
+}else if($_GET['floorplanRequest'] == "getproductdetail"){
+    
+    
+    require_once('../../../wp-load.php');
+    
+    getproductdetail($_REQUEST);
+    die();
+    
 }
 
 
-function savedalllegendstypes($Dataarray){
+function getproductdetail($productID){
+    
+    try{
+	
+        $id = $productID['pro_id'];
+        $woocommerce_rest_api_keys = get_option( 'ContenteManager_Settings' );
+        $wooconsumerkey = $woocommerce_rest_api_keys['ContentManager']['wooconsumerkey'];
+        $wooseceretkey = $woocommerce_rest_api_keys['ContentManager']['wooseceretkey'];
+        
+        require_once( 'lib/woocommerce-api.php' );
+        $url = get_site_url();
+        $options = array(
+             'debug'           => true,
+             'return_as_array' => false,
+             'validate_url'    => false,
+             'timeout'         => 30,
+             'ssl_verify'      => false,
+         );
+        $client = new WC_API_Client( $url, $wooconsumerkey, $wooseceretkey, $options );
+        $get_product = wc_get_product( $id );
+        
+       
+        
+        if(empty($get_product)){
+            
+            $productdetail['productstatus'] =  'removed';
+        }else{
+            
+            $productdetail['productstatus'] =  'exist';
+        }
+        $productdetail['title'] =  addslashes($get_product->name);
+        $productdetail['slug'] =  $get_product->slug;
+        $productdetail['description'] =  $get_product->description;
+        $productdetail['price'] =  (int)$get_product->regular_price;
+        $productdetail['stockstatus'] =  $get_product->stock_status;
+        $productdetail['currencysymbole'] =  get_woocommerce_currency_symbol( $currency );
+        
+        $levelname =  $get_product->tax_class;
+        
+        
+        
+         global $wp_roles;
+            $all_roles = $wp_roles->roles;
+            foreach ($all_roles as $key => $name) {
+                
+                if ($levelname == $key ) {
+                    
+                     $productdetail['level'] = $name['name'];
+                }
+            }
+         
+         
+        
+      
+        
+        if(!empty($get_product->image_id)){
+            
+             $productdetail['src'] = wp_get_attachment_thumb_url($get_product->image_id);
+            
+        }else{
+            
+        
+        $productdetail['src'] =  $url.'/wp-content/plugins/floorplan/icon01.png';
+        
+        }
+       echo json_encode($productdetail);
+       exit;
+        
+        
+        
+        
+        
+    }catch (Exception $e) {
+       
+     
+        return $e;
+        
+    }
+    
+}
+
+
+function savedallpricetegs($Dataarray){
     
     try{
 	
         $id = $Dataarray['post_id'];
+        
+        $user_ID = get_current_user_id();
+        $user_info = get_userdata($user_ID);  
+        $lastInsertId = floorplan_contentmanagerlogging('Save All Price Tags',"Admin Action",$Dataarray,$user_ID,$user_info->user_email,"");
+      
+        update_post_meta( $id, 'pricetegs', $Dataarray['pricetegsArray'] );
+        contentmanagerlogging_file_upload ($lastInsertId,serialize($Dataarray['pricetegsArray']));
+        echo 'update';
+        
+    }catch (Exception $e) {
+       
+     
+        return $e;
+        
+    }
+    
+}
+function savedalllegendstypes($Dataarray){
+    
+    try{
+	$user_ID = get_current_user_id();
+        $user_info = get_userdata($user_ID);  
+        $lastInsertId = floorplan_contentmanagerlogging('Save All Legends Labels',"Admin Action",$Dataarray,$user_ID,$user_info->user_email,"");
+      
+        $id = $Dataarray['post_id'];
         update_post_meta( $id, 'legendlabels', $Dataarray['legendstypesArray'] );
+         contentmanagerlogging_file_upload ($lastInsertId,serialize($Dataarray['pricetegsArray']));
         echo 'update';
     }catch (Exception $e) {
        
@@ -335,6 +460,33 @@ function getAllusers_data(){
         $site_prefix = $wpdb->get_blog_prefix();
         sort($authors);
         $cart = array();
+        
+        $args = array(
+            'posts_per_page'   => -1,
+            'orderby'          => 'date',
+            'order'            => 'DESC',
+            'post_type'        => 'egpl_custome_tasks',
+            'post_status'      => 'draft',
+	);
+        $taskkeyContent = get_posts( $args );
+        
+        foreach($taskkeyContent as $taskIndex=>$taskObject){
+            
+            
+            
+            $taskID = $taskObject->ID;
+            $key = get_post_meta( $taskID, 'key', false);
+            $value_label = get_post_meta( $taskID, 'label' , false);
+            if($value_label[0] == "Company Description"){
+                
+                $companyNameTask  = $key[0];
+                
+            }
+            
+        }
+       
+        
+        
         foreach ($authors as $aid) {
         
             $user_data = get_userdata($aid->ID);
@@ -352,9 +504,12 @@ function getAllusers_data(){
                     
                 
                 
-                $allUsersData[$index]['companyname'] = $all_meta_for_user[$site_prefix.'company_name'][0];
+                $allUsersData[$index]['companyname'] = ucfirst($all_meta_for_user[$site_prefix.'company_name'][0]);
                 $allUsersData[$index]['companylogourl'] = $all_meta_for_user[$site_prefix.'user_profile_url'][0];
                 $allUsersData[$index]['exhibitorsid'] = $aid->ID;
+                $allUsersData[$index]['companyNameTask'] = $all_meta_for_user[$companyNameTask][0];
+                
+                
                 
                 if(isset($all_meta_for_user['first_name'][0])){
                     $allUsersData[$index]['first_name'] = $all_meta_for_user['first_name'][0];
@@ -450,8 +605,9 @@ function getAllusers_data(){
         }
         
         
+        
         if(!empty($allUsersData)){ 
-        usort($allUsersData, 'compareByName');
+        uasort($allUsersData, 'compareByName');
         
         }
        
@@ -513,8 +669,11 @@ function floorplan_shortcode( $atts, $content = null ) {
         
         $contentmanager_settings = get_option( 'ContenteManager_Settings' );
 	$id = $contentmanager_settings['ContentManager']['floorplanactiveid'];
+       
+        $wooconsumerkey = $contentmanager_settings['ContentManager']['wooconsumerkey'];
+        $wooseceretkey = $contentmanager_settings['ContentManager']['wooseceretkey'];
         
-         if(empty($id)){
+        if(empty($id)){
               
             // Gather post data.
             $my_post = array(
@@ -550,34 +709,84 @@ function floorplan_shortcode( $atts, $content = null ) {
            
             $legendlabel .= "]";
             
-            $FloorplanXml = '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" pageWidth="2175" pageHeight="2175" ><root></root></mxGraphModel>';
+            $FloorplanXml[0] = '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" pageWidth="2175" pageHeight="2175" ><root></root></mxGraphModel>';
             
                update_option( 'ContenteManager_Settings', $contentmanager_settings );
                update_post_meta( $id, 'booth_types', $boothTypes );
                update_post_meta( $id, 'floor_background', $FloorBackground);
-               update_post_meta( $id, 'floorplan_xml', $FloorplanXml );
+               update_post_meta( $id, 'floorplan_xml', $FloorplanXml[0] );
                update_post_meta( $id, 'legendlabels', $legendlabel );
             
              
          }
         
         
-       
+         
+            $boothsproductsData;
+            $boothTypes        = get_post_meta( $id, 'booth_types', true );
+            $FloorBackground   = get_post_meta( $id, 'floor_background', true );
+            $FloorplanXml[0]   = get_post_meta( $id, 'floorplan_xml', true );
+            $FloorplanLegends  = get_post_meta( $id, 'legendlabels', true );
+            $mxPriceTegsObject = get_post_meta( $id, 'pricetegs', true );
+           
+           
+            
+            global $wp_roles;
+            $all_roles = $wp_roles->roles;
+            foreach ($all_roles as $key => $name) {
+                
+                if ($key != 'administrator' && $key != 'contentmanager' && $key != 'subscriber') {
+                    
+                     $arrayoflevels[$key] = $name['name'];
+                }
+            }
+            $arrayoflevels = json_encode($arrayoflevels);
+            if(!empty($wooconsumerkey) && !empty($wooseceretkey)){
+                
+                require_once( 'lib/woocommerce-api.php' );
+                $url = get_site_url();
+                $options = array(
+                    'debug' => true,
+                    'return_as_array' => false,
+                    'validate_url' => false,
+                    'timeout' => 30,
+                    'ssl_verify' => false,
+                );
+                $woocommerce_object = new WC_API_Client( $url, $wooconsumerkey, $wooseceretkey, $options );
+                $all_products= $woocommerce_object->products->get( '', ['filter[limit]' => -1,'filter[post_status]' => 'any']);
+               
+                $indexProduct = 0;
+                 foreach ($all_products->products as $single_product) {
+                    
+                    
+                    
+                     
+                     
+                     
+                    if($single_product->categories[0] == 'Booths'){
+                     $boothsproductsData[$indexProduct]['title'] = $single_product->title;
+                     $boothsproductsData[$indexProduct]['id'] = $single_product->id;
+                     $boothsproductsData[$indexProduct]['price'] = (int)$single_product->price;
+                     $indexProduct++;
+                    }
+                     
+                }
+                
+                 
+               $boothsproductsData = json_encode($boothsproductsData);
+               
+              
+                 
+            }
         
-            $boothTypes = get_post_meta( $id, 'booth_types', true );
-            $FloorBackground = get_post_meta( $id, 'floor_background', true );
-            $FloorplanXml = get_post_meta( $id, 'floorplan_xml', true );
-            $FloorplanLegends = get_post_meta( $id, 'legendlabels', true );
-
         
-        
+         
+            
         $current_site_logo = $contentmanager_settings['ContentManager']['adminsitelogo'];
         $current_site_name = get_bloginfo( 'name' );
         $current_site_url  = get_site_url();
         $current_floor_plan_status  = $status;
-        
-	
-	include 'functions.php';
+        include 'functions.php';
     
         
     }else {
@@ -594,26 +803,28 @@ add_shortcode( 'floorplan', 'floorplan_shortcode' );
 function floorplan_contentmanagerlogging($acction_name,$action_type,$pre_action_data,$user_id,$email,$result){
 
     
-//require_once('../../../wp-load.php');
-   
-global $wpdb;
-$blog_id =get_current_blog_id();
-   if(get_current_blog_id() == 1){
-        $tablename = 'contentmanager_log';
-    }else{
-    
-        $tablename = 'contentmanager_'.$blog_id.'_log';
-    } 
-$_SERVER['currentuseremail'] = $email;
-$postArrayData['UserInfo'] = $_SERVER ;
-$emailwithIPAddress = $email.'---'.$_SERVER['REMOTE_ADDR'];
-$postArrayData['requestData'] = unserialize($pre_action_data) ;
+// Create post object
+$activitylog = array(
+  'post_title'    => wp_strip_all_tags( $acction_name ),
+  'post_content'  => "",
+  'post_status'   => 'publish',
+  'post_author'   => $user_id,
+  'post_type'=>'expo_genie_log'
+);
+ 
 
-$postArrayData = serialize($postArrayData);
-$query = "INSERT INTO ".$tablename." (action_name, action_type,pre_action_data,user_id,user_email,result) VALUES (%s,%s,%s,%s,%s,%s)";
-$wpdb->query($wpdb->prepare($query, $acction_name, $action_type,$postArrayData,$user_id,$emailwithIPAddress,$result));
-$lastInsertId = $wpdb->insert_id;
-return $lastInsertId;
+ $logID = wp_insert_post( $activitylog );
+ $_SERVER['currentuseremail'] = $email;
+ update_post_meta( $logID, 'action-type-name', $action_type );
+ update_post_meta( $logID, 'pre-action-data', $pre_action_data );
+ update_post_meta( $logID, 'current-user-info', $_SERVER );
+ update_post_meta( $logID, 'currentuseremail', $email );
+ update_post_meta( $logID, 'ip-address', $_SERVER['REMOTE_ADDR'] );
+ update_post_meta( $logID, 'browser-agent', $_SERVER['HTTP_USER_AGENT'] );
+ update_post_meta( $logID, 'final-result', $result );
+ update_post_meta( $logID, 'request-data-and-time',  date("Y-m-d H:i:s") );
+ return $logID;
+ 
 
 }
 include_once('updater.php');

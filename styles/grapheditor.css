@@ -1019,3 +1019,123 @@ input:checked + .slider:before {
     margin-right: 15% !important;
     
 }
+.customecloseicon{
+    
+    width: 32px !important;
+    padding: 1px !important;
+    font-size: 10px !important;
+    margin-left: -60% !important;
+}
+.geButton{
+    
+    text-align: center !important;
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  position: relative;
+  top: 2px;
+  width: 50%px;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+ 
+}
+
+/* Create an active/current tablink class */
+.tab button {
+ 
+    border-top: 3px solid #fa8b00;
+    border-radius: 6px 6px 0px 0px;
+    border-left: 2px solid #e8e8e8;
+    border-right: 2px solid #e8e8e8;
+    background: #fff;
+    
+}
+
+/* Style the tab content */
+.tabcontent {
+ 
+  padding: 6px 12px;
+  border: 2px solid #e8e8e8;
+  background: #fff !important;
+
+}
+.jconfirm-box{
+    
+    background: #f6f6f6  !important;
+    
+}
+.customedivproductview{
+    
+    
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+.footerdivfloorplan{
+    
+    margin-top: 20px;
+    border: 2px solid #e8e8e8;
+    padding: 15px;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+.unactive{
+    
+    background: #ccc !important;
+    
+    
+    
+}
+
+.content h5{
+    
+    margin-top: 10px !important;
+   
+}
+
+
+
+.btn.btn-info:hover {
+    background-color: #7cb5ec !important;
+    border-color: #7cb5ec !important;
+}
+
+.btn.btn-info {
+    background-color: #7cb5ec !important;
+    border-color: #7cb5ec !important;
+}
+
+.customecloseicon:hover{
+    background-color: #fb6067 !important;
+    border-color: #fb6067 !important;
+    
+    
+} 
+.customecloseicon{
+    
+    background-color: #fb6067 !important;
+    border-color: #fb6067 !important;
+    
+}
+
+.addboothdetialbox{
+    width: 80% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}

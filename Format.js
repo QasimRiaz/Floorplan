@@ -3576,7 +3576,6 @@ StyleFormatPanel.prototype.init = function()
 	this.addGeometry(this.container);
         
         this.container.appendChild(this.addLegendLabel(this.createPanel()));
-        this.container.appendChild(this.addPricetegs(this.createPanel()));
         
         
         
@@ -3829,7 +3828,7 @@ StyleFormatPanel.prototype.addEditPresets = function(div)
                                                inputPlaceholder: "Booth Type Name",
                                            },
                                                function (inputValue) {
-                                                   inputValue = inputValue.replace(/['"]+/g, '')
+                                                   inputValue = inputValue.replace(/'/g, "\\'");
                                                    status_preset = "clear";
                                                    if (inputValue === false)
                                                    return false;
@@ -3852,9 +3851,9 @@ StyleFormatPanel.prototype.addEditPresets = function(div)
 
                                                    }
                                                });
-                                               if (status_preset == 'clear') {  
+                                               if (status_preset == 'clear') {
 
-                                                       presetname = inputValue.replace(/([,.!;"'])+/g, '');
+                                                       presetname = inputValue; 
                                                        console.log(presetname);
                                                        
                                                        jQuery.each(currentCell,function(index,value){
@@ -4006,7 +4005,7 @@ StyleFormatPanel.prototype.addEditPresets = function(div)
                                 });
                                 if (status_preset == 'clear') {
                                        
-                                        presetname = inputValue.replace(/['"]+/g, '')
+                                        presetname = inputValue;
                                         
                                         jQuery.each(currentCell,function(index,value){
                                             
@@ -4437,7 +4436,7 @@ var stylePanel = this.createPanel();
 	selectboothtypes.id = 'legendlabeltypedropdown';
         
          var option = document.createElement("option");
-         option.value = '';
+         option.value = 'none';
         
          option.text = 'None';
         
@@ -4504,7 +4503,8 @@ var stylePanel = this.createPanel();
         mxEvent.addListener(legendbuttonsubmit, 'click', function()
 	{
                           
-                          var cell = graph.getSelectionCells();  
+                          var cell = graph.getSelectionCells(); 
+                          console.log(cell);
                           document.getElementById("applybuttonlegend").focus();
                           jQuery.each(cell,function(cellindex,cellvalue){
                              
@@ -4525,10 +4525,9 @@ var stylePanel = this.createPanel();
                             
                             var labelvalue = "";
                             var boothdetailvalue = "";
-                            var assigenduserID = "none";
+                            var assigenduserID = "";
                             var companydescripiton = "";
-                            var boothproductid = "none";
-                            var seletedpricetegkeyvalue = "none";
+                            
                             if (mxUtils.isNode(cellvalue.value))
                                 {  
                                     
@@ -4536,8 +4535,6 @@ var stylePanel = this.createPanel();
                                      labelvalue = cellvalue.getAttribute('mylabel', '');
                                      boothdetailvalue = cellvalue.getAttribute('boothDetail', '');
                                      companydescripiton = cellvalue.getAttribute('companydescripiton', '');
-                                     boothproductid = cellvalue.getAttribute('boothproductid', '');
-                                     seletedpricetegkeyvalue = cellvalue.getAttribute('pricetegid', '');
                                     
                                 }
                                 
@@ -4551,15 +4548,16 @@ var stylePanel = this.createPanel();
                             node.setAttribute('legendlabels', seletedlegendlabelsvalue);
                             node.setAttribute('legendlabelscolor', selectedlegendcolorcode);
                             node.setAttribute('companydescripiton', companydescripiton);
-                            node.setAttribute('boothproductid', boothproductid);
-                            node.setAttribute('pricetegid', seletedpricetegkeyvalue);   
+                         
+                               
                                   
-                               if(selectedlegendcolorcode != "none"){
+                               if(seletedlegendlabelsvalue != "none"){
                                     console.log(selectedlegendcolorcode)
                                     graph.setCellStyles("fillColor", selectedlegendcolorcode, graph.getSelectionCells());
                                
                                }else{
-                              
+                                   
+                                 console.log(assigenduserID);
                                  if (assigenduserID != 'none') {
                                         
                                         graph.setCellStyles("fillColor", ss.style.occ, graph.getSelectionCells());
@@ -4583,219 +4581,6 @@ var stylePanel = this.createPanel();
 
      
 	stylePanel.appendChild(legendbuttonsubmit);
-        
-	
-            container.appendChild(stylePanel);
-    
-
-	
-        container.style.paddingTop = '0px';
-        
-	return container;
-        
-};
-
-
-StyleFormatPanel.prototype.addPricetegs = function(container)
-{
-	var ui = this.editorUi;
-	var graph = ui.editor.graph;
-	var ss = this.format.getSelectionState();
-        var pricetegsID = "";
-	container.style.paddingTop = '6px';
-	container.style.paddingBottom = '6px';
-        container.style.borderBottom = '0px';
-	
-	var label = document.createElement('div');
-	label.style.border = '1px solid #c0c0c0';
-	label.style.borderWidth = '0px 0px 1px 0px';
-	label.style.textAlign = 'center';
-	label.style.fontWeight = 'bold';
-	label.style.overflow = 'hidden';
-	label.style.display = (mxClient.IS_QUIRKS) ? 'inline' : 'inline-block';
-	label.style.paddingTop = '8px';
-	label.style.height = (mxClient.IS_QUIRKS) ? '34px' : '25px';
-	label.style.width = '100%';
-        label.className = ' customebgcolor';
-	this.container.appendChild(label);
-	
-	mxUtils.write(label, 'Price Tags');
-
-var stylePanel = this.createPanel();
-	stylePanel.style.paddingTop = '2px';
-	stylePanel.style.paddingBottom = '2px';
-	stylePanel.style.paddingLeft = '0px';
-	stylePanel.style.position = 'relative';
-	stylePanel.style.marginLeft = '-2px';
-	stylePanel.style.borderWidth = '0px';
-	stylePanel.className = 'geToolbarContainer';
-	
-	if (mxClient.IS_QUIRKS)
-	{
-		stylePanel.style.display = 'block';
-	}
-	
-	
-		
-	var cell = graph.getSelectionCells();
-	
-        
-        if (mxUtils.isNode(cell[0].value))
-                {   
-                    
-                     
-                     
-                      pricetegsID = cell[0].getAttribute('pricetegid', '');
-                      
-                     
-                     
-                }
-	
-	
-        
-       
-        var createDiv = document.createElement('div');
-        
-        var submitbuttonlebal = this.createTitle('');
-	submitbuttonlebal.style.paddingBottom = '6px';
-	stylePanel.appendChild(submitbuttonlebal);
-        
-        
-        
-        
-        
-        var selectboothtypes = document.createElement('select');
-        selectboothtypes.style.width = '70%';
-        selectboothtypes.style.marginRight = '10px';
-	selectboothtypes.id = 'pricetegdropdown';
-        
-         var option = document.createElement("option");
-         option.value = '';
-        
-         option.text = 'None';
-        
-       
-        if(pricetegsID == ""){
-            
-            option.setAttribute('selected', 'selected');
-            
-        }
-        selectboothtypes.appendChild(option);
-        
-        jQuery.each(PricetegsObjects, function(index1, value) {
-            
-			 var option = document.createElement("option");
-                         option.value = value.ID;
-                         option.text = value.name;
-                         
-                         if(pricetegsID == value.ID){
-            
-                           option.setAttribute('selected', 'selected');
-            
-                        }
-                         
-                         
-                         selectboothtypes.appendChild(option);
-        });
-        
-        
-        createDiv.appendChild(selectboothtypes);
-        
-        
-        var manageboothtypes = document.createElement('a');
-        manageboothtypes.className = 'myCustomeButton';
-        manageboothtypes.style.padding = '5px 4px 5px 4px';
-        manageboothtypes.style.marginRight = '1%';
-        manageboothtypes.setAttribute('onclick', 'getallpricetegs()');
-        manageboothtypes.innerHTML = 'Manage';
-        
-         createDiv.appendChild(manageboothtypes);
-     
-        
-        
-        
-      
-	  stylePanel.appendChild(createDiv);
-        
-        
-        
-        var pricetegapplybutton = document.createElement('button');
-	pricetegapplybutton.id = 'applypricetegs';
-        pricetegapplybutton.title = '';
-       
-        pricetegapplybutton.style.width = '56%';
-        pricetegapplybutton.style.float = 'right';
-        pricetegapplybutton.style.marginTop = '10px';
-        pricetegapplybutton.style.marginRight = '50px';
-        pricetegapplybutton.className = 'myCustomeButton';
-        
-        
-        pricetegapplybutton.innerHTML = 'Apply';
-        
-	
-        
-        mxEvent.addListener(pricetegapplybutton, 'click', function()
-	{
-                          
-                          var cell = graph.getSelectionCells();  
-                          document.getElementById("applypricetegs").focus();
-                          jQuery.each(cell,function(cellindex,cellvalue){
-                             
-                            
-                               var selectedpricetegkey = document.getElementById("pricetegdropdown");
-                               var seletedpricetegkeyvalue = selectedpricetegkey.options[selectedpricetegkey.selectedIndex].value;
-                           
-                              
-                            
-                            var labelvalue = "";
-                            var boothdetailvalue = "";
-                            var assigenduserID = "none";
-                            var companydescripiton = "";
-                            var boothproductid = "none";
-                            var seletedlegendlabelsvalue="none";
-                            var selectedlegendcolorcode="";
-                            if (mxUtils.isNode(cellvalue.value))
-                                {  
-                                    
-                                     assigenduserID = cellvalue.getAttribute('boothOwner', '');
-                                     labelvalue = cellvalue.getAttribute('mylabel', '');
-                                     boothdetailvalue = cellvalue.getAttribute('boothDetail', '');
-                                     companydescripiton = cellvalue.getAttribute('companydescripiton', '');
-                                     boothproductid = cellvalue.getAttribute('boothproductid', '');
-                                     seletedlegendlabelsvalue = cellvalue.getAttribute('legendlabels', '');
-                                     selectedlegendcolorcode = cellvalue.getAttribute('legendlabelscolor', '');
-                                    
-                                }
-                                
-                            var doc = mxUtils.createXmlDocument();
-                            var node = doc.createElement('MyNode')
-                          
-                            node.setAttribute('boothOwner', assigenduserID);
-                            node.setAttribute('mylabel', labelvalue);
-                            node.setAttribute('boothDetail', boothdetailvalue);
-                            
-                            node.setAttribute('legendlabels', seletedlegendlabelsvalue);
-                            node.setAttribute('legendlabelscolor', selectedlegendcolorcode);
-                            node.setAttribute('companydescripiton', companydescripiton);
-                            node.setAttribute('boothproductid', boothproductid);
-                            node.setAttribute('pricetegid', seletedpricetegkeyvalue);
-                               
-                                  
-                               
-                                
-                                cellvalue.value = node;
-                                graph.cellLabelChanged(cellvalue, '');
-                                    
-                            });
-                            
-                            
-                                   
-                   
-                });
-        
-
-     
-	stylePanel.appendChild(pricetegapplybutton);
         
 	
             container.appendChild(stylePanel);
@@ -4927,13 +4712,13 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         
         var icontegat = document.createElement('p');
         
-        icontegat.innerHTML = '<i class="font-icon fa fa-edit"  style="cursor: pointer;color: #0082ff;" title="Edit booth detail"></i>';
+        icontegat.innerHTML = '<i class="font-icon fa fa-edit"  style="cursor: pointer;color: #0082ff;" title="Edit company description"></i>';
         icontegat.style.float="right";
-        icontegat.style.marginRight="9%";
+        icontegat.style.marginRight="35%";
         icontegat.style.marginTop="-6%";
        
         
-        heading.innerHTML = 'Booth Detail:    ';
+        heading.innerHTML = 'Company Description:    ';
         
     
     
@@ -4954,10 +4739,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         var descripitiondetailhtml = document.createElement('p');
         descripitiondetailhtml.id="descripitonhtmltext";
         if(getshowdescripiton !=""){
-            var htmldescription = unescape(getshowdescripiton);
-            
-                
-            descripitiondetailhtml.innerHTML = htmldescription.substr(0, 75)+"....";
+            descripitiondetailhtml.innerHTML = unescape(getshowdescripiton)+"....";
         }
         
        
@@ -4968,118 +4750,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         
         
         stylePanel.appendChild(descripitiondetailhtml);
-        
-        
-       
-       
-        var seletetboothprduct = document.createElement('input');
-	var boothporudcttitlename = document.createElement('p');
-	//gradientSelect.style.position = 'absolute';
-	//gradientSelect.style.marginTop = '-2px';
-	//gradientSelect.style.right = (mxClient.IS_QUIRKS) ? '52px' : '72px';
-	
-        seletetboothprduct.type = 'hidden';
-       
-        boothporudcttitlename.id = 'selectedboothtitlename';
-        
-	seletetboothprduct.id = 'boothproduct';
-        seletetboothprduct.disabled = 'true';
-        var seletedproductID = "";
-       
-	
-        
-        if (mxUtils.isNode(cell[0].value))
-                {   
-                    
-                     
-                     
-                      seletedproductID = cell[0].getAttribute('boothproductid', '');
-                      
-                     
-                     
-                }
-	
-        
-        var productdivtitle = document.createElement('div');
-        
-        productdivtitle.style.width = '100%';
-        var boothproduct = this.createTitle('Booth Product: ');
-	boothproduct.style.paddingTop = '6px';
-	boothproduct.style.paddingBottom = '6px';
-        boothproduct.style.width = '35%';
-        
-        var buttonsdiv = document.createElement('div');
-        buttonsdiv.style.width = '22%';
-        buttonsdiv.style.float = 'right';
-       
-        buttonsdiv.id = 'customebuttonsdiv';
-        var removeproduct = document.createElement('a');
-	
-	removeproduct.id = 'removethisporduct';
-        
-        
-        
-       
-       
-        removeproduct.innerHTML = '<i class="fa fa-trash" style="cursor: pointer;color: #0082ff;" ></i>';
-        removeproduct.title = 'Remove';
-        
-        
-        var editproduct = document.createElement('a');
-	
-	editproduct.id = 'editthisporduct';
-        editproduct.href = baseCurrentSiteURl+'/add-new-product/?productid='+seletedproductID;
-        editproduct.target ="_blank";
-        editproduct.style.marginRight = '10px';
-        editproduct.innerHTML = '<i class="font-icon fa fa-edit" style="cursor: pointer;color: #0082ff;" ></i>';
-        editproduct.title = 'Edit Product';
-       
-       buttonsdiv.appendChild(editproduct); 
-       buttonsdiv.appendChild(removeproduct); 
-       
-       if(seletedproductID == 'none' || seletedproductID == ""){
-            buttonsdiv.style.display = 'none';
-       }
-       
-       productdivtitle.appendChild(boothproduct);
-       productdivtitle.appendChild(buttonsdiv);
-   
-       
-        if(seletedproductID == ""){
-            
-            seletetboothprduct.value = "none";
-            
-        }
-     
-        
-        jQuery.each(boothsproducts, function(index1, value) {
-            
-			 
-                        
-                         if(seletedproductID == value.id){
-                           
-                           
-                            seletetboothprduct.value = value.id;
-                            boothporudcttitlename.innerHTML=currencysymbole+value.price+' '+value.title;
-            
-                        }
-                         
-                         
-                         
-        });
-        
-        
-        
-        if(cell.length == 1){
-	 stylePanel.appendChild(productdivtitle);
-         stylePanel.appendChild(boothporudcttitlename);
-         stylePanel.appendChild(seletetboothprduct);
-        }
-        
-        
-        
-        
-        
         
         
         var detailsubmit = document.createElement('button');
@@ -5098,16 +4768,9 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	var title = this.createTitle('Exhibitors: ');
 	title.style.paddingTop = '6px';
 	title.style.paddingBottom = '6px';
-       
-        
-        
-         if(cell.length == 1){
+        if(cell.length == 1){
 	 stylePanel.appendChild(title);
         }
-        
-        
-        
-        
 	// Adds gradient direction option
 	var gradientSelect = document.createElement('select');
 	
@@ -5128,9 +4791,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	{
 		mxEvent.consume(evt);
 	});
-        
-       
-/*      
+/*
 	var gradientPanel = this.createCellColorOption(mxResources.get('gradient'), mxConstants.STYLE_GRADIENTCOLOR, '#ffffff', function(color)
 	{
 		if (color == null || color == mxConstants.NONE)
@@ -5168,15 +4829,15 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         //console.log(mxFloorPlanXml);
         
         
-	jQuery.each( newcompanynamesArray, function( key, value ) {
+	jQuery.each( mxgetjosnusersData, function( key, value ) {
                         
                 var gradientOption = document.createElement('option');
-		gradientOption.setAttribute('value', value.userID);
-		mxUtils.write(gradientOption, value.companyname);
+		gradientOption.setAttribute('value', mxgetjosnusersData[key].exhibitorsid);
+		mxUtils.write(gradientOption, mxgetjosnusersData[key].companyname);
 		jQuery($xml).find("MyNode").each(function () {
                     
                     var usercurrentid = jQuery(this).attr('boothOwner');
-                    if (value.userID == usercurrentid) {
+                    if (mxgetjosnusersData[key].exhibitorsid == usercurrentid) {
                         
                         gradientOption.setAttribute('class', 'assignedcolor');
                         
@@ -5197,9 +4858,8 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 		ss = this.format.getSelectionState();
                 var cell = graph.getSelectionCells();
 		var value = cell[0].getAttribute('boothOwner', '');
-              
                // jQuery("#exhibitorID").valu('none');
-		
+		console.log(value);
 		// Handles empty string which is not allowed as a value
 		if (value == '')
 		{
@@ -5211,11 +4871,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 		gradientSelect.value = value;
                
 		container.style.display = (ss.fill) ? '' : 'none';
-                
-              
-                
-                
-                
 		/*
 		var fillColor = mxUtils.getValue(ss.style, mxConstants.STYLE_FILLCOLOR, null);
 
@@ -5234,27 +4889,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	this.listeners.push({destroy: function() { graph.getModel().removeListener(listener); }});
 	listener();
         
-        mxEvent.addListener(removeproduct, 'click', function()
-	{
-            
-            
-            jQuery("#boothproduct").val("none");
-            jQuery("#customebuttonsdiv").hide();
-            jQuery("#selectedboothtitlename").empty();
-            
-            
-           // var cell = graph.getSelectionCells(); 
-            
-          //   jQuery.each(cell,function(cellindex,cellvalue){
-                
-            //     cellvalue.setAttribute('boothproductid', 'none');
-                 
-           //  });
-            
-            
-            
-            
-        });
+        
         
         
         
@@ -5262,10 +4897,10 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	{
             var getdescripitionvalue = jQuery("#currentcompanydescripiton").val();
             jQuery.confirm({
-        title: 'Booth Detail',
+        title: 'Company Description',
         content: '<textarea style="width:100%;height:200px;"class="companydescription"  >' + unescape(getdescripitionvalue) + '</textarea>',
         html: true,
-        columnClass: 'jconfirm-box-container-special-company-descripiton addboothdetialbox',
+        columnClass: 'jconfirm-box-container-special-company-descripiton',
    
         closeIcon: true,
         confirmButton: 'Apply',
@@ -5303,7 +4938,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                
                              
                                var getexhibortervalue = "";
-                               var boothproductvalue = "";
+                               
                                 if (getboothnumber) {
                                     } else {
                                         getboothnumber = "";
@@ -5323,7 +4958,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                             var node = doc.createElement('MyNode');
                             var legendlabels = "";
                             var legendlabelscolor = "";
-                            var seletedpricetegkeyvalue = "none";
+                            
                             node.setAttribute('mylabel', getboothnumber);
                             node.setAttribute('boothDetail', getdetailvalue);
                             node.setAttribute('companydescripiton', currentcompanydescripiton);
@@ -5332,11 +4967,10 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                 
                               legendlabels = cell[0].getAttribute('legendlabels', '');
                               legendlabelscolor = cell[0].getAttribute('legendlabelscolor', '');
-                              seletedpricetegkeyvalue = cell[0].getAttribute('pricetegid', '');
                               
                                node.setAttribute('legendlabels', legendlabels);
                                node.setAttribute('legendlabelscolor', legendlabelscolor);
-                               node.setAttribute('pricetegid', seletedpricetegkeyvalue);
+                              
                                var e = document.getElementById("exhibitorID");
                                if (e.options[e.selectedIndex].value != "") {
 
@@ -5348,18 +4982,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 
                                 }
                                node.setAttribute('boothOwner', getexhibortervalue);
-                               var boothproductvaluecheck = jQuery("#boothproduct").val();//document.getElementById("boothproduct");
-                               if (boothproductvaluecheck != "") {
-
-                                    boothproductvalue = boothproductvaluecheck;
-
-                                } else {
-
-                                    boothproductvalue = "";
-
-                                }
-                               node.setAttribute('boothproductid', boothproductvalue);
-                               
                                
                                 if(legendlabelscolor != "none" && legendlabelscolor !=""){
                                     
@@ -5383,16 +5005,14 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                               
                                 
                                 var boothownerlastvalue  = "";
-                                var boothproductlastvalue  = "";
-                                var seletedpricetegkeyvalue  = "none";
                                 if (mxUtils.isNode(cellvalue.value))
                                 {  
                                      console.log(boothownerlastvalue);
                                      boothownerlastvalue = cellvalue.getAttribute('boothOwner', '');
-                                     legendlabels = cellvalue.getAttribute('legendlabels', '');
-                                     legendlabelscolor = cellvalue.getAttribute('legendlabelscolor', '');
-                                     boothproductlastvalue = cellvalue.getAttribute('boothproductid', '');
-                                     seletedpricetegkeyvalue = cellvalue.getAttribute('pricetegid', '');
+                                     
+                                      legendlabels = cellvalue.getAttribute('legendlabels', '');
+                                      legendlabelscolor = cellvalue.getAttribute('legendlabelscolor', '');
+                                     
                                     
                                 }
                                 
@@ -5406,8 +5026,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                 node.setAttribute('boothOwner', boothownerlastvalue);
                                 node.setAttribute('legendlabels', legendlabels);
                                 node.setAttribute('legendlabelscolor', legendlabelscolor);
-                                node.setAttribute('boothproductid', boothproductlastvalue);
-                                node.setAttribute('pricetegid', seletedpricetegkeyvalue);
+                                
                             }
                             
                                
@@ -5455,7 +5074,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                
                                
                                var getexhibortervalue = "";
-                               var boothproductvalue ="";
                                
                                 if (getboothnumber) {
                                     } else {
@@ -5477,23 +5095,18 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                             var legendlabels = "";
                             var legendlabelscolor = "";
                             
-                            
-                            
-                            
                             node.setAttribute('mylabel', getboothnumber);
                             node.setAttribute('boothDetail', getdetailvalue);
                             node.setAttribute('companydescripiton', currentcompanydescripiton);
-                           
                             
                             if(cell.length == 1){
                                 
                               legendlabels = cell[0].getAttribute('legendlabels', '');
                               legendlabelscolor = cell[0].getAttribute('legendlabelscolor', '');
-                              var seletedpricetegkeyvalue = cell[0].getAttribute('pricetegid', '');
                               
                                node.setAttribute('legendlabels', legendlabels);
                                node.setAttribute('legendlabelscolor', legendlabelscolor);
-                               node.setAttribute('pricetegid', seletedpricetegkeyvalue);
+                              
                                var e = document.getElementById("exhibitorID");
                                if (e.options[e.selectedIndex].value != "") {
 
@@ -5505,21 +5118,8 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 
                                 }
                                node.setAttribute('boothOwner', getexhibortervalue);
-                                var boothproductvaluecheck = jQuery("#boothproduct").val();//document.getElementById("boothproduct");
-                               if (boothproductvaluecheck != "") {
-                                  
-                                    boothproductvalue = boothproductvaluecheck;
-                                    
-                                    console.log(boothproductvalue);
-
-                                } else {
-
-                                    boothproductvalue = "";
-
-                                }
-                               node.setAttribute('boothproductid', boothproductvalue);
                                
-                                if(legendlabelscolor != "none" && legendlabelscolor !=""){
+                                if(legendlabels != "none" && legendlabelscolor !=""){
                                     
                                     graph.setCellStyles("fillColor", legendlabelscolor, graph.getSelectionCells());
                                     
@@ -5541,8 +5141,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                               
                                 
                                 var boothownerlastvalue  = "";
-                                var boothproductlastvalue  = "";
-                                var seletedpricetegkeyvalue  = "none";
                                 if (mxUtils.isNode(cellvalue.value))
                                 {  
                                      console.log(boothownerlastvalue);
@@ -5550,13 +5148,11 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                      
                                       legendlabels = cellvalue.getAttribute('legendlabels', '');
                                       legendlabelscolor = cellvalue.getAttribute('legendlabelscolor', '');
-                                      boothproductlastvalue = cellvalue.getAttribute('boothproductid', '');
-                                      seletedpricetegkeyvalue = cellvalue.getAttribute('pricetegid', '');
                                      
                                     
                                 }
                                 
-                                if(legendlabelscolor != "none" && legendlabelscolor !=""){
+                                if(legendlabels != "none" && legendlabelscolor !=""){
                                     
                                     graph.setCellStyles("fillColor", legendlabelscolor, graph.getSelectionCells());
                                     
@@ -5566,8 +5162,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                 node.setAttribute('boothOwner', boothownerlastvalue);
                                 node.setAttribute('legendlabels', legendlabels);
                                 node.setAttribute('legendlabelscolor', legendlabelscolor);
-                                node.setAttribute('boothproductid', boothproductlastvalue);
-                                node.setAttribute('pricetegid', seletedpricetegkeyvalue);
+                                
                             }
                             
                                
@@ -5704,9 +5299,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	//stylePanel.appendChild(boothNumber);
       if(cell.length == 1){
 	stylePanel.appendChild(gradientSelect);
-       
-        
-        
         }
 	stylePanel.appendChild(detailsubmit);
         
@@ -5724,9 +5316,6 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	return container;
         
 };
-
-
-
 
 /**
  * Adds the label menu items to the given menu and parent.
@@ -7243,7 +6832,6 @@ function updatealllengends(){
     jQuery( ".lengendsrows" ).each(function( index ) {
            var currentrowID =  jQuery(this).attr("id");
            var currentrowName =  jQuery("#boothtypename_"+currentrowID).val();
-           var currentrowprice =  jQuery("#boothtypeprice_"+currentrowID).val();
            currentrowName = currentrowName.replace(/([,.!;"'])+/g, '');
            var currentrowLengendStatus =  jQuery().attr("id");
            
@@ -7266,7 +6854,6 @@ function updatealllengends(){
            saveddataarray.colorstatus =currentrowLengendStatus
            saveddataarray.name =currentrowName;
            saveddataarray.colorcode =currentrowColorCode;
-           //saveddataarray.price =currentrowprice;
            LegendsOfObjects.push(saveddataarray);
     });
     
@@ -7274,7 +6861,7 @@ function updatealllengends(){
    jQuery("#legendlabeltypedropdown").empty();
     
     var option = document.createElement("option");
-       option.value = '';
+       option.value = 'none';
        option.text = 'None';
        if(legendlabelID == "" ){
            option.setAttribute('selected', 'selected');
@@ -7297,7 +6884,7 @@ function updatealllengends(){
     });
     
     
-    console.log(LegendsOfObjects)
+    
     data.append('legendstypesArray', JSON.stringify(LegendsOfObjects));
     jQuery.ajax({
         url: baseCurrentSiteURl+'/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=savedalllegendstypes',
@@ -7333,102 +6920,6 @@ function updatealllengends(){
    
     
 }
-
-function updateallpricetegs(){
-    
-    jQuery('body').css({'cursor' : 'wait'});
-    var data = new FormData();
-    PricetegsObjects = [];
-    data.append('post_id', mxPostID);
-    var rowscount = document.getElementById("listofallpricetegs").rows.length;
-    var rowcounter = 0;
-    jQuery( ".listofallpricetegs" ).each(function( index ) {
-        
-           var currentrowID =  jQuery(this).attr("id");
-           var currentrowName =  jQuery("#pricetegname_"+currentrowID).val();
-           var currentrowprice =  jQuery("#pricetegprice_"+currentrowID).val();
-           var priceteglevel =  jQuery("#priceteglevel_"+currentrowID+" option:selected").val();
-           console.log(priceteglevel)
-           currentrowName = currentrowName.replace(/([,.!;"'])+/g, '');
-         
-           
-           var saveddataarray ={};
-           saveddataarray.ID =currentrowID;
-           saveddataarray.name =currentrowName
-           saveddataarray.price =currentrowprice;
-           saveddataarray.level =priceteglevel;
-          
-           PricetegsObjects.push(saveddataarray);
-          
-      
-    
-    });
-    
-    
-   jQuery("#pricetegdropdown").empty();
-    
-    var option = document.createElement("option");
-       option.value = '';
-       option.text = 'None';
-       if(pricetegID == "" ){
-           option.setAttribute('selected', 'selected');
-       }
-       
-    jQuery("#pricetegdropdown").append(option);
-    jQuery.each(PricetegsObjects, function(index1, value) {
-       
-        
-       var option = document.createElement("option");
-       
-       if(pricetegID == value.ID ){
-           option.setAttribute('selected', 'selected');
-       }
-       option.style.backgroundColor = value.colorcode;
-       option.value = value.ID;
-       option.text = value.name;
-      jQuery("#pricetegdropdown").append(option);
-        
-    });
-    
-    
-    console.log(PricetegsObjects);
-    data.append('pricetegsArray', JSON.stringify(PricetegsObjects));
-    jQuery.ajax({
-        url: baseCurrentSiteURl+'/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=savedallpricetegs',
-        data:data,
-        cache: false,
-        contentType: false,
-        processData: false,
-        type: 'POST',
-        success: function(data) {
-                   jQuery('body').css({'cursor' : 'default'});
-                  
-                   if(data == 'update'){
-                       
-                       jQuery(".successmessage").append("<h6 style='background: #95e87a;color: #fff;text-align: center;'>Price tags have been updated successfully.</h6>");
-                       
-                   }
-                   
-                    setTimeout(function() {
-                        jQuery( ".successmessage" ).empty();
-                        }, 3000); // <-- time in milliseconds
-                   
-
-        },error: function (xhr, ajaxOptions, thrownError) {
-                            swal({
-                                title: "Error",
-                                text: "There was an error during the requested operation. Please try again.",
-                                type: "error",
-                                confirmButtonClass: "btn-danger",
-                                confirmButtonText: "Ok"
-                            });
-            }
-    });
-   
-   
-}
-
-
 function makeid() {
   var text = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -7451,10 +6942,8 @@ function insertnewrowintolegendtypes(){
      
      var IDCODE = "'"+saveddataarray.ID+"'";
      var legendlabel = jQuery("#addnewlegendname").val();
-   
      saveddataarray.name  = legendlabel.replace(/([,.!;"'])+/g, '');
-    
-     insertRowhtml+='<tr class="lengendsrows" id="'+saveddataarray.ID+'" ><td style="width:65px;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td style="width: 30%;"><input type="text" title="Label" value="'+saveddataarray.name+'" id="boothtypename_'+saveddataarray.ID+'" /></td>';
+     insertRowhtml+='<tr class="lengendsrows" id="'+saveddataarray.ID+'" ><td style="width:65px;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td style="width: 50%;"><input type="text" title="Label" value="'+saveddataarray.name+'" id="boothtypename_'+saveddataarray.ID+'" /></td>';
                                                  
      if (jQuery("#addnewlegendstatus").prop('checked')){
          
@@ -7471,77 +6960,17 @@ function insertnewrowintolegendtypes(){
      }
      insertRowhtml+='<td style="width: 10%;text-align: center;"><a style="cursor: pointer;"  title="Remove" onclick="removethisrow('+IDCODE+')" ><i class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></a></td></tr>';
                                               
-    // LegendsOfObjects.push(saveddataarray);
-     
-        
-        jQuery("#showheaderlegend").show();
-        jQuery("#legendsbuttons").show();   
+     LegendsOfObjects.push(saveddataarray);
      jQuery("#addnewlegendcolorcode").val("#000000");
      jQuery("#addnewlegendname").val("");
-    
      jQuery("#addnewlegendstatus").removeAttr('checked');
-     jQuery("#listofalllegends").append(insertRowhtml);
+     jQuery("#listofalllegends").prepend(insertRowhtml);
      jQuery('body').css({'cursor' : 'default'});
      
     }
      
 }
  
-
-function insertnewrowintopricetegs(){
-    
-    
-    if(jQuery("#addnewpricetegname").val() !=""){
-    
-     jQuery('body').css({'cursor' : 'wait'});
-     var saveddataarray ={};
-     var insertRowhtml = "";
-     saveddataarray.ID =  makeid();
-     
-     var IDCODE = "'"+saveddataarray.ID+"'";
-     var legendlabel = jQuery("#addnewpricetegname").val();
-     var price = jQuery("#pricetegpriceNewTeg").val();
-     var selectedlevel = jQuery("#pricetegleveldropdownvalue option:selected").val();
-     var roleshtml = "";
-     jQuery.each(arrayoflevelsObjects, function(rolekey, rolevalue) {
-                                                      
-            if(selectedlevel == rolevalue.key){
-                                                          
-                roleshtml+='<option value="'+rolevalue.key+'" selected>'+rolevalue.name+'</option>';
-            }else{
-                roleshtml+='<option value="'+rolevalue.key+'" >'+rolevalue.name+'</option>';
-            }
-                                                      
-    });
-    
-     saveddataarray.name  = legendlabel.replace(/([,.!;"'])+/g, '');
-     saveddataarray.price  = price;
-     insertRowhtml+='<tr class="listofallpricetegs" id="'+saveddataarray.ID+'" ><td style="width:65px;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td style="width: 30%;"><input type="text" title="Title" value="'+saveddataarray.name+'" id="pricetegname_'+saveddataarray.ID+'" /></td>';
-                                                 
-      insertRowhtml+='<td style="width: 30%;text-align: center;"><div class="input-group"><span class="input-group-addon">'+currencysymbole+'</span><input style="width: 80%;" type="number" id="pricetegprice_'+saveddataarray.ID+'" value="'+saveddataarray.price+'"    class="form-control currency"  /></div></td>';
-      insertRowhtml+='<td style="width: 10%;text-align: center;"><select id="priceteglevel_'+saveddataarray.ID+'" >'+roleshtml+'</select></td>';
-                                                     
-     
-     
-     insertRowhtml+='<td style="width: 10%;text-align: center;"><a style="cursor: pointer;"  title="Remove" onclick="removethispriceteg('+IDCODE+')" ><i class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></a></td></tr>';
-                                              
-    // PricetegsObjects.push(saveddataarray);
-   
-       
-        jQuery("#buttonsdiv").show();
-        jQuery("#showheader").show();
-   
-     jQuery("#addnewpricetegname").val("");
-     jQuery("#pricetegpriceNewTeg").val("");
-     jQuery("#listofallpricetegs").append(insertRowhtml);
-     jQuery('body').css({'cursor' : 'default'});
-     
-     
-    }
-     
-}
-
-
 function hidecolorselection(id){
     if(id == 'add' ){
         if (jQuery("#addnewlegendstatus").prop('checked'))
@@ -7583,121 +7012,12 @@ function removethisrow(id){
     
     
 }
-function removethispriceteg(id){
-    
-    
-    jQuery("#"+id).remove();
-    
-    
-}
-
-function getallpricetegs(){
-    
-  
-     var data = new FormData();
-     var addtext = "'add'";
-     data.append('post_id', mxPostID);
-    
-                 
-     var html = "<p class='successmessage'></p>";
-     var roleshtml = "";
-     var newroleshtml = "";
-     var classstatusshow ="";
-     jQuery.each(arrayoflevelsObjects, function(rolekey, rolevalue) {
-                              
-            if(rolevalue.key == "standard_role" ){
-                newroleshtml+='<option value="'+rolevalue.key+'" selected>'+rolevalue.name+'</option>';
-            }else{
-                newroleshtml+='<option value="'+rolevalue.key+'" >'+rolevalue.name+'</option>';
-            }
-            
-                                                      
-    });
-     
-     
-                                               html+='<div style="max-height: 350px;overflow: auto;"><table class="table mycustometable" id="listofallpricetegs">';
-                                               if(PricetegsObjects.length > 0){
-                                                    classstatusshow = "";  
-                                              }else{
-                                                    
-                                                    classstatusshow='display:none;';
-                                               }
-                                               html+='<tr id="showheader" style="'+classstatusshow+'"><th>Position</th><th>Default Name</th><th>Default Price</th><th>Default Level</th><th>Delete</th></tr>';
-                                                
-                                               
-                                               jQuery.each(PricetegsObjects, function(index1, value) {
-                                                  var IDCODE = "'"+value.ID+"'" ;
-                                                  
-                                                  jQuery.each(arrayoflevelsObjects, function(rolekey, rolevalue) {
-                                                      
-                                                      if(value.level == rolevalue.key){
-                                                          
-                                                          roleshtml+='<option value="'+rolevalue.key+'" selected>'+rolevalue.name+'</option>';
-                                                      }else{
-                                                        roleshtml+='<option value="'+rolevalue.key+'" >'+rolevalue.name+'</option>';
-                                                      }
-         
-                                                    });
-                                                  
-                                                 
-      
-    
-        
-        
-                                                 
-                                                  
-                                                  html+='<tr class="listofallpricetegs" id="'+value.ID+'" ><td style="width:10%;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 30%;"><input title="Title" type="text" title="Label" value="'+value.name+'" id="pricetegname_'+value.ID+'" /></td>';
-                                                  
-                                                       
-                                                      html+='<td style="width: 30%;text-align: center;"><div class="input-group"><span class="input-group-addon">'+currencysymbole+'</span><input style="width: 80%;" type="number" id="pricetegprice_'+value.ID+'" value="'+value.price+'"    class="form-control currency"  /></div></td>';
-                                                      html+='<td style="width: 10%;text-align: center;"><select id="priceteglevel_'+value.ID+'" >'+roleshtml+'</select></td>';
-                                                      html+='<td style="width: 10%;text-align: center;"><a style="cursor: pointer;"  title="Remove" onclick="removethispriceteg('+IDCODE+')" ><i class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></a></td></tr>';
-                                              
-                                                   
-                                               });
-                                              
-                                               html+='</table></div>';
-                                               html+='<p id="buttonsdiv" style="'+classstatusshow+'text-align:center;margin: 10px 0px 0px 0px;"><button class="btn btn-large btn-info" onclick="updateallpricetegs()">Save</button><button style="margin-left: 11px;background-color: #b0b0b0; border-color: #b0b0b0;" class="btn btn-large btn-info" onclick="closepricetegsdilog()">Cancel</button></p>';
-                                                   
-                                               html+='<hr>';
-                                               
-                                               
-                                               
-                                               
-                                               html+='<table class="table mycustometable">';
-                                               html+='<tr><th></th><th>Default Name</th><th>Default Price</th><th>Default Level</th><th></th></tr>';
-                                               html+='<tr><td style="width:10%;"><b>Add New</b></td><td style="width: 30%;"><input title="Default Title" type="text" id="addnewpricetegname" ></td>';
-                                               html+='<td style="width: 30%;text-align: center;"><div class="input-group"><span class="input-group-addon">'+currencysymbole+'</span><input type="number" style="width: 80%;" id="pricetegpriceNewTeg" value="0"    class="form-control currency"  /></div></td><td style="width: 10%;text-align: center;"><select id="pricetegleveldropdownvalue" >'+newroleshtml+'</select></td><td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintopricetegs()">Add</button></td></tr>';
-                                              
-                                               html+='</table>';
-                                              
-                                               
-                                               
-                                         //  }
-                                            
-                                            pricetegsdilog = jQuery.confirm({
-                                                    title: '<b style="text-align:center;">Price Tags</b>',
-                                                    content: html,
-                                                    html:true,
-                                               
-                                                    closeIcon: true,
-                                                    columnClass: 'jconfirm-box-container-special-boothtypes',
-                                                   cancelButton: false ,// hides the cancel button.
-                                                   confirmButton: false, // hides the confirm button.
-
-
-                                                });
-                                           jQuery(".mycustometable tbody").sortable();
-                                    
-                          
-}
 
 function getallboothtypes(){
     
   
      var data = new FormData();
      var addtext = "'add'";
-     var classstatusshow ="";
      data.append('post_id', mxPostID);
     
                                            
@@ -7720,20 +7040,9 @@ function getallboothtypes(){
                                               // console.log(boothtypeslist);
                                                html+='<div style="max-height: 350px;overflow: auto;"><table class="table mycustometable" id="listofalllegends">';
                                                
-                                              if(LegendsOfObjects.length > 0){
-                                                    classstatusshow = "";  
-                                              }else{
-                                                    
-                                                    classstatusshow='display:none;';
-                                               }
-                                               html+='<tr id="showheaderlegend" style="'+classstatusshow+'"><th>Position</th><th>Label</th><th>Active</th><th>Color</th><th>Delete</th></tr>';
-                                               
-                                             
-    
-    
-                                            jQuery.each(LegendsOfObjects, function(index1, value) {
+                                               jQuery.each(LegendsOfObjects, function(index1, value) {
                                                   var IDCODE = "'"+value.ID+"'" ;
-                                                  html+='<tr class="lengendsrows" id="'+value.ID+'" ><td style="width:10%;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 30%;"><input type="text" title="Label" value="'+value.name+'" id="boothtypename_'+value.ID+'" /></td>';
+                                                  html+='<tr class="lengendsrows" id="'+value.ID+'" ><td style="width:10%;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 50%;"><input type="text" title="Label" value="'+value.name+'" id="boothtypename_'+value.ID+'" /></td>';
                                                   if(value.colorstatus == true){
                                                        
                                                        html+='<td style="width: 10%;text-align: center;"><label style="" title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td>';
@@ -7750,7 +7059,7 @@ function getallboothtypes(){
                                                });
                                               
                                                html+='</table></div>';
-                                               html+='<p id="legendsbuttons" style="'+classstatusshow+' text-align:center;margin: 10px 0px 0px 0px;"><button class="btn btn-large btn-info" onclick="updatealllengends()">Save</button><button style="margin-left: 11px;background-color: #b0b0b0; border-color: #b0b0b0;" class="btn btn-large btn-info" onclick="closelegendsdilog()">Cancel</button></p>';
+                                               html+='<p style="text-align:center;margin: 10px 0px 0px 0px;"><button class="btn btn-large btn-info" onclick="updatealllengends()">Save</button><button style="margin-left: 11px;background-color: #b0b0b0; border-color: #b0b0b0;" class="btn btn-large btn-info" onclick="closelegendsdilog()">Cancel</button></p>';
                                                
                                                html+='<hr>';
                                                
@@ -7758,8 +7067,7 @@ function getallboothtypes(){
                                                
                                                
                                                html+='<table class="table mycustometable">';
-                                               html+='<tr ><th></th><th>Label</th><th>Active</th><th>Color</th><th></th></tr>';
-                                               html+='<tr><td style="width:10%;"><b>Add New</b></td><td style="width: 30%;"><input title="Label" type="text" id="addnewlegendname" ></td>';
+                                               html+='<tr><td style="width:10%;"><b>Add New</b></td><td style="width: 50%;"><input title="Label" type="text" id="addnewlegendname" ></td>';
                                                html+='<td style="width: 10%;text-align: center;"><label  title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+addtext+')"  id="addnewlegendstatus" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color"  id="addnewlegendcolorcode" ></td><td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintolegendtypes()">Add</button></td></tr>';
                                               
                                                html+='</table>';
@@ -7790,11 +7098,7 @@ function closelegendsdilog(){
     legendsdilog.close();
     
 }
-function closepricetegsdilog(){
-    
-    pricetegsdilog.close();
-    
-}
+
 
 /**
  * Adds the label menu items to the given menu and parent.

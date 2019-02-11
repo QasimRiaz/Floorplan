@@ -2235,7 +2235,7 @@ Graph.prototype.getTooltipForCell = function(cell)
 	var tip = '';
 	var cellStyle = cell.style;
         var labelvalue = cell.getAttribute('mylabel', '');
-        var boothDetail = cell.getAttribute('boothDetail', '');
+        var boothDetail = unescape(cell.getAttribute('companydescripiton', ''));
         var boothOwner = cell.getAttribute('boothOwner', '');
         var companylogourll = "";
         var newcompanyname = "";
@@ -4912,6 +4912,8 @@ if (typeof mxVertexHandler != 'undefined')
 		 * @param {number} dx X-coordinate of the translation.
 		 * @param {number} dy Y-coordinate of the translation.
 		 */
+                
+
 		Graph.prototype.encodeCells = function(cells)
 		{
 			var clones = this.cloneCells(cells);

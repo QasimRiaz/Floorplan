@@ -74,7 +74,7 @@ body.jconfirm-noscroll {
   top: 12px;
   right: 12px;
   cursor: pointer;
-  opacity: .6;
+  opacity: 1.6;
   text-align: center;
   display: none;
 }
@@ -408,7 +408,7 @@ button,input,input:not([type]),input[type=number],input[type=password],input[typ
 .content h4{font-size:22px}
 .content h5{font-size:18px}
 .content h6{font-size:14px}
-.content p{margin:25px 0}
+.content p{margin-bottom: 6px !important;}
 .content ol,.content ul{margin-left:15px;list-style-position:outside;margin-bottom:20px}
 .content ol li,.content ul li{margin-left:10px;margin-bottom:10px;color:#000}
 .content ul{list-style-type:disc}
@@ -424,4 +424,39 @@ hr{border-top: 1px solid #eee;}
 
 #floorplanpopup{
     background-color: #004c9c  !important;
+}
+
+.form-row input {
+    padding: 3px 1px;
+    width: 100%;
+}
+input.currency {
+    text-align: right;
+    padding-right: 15px;
+}
+.input-group .form-control {
+    float: none;
+}
+.input-group .input-buttons {
+    position: relative;
+    z-index: 3;
+}
+.jconfirm-box-container-viewerBOx{
+    
+        width: 70% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    
+    
+}
+.content{
+    
+    padding: 10px 3% 10px 3% !important;
+    
+}
+.myspecialbuttoncustomwidth{
+    
+    padding: 4px !important;
+    font-size: 14px !important;
+    
 }

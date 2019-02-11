@@ -70,6 +70,7 @@ Actions.prototype.init = function()
 	}).isEnabled = isGraphEnabled;
        
 	this.addAction('save', function() { ui.saveFile(false); }, null, null, 'Ctrl+S').isEnabled = isGraphEnabled;
+        this.addAction('autogenerateproducts', function() { ui.saveFile(false); }, null, null, '').isEnabled = isGraphEnabled;
 	this.addAction('saveAs...', function() { ui.saveFile(true); }, null, null, 'Ctrl+Shift+S').isEnabled = isGraphEnabled;
 	this.addAction('export...', function() { ui.showDialog(new ExportDialog(ui).container, 300, 230, true, true); });
 	this.addAction('editDiagram...', function()
@@ -215,6 +216,105 @@ Actions.prototype.init = function()
             
             
         });
+        this.addAction('listofalllegendslabels', function(evt)
+	{
+            
+           getallboothtypes();
+            
+            
+            
+        });
+        this.addAction('listofallpricetags', function(evt)
+	{
+            
+           getallpricetegs();
+            
+            
+        });
+        this.addAction('autogenerateproducts', function(evt)
+	{
+           
+           window.onbeforeunload = null;
+           jQuery('body').css({'cursor' : 'wait'});
+           
+           
+           
+           customepopup=swal({
+							title: "Are you sure?",
+							text: 'This process will create a booth product for each booth in your current floorplan. Only the booths that do not already have a corresponding product or exhibitor and associated with a price tag, will be included in this process. Do you want to continue? ',
+							type: "info",
+							showCancelButton: true,
+							confirmButtonClass: "btn-danger",
+							confirmButtonText: "Yes, continue!",
+							cancelButtonText: "No, cancel please!",
+							closeOnConfirm: false,
+							closeOnCancel: true
+						},
+						function(isConfirm) {
+                                                     
+                                                    
+                                                     
+							if (isConfirm) {
+                                                             mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
+                                                        var data = new FormData();
+                                                        data.append('floorXml', mxFloorPlanXml);
+                                                        data.append('post_id', mxPostID);
+                                                        var customepopup ;
+                                                        jQuery.ajax({
+                                                             url: baseCurrentSiteURl+'/wp-content/plugins/EGPL/orderreport.php?floorplanRequest=autogenerateproducts',
+                                                             data:data,
+                                                             cache: false,
+                                                             contentType: false,
+                                                             processData: false,
+                                                             type: 'POST',
+                                                             success: function(data) {
+                                                                        jQuery('body').css({'cursor' : 'default'});
+                                                                         console.log(jQuery.trim(data))
+                                                                        if(jQuery.trim(data) == 'updated'){
+                                                                            console.log(data)
+                                                                             swal({
+                                                                                 title: "Success",
+                                                                                 text: "All booth products have been generated successfully.",
+                                                                                 type: "success",
+                                                                                 confirmButtonClass: "btn-success",
+                                                                                 confirmButtonText: "Ok",
+
+
+                                                                             },function(isConfirm) {
+
+
+
+
+
+                                                                                     location.reload();
+                                                                             });
+                                                                }
+                           
+
+
+                                                            },error: function (xhr, ajaxOptions, thrownError) {
+                                                                                swal({
+                                                                                    title: "Error",
+                                                                                    text: "There was an error during the requested operation. Please try again.",
+                                                                                    type: "error",
+                                                                                    confirmButtonClass: "btn-danger",
+                                                                                    confirmButtonText: "Ok"
+                                                                                });
+                                                                }
+                                                        });
+							} 
+						});
+           
+           
+          
+           
+           
+            
+            
+        }, null, null, 'Autogenerateproducts');
+        
+        
+        
         this.addAction('collapseexpand', function(evt)
 	{
            console.log(ui.hsplitPosition);
@@ -235,11 +335,14 @@ Actions.prototype.init = function()
         });
         this.addAction('save', function(evt)
 	{
-		
+                    
+                  
+                    
+                       
                        mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
-                       console.log(mxFloorPlanXml)
+                       
                        var currentbgImage = ui.editor.graph.getBackgroundImage();
-                       console.log(currentbgImage);
+                     
                        if(currentbgImage == null ){
                             mxFloorBackground = "";
                         }else{
@@ -270,7 +373,7 @@ Actions.prototype.init = function()
                                        confirmButtonClass: "btn-success",
                                        confirmButtonText: "Ok"
                                    });
-                                    
+                                   
                                     
                                 },error: function (xhr, ajaxOptions, thrownError) {
                                                     swal({

@@ -882,12 +882,13 @@ EditorUi = function(editor, container, lightbox)
    	this.init();
    	this.open();
 	
+        
 	// Load/Populate Graph from xml on load
 	if(mxFloorPlanXml)
 	{
 		var data = this.editor.graph.zapGremlins(mxUtils.trim(mxFloorPlanXml));
                  
-                 
+                
                 
 		this.editor.setGraphXml(mxUtils.parseXml(data).documentElement);
                  mxGraph.prototype.cellsEditable =false;
@@ -915,7 +916,7 @@ EditorUi = function(editor, container, lightbox)
                                         console.log(cell)
                                     if(typeof(cell) != "undefined"){
                                         var assignedboothname = "";
-                                        
+                                           jQuery('body').css('cursor', 'wait');
                                         assignedboothname = cell.getAttribute('mylabel', '');
                                         var valuessrting = cell.style;
                                          var companydescription ="";
@@ -925,6 +926,8 @@ EditorUi = function(editor, container, lightbox)
                                         var userid  = cell.getAttribute('boothOwner', '');
                                         var boothdetail  = cell.getAttribute('boothDetail', '');
                                         var companydescription  = cell.getAttribute('companydescripiton', '');
+                                        var  boothproductid = cell.getAttribute('boothproductid', '');
+                                        
                                         var reportData = jQuery.parseJSON(mxgetAllusersData);
                                         var openhtml = "";
                                         var tablehtml = '';
@@ -932,7 +935,9 @@ EditorUi = function(editor, container, lightbox)
                                         var companynameas="";
                                         var companylogourlnew="";
                                         var htmlforassignedbooth = '';
+                                        var boothtitle ="";
                                         var htmlforaddress = '';
+                                         var imagesrc ="";
                                         console.log(userid);
                                         if(userid !="" && userid != "none" && reportData){
                                            
@@ -941,30 +946,41 @@ EditorUi = function(editor, container, lightbox)
                                             jQuery.each(reportData, function(key,index){ 
                                                 if(index.exhibitorsid == userid){
 
-                                                  console.log(index.companyname);
+                                                  
                                                   companynameas = index.companyname;
                                                   companylogourlnew = index.companylogourl;
-                                                 
-                                                 
-
+                                                  companydescription  = index.companyNameTask;
+                                                  console.log(companydescription);
                                                       if (companylogourlnew == null || companylogourlnew == '') {
 
                                                            companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
-                                                           }
-                                                      if(companydescription != "" && typeof companydescription !== "undefined" ){
+                                                           
+                                                        }
+                                                           
+                                                       imagesrc = "<p style='float: right;padding: 0px 20px 0px 20px;margin-top: 10px;'><img width='150' src='"+companylogourlnew+"' /></p>";
+                                                      
+                                                      if(companydescription != "" && typeof companydescription !== "undefined" && companydescription != null ){
                                                 
-                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
+                                                            htmlcompanydescription = '<div style="text-align: justify;">'+unescape(companydescription)+'</div>';
                                             
                                                 
+                                                        }else{
+                                                            
+                                                            htmlcompanydescription = "";
                                                         }
                                                       
                                                       if (assignedboothname != "") {
 
-                                                      htmlforassignedbooth = '<h5 >Assigned Booth(s):   <span style="font-size:14px;">' + assignedboothname.replace(/,\s*$/, "") + '</span></h5>';
+                                                      htmlforassignedbooth = "";//'<h5 ><strong>Assigned Booth(s):</strong>   ' + assignedboothname.replace(/,\s*$/, "") + '</h5>';
+                                                      
                                                       } else{
 
-                                                      htmlforassignedbooth = '<h5 >Booth Number</h5><p ></p>';
+                                                      htmlforassignedbooth = '';
                                                       }
+                                                      
+                                                      
+                                                      
+                                                      
                                                       if (index.address_line_1 != "") {
 
                                                         htmlforaddress = '<p>' + index.address_line_1 + ', ' + index.usercity + ', ' + index.usercountry + '</p>';
@@ -978,45 +994,220 @@ EditorUi = function(editor, container, lightbox)
                                                             companynameas = "";
                                                         }
                                                   }
+                                                  
+                                                   
                                               });
                                               
-                                                openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
-
+                                              
                                                
+                                                var boothtitle = imagesrc+'<h5 ><strong>Booth Number: </strong>' + assignedboothname + '</h5>';     
+                                                //openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
+                                                var openhtml = '<div class="row" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+'</div><div id="contactdiv" style="display:none;"class="tabcontent">Contact Us....</div>';
+
+                                                jQuery('body').css('cursor', 'default');
+                                                    jQuery.confirm({
+                                                        title: '<i class="far fa-id-card"></i> '+companynameas,
+                                                        content: newopenhtml,
+                                                        confirmButton: false,
+                                                        confirmButtonClass: 'mycustomwidth',
+                                                        cancelButton: false,
+                                                     
+                                                        closeIcon: true,
+                                                        columnClass: 'jconfirm-box-container-viewerBOx'
+
+                                                    });  
+                                                     jQuery( ".closeIcon" ).each(function() {
+                                                            
+                                                            console.log("google");
+                                                            jQuery( this ).children().removeClass("glyphicon glyphicon-remove");
+                                                            jQuery( this ).children().addClass( "customecloseicon btn btn-small btn-danger" );
+                                                            jQuery( this ).children().html( "Close" );
+                                                            
+                                                          });
                                            
                                     }else{
                                            
-                                               var tablehtml = '';
+                                           
+                                           if(boothproductid !="" && boothproductid !="undefined" && boothproductid !="none"){
+                                                
+                                                
+                                                var data = new FormData();
+                                                data.append('pro_id', boothproductid);
+                                                console.log(boothproductid);
+                                                jQuery.ajax({
+                                                     url: baseCurrentSiteURl+'/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=getproductdetail',
+                                                    data: data,
+                                                    cache: false,
+                                                    contentType: false,
+                                                    processData: false,
+                                                    type: 'POST',
+                                                    success: function(data) {
+
+
+                                                        var finalresultProduct = jQuery.parseJSON(data);
+                                                        console.log(finalresultProduct);
+                                                        
+                                                        
+                                                         var htmlforproductdetail = "";
+                                                         var postid = "'"+boothproductid+"'";
+                                                         var checkouturl = baseCurrentSiteURl+'/checkout/';
+                                                         var productprice = '<p><h5 ><strong>Price: </strong>' + finalresultProduct.currencysymbole+finalresultProduct.price + '</h5>';
+                                                         var boothtitle = '<h5 ><strong>Booth Number: </strong>' + assignedboothname + '</h5>';
+                                                         
+                                                         if(finalresultProduct.description == null){
+                                                            
+                                                            finalresultProduct.description="";
+                                                            
+                                                        } 
+                                                         
+                                                          var productDescription = '<h6 >' + finalresultProduct.description + '</h6>';
+                                                         
+                                                        
+                                                       
+                                                        
+                                                        var productICon = "<p style='float:right;margin-top: 10px;'><img width='125' src='"+finalresultProduct.src+"'></p>";
+                                                         
+                                                        htmlforproductdetail += "<div class='row'><div class='col-sm-6'><h2>"+finalresultProduct.title+"</h2><p><strong>Price : "+finalresultProduct.price+"</strong></p></div><div class='col-sm-3'><p style='text-align:center;margin-top: 25px;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div>";
+                                                      
+                                                        htmlforproductdetail += "<p>"+finalresultProduct.description+"</p><hr>";
+                                                         if(companydescription != "" && typeof companydescription !== "undefined" ){
+                                                
+                                                     htmlcompanydescription = '<h6 ><div style="text-align: justify;">'+unescape(companydescription)+'</div></h6>';
+                                            
+                                                
+                                                        }
+                                                        if(finalresultProduct.stockstatus == 'instock'){
+
+                                                            htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+')"  >Add To Cart</a></p>';
+                                                        
+                                                        }else{
+
+                                                            htmlforproductdetail += "<p style='float:right;'><strong style='color:red'>Stock Out</strong></p>";
+                                                        }
+
+                                                      if(finalresultProduct.productstatus == "exist"){ 
+                                                      
+                                                         var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >'+productprice+''+boothtitle+productDescription+'</div><div class="col-sm-2">'+productICon+'</div></div>';	
+                                                         var popupstatustitle = "Available for Purchase"; 
+                                                        }else{
+                                                            
+                                                        var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                                        var popupstatustitle = "Unavailable for Purchase"; 
+                                                        }
+
+                                                      //  var openhtml = '<div class="row" style="padding:30px;" ><div class="col-sm-5">'+imagesrc+''+htmlforaddress+''+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-5">'+htmlforproductdetail+'</div></div>';
+                                                       
+                                                      if(userloggedinstatus == true){  
+                                                      if(finalresultProduct.productstatus == "exist"){ 
+                                                        var buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-small btn-info "  onclick="addToCart('+postid+')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
+                                                       }else{
+                                                           buttonsdiv = '';
+                                                       }
+                                                     }else{
+                                                         
+                                                         buttonsdiv = '';
+                                                     }
+                                                        
+                                                        jQuery('body').css('cursor', 'default');
+                                                        
+                                                        
+                                                       
+                                                        
+                                                        var newopenhtml='<div class="tab"><button class="tablinks" >Product Info</button></div><div id="London" class="tabcontent">'+openhtml+'</div>'+buttonsdiv;
+
+                                                         var checkopenfunction  = jQuery.confirm({
+                                                            title: '<i class="far fa-id-card"></i> '+popupstatustitle,
+                                                            content: newopenhtml,
+                                                            confirmButton: false,
+                                                            confirmButtonClass: 'mycustomwidth',
+                                                            cancelButton: false,
+                                                          
+                                                            closeIcon: true,
+                                                            columnClass: 'jconfirm-box-container-viewerBOx viewerBOxwhenproducton'
+
+                                                        });
+                                                        
+                                                        jQuery( ".closeIcon" ).each(function() {
+                                                            
+                                                            
+                                                            jQuery( this ).children().removeClass("glyphicon glyphicon-remove");
+                                                            jQuery( this ).children().addClass( "customecloseicon btn btn-small btn-danger" );
+                                                            jQuery( this ).children().html( "Close" );
+                                                            
+                                                          });
+                                                        
+                                                    }
+                                                 });   
+                                                
+                                                
+                                              
+                                             
+                                                
+                                                
+                                            }else{
+                                                
+                                                var tablehtml = '';
                                                var curr_dat = '';
                                                var companylogourlnew = '';
                                                var htmlforassignedbooth = '';
                                                var htmlforaddress = '';
                                                   if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
-                                                     htmlcompanydescription = '<h5 >Company Description</h5><div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
-                                            
+                                                     htmlcompanydescription = '<div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
+                                                     
+                                                
                                                 
                                                         }
-                                               
+                                                        
+                                               var productDescription = '<h6 >' + htmlcompanydescription + '</h6>';
                                                htmlforassignedbooth = '<h5 >Booth Number:   <span style="font-size:14px;" >' + assignedboothname + '</span></h5>';
                                                companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
-                                               console.log(companylogourlnew);
-                                               openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 ></h1>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
-                                           
-                                           
-                                       }
-                                    jQuery('body').css('cursor', 'default');
-                                               jQuery.confirm({
-                                                   title: '',
-                                                   content: openhtml,
-                                                   confirmButton: false,
-                                                   confirmButtonClass: 'mycustomwidth',
-                                                   cancelButton: false,
-                                                   animation: 'rotateY',
-                                                   closeIcon: true,
-                                                   columnClass: 'jconfirm-box-container-special'
+                                                       var boothtitle = '<h5 ><strong>Booth Number: </strong>' + assignedboothname + '</h5>';
+                                                         
+                                                         
+                                                         
+                                                          
+                                              // openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 ></h1>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
+                                              // openhtml = '<div class="row"><div class="col-sm-4" style="margin-top: 2%;">'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-6"></div></div>';	
+                                                
+                                                //  var openhtml = '<div class="row" style="padding:30px;" ><div class="col-sm-5">'+imagesrc+''+htmlforaddress+''+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-5">'+htmlforproductdetail+'</div></div>';
+                                                        var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+''+productDescription+'</div></div>';	
+                                                        
+                                                        
+                                                       
+                                                        
+                                                        var newopenhtml='<div class="tab"><button class="tablinks" >Booth Info</button></div><div id="London" class="tabcontent">'+openhtml+'</div>';
 
-                                               });    
+                                                
+                                                
+                                                jQuery('body').css('cursor', 'default');
+                                                    jQuery.confirm({
+                                                        title: '<i class="far fa-id-card"></i> '+assignedboothname,
+                                                        content: newopenhtml,
+                                                        confirmButton: false,
+                                                        confirmButtonClass: 'mycustomwidth',
+                                                        cancelButton: false,
+                                                     
+                                                        closeIcon: true,
+                                                        columnClass: 'jconfirm-box-container-viewerBOx viewerBOxwhenproducton'
+
+                                                    });   
+                                                
+                                                 jQuery( ".closeIcon" ).each(function() {
+                                                            
+                                                            console.log("google");
+                                                            jQuery( this ).children().removeClass("glyphicon glyphicon-remove");
+                                                            jQuery( this ).children().addClass( "customecloseicon btn btn-small btn-danger" );
+                                                            jQuery( this ).children().html( "Close" );
+                                                            
+                                                          });
+                                            }
+                                               
+                                       }
+                                   
+                                    
 				}	
 				});
                             
@@ -1070,6 +1261,49 @@ EditorUi = function(editor, container, lightbox)
         //Set canvas background on page load
 	this.SetbackgroundImageOnload();
 };
+
+
+ function toggletabs(tabID){
+     
+    
+     var getID = jQuery(tabID).attr("id");
+     console.log(getID);
+     if(getID == 'mainprofile'){
+         
+    
+     jQuery("#mainprofile").removeClass("unactive");
+     jQuery("#contactus").addClass("unactive");
+     jQuery("#mainprofilediv").show();
+     jQuery("#contactdiv").hide();
+     
+     }else{
+         
+        jQuery("#contactus").removeClass("unactive");
+        jQuery("#mainprofile").addClass("unactive");
+        jQuery("#mainprofilediv").hide();
+        jQuery("#contactdiv").show();
+         
+     }
+     
+     
+ }
+
+
+ function addToCart(p_id) {
+     
+     console.log(p_id);
+          jQuery("body").css("cursor", "progress");
+          jQuery.get(baseCurrentSiteURl+'/?add-to-cart=' + p_id+'&quantity=1', function() {
+             var checkouturl = baseCurrentSiteURl+'/checkout/';
+             var addONs = baseCurrentSiteURl+'/product-category/add-ons/';
+             jQuery("#"+p_id).empty();
+             jQuery("#"+p_id+'_checkout').attr("disabled", false);
+             var enbutton = "<a class='btn btn-success btn-small' >Added</a>"
+             jQuery("#"+p_id).append(enbutton);
+             jQuery("body").css("cursor", "default");
+            
+          });
+       }
 
 // Extends mxEventSource
 mxUtils.extend(EditorUi, mxEventSource);

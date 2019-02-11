@@ -40899,10 +40899,12 @@ mxGraphModel.prototype.cloneCells = function(cells, includeChildren, mapping)
 	var clones = [];
 	
 	for (var i = 0; i < cells.length; i++)
-	{
+	{       
 		if (cells[i] != null)
 		{
-			clones.push(this.cloneCellImpl(cells[i], mapping, includeChildren));
+                    
+                    
+                    clones.push(this.cloneCellImpl(cells[i], mapping, includeChildren));
 		}
 		else
 		{
@@ -40929,7 +40931,8 @@ mxGraphModel.prototype.cloneCells = function(cells, includeChildren, mapping)
 mxGraphModel.prototype.cloneCellImpl = function(cell, mapping, includeChildren)
 {
 	var clone = this.cellCloned(cell);
-	
+        //Qasim change remove porudct id on clone
+	clone.setAttribute('boothproductid', '');
 	// Stores the clone in the lookup table
 	mapping[mxObjectIdentity.get(cell)] = clone;
 	

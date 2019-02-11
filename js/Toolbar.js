@@ -189,6 +189,23 @@ Toolbar.prototype.init = function()
              eltss[1].setAttribute('title', 'Get Public Link');
              eltss[1].innerHTML= '<div class="fas fa-link" style="color:#000"></div>';
              
+             
+             var eltss = this.addItems(['-', 'listofalllegendslabels']);
+             eltss[1].setAttribute('title', 'Manage Legend Labels');
+             eltss[1].innerHTML= '<div class="fas fa-map-signs" style="color:#000"></div>';
+             
+             
+             var eltss = this.addItems(['-', 'listofallpricetags']);
+             eltss[1].setAttribute('title', 'Manage Price Tags');
+             eltss[1].innerHTML= '<div class="fas fa-tags" style="color:#000"></div>';
+             
+            
+             var eltss = this.addItems(['-', 'autogenerateproducts']);
+             eltss[1].setAttribute('title', 'Save and Autogenerate Booth Products');
+             eltss[1].innerHTML= '<div class="fas fa-dollar-sign" style="color:#000"></div>';
+             
+             
+             
              var elts = this.addItems(['-', 'save']);
              elts[1].setAttribute('title', 'Save');
              elts[1].setAttribute('class', 'mycustomstylelink');
