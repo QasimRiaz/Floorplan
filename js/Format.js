@@ -4473,7 +4473,7 @@ var stylePanel = this.createPanel();
         manageboothtypes.className = 'myCustomeButton';
         manageboothtypes.style.padding = '5px 4px 5px 4px';
         manageboothtypes.style.marginRight = '1%';
-        manageboothtypes.setAttribute('onclick', 'getallboothtypes()');
+       // manageboothtypes.setAttribute('onclick', 'getallboothtypes()');
         manageboothtypes.innerHTML = 'Manage';
         
          createDiv.appendChild(manageboothtypes);
@@ -4499,7 +4499,130 @@ var stylePanel = this.createPanel();
         
         legendbuttonsubmit.innerHTML = 'Apply';
         
+        
+        
 	
+         mxEvent.addListener(manageboothtypes, 'click', function()
+	{
+            
+            
+            
+             var data = new FormData();
+                                var addtext = "'add'";
+                                var classstatusshow ="";
+                                data.append('post_id', mxPostID);
+    
+                                           
+                                           var html = "<p class='successmessage'></p>";
+                                           
+                                           
+                                        
+                                     
+                                           
+                                          // if(data == 'empty'){
+                                               
+                                               
+                                               
+                                         //  }else{
+                                               
+                                               
+                                             //  var boothtypeslist = JSON.parse(data);
+                                               
+                                               
+                                              // console.log(boothtypeslist);
+                                               html+='<div style="max-height: 350px;overflow: auto;"><table class="table mycustometable" id="listofalllegends">';
+                                               
+                                              if(LegendsOfObjects.length > 0){
+                                                    classstatusshow = "";  
+                                              }else{
+                                                    
+                                                    classstatusshow='display:none;';
+                                               }
+                                               html+='<tr id="showheaderlegend" style="'+classstatusshow+'"><th>Position</th><th>Label</th><th>Active</th><th>Color</th><th>Delete</th></tr>';
+                                               
+                                             
+    
+    
+                                            jQuery.each(LegendsOfObjects, function(index1, value) {
+                                                  var IDCODE = "'"+value.ID+"'" ;
+                                                  var statusremove = 'removeable';
+                                                  var localxml = mxUtils.getXml(ui.editor.getGraphXml());
+                                                  
+                                                  var localxml = mxUtils.getXml(ui.editor.getGraphXml());
+                                                  var xmlDoc = jQuery.parseXML(localxml);
+                                                  $xml = jQuery(xmlDoc);
+                                                  jQuery($xml).find("MyNode").each(function () {
+                    
+                                                        var legendlabels = jQuery(this).attr('legendlabels');
+                                                        if (legendlabels == value.ID) {
+
+                                                            statusremove = 'notremoveable';
+                                                            
+
+                                                        }
+                                                    });
+                                                  
+                                                  
+                                                  html+='<tr class="lengendsrows" id="'+value.ID+'" ><td style="width:10%;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 30%;"><input type="text" title="Label" value="'+value.name+'" id="boothtypename_'+value.ID+'" /></td>';
+                                                  if(value.colorstatus == true){
+                                                       
+                                                       html+='<td style="width: 10%;text-align: center;"><label style="" title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td>';
+                                                 
+                                                  }else{
+                                                       
+                                                       html+='<td style="width: 10%;text-align: center;"><label  title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" ><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input style="display:none;" title="Select Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td>';
+                                                 
+                                                  }
+                                                  if(statusremove == 'notremoveable'){
+                                                      
+                                                      html+='<td style="width: 10%;text-align: center;"><i style="color: gray;" title="The selected label cannot be deleted as it is assigned to one or more booths. Please try deleting again after removing the label from all booths." class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></td></tr>';
+                                              
+                                                  }else{
+                                                      
+                                                      html+='<td style="width: 10%;text-align: center;"><a style="cursor: pointer;"  title="Remove" onclick="removethisrow('+IDCODE+')" ><i class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></a></td></tr>';
+                                              
+                                                  }
+                                                      
+                                                   
+                                               });
+                                              
+                                               html+='</table></div>';
+                                               html+='<p id="legendsbuttons" style="'+classstatusshow+' text-align:center;margin: 10px 0px 0px 0px;"><button class="btn btn-large btn-info" onclick="updatealllengends()">Save</button><button style="margin-left: 11px;background-color: #b0b0b0; border-color: #b0b0b0;" class="btn btn-large btn-info" onclick="closelegendsdilog()">Cancel</button></p>';
+                                               
+                                               html+='<hr>';
+                                               
+                                               
+                                               
+                                               
+                                               html+='<table class="table mycustometable">';
+                                               html+='<tr ><th></th><th>Label</th><th>Active</th><th>Color</th><th></th></tr>';
+                                               html+='<tr><td style="width:10%;"><b>Add New</b></td><td style="width: 30%;"><input title="Label" type="text" id="addnewlegendname" ></td>';
+                                               html+='<td style="width: 10%;text-align: center;"><label  title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+addtext+')"  id="addnewlegendstatus" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color"  id="addnewlegendcolorcode" ></td><td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintolegendtypes()">Add</button></td></tr>';
+                                              
+                                               html+='</table>';
+                                              
+                                               
+                                               
+                                         //  }
+                                            
+                                            legendsdilog = jQuery.confirm({
+                                                    title: '<b style="text-align:center;">Legend Labels</b>',
+                                                    content: html,
+                                                    html:true,
+                                               
+                                                    closeIcon: true,
+                                                    columnClass: 'jconfirm-box-container-special-boothtypes',
+                                                   cancelButton: false ,// hides the cancel button.
+                                                   confirmButton: false, // hides the confirm button.
+
+
+                                                });
+                                           jQuery(".mycustometable tbody").sortable();          
+            
+            
+            
+        });
+        
         
         mxEvent.addListener(legendbuttonsubmit, 'click', function()
 	{
@@ -4511,7 +4634,7 @@ var stylePanel = this.createPanel();
                             
                                var legendlabelsdropdown = document.getElementById("legendlabeltypedropdown");
                                var seletedlegendlabelsvalue = legendlabelsdropdown.options[legendlabelsdropdown.selectedIndex].value;
-                               var selectedlegendcolorcode = "#ffffff";
+                               var selectedlegendcolorcode = "none";
                               jQuery.each(LegendsOfObjects, function(index1, value) {
                                  
                                   if(value.ID == seletedlegendlabelsvalue){
@@ -4522,7 +4645,7 @@ var stylePanel = this.createPanel();
                                   }
                                   
                               });
-                            
+                            console.log();
                             var labelvalue = "";
                             var boothdetailvalue = "";
                             var assigenduserID = "none";
@@ -4554,19 +4677,41 @@ var stylePanel = this.createPanel();
                             node.setAttribute('boothproductid', boothproductid);
                             node.setAttribute('pricetegid', seletedpricetegkeyvalue);   
                                   
-                               if(selectedlegendcolorcode != "none"){
+                               if(selectedlegendcolorcode != "none" && selectedlegendcolorcode != "" ){
                                     console.log(selectedlegendcolorcode)
                                     graph.setCellStyles("fillColor", selectedlegendcolorcode, graph.getSelectionCells());
                                
                                }else{
-                              
-                                 if (assigenduserID != 'none') {
+                                   
+                                 var cellStyle = cellvalue.style;
+                                 var tokens = (cellStyle != null) ? cellStyle.split(';') : [];
+                                 var occcolor="";
+                                 var unoccou="";
+                                jQuery.each(tokens,function(index,value){
+                                            
+                                            
+                                    var getboothname = (value != null) ? value.split('=') : []; 
+                                    if(getboothname[0]=="occ"){
                                         
-                                        graph.setCellStyles("fillColor", ss.style.occ, graph.getSelectionCells());
+                                         occcolor = getboothname[1];
+                                       
+                                    }else if(getboothname[0]=="uno"){
+                                        
+                                         unoccou = getboothname[1];
+                                    }
+                                });
+                                 
+                                 if (assigenduserID != 'none') {
+                                     
+                                       console.log(occcolor+'------owner');
+                                        //graph.setCellStyles("fillColor", occcolor, graph.getSelectionCells());
                                     
                                     } else {
-                                        graph.setCellStyles("fillColor", ss.style.uno, graph.getSelectionCells());
-                                    }  
+                                        console.log(unoccou+'------notowner');
+                                       // graph.setCellStyles("fillColor", unoccou, graph.getSelectionCells());
+                                    } 
+                                    
+                                     
                                 }
                                
                                 
@@ -4594,8 +4739,11 @@ var stylePanel = this.createPanel();
 	return container;
         
 };
+StyleFormatPanel.prototype.removelegendlable= function(container)
+{
 
-
+    console.log(container);
+};
 StyleFormatPanel.prototype.addPricetegs = function(container)
 {
 	var ui = this.editorUi;
@@ -4706,7 +4854,7 @@ var stylePanel = this.createPanel();
         manageboothtypes.className = 'myCustomeButton';
         manageboothtypes.style.padding = '5px 4px 5px 4px';
         manageboothtypes.style.marginRight = '1%';
-        manageboothtypes.setAttribute('onclick', 'getallpricetegs()');
+       // manageboothtypes.setAttribute('onclick', 'getallpricetegs()');
         manageboothtypes.innerHTML = 'Manage';
         
          createDiv.appendChild(manageboothtypes);
@@ -4732,7 +4880,127 @@ var stylePanel = this.createPanel();
         
         pricetegapplybutton.innerHTML = 'Apply';
         
-	
+	mxEvent.addListener(manageboothtypes, 'click', function()
+	{
+            
+             var data = new FormData();
+             var addtext = "'add'";
+             data.append('post_id', mxPostID);
+    
+                 
+            var html = "<p class='successmessage'></p>";
+            var roleshtml = "";
+            var newroleshtml = "";
+            var classstatusshow ="";
+            jQuery.each(arrayoflevelsObjects, function(rolekey, rolevalue) {
+
+                   if(rolevalue.key == "standard_role" ){
+                       newroleshtml+='<option value="'+rolevalue.key+'" selected>'+rolevalue.name+'</option>';
+                   }else{
+                       newroleshtml+='<option value="'+rolevalue.key+'" >'+rolevalue.name+'</option>';
+                   }
+
+
+           });
+     
+     
+                                               html+='<div style="max-height: 350px;overflow: auto;"><table class="table mycustometable" id="listofallpricetegs">';
+                                               if(PricetegsObjects.length > 0){
+                                                    classstatusshow = "";  
+                                              }else{
+                                                    
+                                                    classstatusshow='display:none;';
+                                               }
+                                               html+='<tr id="showheader" style="'+classstatusshow+'"><th>Position</th><th>Default Name</th><th>Default Price</th><th>Default Level</th><th>Delete</th></tr>';
+                                                
+                                               
+                                               jQuery.each(PricetegsObjects, function(index1, value) {
+                                                  var IDCODE = "'"+value.ID+"'" ;
+                                                  var statusremove = 'removeable';
+                                                  var localxml = mxUtils.getXml(ui.editor.getGraphXml());
+                                                  
+                                                  var localxml = mxUtils.getXml(ui.editor.getGraphXml());
+                                                  var xmlDoc = jQuery.parseXML(localxml);
+                                                  $xml = jQuery(xmlDoc);
+                                                  jQuery($xml).find("MyNode").each(function () {
+                    
+                                                        var pricetegid = jQuery(this).attr('pricetegid');
+                                                        if (pricetegid == value.ID) {
+
+                                                            statusremove = 'notremoveable';
+                                                            
+
+                                                        }
+                                                    });
+                                                  jQuery.each(arrayoflevelsObjects, function(rolekey, rolevalue) {
+                                                      
+                                                      if(value.level == rolevalue.key){
+                                                          
+                                                          roleshtml+='<option value="'+rolevalue.key+'" selected>'+rolevalue.name+'</option>';
+                                                      }else{
+                                                        roleshtml+='<option value="'+rolevalue.key+'" >'+rolevalue.name+'</option>';
+                                                      }
+         
+                                                    });
+                                                  
+                                                 
+      
+    
+        
+        
+                                                 
+                                                  
+                                                  html+='<tr class="listofallpricetegs" id="'+value.ID+'" ><td style="width:10%;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 30%;"><input title="Title" type="text" title="Label" value="'+value.name+'" id="pricetegname_'+value.ID+'" /></td>';
+                                                  
+                                                       
+                                                      html+='<td style="width: 30%;text-align: center;"><div class="input-group"><span class="input-group-addon">'+currencysymbole+'</span><input style="width: 80%;" type="number" id="pricetegprice_'+value.ID+'" value="'+value.price+'"    class="form-control currency"  /></div></td>';
+                                                      html+='<td style="width: 10%;text-align: center;"><select id="priceteglevel_'+value.ID+'" >'+roleshtml+'</select></td>';
+                                                     
+                                                   if( statusremove == 'notremoveable'){
+                                                       html+='<td style="width: 10%;text-align: center;"><i style="color:gray;" title="The selected price tag cannot be deleted as it is assigned to one or more booths. Please try deleting again after removing the price tag from all booths." class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></td></tr>';
+                                              
+                                                   }else{
+                                                      html+='<td style="width: 10%;text-align: center;"><a style="cursor: pointer;"  title="Remove" onclick="removethispriceteg('+IDCODE+')" ><i class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></a></td></tr>';
+                                               
+                                                   }
+                                                   
+                                                   
+                                               });
+                                              
+                                               html+='</table></div>';
+                                               html+='<p id="buttonsdiv" style="'+classstatusshow+'text-align:center;margin: 10px 0px 0px 0px;"><button class="btn btn-large btn-info" onclick="updateallpricetegs()">Save</button><button style="margin-left: 11px;background-color: #b0b0b0; border-color: #b0b0b0;" class="btn btn-large btn-info" onclick="closepricetegsdilog()">Cancel</button></p>';
+                                                   
+                                               html+='<hr>';
+                                               
+                                               
+                                               
+                                               
+                                               html+='<table class="table mycustometable">';
+                                               html+='<tr><th></th><th>Default Name</th><th>Default Price</th><th>Default Level</th><th></th></tr>';
+                                               html+='<tr><td style="width:10%;"><b>Add New</b></td><td style="width: 30%;"><input title="Default Title" type="text" id="addnewpricetegname" ></td>';
+                                               html+='<td style="width: 30%;text-align: center;"><div class="input-group"><span class="input-group-addon">'+currencysymbole+'</span><input type="number" style="width: 80%;" id="pricetegpriceNewTeg" value="0"    class="form-control currency"  /></div></td><td style="width: 10%;text-align: center;"><select id="pricetegleveldropdownvalue" >'+newroleshtml+'</select></td><td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintopricetegs()">Add</button></td></tr>';
+                                              
+                                               html+='</table>';
+                                              
+                                               
+                                               
+                                         //  }
+                                            
+                                            pricetegsdilog = jQuery.confirm({
+                                                    title: '<b style="text-align:center;">Price Tags</b>',
+                                                    content: html,
+                                                    html:true,
+                                               
+                                                    closeIcon: true,
+                                                    columnClass: 'jconfirm-box-container-special-boothtypes',
+                                                   cancelButton: false ,// hides the cancel button.
+                                                   confirmButton: false, // hides the confirm button.
+
+
+                                                });
+                                           jQuery(".mycustometable tbody").sortable();
+            
+        });
         
         mxEvent.addListener(pricetegapplybutton, 'click', function()
 	{
@@ -7268,6 +7536,7 @@ function updatealllengends(){
            saveddataarray.colorcode =currentrowColorCode;
            //saveddataarray.price =currentrowprice;
            LegendsOfObjects.push(saveddataarray);
+           console.log(LegendsOfObjects);
     });
     
     
@@ -7578,8 +7847,7 @@ function hidecolorselection(id){
 }
 function removethisrow(id){
     
-    
-    jQuery("#"+id).remove();
+  jQuery("#"+id).remove();
     
     
 }
