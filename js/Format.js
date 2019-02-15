@@ -4703,12 +4703,12 @@ var stylePanel = this.createPanel();
                                  
                                  if (assigenduserID != 'none') {
                                      
-                                       console.log(occcolor+'------owner');
-                                        //graph.setCellStyles("fillColor", occcolor, graph.getSelectionCells());
+                                      // console.log(occcolor+'------owner');
+                                        graph.setCellStyles("fillColor", occcolor, graph.getSelectionCells());
                                     
                                     } else {
-                                        console.log(unoccou+'------notowner');
-                                       // graph.setCellStyles("fillColor", unoccou, graph.getSelectionCells());
+                                      //  console.log(unoccou+'------notowner');
+                                        graph.setCellStyles("fillColor", unoccou, graph.getSelectionCells());
                                     } 
                                     
                                      
