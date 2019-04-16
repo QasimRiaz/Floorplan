@@ -934,10 +934,13 @@ EditorUi = function(editor, container, lightbox)
                                         var curr_dat = '';
                                         var companynameas="";
                                         var companylogourlnew="";
+                                        var profilelogourl="";
+                                        var companywebsite="";
                                         var htmlforassignedbooth = '';
                                         var boothtitle ="";
                                         var htmlforaddress = '';
                                          var imagesrc ="";
+                                         var websiteURLhtml = "";
                                         console.log(userid);
                                         if(userid !="" && userid != "none" && reportData){
                                            
@@ -948,20 +951,44 @@ EditorUi = function(editor, container, lightbox)
 
                                                   
                                                   companynameas = index.companyname;
-                                                  companylogourlnew = index.companylogourl;
-                                                  companydescription  = index.companyNameTask;
-                                                  console.log(companydescription);
+                                                  companylogourlnew = index.COL;
+                                                  profilelogourl = index.companylogourl;
+                                                  companywebsite = index.COW;
+                                                  companydescription  = index.COD;
+                                                 
+                                                    if (companywebsite == null || companywebsite == '') {
+                                                        
+                                                         websiteURLhtml = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         websiteURLhtml = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" ><a href="'+companywebsite+'" target="_blank">'+companywebsite+'</a></div></div>';	
+                                              
+                                                        
+                                                    }
+                                                 
+                                                 
                                                       if (companylogourlnew == null || companylogourlnew == '') {
-
-                                                           companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
-                                                           
+                                                          
+                                                          if (profilelogourl == null || profilelogourl == '') {
+                                                              
+                                                              companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
+                                                            
+                                                              
+                                                          }else{
+                                                              
+                                                              companylogourlnew = profilelogourl;
+                                                          }
+                                                        
+                                                          
                                                         }
                                                            
                                                        imagesrc = "<p style='float: right;padding: 0px 20px 0px 20px;margin-top: 10px;'><img width='150' src='"+companylogourlnew+"' /></p>";
                                                       
                                                       if(companydescription != "" && typeof companydescription !== "undefined" && companydescription != null ){
                                                 
-                                                            htmlcompanydescription = '<div style="text-align: justify;">'+unescape(companydescription)+'</div>';
+                                                            htmlcompanydescription = '<div >'+unescape(companydescription)+'</div>';
                                             
                                                 
                                                         }else{
@@ -1002,9 +1029,10 @@ EditorUi = function(editor, container, lightbox)
                                                
                                                 var boothtitle = imagesrc+'<h5 ><strong>Booth Number: </strong>' + assignedboothname + '</h5>';     
                                                 //openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
-                                                var openhtml = '<div class="row" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
-                                              
-                                                var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+'</div><div id="contactdiv" style="display:none;"class="tabcontent">Contact Us....</div>';
+                                                var openhtml = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                                
+                                                
+                                                var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+websiteURLhtml+'</div><div id="contactdiv" style="display:none;"class="tabcontent">Contact Us....</div>';
 
                                                 jQuery('body').css('cursor', 'default');
                                                     jQuery.confirm({
@@ -1035,6 +1063,7 @@ EditorUi = function(editor, container, lightbox)
                                                 
                                                 var data = new FormData();
                                                 data.append('pro_id', boothproductid);
+                                                data.append('floorplanID', mxPostID);
                                                 console.log(boothproductid);
                                                 jQuery.ajax({
                                                      url: baseCurrentSiteURl+'/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=getproductdetail',
@@ -1047,6 +1076,8 @@ EditorUi = function(editor, container, lightbox)
 
 
                                                         var finalresultProduct = jQuery.parseJSON(data);
+                                                        var floorplanstatus = finalresultProduct.floorplanstatus;
+                                                        var buttonsdiv = "";
                                                         console.log(finalresultProduct);
                                                         
                                                         
@@ -1074,7 +1105,7 @@ EditorUi = function(editor, container, lightbox)
                                                         htmlforproductdetail += "<p>"+finalresultProduct.description+"</p><hr>";
                                                          if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
-                                                     htmlcompanydescription = '<h6 ><div style="text-align: justify;">'+unescape(companydescription)+'</div></h6>';
+                                                     htmlcompanydescription = '<h6 ><div >'+unescape(companydescription)+'</div></h6>';
                                             
                                                 
                                                         }
@@ -1101,8 +1132,23 @@ EditorUi = function(editor, container, lightbox)
                                                        
                                                       if(userloggedinstatus == true){  
                                                       if(finalresultProduct.productstatus == "exist"){ 
-                                                        var buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-small btn-info "  onclick="addToCart('+postid+')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
-                                                       }else{
+                                                        
+                                                        if(floorplanstatus == 'unlock'){
+                                                            if(finalresultProduct.stockstatus == 'instock'){ 
+                                                                
+                                                                     buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-small btn-info "  onclick="addToCart('+postid+')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
+                                                                
+                                                                }else{
+                                                                    
+                                                                     buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;"><strong style="color:red">Out Of Stock </strong></p></div>'
+                                                       
+                                                                    
+                                                                }
+                                                        }else{
+                                                                    
+                                                            buttonsdiv ='<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;color:red;"><strong>Floorplan is currently being edited, please try again later.</strong></p><div>';
+                                                        }
+                                                     }else{
                                                            buttonsdiv = '';
                                                        }
                                                      }else{

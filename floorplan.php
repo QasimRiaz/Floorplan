@@ -4,7 +4,7 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 3.09
+ * Version: 3.2.0
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -56,14 +56,51 @@ if($_GET['floorplanRequest'] == "savedfloorplansettings") {
     getproductdetail($_REQUEST);
     die();
     
+}else if($_GET['floorplanRequest'] == "savedlockunlockstatus"){
+    
+    
+    require_once('../../../wp-load.php');
+    
+    savedlockunlockstatus($_REQUEST);
+    die();
+    
 }
 
+
+
+
+
+function savedlockunlockstatus($post_request){
+    
+    try{
+	
+        
+        $user_ID = get_current_user_id();
+        $user_info = get_userdata($user_ID);  
+        $lastInsertId = floorplan_contentmanagerlogging('Save All Price Tags',"Admin Action",$post_request,$user_ID,$user_info->user_email,"");
+      
+        update_post_meta( $post_request['post_id'], 'updateboothpurchasestatus', $post_request['status'] );
+        
+        contentmanagerlogging_file_upload ($lastInsertId,serialize($post_request));
+        
+        echo 'update';
+        
+        
+    }catch (Exception $e) {
+       
+     
+        return $e;
+        
+    }
+    
+}
 
 function getproductdetail($productID){
     
     try{
 	
         $id = $productID['pro_id'];
+        $floorplanID = $productID['floorplanID'];
         $woocommerce_rest_api_keys = get_option( 'ContenteManager_Settings' );
         $wooconsumerkey = $woocommerce_rest_api_keys['ContentManager']['wooconsumerkey'];
         $wooseceretkey = $woocommerce_rest_api_keys['ContentManager']['wooseceretkey'];
@@ -89,6 +126,7 @@ function getproductdetail($productID){
             
             $productdetail['productstatus'] =  'exist';
         }
+        
         $productdetail['title'] =  addslashes($get_product->name);
         $productdetail['slug'] =  $get_product->slug;
         $productdetail['description'] =  $get_product->description;
@@ -124,6 +162,10 @@ function getproductdetail($productID){
         $productdetail['src'] =  $url.'/wp-content/plugins/floorplan/icon01.png';
         
         }
+        
+        
+       $productdetail['floorplanstatus'] =  get_post_meta($floorplanID, 'updateboothpurchasestatus', true );
+        
        echo json_encode($productdetail);
        exit;
         
@@ -323,6 +365,29 @@ function getBoothList($postdata) {
 	update_post_meta( $postdata['post_id'], 'booth_types', trim($boothTypes) );
 	update_post_meta( $postdata['post_id'], 'floor_background', $postdata['floorBG'] );
 	update_post_meta( $postdata['post_id'], 'floorplan_xml', $postdata['floorXml'] );
+        update_post_meta( $postdata['post_id'], 'sellboothsjson', $postdata['sellboothsjson'] );
+        
+       
+        
+        
+        if(!empty($postdata['sellboothsjson'])){
+            
+            
+            
+            
+            require_once plugin_dir_path( __DIR__ ) . 'EGPL/includes/floorplan-manager.php';
+            $demo = new FloorPlanManager();
+            $defaultImage = get_site_url()."/wp-content/plugins/floorplan/icon01.png";
+            $productpicID = floorplanBoothImage($defaultImage);
+           
+            
+            $responce = $demo->createAllBoothPorducts($postdata['post_id'],$postdata['sellboothsjson'],$postdata['floorXml'],$productpicID);exit;
+            
+            
+        }
+        
+        
+        
         
         
     }catch (Exception $e) {
@@ -475,11 +540,12 @@ function getAllusers_data(){
             
             
             $taskID = $taskObject->ID;
-            $key = get_post_meta( $taskID, 'key', false);
+            $key = get_post_meta( $taskID, 'key', true);
+            $TaskCode = get_post_meta( $taskID, 'taskCode', true);
             $value_label = get_post_meta( $taskID, 'label' , false);
-            if($value_label[0] == "Company Description"){
+            if($TaskCode != ""){
                 
-                $companyNameTask  = $key[0];
+                $MappedKeys[$TaskCode]  = $key;
                 
             }
             
@@ -502,12 +568,29 @@ function getAllusers_data(){
                 }else{
                     
                     
-                
-                
+                foreach($MappedKeys as $mappedIndex=>$maapedObject){
+                    
+                      
+                     if($mappedIndex == 'COL'){
+                         
+                         $getLogoURL = unserialize($all_meta_for_user[$maapedObject][0]);
+                         
+                         
+                         $allUsersData[$index][$mappedIndex] = $getLogoURL['url'];
+                         
+                     }else{
+                        
+                         $allUsersData[$index][$mappedIndex] = $all_meta_for_user[$maapedObject][0];
+                     
+                     }
+                    
+                    
+                }
+              
                 $allUsersData[$index]['companyname'] = ucfirst($all_meta_for_user[$site_prefix.'company_name'][0]);
                 $allUsersData[$index]['companylogourl'] = $all_meta_for_user[$site_prefix.'user_profile_url'][0];
                 $allUsersData[$index]['exhibitorsid'] = $aid->ID;
-                $allUsersData[$index]['companyNameTask'] = $all_meta_for_user[$companyNameTask][0];
+               
                 
                 
                 
@@ -728,9 +811,30 @@ function floorplan_shortcode( $atts, $content = null ) {
             $FloorplanXml[0]   = get_post_meta( $id, 'floorplan_xml', true );
             $FloorplanLegends  = get_post_meta( $id, 'legendlabels', true );
             $mxPriceTegsObject = get_post_meta( $id, 'pricetegs', true );
-           
-           
+            $sellboothsjson = get_post_meta( $id, 'sellboothsjson', true );
+            $floorplanstatuslockunlock = get_post_meta( $id, 'updateboothpurchasestatus', true );
             
+            
+           
+            $args = array(
+                 'posts_per_page'   => -1,
+                 'orderby'          => 'date',
+                 'order'            => 'DESC',
+                 'post_type'        => 'egpl_custome_tasks',
+                 'post_status'      => 'draft',
+
+            );
+            $taskkeyContent = get_posts( $args );
+             
+            foreach ($taskkeyContent as $taskindex => $taskValue) {
+                
+                $tasksID = $taskValue->ID;
+                $value_key = get_post_meta( $tasksID, 'key', true);
+                $value_label = get_post_meta( $tasksID, 'label' , true);
+                $arrayoftasks[$tasksID] = $value_label;
+                
+            }
+            $arrayoftasks = json_encode($arrayoftasks);
             global $wp_roles;
             $all_roles = $wp_roles->roles;
             foreach ($all_roles as $key => $name) {
@@ -847,6 +951,87 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
         new WP_GitHub_floorplan_Updater($config);
     }
 
+    
+/* Add image to media library from URL and return the new image ID */
+function floorplanBoothImage($url) {
+
+  // Gives us access to the download_url() and wp_handle_sideload() functions
+  require_once( ABSPATH . 'wp-admin/includes/file.php' );
+
+  // Download file to temp dir
+  $timeout_seconds = 10;
+  $temp_file = download_url( $url, $timeout_seconds );
+
+  if ( !is_wp_error( $temp_file ) ) {
+
+      // Array based on $_FILE as seen in PHP file uploads
+      $file = array(
+          'name'     => basename($url), // ex: wp-header-logo.png
+          'type'     => 'image/png',
+          'tmp_name' => $temp_file,
+          'error'    => 0,
+          'size'     => filesize($temp_file),
+      );
+
+      $overrides = array(
+          // Tells WordPress to not look for the POST form
+          // fields that would normally be present as
+          // we downloaded the file from a remote server, so there
+          // will be no form fields
+          // Default is true
+          'test_form' => false,
+
+          // Setting this to false lets WordPress allow empty files, not recommended
+          // Default is true
+          'test_size' => true,
+      );
+
+      // Move the temporary file into the uploads directory
+      $results = wp_handle_sideload( $file, $overrides );
+      
+      
+      if ( !empty( $results['error'] ) ) {
+          // Insert any error handling here
+      } else {
+
+         
+          $url = $results['url'];
+          $type = $results['type'];
+          $file = $results['file'];
+          $title = sanitize_text_field( $name );
+          $content = '';
+          $excerpt = '';
+          
+          $attachment = array(
+                'post_mime_type' => $type,
+                'guid' => $url,
+                'post_parent' => '',
+                'post_title' => $title,
+                'post_content' => $content,
+                'post_excerpt' => $excerpt,
+            );
+    
+    
+  
+ 
+   
+    // Save the data
+    $id = wp_insert_attachment( $attachment, $file, '', true );
+    require_once( ABSPATH . 'wp-admin/includes/image.php' );
+
+// Generate the metadata for the attachment, and update the database record.
+    $attach_data = wp_generate_attachment_metadata( $id, $file );
+    wp_update_attachment_metadata( $id, $attach_data );
+          
+          
+          
+
+          return $id;
+      }
+  }
+}    
+
+                
 
 ?>
 

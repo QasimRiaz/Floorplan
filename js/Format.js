@@ -331,14 +331,14 @@ Format.prototype.refresh = function()
 	label.style.paddingTop = '8px';
 	label.style.height = (mxClient.IS_QUIRKS) ? '34px' : '25px';
 	label.style.width = '100%';
-        label.className = 'customebgcolor';
+    label.className = 'customebgcolor';
         
 	this.container.appendChild(div);
 	
 	if (graph.isSelectionEmpty())
 	{
-		mxUtils.write(label, 'Floor Settings');
-		
+		//mxUtils.write(label, 'Floor Settings');
+		label.innerHTML = 'Static Layer Settings <i class="far fa-question-circle" title="helpText"></i>';//edit
 		// Adds button to hide the format panel since
 		// people don't seem to find the toolbar button
 		// and the menu item in the format menu
@@ -470,8 +470,9 @@ Format.prototype.refresh = function()
 		{
 			label.style.borderLeftWidth = '0px';
                         label.className = ' customebgcolor';
-			mxUtils.write(label, 'Booth Settings');
-                        mxUtils.write(labelLegend, 'Legend Label');
+                        label.innerHTML = 'Booth Settings <i class="far fa-question-circle" title="Set the Booth Number, Details, and Exhibitor Assignment here. Be sure to click \'Apply Booth Settings\' to apply any changes in this section, and click \'Save\' to publish these changes to the live floor plan. "></i>';
+			labelLegend.innerHTML = 'Legend Label <i class="far fa-question-circle" title="Use this setting to "group" or \'categorize\' booths together on the interactive floor plan. Users will be able to view and identify booths tagged with these labels. Note you also have the option to override the booth color settings above with a legend label color.\n Be sure to click \'Apply Legend Label\' to apply any changes in this section, and click \'Save\' to publish these changes to the live floor plan."></i>';
+                       
                         var cell = graph.getSelectionCells();
                       //  if(cell.length == 1){	
                             div.appendChild(label);
@@ -1087,10 +1088,13 @@ BaseFormatPanel.prototype.createColorOption = function(label, getColorFn, setCol
 	
 	btn.style.position = 'absolute';
 	btn.style.marginTop = '-4px';
-	btn.style.right = (mxClient.IS_QUIRKS) ? '0px' : '20px';
+	btn.style.right = (mxClient.IS_QUIRKS) ? '0px' : '56px';//edit '0px' : '20px';
 	btn.style.height = '22px';
 	btn.className = 'geColorBtn';
+       
 	btn.style.display = (cb.checked || hideCheckbox) ? '' : 'none';
+        
+        
 	div.appendChild(btn);
 
 //	mxEvent.addListener(div, 'click', function(evt)
@@ -2653,7 +2657,7 @@ TextFormatPanel.prototype.addFont = function(container)
 		destroy: function() { bgColorApply = null; }
 	}, null, true) : this.createCellColorOption(mxResources.get('backgroundColor'), mxConstants.STYLE_LABEL_BACKGROUNDCOLOR, '#ffffff');
 	bgPanel.style.fontWeight = 'bold';
-
+       
 	var borderPanel = this.createCellColorOption(mxResources.get('borderColor'), mxConstants.STYLE_LABEL_BORDERCOLOR, '#000000');
 	borderPanel.style.fontWeight = 'bold';
 	
@@ -2675,7 +2679,7 @@ TextFormatPanel.prototype.addFont = function(container)
 		}
 		else
 		{
-			bgPanel.style.display = '';
+			bgPanel.style.display = 'none';
 		}
 		
 		borderPanel.style.display = bgPanel.style.display;
@@ -2692,6 +2696,7 @@ TextFormatPanel.prototype.addFont = function(container)
 	});
 	panel.style.fontWeight = 'bold';
 	
+        
 	colorPanel.appendChild(panel);
 	colorPanel.appendChild(bgPanel);
 	
@@ -3593,8 +3598,8 @@ StyleFormatPanel.prototype.init = function()
         label.className = ' customebgcolor';
 	this.container.appendChild(label);
 	
-	mxUtils.write(label, 'Advanced Settings');
-        
+	//mxUtils.write(label, 'Advanced Settings');
+        label.innerHTML = 'Advanced Settings <i class="far fa-question-circle" title="Advanced configurations on the booth type physical attributes. "></i>';
         this.container.appendChild(opacityPanel);
         
 	this.container.appendChild(this.addStroke(this.createPanel()));
@@ -3811,8 +3816,7 @@ StyleFormatPanel.prototype.addEditPresets = function(div)
                                         cancelButtonText: "No",
                                         confirmButtonClass: "btn-info",
                                         closeOnConfirm: false
-                                    },
-                                    function(){
+                                    }).then(function(isConfirm) {
                                       
                                         
                                          var jsonObj = {};
@@ -3820,15 +3824,13 @@ StyleFormatPanel.prototype.addEditPresets = function(div)
                                          var presetname = '';
                                          swal({
                                                title: "Booth Type Name",
-                                               text: '',
-                                               type: 'input',
-                                               inputValue: '',
+                                               input: 'text',
                                                showCancelButton: true,
                                                closeOnConfirm: false,
                                                animation: "slide-from-top",
                                                inputPlaceholder: "Booth Type Name",
-                                           },
-                                               function (inputValue) {
+                                           }).then(function(inputValue) {
+                                              
                                                    inputValue = inputValue.replace(/['"]+/g, '')
                                                    status_preset = "clear";
                                                    if (inputValue === false)
@@ -3972,15 +3974,14 @@ StyleFormatPanel.prototype.addEditPresets = function(div)
                          var presetname = '';
                          swal({
                                 title: "Booth Type Name",
-                                text: '',
-                                type: 'input',
+                             
+                                input: 'text',
                                 inputValue: '',
                                 showCancelButton: true,
                                 closeOnConfirm: false,
                                 animation: "slide-from-top",
                                 inputPlaceholder: "Booth Type Name",
-                            },
-                                function (inputValue) {
+                           }).then(function(inputValue) {
                                     
                                     status_preset = "clear";
                                     if (inputValue === false)
@@ -4154,8 +4155,8 @@ StyleFormatPanel.prototype.addFill = function(container)
         label.className = ' customebgcolor';
 	this.container.appendChild(label);
 	
-	mxUtils.write(label, 'Booth Type Settings');
-
+	//mxUtils.write(label, 'Booth Type Settings');
+        label.innerHTML = 'Booth Type Settings <i class="far fa-question-circle" title="Set the visual aspects and dimensions of the booth here. The color you select for \'Unoccupied\' will be the set color for the booth(s) selected that don\'t have an exhibitor assigned. \'Occupied\' color will be the color once an Exhibitor is assigned. Note these colors may be overridden in the Legend Labels below based on your settings in that section. "></i>';
 	// Adds gradient direction option
 	var gradientSelect = document.createElement('select');
 	gradientSelect.style.position = 'absolute';
@@ -4386,9 +4387,11 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
         label.className = ' customebgcolor';
 	this.container.appendChild(label);
 	
-	mxUtils.write(label, 'Legend Labels');
-
-var stylePanel = this.createPanel();
+	//mxUtils.write(label, 'Legend Labels');
+        label.innerHTML = 'Legend Labels <i class="far fa-question-circle" title="Use this setting to \'group\' or \'categorize\' booths together on the interactive floor plan. Users will be able to view and identify booths tagged with these labels. Note you also have the option to override the booth color settings above with a legend label color. \n Be sure to click \'Apply Legend Label\' to apply any changes in this section, and click \'Save\' to publish these changes to the live floor plan. "></i>';
+        
+        
+        var stylePanel = this.createPanel();
 	stylePanel.style.paddingTop = '2px';
 	stylePanel.style.paddingBottom = '2px';
 	stylePanel.style.paddingLeft = '0px';
@@ -4497,7 +4500,7 @@ var stylePanel = this.createPanel();
         legendbuttonsubmit.className = 'myCustomeButton';
         
         
-        legendbuttonsubmit.innerHTML = 'Apply';
+        legendbuttonsubmit.innerHTML = 'Apply Legend Label';
         
         
         
@@ -4507,7 +4510,7 @@ var stylePanel = this.createPanel();
             
             
             
-             var data = new FormData();
+                                var data = new FormData();
                                 var addtext = "'add'";
                                 var classstatusshow ="";
                                 data.append('post_id', mxPostID);
@@ -4767,9 +4770,11 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
         label.className = ' customebgcolor';
 	this.container.appendChild(label);
 	
-	mxUtils.write(label, 'Price Tags');
-
-var stylePanel = this.createPanel();
+	//mxUtils.write(label, 'Price Tags');
+        label.innerHTML = 'Self-Booth Purchase <i class="far fa-question-circle" title="Use this feature if you want to allow your users to self-select, assign, and/or pay for booths directly from the interactive floor plan. Note that any booths configured with this option will make the booth purchasable by users and assign them automatically without your approval. If you need to maintain control of assigning your users to booths, do NOT use this feature."></i>';
+        
+        
+        var stylePanel = this.createPanel();
 	stylePanel.style.paddingTop = '2px';
 	stylePanel.style.paddingBottom = '2px';
 	stylePanel.style.paddingLeft = '0px';
@@ -4786,223 +4791,631 @@ var stylePanel = this.createPanel();
 	
 		
 	var cell = graph.getSelectionCells();
-	
+	var selectedBoothID = cell[0].getAttribute('id', '');
         
-        if (mxUtils.isNode(cell[0].value))
-                {   
-                    
-                     
-                     
-                      pricetegsID = cell[0].getAttribute('pricetegid', '');
-                      
-                     
-                     
-                }
-	
-	
+       
         
        
         var createDiv = document.createElement('div');
+         createDiv.style.textAlign = 'center';
         
-        var submitbuttonlebal = this.createTitle('');
-	submitbuttonlebal.style.paddingBottom = '6px';
-	stylePanel.appendChild(submitbuttonlebal);
-        
-        
-        
-        
-        
-        var selectboothtypes = document.createElement('select');
-        selectboothtypes.style.width = '70%';
-        selectboothtypes.style.marginRight = '10px';
-	selectboothtypes.id = 'pricetegdropdown';
-        
-         var option = document.createElement("option");
-         option.value = '';
-        
-         option.text = 'None';
-        
-       
-        if(pricetegsID == ""){
-            
-            option.setAttribute('selected', 'selected');
-            
-        }
-        selectboothtypes.appendChild(option);
-        
-        jQuery.each(PricetegsObjects, function(index1, value) {
-            
-			 var option = document.createElement("option");
-                         option.value = value.ID;
-                         option.text = value.name;
-                         
-                         if(pricetegsID == value.ID){
-            
-                           option.setAttribute('selected', 'selected');
-            
-                        }
-                         
-                         
-                         selectboothtypes.appendChild(option);
-        });
-        
-        
-        createDiv.appendChild(selectboothtypes);
         
         
         var manageboothtypes = document.createElement('a');
         manageboothtypes.className = 'myCustomeButton';
         manageboothtypes.style.padding = '5px 4px 5px 4px';
-        manageboothtypes.style.marginRight = '1%';
-       // manageboothtypes.setAttribute('onclick', 'getallpricetegs()');
-        manageboothtypes.innerHTML = 'Manage';
-        
-         createDiv.appendChild(manageboothtypes);
-     
-        
-        
-        
       
-	  stylePanel.appendChild(createDiv);
+        manageboothtypes.style.width = '56%';
+        manageboothtypes.style.textAlign = 'center';
+       // manageboothtypes.setAttribute('onclick', 'getallpricetegs()');
+        manageboothtypes.innerHTML = 'Sell Booth';
+        manageboothtypes.id = 'manageboothtypes';
+        
+        var dontsellbutton = document.createElement('a');
+        dontsellbutton.className = 'myCustomeButton';
+        dontsellbutton.style.padding = '5px 4px 5px 4px';
+        dontsellbutton.id = 'dontsellbutton';
+        dontsellbutton.style.width = '40%';
+        dontsellbutton.innerHTML = 'Don\'t Sell Booth';
+        
+        var updateboothdetail = document.createElement('a');
+        updateboothdetail.className = 'myCustomeButton';
+        updateboothdetail.style.padding = '5px 4px 5px 4px';
+      
+        updateboothdetail.style.width = '26%';
+        updateboothdetail.style.marginRight = '15%';
+        updateboothdetail.id = 'updateboothdetail';
+        updateboothdetail.innerHTML = 'Edit';
+        var productstatus  ="";
+        var currentBoothID = cell[0].id;
+        
+        console.log(cell.length);
+        
+        if(cell.length > 1){
+        jQuery.each(cell,function(cellindex,cellvalue){
+            
+            
+            var currentBoothIDDD = cellvalue.id;
+            var checkstatusproductstatus = checkBoothPurchaseable(currentBoothIDDD);
+            if(checkstatusproductstatus == "selled"){
+                
+                currentBoothID = cellvalue.id;
+                productstatus = 'selled';
+            }
+            
+            console.log(productstatus);
+            
+        });
+        }else{
+          productstatus = checkBoothPurchaseable(currentBoothID);
+        }
         
         
-        
-        var pricetegapplybutton = document.createElement('button');
-	pricetegapplybutton.id = 'applypricetegs';
-        pricetegapplybutton.title = '';
        
-        pricetegapplybutton.style.width = '56%';
-        pricetegapplybutton.style.float = 'right';
-        pricetegapplybutton.style.marginTop = '10px';
-        pricetegapplybutton.style.marginRight = '50px';
-        pricetegapplybutton.className = 'myCustomeButton';
+        
+        var checkboothstatusfun = checkboothstatus(currentBoothID);
         
         
-        pricetegapplybutton.innerHTML = 'Apply';
+        if(productstatus != 'selled' ){
+              
+            
+              updateboothdetail.style.display = 'none';
+              dontsellbutton.style.display = 'none';
+              
+        }else{
+            
+          if(checkboothstatusfun == "deleterequest"){
+              
+              updateboothdetail.style.display = 'none';
+              dontsellbutton.style.display = 'none';
+              
+          }else{
+              
+              manageboothtypes.style.display = 'none';
+              
+          }
+           
+             
+        }
+    
+    
+        createDiv.appendChild(updateboothdetail);
+        createDiv.appendChild(dontsellbutton);
+        createDiv.appendChild(manageboothtypes);
+        stylePanel.appendChild(createDiv);
+        var multiboothsselectionErrorMsg = "<p style='color:red;text-align: center;'>Warning: These changes will be applied to all booths in your current selection, overriding all previous pricing details (Price, Description, Level). Be sure about the booths in your current selection before clicking 'Update'. </p>";
+        mxEvent.addListener(dontsellbutton, 'click', function()
+	{
+            
+            jQuery.each(cell,function(cellindex,cellvalue){
+                    var CurentBoothID = cellvalue.id;
+                    jQuery.each(allBoothsProductData,function(boothIndex,boothObject){
+                        
+                        if(boothObject.cellID == CurentBoothID){
+                            
+                             allBoothsProductData[boothIndex].boothstatus="deleterequest";
+                        }
+                        
+                    });
+                    
+                   
+            });
+           
+            
+            jQuery("#manageboothtypes").show();
+            jQuery("#updateboothdetail").hide();
+            jQuery("#dontsellbutton").hide();
+            
+        });
+         var selectedBoothtitles ="";
+         jQuery.each(cell,function(cellindex,cellvalue){
+                
+                    var CurentBoothID = cellvalue.id;
+                     var title  = cellvalue.getAttribute('mylabel', '');
+                     selectedBoothtitles+=title+' ,';
+                    
+                
+                
+                
+            });
+        mxEvent.addListener(updateboothdetail, 'click', function()
+	{
+            
+            
+             var cell = graph.getSelectionCells();  
+             var popupstatus = 'multiboothselection';
+             var productstatus = '';
+             var firstBoothiD = cell[0].id;
+             
+             if(cell.length > 1){
+                jQuery.each(cell,function(cellindex,cellvalue){
+
+
+                    var currentBoothIDDD = cellvalue.id;
+                    var checkstatusproductstatus = checkBoothPurchaseable(currentBoothIDDD);
+                    if(checkstatusproductstatus == "selled"){
+
+                        firstBoothiD = cellvalue.id;
+                        
+                    }
+
+                   
+
+                });
+                }
+             
+             
+             
+             
+             
+             var firstBoothownerID= cell[0].getAttribute('boothOwner', '');
+             var exhibitorstatus = 'deactive';
+             
+             
+            
+             var boothOwner = 'none';
+             var boothprice = 0;
+             var boothlevel = "";
+             var boothdescripition = "";
+             var titlestatus = '';
+              
+            
+             jQuery.each(allBoothsProductData,function(boothIndex,boothObject){
+                 
+                 if(boothObject.cellID == firstBoothiD){
+                     
+                      boothprice = boothObject.boothprice;
+                      boothlevel = boothObject.boothlevel;
+                      boothdescripition = boothObject.boothdescripition;
+                      
+                     
+                     
+                 }
+                 
+                 
+                 
+             });
+            
+            
+          
+             
+            jQuery.each(cell,function(cellindex,cellvalue){
+                
+               
+                    var CurentBoothID = cellvalue.id;
+                    var mylabel =  cellvalue.getAttribute('mylabel', '');
+                    console.log(mylabel);
+                    var boothOwner = cellvalue.getAttribute('boothOwner', '');
+                    
+                    if(boothOwner !="none" && boothOwner !=""){
+                        
+                        exhibitorstatus = 'avtive';
+                        
+                    }
+                    
+                    
+                    if(checkBoothPurchaseable(CurentBoothID) == 'selled'){
+                    
+                        popupstatus = 'success';
+                    
+                    }else{
+                        
+                        popupstatus = 'multiboothselection'; 
+                    }
+                    if(typeof mylabel === 'undefined' || mylabel == ''){
+                        
+                        titlestatus = 'empty';
+                        
+                    }
+                
+                
+                
+            });
+            
+             
+             
+            var addtext = "'add'";
+            
+            var html = "<p class='successmessage'></p>";
+            var roleshtml = "";
+            var newroleshtml = "";
+            var classstatusshow ="";
+            var boothlevelname = "";
+            var alltaskesHtml = "";
+           
+            jQuery.each(arrayoflevelsObjects, function(rolekey, rolevalue) {
+
+                   if(rolevalue.key == boothlevel ){
+                       boothlevelname+='<option value="'+rolevalue.key+'" selected>'+rolevalue.name+'</option>';
+                   }else{
+                       boothlevelname+='<option value="'+rolevalue.key+'" >'+rolevalue.name+'</option>';
+                   }
+
+
+           });
+           
+          
+     
+        var updateproductlist = document.createElement('a');
+        updateproductlist.className = 'myCustomeButton';
+        updateproductlist.style.padding = '5px 4px 5px 4px';
+      
+        updateproductlist.style.width = '75%';
+         updateproductlist.style.marginRight = '7%';
+        updateproductlist.style.textAlign = 'center';
+       // manageboothtypes.setAttribute('onclick', 'getallpricetegs()');
+        updateproductlist.innerHTML = 'Update';
+        
+        
+       selectedBoothtitles =selectedBoothtitles.slice(0, -1);
+
+
+    html+=multiboothsselectionErrorMsg; 
+   
+ console.log(titlestatus);
+html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 80%;" id="boothprice" value="'+boothprice+'" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Level <i class="far fa-question-circle" title="Set the Level the user will be assigned in ExpoGenie when they purchase this booth. Levels determine what Tasks show up on their Task list based on how you configured Levels and task assignment. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" style="border-radius: 5px;width:100%;">'+boothlevelname+'</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click into the booth that is available for self-purchase. Example content would be details around what the users get if they purchase this booth, such as booth size and other related benefits."></i></label></div><div class="col-sm-8"><textarea style="border-radius:5px;width:98%;height:120px;"id="boothdescripition" style="height:20px;">'+boothdescripition+'</textarea></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
+     if(popupstatus == 'success' || popupstatus == 'multiboothselection' ){   
+            
+            if(exhibitorstatus == 'deactive'){
+           if(titlestatus == ""){  
+            boothdetailpopup = jQuery.confirm({
+                title: '<b style="text-align:center;">Self-booth Purchase</b>',
+                content: html,
+                html:true,
+                closeIcon: true,
+                columnClass: 'jconfirm-box-container-special-boothtypes',
+                cancelButton: false ,// hides the cancel button.
+                confirmButton: false, // hides the confirm button.
+            });
+           
+            jQuery(".mycustometable tbody").sortable();
+            jQuery("#updateproductbutton").append(updateproductlist);
+            
+                    }else{
+                
+                 swal({
+                title: "Invalid Booth Selection",
+               text: "At least one booth in your current selection is missing booth number. Please assign booth numbers to all selected booths and try again.",
+                 type: "warning",
+                confirmButtonClass: "btn-warning",
+                confirmButtonText: "Ok"
+            });
+            }
+        }else{
+            
+             
+             swal({
+                title: "Invalid Booth Selection",
+               text: "At least one booth in your current selection has an exhibitor(s) already assigned. Either remove the exhibitor(s) assigned to your current selected booths, or reselect booths without any exhibitors assigned.",
+                type: "warning",
+                confirmButtonClass: "btn-warning",
+                confirmButtonText: "Ok"
+            });
+            
+        }
+            
+        }
+        
+        
+         mxEvent.addListener(updateproductlist, 'click', function()
+	{
+            
+            var cell = graph.getSelectionCells();  
+            var boothprice = jQuery("#boothprice").val();
+            var boothlevel = jQuery("#boothlevelvalue option:selected").val();
+            var boothtasks = jQuery("#boothtasksvalues ").val();
+            var boothdescripition = jQuery("#boothdescripition").val();
+            
+            
+           jQuery.each(cell,function(cellindex,cellvalue){
+                
+               var boothproductdata =  {};
+               var CurentBoothID = cellvalue.id;
+                var boothtitle = cellvalue.getAttribute('mylabel', '');
+               var boothstatus  = cellvalue.getAttribute('boothproductid', '');
+               var boothID  = cellvalue.getAttribute('boothproductid', '');
+               if(boothstatus == "" || boothstatus == "none" || boothstatus == "deleterequest"){
+                   
+                   boothstatus = 'newBooth';
+                   
+               }else{
+                   
+                   boothstatus = 'updated';
+               }
+               
+               boothproductdata.boothprice = boothprice;
+               boothproductdata.boothlevel = boothlevel;
+               boothproductdata.boothdescripition = boothdescripition;
+               boothproductdata.boothstatus = boothstatus;
+               boothproductdata.boothID = boothID;
+               boothproductdata.boothtitle = boothtitle;
+               
+               boothproductdata.cellID = CurentBoothID;
+               
+              if(checkBoothPurchaseable(CurentBoothID) == "selled"){
+                    
+                    jQuery.each(allBoothsProductData,function(boothIndex,boothobject){
+                        if(boothobject.cellID == CurentBoothID){
+                            
+                             allBoothsProductData[boothIndex].boothprice=boothprice;
+                             allBoothsProductData[boothIndex].boothlevel=boothlevel;
+                             allBoothsProductData[boothIndex].boothdescripition=boothdescripition;
+                             allBoothsProductData[boothIndex].boothID=boothID;
+                             allBoothsProductData[boothIndex].boothstatus=boothstatus;
+                             allBoothsProductData[boothIndex].boothtitle=boothtitle;
+                        }
+                        
+                    });
+                    
+               }else{
+               
+               allBoothsProductData.push(boothproductdata);
+               
+               }
+               
+               
+               
+           });
+           
+            boothdetailpopup.close();
+            swal({
+                title: "Success",
+                text: "Booth Detail has been updated successfully.",
+                type: "success",
+                confirmButtonClass: "btn-success",
+                confirmButtonText: "Ok"
+            });
+           
+           
+
+
+        });
+        
+        });
+        
+     
         
 	mxEvent.addListener(manageboothtypes, 'click', function()
 	{
             
              var data = new FormData();
-             var addtext = "'add'";
-             data.append('post_id', mxPostID);
-    
-                 
+             var cell = graph.getSelectionCells();  
+             var popupstatus = 'error';
+             var titlestatus = '';
+             var productstatus = '';
+             var getFirstOneStatus = cell[0].id;
+             var exhibitorstatus = 'deactive';
+             if(checkBoothPurchaseable(getFirstOneStatus) == 'selled'){
+                    
+                     productstatus = 'alreadyExist';
+                    
+                }else{
+                    
+                    productstatus = 'newBooth';
+                }
+            jQuery.each(cell,function(cellindex,cellvalue){
+                var CurentBoothID = cellvalue.id;
+                var mylabel = cellvalue.getAttribute('mylabel', '');
+                var boothOwner = cellvalue.getAttribute('boothOwner', '');
+                console.log(mylabel);
+                    
+                    if(boothOwner !="none" && boothOwner !=""){
+                        
+                        exhibitorstatus = 'avtive';
+                        
+                    }
+                
+                if(productstatus == 'alreadyExist'){
+                    
+                    if(checkBoothPurchaseable(CurentBoothID) == "selled"){
+                    
+                        popupstatus = 'success';
+                    
+                    }else{
+                        
+                        popupstatus = 'error'; 
+                    }
+                }else{
+                    
+                    if(checkBoothPurchaseable(CurentBoothID) == "selled"){
+                    
+                        popupstatus = 'error';
+                    
+                    }else{
+                        
+                        popupstatus = 'success'; 
+                    }
+                    
+                    
+                }
+                if(typeof mylabel === 'undefined' || mylabel == ''){
+                        
+                        titlestatus = 'empty';
+                        
+                    }
+                
+                
+            });
+            console.log(popupstatus);
+             
+             
+            var addtext = "'add'";
+            data.append('post_id', mxPostID);
             var html = "<p class='successmessage'></p>";
             var roleshtml = "";
-            var newroleshtml = "";
+            var boothlevelname = "";
+            var alltaskesHtml = "";
             var classstatusshow ="";
-            jQuery.each(arrayoflevelsObjects, function(rolekey, rolevalue) {
+             jQuery.each(arrayoflevelsObjects, function(rolekey, rolevalue) {
 
-                   if(rolevalue.key == "standard_role" ){
-                       newroleshtml+='<option value="'+rolevalue.key+'" selected>'+rolevalue.name+'</option>';
-                   }else{
-                       newroleshtml+='<option value="'+rolevalue.key+'" >'+rolevalue.name+'</option>';
-                   }
+                  
+                       boothlevelname+='<option value="'+rolevalue.key+'" >'+rolevalue.name+'</option>';
+                  
+
+
+           });
+           jQuery.each(arrayoftasksObjects, function(taskskey, taskname) {
+
+                  
+                       alltaskesHtml+='<option value="'+taskname.key+'" >'+taskname.name+'</option>';
+                   
 
 
            });
      
      
-                                               html+='<div style="max-height: 350px;overflow: auto;"><table class="table mycustometable" id="listofallpricetegs">';
-                                               if(PricetegsObjects.length > 0){
-                                                    classstatusshow = "";  
-                                              }else{
-                                                    
-                                                    classstatusshow='display:none;';
-                                               }
-                                               html+='<tr id="showheader" style="'+classstatusshow+'"><th>Position</th><th>Default Name</th><th>Default Price</th><th>Default Level</th><th>Delete</th></tr>';
-                                                
-                                               
-                                               jQuery.each(PricetegsObjects, function(index1, value) {
-                                                  var IDCODE = "'"+value.ID+"'" ;
-                                                  var statusremove = 'removeable';
-                                                  var localxml = mxUtils.getXml(ui.editor.getGraphXml());
-                                                  
-                                                  var localxml = mxUtils.getXml(ui.editor.getGraphXml());
-                                                  var xmlDoc = jQuery.parseXML(localxml);
-                                                  $xml = jQuery(xmlDoc);
-                                                  jQuery($xml).find("MyNode").each(function () {
-                    
-                                                        var pricetegid = jQuery(this).attr('pricetegid');
-                                                        if (pricetegid == value.ID) {
-
-                                                            statusremove = 'notremoveable';
-                                                            
-
-                                                        }
-                                                    });
-                                                  jQuery.each(arrayoflevelsObjects, function(rolekey, rolevalue) {
-                                                      
-                                                      if(value.level == rolevalue.key){
-                                                          
-                                                          roleshtml+='<option value="'+rolevalue.key+'" selected>'+rolevalue.name+'</option>';
-                                                      }else{
-                                                        roleshtml+='<option value="'+rolevalue.key+'" >'+rolevalue.name+'</option>';
-                                                      }
-         
-                                                    });
-                                                  
-                                                 
+        var updateproductlist = document.createElement('a');
+        updateproductlist.className = 'myCustomeButton';
+        updateproductlist.style.padding = '5px 4px 5px 4px';
       
-    
+        updateproductlist.style.width = '75%';
+         updateproductlist.style.marginRight = '7%';
+        updateproductlist.style.textAlign = 'center';
+       // manageboothtypes.setAttribute('onclick', 'getallpricetegs()');
+        updateproductlist.innerHTML = 'Update';
         
         
-                                                 
-                                                  
-                                                  html+='<tr class="listofallpricetegs" id="'+value.ID+'" ><td style="width:10%;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 30%;"><input title="Title" type="text" title="Label" value="'+value.name+'" id="pricetegname_'+value.ID+'" /></td>';
-                                                  
-                                                       
-                                                      html+='<td style="width: 30%;text-align: center;"><div class="input-group"><span class="input-group-addon">'+currencysymbole+'</span><input style="width: 80%;" type="number" id="pricetegprice_'+value.ID+'" value="'+value.price+'"    class="form-control currency"  /></div></td>';
-                                                      html+='<td style="width: 10%;text-align: center;"><select id="priceteglevel_'+value.ID+'" >'+roleshtml+'</select></td>';
-                                                     
-                                                   if( statusremove == 'notremoveable'){
-                                                       html+='<td style="width: 10%;text-align: center;"><i style="color:gray;" title="The selected price tag cannot be deleted as it is assigned to one or more booths. Please try deleting again after removing the price tag from all booths." class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></td></tr>';
-                                              
-                                                   }else{
-                                                      html+='<td style="width: 10%;text-align: center;"><a style="cursor: pointer;"  title="Remove" onclick="removethispriceteg('+IDCODE+')" ><i class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></a></td></tr>';
-                                               
-                                                   }
-                                                   
-                                                   
-                                               });
-                                              
-                                               html+='</table></div>';
-                                               html+='<p id="buttonsdiv" style="'+classstatusshow+'text-align:center;margin: 10px 0px 0px 0px;"><button class="btn btn-large btn-info" onclick="updateallpricetegs()">Save</button><button style="margin-left: 11px;background-color: #b0b0b0; border-color: #b0b0b0;" class="btn btn-large btn-info" onclick="closepricetegsdilog()">Cancel</button></p>';
-                                                   
-                                               html+='<hr>';
-                                               
-                                               
-                                               
-                                               
-                                               html+='<table class="table mycustometable">';
-                                               html+='<tr><th></th><th>Default Name</th><th>Default Price</th><th>Default Level</th><th></th></tr>';
-                                               html+='<tr><td style="width:10%;"><b>Add New</b></td><td style="width: 30%;"><input title="Default Title" type="text" id="addnewpricetegname" ></td>';
-                                               html+='<td style="width: 30%;text-align: center;"><div class="input-group"><span class="input-group-addon">'+currencysymbole+'</span><input type="number" style="width: 80%;" id="pricetegpriceNewTeg" value="0"    class="form-control currency"  /></div></td><td style="width: 10%;text-align: center;"><select id="pricetegleveldropdownvalue" >'+newroleshtml+'</select></td><td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintopricetegs()">Add</button></td></tr>';
-                                              
-                                               html+='</table>';
-                                              
-                                               
-                                               
-                                         //  }
-                                            
-                                            pricetegsdilog = jQuery.confirm({
-                                                    title: '<b style="text-align:center;">Price Tags</b>',
-                                                    content: html,
-                                                    html:true,
-                                               
-                                                    closeIcon: true,
-                                                    columnClass: 'jconfirm-box-container-special-boothtypes',
-                                                   cancelButton: false ,// hides the cancel button.
-                                                   confirmButton: false, // hides the confirm button.
-
-
-                                                });
-                                           jQuery(".mycustometable tbody").sortable();
+        mxEvent.addListener(updateproductlist, 'click', function()
+	{
             
+            var cell = graph.getSelectionCells();  
+            var boothprice = jQuery("#boothprice").val();
+            var boothlevel = jQuery("#boothlevelvalue option:selected").val();
+            
+            var boothdescripition = jQuery("#boothdescripition").val();
+            var selectedBoothtitles ="";
+           jQuery.each(cell,function(cellindex,cellvalue){
+                
+                var boothproductdata =  {};
+               var CurentBoothID = cellvalue.id;
+               var boothtitle = cellvalue.getAttribute('mylabel', '');
+             
+               var boothstatus  = cellvalue.getAttribute('boothproductid', '');
+               var boothID  = cellvalue.getAttribute('boothproductid', '');
+               var title  = cellvalue.getAttribute('mylabel', '');
+               selectedBoothtitles+=title+' , ';
+               
+             
+              
+              
+               
+               if(boothstatus == "" || boothstatus == "none" || boothstatus == "deleterequest"){
+                   
+                   boothstatus = 'newBooth';
+                   
+               }else{
+                   
+                   boothstatus = 'updated';
+               }
+               
+               boothproductdata.boothprice = boothprice;
+               boothproductdata.boothlevel = boothlevel;
+               boothproductdata.boothdescripition = boothdescripition;
+               boothproductdata.boothstatus = boothstatus;
+               boothproductdata.boothID = boothID;
+               boothproductdata.boothtitle = boothtitle;
+               boothproductdata.cellID = CurentBoothID;
+               
+              if(checkBoothPurchaseable(CurentBoothID) == "selled"){
+                    
+                    jQuery.each(allBoothsProductData,function(boothIndex,boothobject){
+                        if(boothobject.cellID == CurentBoothID){
+                            
+                             allBoothsProductData[boothIndex].boothprice=boothprice;
+                             allBoothsProductData[boothIndex].boothlevel=boothlevel;
+                             allBoothsProductData[boothIndex].boothdescripition=boothdescripition;
+                             allBoothsProductData[boothIndex].boothstatus=boothstatus;
+                             allBoothsProductData[boothIndex].boothtitle=boothtitle;
+                             
+                        }
+                        
+                    });
+                    
+               }else{
+               
+               allBoothsProductData.push(boothproductdata);
+               
+               }
+               
+           });
+           
+            boothdetailpopup.close();
+            swal({
+                title: "Success",
+                text: "Booth detail has been successfully updated.",
+                type: "success",
+                confirmButtonClass: "btn-success",
+                confirmButtonText: "Ok"
+            });
+           
+        
+           jQuery("#manageboothtypes").hide();
+           jQuery("#updateboothdetail").show();
+           jQuery("#dontsellbutton").show();
+
+
+        });
+selectedBoothtitles =selectedBoothtitles.slice(0, -1);
+
+if(popupstatus == 'multiboothselection' )  {
+    html+=multiboothsselectionErrorMsg; 
+   
+      
+}
+console.log(titlestatus);
+html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 80%;" id="boothprice" value="0" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Level <i class="far fa-question-circle" title="Set the Level the user will be assigned in ExpoGenie when they purchase this booth. Levels determine what Tasks show up on their Task list based on how you configured Levels and task assignment. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" style="border-radius: 5px;width:100%;">'+boothlevelname+'</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click into the booth that is available for self-purchase. Example content would be details around what the users get if they purchase this booth, such as booth size and other related benefits."></i></label></div><div class="col-sm-8"><textarea style="border-radius:5px;width:98%;height:120px;"id="boothdescripition" style="height:20px;"></textarea></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
+            
+           
+console.log(exhibitorstatus);     
+
+    if(popupstatus == 'success' || popupstatus == 'multiboothselection' ){   
+            
+            if(exhibitorstatus == 'deactive'){
+             
+            if(titlestatus == ""){
+                
+            
+                boothdetailpopup = jQuery.confirm({
+                    title: '<b style="text-align:center;">Self-booth Purchase</b>',
+                    content: html,
+                    html:true,
+                    closeIcon: true,
+                    columnClass: 'jconfirm-box-container-special-boothtypes',
+                    cancelButton: false ,// hides the cancel button.
+                    confirmButton: false, // hides the confirm button.
+                });
+                
+           
+                    jQuery(".mycustometable tbody").sortable();
+                    jQuery("#updateproductbutton").append(updateproductlist);
+                    
+            }else{
+            
+            swal({
+                title: "Invalid Booth Selection",
+               text: "At least one booth in your current selection is missing booth number. Please assign booth numbers to all selected booths and try again.",
+                 type: "warning",
+                confirmButtonClass: "btn-warning",
+                confirmButtonText: "Ok"
+            });
+        }
+        }else{
+            
+             
+             swal({
+                title: "Invalid Booth Selection",
+               text: "At least one booth in your current selection has an exhibitor(s) already assigned. Either remove the exhibitor(s) assigned to your current selected booths, or reselect booths without any exhibitors assigned.",
+                 type: "warning",
+                confirmButtonClass: "btn-warning",
+                confirmButtonText: "Ok"
+            });
+            
+        }
+            
+        }
         });
         
-        mxEvent.addListener(pricetegapplybutton, 'click', function()
+       /* mxEvent.addListener('', 'click', function()
 	{
                           
                           var cell = graph.getSelectionCells();  
@@ -5059,11 +5472,11 @@ var stylePanel = this.createPanel();
                             
                                    
                    
-                });
+                });*/
         
 
      
-	stylePanel.appendChild(pricetegapplybutton);
+	
         
 	
             container.appendChild(stylePanel);
@@ -5076,7 +5489,42 @@ var stylePanel = this.createPanel();
         
 };
 
-
+function checkboothstatus(ID){
+    
+     var CurrentBoothStatus = '';
+      jQuery.each(allBoothsProductData,function(boothIndex,boothObject){
+          
+          if(boothObject.cellID == ID){
+              
+               CurrentBoothStatus = boothObject.boothstatus;
+          }
+          
+          
+      });
+    
+         
+  
+    return CurrentBoothStatus;
+    
+}
+function checkBoothPurchaseable(ID){
+    
+     var CurrentBoothStatus = 'unselled';
+      jQuery.each(allBoothsProductData,function(boothIndex,boothObject){
+          
+          if(boothObject.cellID == ID){
+              
+               CurrentBoothStatus = 'selled';
+          }
+          
+          
+      });
+    
+         
+  
+    return CurrentBoothStatus;
+    
+}
 StyleFormatPanel.prototype.addfloorplancompanydescription = function floorplancompany_descripiton(){
     
     
@@ -5084,17 +5532,7 @@ StyleFormatPanel.prototype.addfloorplancompanydescription = function floorplanco
 	var editor = ui.editor;
 	var graph = editor.graph;
 	var ss = this.format.getSelectionState();
-       
-   
-        
-       
-   
-
-    
-    
-    
-    
-}
+  }
 
 
 function getWords(str) {
@@ -5129,7 +5567,10 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 		stylePanel.style.display = 'block';
 	}
 	
-	var btypename = this.createTitle('Booth Number: ');
+	var btypename = document.createElement('div');
+        btypename.innerHTML= 'Booth Number  <i class="far fa-question-circle" title="Set Booth Number or other display label here."></i>';
+        
+       
 	btypename.style.paddingTop = '10px';
 	stylePanel.appendChild(btypename);
 		
@@ -5170,7 +5611,11 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	
 	stylePanel.appendChild(boothtypename);
 	
-        var bothdetiallebal = this.createTitle('Booth Detail: ');
+        var bothdetiallebal = document.createElement('div');
+        
+      
+        bothdetiallebal.innerHTML= 'Booth Detail  <i class="far fa-question-circle" title="Add any details of the booth itself here. This content will appear as a tooltip when users hover their mouse over the booth, and when a user clicks the booth IF there is no exhibitor assigned to that booth. Example: 10x10 Gold Booth.\n Note that if an Exhibitor is assigned to the booth, then the Exhibitor\'s \'Company Description\' details will override this content."></i>';
+        
 	bothdetiallebal.style.paddingTop = '10px';
         bothdetiallebal.style.display = 'none';
 	stylePanel.appendChild(bothdetiallebal);
@@ -5201,7 +5646,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         icontegat.style.marginTop="-6%";
        
         
-        heading.innerHTML = 'Booth Detail:    ';
+        heading.innerHTML = 'Booth Detail  <i class="far fa-question-circle" title="Add any details of the booth itself here. This content will appear as a tooltip when users hover their mouse over the booth, and when a user clicks the booth IF there is no exhibitor assigned to that booth. Example: 10x10 Gold Booth.\n Note that if an Exhibitor is assigned to the booth, then the Exhibitor\'s \'Company Description\' details will override this content."></i>';
         
     
     
@@ -5268,82 +5713,82 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                 }
 	
         
-        var productdivtitle = document.createElement('div');
-        
-        productdivtitle.style.width = '100%';
-        var boothproduct = this.createTitle('Booth Product: ');
-	boothproduct.style.paddingTop = '6px';
-	boothproduct.style.paddingBottom = '6px';
-        boothproduct.style.width = '35%';
-        
-        var buttonsdiv = document.createElement('div');
-        buttonsdiv.style.width = '22%';
-        buttonsdiv.style.float = 'right';
-       
-        buttonsdiv.id = 'customebuttonsdiv';
-        var removeproduct = document.createElement('a');
-	
-	removeproduct.id = 'removethisporduct';
-        
-        
-        
-       
-       
-        removeproduct.innerHTML = '<i class="fa fa-trash" style="cursor: pointer;color: #0082ff;" ></i>';
-        removeproduct.title = 'Remove';
-        
-        
-        var editproduct = document.createElement('a');
-	
-	editproduct.id = 'editthisporduct';
-        editproduct.href = baseCurrentSiteURl+'/add-new-product/?productid='+seletedproductID;
-        editproduct.target ="_blank";
-        editproduct.style.marginRight = '10px';
-        editproduct.innerHTML = '<i class="font-icon fa fa-edit" style="cursor: pointer;color: #0082ff;" ></i>';
-        editproduct.title = 'Edit Product';
-       
-       buttonsdiv.appendChild(editproduct); 
-       buttonsdiv.appendChild(removeproduct); 
-       
-       if(seletedproductID == 'none' || seletedproductID == ""){
-            buttonsdiv.style.display = 'none';
-       }
-       
-       productdivtitle.appendChild(boothproduct);
-       productdivtitle.appendChild(buttonsdiv);
-   
-       
-        if(seletedproductID == ""){
-            
-            seletetboothprduct.value = "none";
-            
-        }
-     
-        
-        jQuery.each(boothsproducts, function(index1, value) {
-            
-			 
-                        
-                         if(seletedproductID == value.id){
-                           
-                           
-                            seletetboothprduct.value = value.id;
-                            boothporudcttitlename.innerHTML=currencysymbole+value.price+' '+value.title;
-            
-                        }
-                         
-                         
-                         
-        });
-        
-        
-        
-        if(cell.length == 1){
-	 stylePanel.appendChild(productdivtitle);
-         stylePanel.appendChild(boothporudcttitlename);
-         stylePanel.appendChild(seletetboothprduct);
-        }
-        
+//        var productdivtitle = document.createElement('div');
+//        
+//        productdivtitle.style.width = '100%';
+//        var boothproduct = this.createTitle('Booth Product: ');
+//	boothproduct.style.paddingTop = '6px';
+//	boothproduct.style.paddingBottom = '6px';
+//        boothproduct.style.width = '35%';
+//        
+//        var buttonsdiv = document.createElement('div');
+//        buttonsdiv.style.width = '22%';
+//        buttonsdiv.style.float = 'right';
+//       
+//        buttonsdiv.id = 'customebuttonsdiv';
+//        var removeproduct = document.createElement('a');
+//	
+//	removeproduct.id = 'removethisporduct';
+//        
+//        
+//        
+//       
+//       
+//        removeproduct.innerHTML = '<i class="fa fa-trash" style="cursor: pointer;color: #0082ff;" ></i>';
+//        removeproduct.title = 'Remove';
+//        
+//        
+//        var editproduct = document.createElement('a');
+//	
+//	editproduct.id = 'editthisporduct';
+//        editproduct.href = baseCurrentSiteURl+'/add-new-product/?productid='+seletedproductID;
+//        editproduct.target ="_blank";
+//        editproduct.style.marginRight = '10px';
+//        editproduct.innerHTML = '<i class="font-icon fa fa-edit" style="cursor: pointer;color: #0082ff;" ></i>';
+//        editproduct.title = 'Edit Product';
+//       
+//       buttonsdiv.appendChild(editproduct); 
+//       buttonsdiv.appendChild(removeproduct); 
+//       
+//       if(seletedproductID == 'none' || seletedproductID == ""){
+//            buttonsdiv.style.display = 'none';
+//       }
+//       
+//       productdivtitle.appendChild(boothproduct);
+//       productdivtitle.appendChild(buttonsdiv);
+//   
+//       
+//        if(seletedproductID == ""){
+//            
+//            seletetboothprduct.value = "none";
+//            
+//        }
+//     
+//        
+//        jQuery.each(boothsproducts, function(index1, value) {
+//            
+//			 
+//                        
+//                         if(seletedproductID == value.id){
+//                           
+//                           
+//                            seletetboothprduct.value = value.id;
+//                            boothporudcttitlename.innerHTML=currencysymbole+value.price+' '+value.title;
+//            
+//                        }
+//                         
+//                         
+//                         
+//        });
+//        
+//        
+//        
+//        if(cell.length == 1){
+//	 stylePanel.appendChild(productdivtitle);
+//         stylePanel.appendChild(boothporudcttitlename);
+//         stylePanel.appendChild(seletetboothprduct);
+//        }
+//        
         
         
         
@@ -5361,9 +5806,16 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         detailsubmit.className = 'myCustomeButton';
         
         
-        detailsubmit.innerHTML = 'Apply';
+        detailsubmit.innerHTML = 'Apply Booth Settings';
         
-	var title = this.createTitle('Exhibitors: ');
+	var title = document.createElement('div');
+        
+        
+        
+      
+        title.innerHTML= 'Exhibitors  <i class="far fa-question-circle" title="Select from your list of available users to assign the booth(s)."></i>';
+        
+        
 	title.style.paddingTop = '6px';
 	title.style.paddingBottom = '6px';
        
@@ -5502,27 +5954,27 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 	this.listeners.push({destroy: function() { graph.getModel().removeListener(listener); }});
 	listener();
         
-        mxEvent.addListener(removeproduct, 'click', function()
-	{
-            
-            
-            jQuery("#boothproduct").val("none");
-            jQuery("#customebuttonsdiv").hide();
-            jQuery("#selectedboothtitlename").empty();
-            
-            
-           // var cell = graph.getSelectionCells(); 
-            
-          //   jQuery.each(cell,function(cellindex,cellvalue){
-                
-            //     cellvalue.setAttribute('boothproductid', 'none');
-                 
-           //  });
-            
-            
-            
-            
-        });
+//        mxEvent.addListener(removeproduct, 'click', function()
+//	{
+//            
+//            
+//            jQuery("#boothproduct").val("none");
+//            jQuery("#customebuttonsdiv").hide();
+//            jQuery("#selectedboothtitlename").empty();
+//            
+//            
+//           // var cell = graph.getSelectionCells(); 
+//            
+//          //   jQuery.each(cell,function(cellindex,cellvalue){
+//                
+//            //     cellvalue.setAttribute('boothproductid', 'none');
+//                 
+//           //  });
+//            
+//            
+//            
+//            
+//        });
         
         
         
@@ -5616,7 +6068,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 
                                 }
                                node.setAttribute('boothOwner', getexhibortervalue);
-                               var boothproductvaluecheck = jQuery("#boothproduct").val();//document.getElementById("boothproduct");
+                              var boothproductvaluecheck = cell[0].getAttribute('boothproductid', '');
                                if (boothproductvaluecheck != "") {
 
                                     boothproductvalue = boothproductvaluecheck;
@@ -5754,15 +6206,22 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                            
                             
                             if(cell.length == 1){
-                                
+                               
+                              
+                              
                               legendlabels = cell[0].getAttribute('legendlabels', '');
                               legendlabelscolor = cell[0].getAttribute('legendlabelscolor', '');
                               var seletedpricetegkeyvalue = cell[0].getAttribute('pricetegid', '');
+                              var boothproductvaluecheck = cell[0].getAttribute('boothproductid', '');
                               
                                node.setAttribute('legendlabels', legendlabels);
                                node.setAttribute('legendlabelscolor', legendlabelscolor);
                                node.setAttribute('pricetegid', seletedpricetegkeyvalue);
+                               
+                               
                                var e = document.getElementById("exhibitorID");
+                               
+                                  
                                if (e.options[e.selectedIndex].value != "") {
 
                                     getexhibortervalue = e.options[e.selectedIndex].value;
@@ -5772,8 +6231,27 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                     getexhibortervalue = "";
 
                                 }
+                                
+                               var oldboothowner = cell[0].getAttribute('boothOwner', '');
+                               var cellID = cell[0].id;
+                               
+                               if(oldboothowner !="" && oldboothowner!='none'){
+                                   
+                                   jQuery.each(allBoothsProductData,function(boothIndex,boothObject){
+                        
+                                        if(boothObject.cellID == cellID){
+
+                                             allBoothsProductData[boothIndex].boothstatus="deleterequest";
+                                        }
+                        
+                                    });
+                    
+                                   
+                                   
+                               }
+                               
                                node.setAttribute('boothOwner', getexhibortervalue);
-                                var boothproductvaluecheck = jQuery("#boothproduct").val();//document.getElementById("boothproduct");
+                                //document.getElementById("boothproduct");
                                if (boothproductvaluecheck != "") {
                                   
                                     boothproductvalue = boothproductvaluecheck;
@@ -7273,7 +7751,7 @@ DiagramFormatPanel.prototype.init = function()
 	if (graph.isEnabled())
 	{
 		//this.container.appendChild(this.addOptions(this.createPanel()));
-		this.container.appendChild(this.addPaperSize(this.createPanel()));
+		//this.container.appendChild(this.addPaperSize(this.createPanel()));//edit
 		//this.container.appendChild(this.addStyleOps(this.createPanel()));
 
 		btn = mxUtils.button('Save', mxUtils.bind(this, function(evt)
@@ -7350,7 +7828,7 @@ DiagramFormatPanel.prototype.addView = function(div)
 	}));
 	*/
 	
-	div.appendChild(this.createTitle(mxResources.get('view')));
+	//div.appendChild(this.createTitle(mxResources.get('view')));//edit
 	
 	// Grid
 	//this.addGridOption(div);
@@ -7388,7 +7866,8 @@ DiagramFormatPanel.prototype.addView = function(div)
 		
 		
 		// Background
-		var bg = this.createColorOption(mxResources.get('background'), function()
+		//var bg = this.createColorOption(mxResources.get('background'), function()
+		var bg = this.createColorOption("", function()  //edit
 		{
 			return graph.background;
 		}, function(color)
@@ -7442,15 +7921,21 @@ DiagramFormatPanel.prototype.addView = function(div)
 		
 			
                        
-                        btn.style.marginLeft = '43%';
-			btn.className = 'myCustomeButton';
-                        bg.style.width='194px';
-                        bg.style.height='30px';
+                                                btn.style.marginLeft = '9%';  //edit
+                                                btn.style.width = '68%';  //edit
+						btn.style.marginTop = '10px'; //edit
+						btn.className = 'myCustomeButton';
+                                                bg.style.width='194px';
+                                                bg.style.height='30px';
+                       
+						btn.innerHTML='Upload Static Layer'; //edit new add
+						btn.setAttribute('id', 'myCustomeButtonid'); //edit new add
+						btn.setAttribute('title', 'png format only'); //edit new add
                         
-			bg.appendChild(btn);
+			//bg.appendChild(btn);
 		}
 		
-		div.appendChild(bg);
+		div.appendChild(btn);
 	}
 	
         
@@ -7463,7 +7948,7 @@ DiagramFormatPanel.prototype.addView = function(div)
             
             
             var downloadbutton = document.createElement('div');
-            downloadbutton.style.marginTop = '20px';
+            downloadbutton.style.marginTop = '10px';//edit 20px
             downloadbutton.style.marginLeft = '10%';
             downloadbutton.style.marginBottom = '10px';
             downloadbutton.id = 'mainDivdownloadButton';
@@ -7479,7 +7964,7 @@ DiagramFormatPanel.prototype.addView = function(div)
            
             downloadLink.className = 'myCustomeButton';
             downloadLink.style.padding = '5px 36px 5px 36px';
-            downloadLink.innerHTML = 'Download Current Image';
+            downloadLink.innerHTML = 'Download Static Layer';//edit
             downloadbutton.style.display = 'none';
             
             
@@ -8297,7 +8782,7 @@ DiagramFormatPanel.prototype.addPaperSize = function(div)
 	var editor = ui.editor;
 	var graph = editor.graph;
 	
-	div.appendChild(this.createTitle("Floor Size"));
+	//div.appendChild(this.createTitle("Floor Size"));  //edit
 
 	var accessor = PageSetupDialog.addPageFormatPanel(div, 'formatpanel', graph.pageFormat, function(pageFormat)
 	{

@@ -40934,6 +40934,15 @@ mxGraphModel.prototype.cloneCellImpl = function(cell, mapping, includeChildren)
         //Qasim change remove porudct id on clone
 	clone.setAttribute('boothproductid', '');
 	// Stores the clone in the lookup table
+        
+        var OldId =  cell.id;
+        var cloneID =  clone.id;
+        console.log(OldId);
+        console.log(cloneID);
+        
+       
+        
+        
 	mapping[mxObjectIdentity.get(cell)] = clone;
 	
 	if (includeChildren)

@@ -190,8 +190,8 @@ Actions.prototype.init = function()
             
             swal({
                 title: "Embed Code",
-                text: '<textarea style="width: 95%;height:160px;"><iframe id="floorplanviewer" allowfullscreen="allowfullscreen" src="'+baseCurrentSiteURl+'/floor-plan-viewer/" width="100%" height="800" scrolling="no" ></iframe></textarea>',
-                html:true,
+                html: '<textarea style="width: 95%;height:160px;"><iframe id="floorplanviewer" allowfullscreen="allowfullscreen" src="'+baseCurrentSiteURl+'/floor-plan-viewer/" width="100%" height="800" scrolling="no" ></iframe></textarea>',
+               
                 type: "info",
                 confirmButtonClass: "btn-success",
                 confirmButtonText: "Close"
@@ -206,8 +206,8 @@ Actions.prototype.init = function()
             swal({
                 title: "Public Link",
                 text: '',
-                type: 'input',
-                html:true,
+                input: 'textarea',
+              
                 inputValue: baseCurrentSiteURl+'/floor-plan-viewer/',
                 confirmButtonClass: "btn-success",
                 confirmButtonText: "Close"
@@ -333,16 +333,125 @@ Actions.prototype.init = function()
             ui.refresh();
             
         });
+        
+        
+        this.addAction('lockunlockstatus', function(evt)
+	{
+            
+            
+           
+            
+            var data = new FormData();
+            var status = jQuery("#togglelockunlock").attr("name");
+            data.append('post_id', mxPostID);
+            data.append('status', status);
+            
+             
+                                    if(status == 'lock'){
+                                        
+                                        
+                                                 swal({
+                                                        title: "Are you sure?",
+                                                        text: 'This action will lock the floor plan and prevent users from purchasing booths. Once complete with your edits, remember to unlock.',
+							type: "info",
+                                                        showCancelButton: true,
+                                                        confirmButtonClass: "btn-info",
+                                                        confirmButtonText: "Yes, continue!",
+                                                        }).then(function(isConfirm) {
+                                                          if (isConfirm) {
+
+                                                              jQuery.ajax({
+                                                                  url: baseCurrentSiteURl + '/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=savedlockunlockstatus',
+                                                                  data: data,
+                                                                  cache: false,
+                                                                  contentType: false,
+                                                                  processData: false,
+                                                                  type: 'POST',
+                                                                  success: function (data) {
+
+
+                                                                      jQuery("#togglelockunlock").attr("name", "unlock");
+                                                                      jQuery("#togglelockunlock").css("color", "red");
+                                                                      jQuery("#togglelockunlock").attr("title", "Click to unlock");
+                                                                      jQuery("#togglelockunlock").removeClass('fa-lock-open');
+                                                                      jQuery("#togglelockunlock").addClass('fa-lock');
+
+
+                                                                  }, error: function (xhr, ajaxOptions, thrownError) {
+                                                                      swal({
+                                                                          title: "Error",
+                                                                          text: "There was an error during the requested operation. Please try again.",
+                                                                          type: "error",
+                                                                          confirmButtonClass: "btn-danger",
+                                                                          confirmButtonText: "Ok"
+                                                                      });
+                                                                  }
+
+                                                              });
+
+                                                          } 
+                                                      });
+						
+                                        
+                                    }else{
+                                        
+                                        jQuery("#togglelockunlock").attr("name", "lock");
+                                        jQuery("#togglelockunlock").attr("title", "Click to Lock");
+                                        jQuery( "#togglelockunlock" ).removeClass( 'fa-lock' );
+                                        jQuery( "#togglelockunlock" ).addClass( 'fa-lock-open' );
+                                        jQuery("#togglelockunlock").css("color", "#333");
+                                        jQuery.ajax({
+                                                            url: baseCurrentSiteURl+'/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=savedlockunlockstatus',
+                                                                    data: data,
+                                                                    cache: false,
+                                                                    contentType: false,
+                                                                    processData: false,
+                                                                    type: 'POST',
+                                                                    success: function(data) {
+
+                                                                    },error: function (xhr, ajaxOptions, thrownError) {
+                                                                                        swal({
+                                                                                            title: "Error",
+                                                                                            text: "There was an error during the requested operation. Please try again.",
+                                                                                            type: "error",
+                                                                                            confirmButtonClass: "btn-danger",
+                                                                                            confirmButtonText: "Ok"
+                                                                                        });
+                                                                        }
+
+                                                                    });
+                                       
+                                        
+                                        
+                                    }
+                                    
+            
+        });
         this.addAction('save', function(evt)
 	{
                     
                   
                     
+                       jQuery("body").css({'cursor':'wait'});  
                        
-                       mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
-                       
-                       var currentbgImage = ui.editor.graph.getBackgroundImage();
                      
+                       var status = jQuery("#togglelockunlock").attr("name");
+            
+                       if(status == 'unlock'){
+                           
+                        swal({
+                            title: "Alert",
+                            text: "You must unlock the floor plan before saving your changes.",
+                            type: "info",
+                            confirmButtonClass: "btn-info",
+                            confirmButtonText: "Ok"
+                        });
+                           
+                       }else{
+            
+            
+                       mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
+                       var currentbgImage = ui.editor.graph.getBackgroundImage();
                        if(currentbgImage == null ){
                             mxFloorBackground = "";
                         }else{
@@ -353,10 +462,21 @@ Actions.prototype.init = function()
                        var data = new FormData();
                        data.append('post_id', mxPostID);
                        data.append('boothTypes', JSON.stringify(ArrayOfObjects));
+                       data.append('sellboothsjson', JSON.stringify(allBoothsProductData));
                        data.append('floorBG', mxFloorBackground);
                        data.append('floorXml', mxFloorPlanXml);
-                       
-                       jQuery.ajax({
+                       var popuphtml = '<p><img src="'+baseCurrentSiteURl+'/wp-content/plugins/floorplan/load1.gif"/></p>'; 
+                          
+        
+                                    swal({
+                                       title: "Please Wait...",
+                                       html:popuphtml,
+                                       type: "info",
+                                       confirmButtonClass: "btn-info",
+                                       showConfirmButton: false,
+                                       closeOnClickOutside: false
+                                   });
+                         jQuery.ajax({
                         url: baseCurrentSiteURl+'/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=savedfloorplansettings',
                                 data: data,
                                 cache: false,
@@ -365,14 +485,27 @@ Actions.prototype.init = function()
                                 type: 'POST',
                                 success: function(data) {
                                     
+                                    jQuery("body").css({'cursor':'default'});  
                                     ui.updateGraphStatus();
+                                    
+                                    swal.close();
+                                   
                                     swal({
                                        title: "Success",
-                                       text: "Floor plan saved successfully.",
+                                       text:"Floor Plan settings has been updated successfully.",
                                        type: "success",
                                        confirmButtonClass: "btn-success",
-                                       confirmButtonText: "Ok"
+                                       confirmButtonText: "Close",
+                                       onClose:function(){
+                                           
+                                           
+                                           location.reload();
+                                           
+                                       }
+                                      
                                    });
+                                          
+                                
                                    
                                     
                                 },error: function (xhr, ajaxOptions, thrownError) {
@@ -385,6 +518,7 @@ Actions.prototype.init = function()
                                                     });
                                     }
                         });
+                    }
                        
                        
 	      

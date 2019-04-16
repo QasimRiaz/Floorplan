@@ -3441,6 +3441,9 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                 var companydescription ="";
                                 var htmlcompanydescription = "";
                                 var boothproductid = "";
+                                var websiteURLhtml = "";
+                                        var profilelogourl="";
+                                        var companywebsite="";
                                  $xml = jQuery(xmlDoc);
                                  
 
@@ -3472,19 +3475,45 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                         if(index.exhibitorsid == userid){
                                             var tablehtml = '';
                                             var curr_dat = '';
-                                            var companylogourlnew = index.companylogourl;
+                                            var companylogourlnew = index.COL;
+                                            var profilelogourl = index.companylogourl;
+                                            var companywebsite = index.COW;
                                             var htmlforassignedbooth='';
                                             var htmlforaddress = '' ;
                                              var imagesrc ="";
-                                              companydescription  = index.companyNameTask;
-                                            if(companylogourlnew == null){
-                                               
-                                                companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
-                                            }
+                                              companydescription  = index.COD;
+                                             
+                                            
+                                             if (companylogourlnew == null || companylogourlnew == '') {
+                                                          
+                                                          if (profilelogourl == null || profilelogourl == '') {
+                                                              
+                                                              companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
+                                                            
+                                                              
+                                                          }else{
+                                                              
+                                                              companylogourlnew = profilelogourl;
+                                                          }
+                                                        
+                                                          
+                                                        }
+                                                           
+                                            if (companywebsite == null || companywebsite == '') {
+                                                        
+                                                         websiteURLhtml = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         websiteURLhtml = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" ><a href="'+companywebsite+'" target="_blank">'+companywebsite+'</a></div></div>';	
+                                              
+                                                        
+                                                    }
                                             
                                             if(companydescription != "" && typeof companydescription !== "undefined" && companydescription != null ){
                                                 
-                                                     htmlcompanydescription = '<div style="text-align: justify;">'+unescape(companydescription)+'</div>';
+                                                     htmlcompanydescription = '<div >'+unescape(companydescription)+'</div>';
                                             
                                                 
                                             }else{
@@ -3509,7 +3538,7 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                                  var openhtml = '<div class="row" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+htmlforassignedbooth+htmlcompanydescription+'</div></div>';	
                                               
                                                  //var openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top: 6%;float:left;text-align:center"><img width="200" src="'+companylogourlnew+'" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >'+index.companyname+'</h1>'+htmlforaddress+'<hr>'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div></div>';
-                                                 var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+'</div><div id="contactdiv" style="display:none;"class="tabcontent">Contact Us....</div>';
+                                                 var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+websiteURLhtml+'</div><div id="contactdiv" style="display:none;"class="tabcontent">Contact Us....</div>';
  
                                              
                                                  jQuery('body').css('cursor', 'default');

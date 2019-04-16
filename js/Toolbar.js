@@ -195,17 +195,20 @@ Toolbar.prototype.init = function()
              eltss[1].innerHTML= '<div class="fas fa-map-signs" style="color:#000"></div>';
              
              
-             var eltss = this.addItems(['-', 'listofallpricetags']);
-             eltss[1].setAttribute('title', 'Manage Price Tags');
-             eltss[1].innerHTML= '<div class="fas fa-tags" style="color:#000"></div>';
+             var elts = this.addItems(['-', 'lockunlockstatus']);
+            
+             if(floorplanstatuslockunlock == 'lock'){
+                 
+                 elts[1].innerHTML= '<div name="unlock" title="Click to Unlock" id="togglelockunlock" class="fas fa-lock" style="color:red"></div>';//'Save';//('title', 'Save');
+             
+                 
+             }else{
+                 
+                 elts[1].innerHTML= '<div name="lock" title="Click to Lock" id="togglelockunlock" class="fas fa-lock-open" style="color:#333"></div>';//'Save';//('title', 'Save');
+              
+             }
              
             
-             var eltss = this.addItems(['-', 'autogenerateproducts']);
-             eltss[1].setAttribute('title', 'Save and Autogenerate Booth Products');
-             eltss[1].innerHTML= '<div class="fas fa-dollar-sign" style="color:#000"></div>';
-             
-             
-             
              var elts = this.addItems(['-', 'save']);
              elts[1].setAttribute('title', 'Save');
              elts[1].setAttribute('class', 'mycustomstylelink');

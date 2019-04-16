@@ -460,3 +460,40 @@ input.currency {
     font-size: 14px !important;
     
 }
+.title{
+    
+    text-align: center !important;
+    margin-bottom: 1% !important;
+    
+}
+
+.select2-container--open .select2-dropdown--below {
+z-index:100000000000;
+height: 50% !important;
+
+}.select2-results__options {
+	
+	background: #e8e7e769 !important;
+        border: 1px #cccccc solid !important;
+        
+}
+
+.select2-selection--multiple {
+    border: solid #cccccc 1px !important;
+
+}
+
+.ui-widget-content {
+       border: 1px solid #ffffff !important;
+    background: #ffffff !important;
+     height: 7px !important; 
+    border-radius: 0px !important;
+}
+
+.ui-widget-header {
+   
+   
+    height: 6px;
+    border-radius: 0px !important;
+    background: #00a8ff !important;;
+}
