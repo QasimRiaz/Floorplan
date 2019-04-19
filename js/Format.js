@@ -5123,6 +5123,11 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
                    boothstatus = 'updated';
                }
                
+               
+                console.log(boothdescripition);
+               boothdescripition =  boothdescripition.replace(/([,.!;"'])+/g, '');
+                console.log(boothdescripition);
+               
                boothproductdata.boothprice = boothprice;
                boothproductdata.boothlevel = boothlevel;
                boothproductdata.boothdescripition = boothdescripition;
@@ -5308,6 +5313,9 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
                    boothstatus = 'updated';
                }
                
+               console.log(boothdescripition);
+                boothdescripition =  boothdescripition.replace(/([,.!;"'])+/g, '');
+                console.log(boothdescripition);
                boothproductdata.boothprice = boothprice;
                boothproductdata.boothlevel = boothlevel;
                boothproductdata.boothdescripition = boothdescripition;

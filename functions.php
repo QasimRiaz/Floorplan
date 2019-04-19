@@ -28,9 +28,10 @@
                 
               
                 allBoothsProductData = '<?php echo $sellboothsjson; ?>';
-                
+                 console.log(allBoothsProductData);
                 if(allBoothsProductData !=""){
-                    
+                    allBoothsProductData = allBoothsProductData.replace(/\\/g, '');
+                     console.log(allBoothsProductData);
                     allBoothsProductData = JSON.parse(allBoothsProductData);
                     
                 }else{
@@ -38,7 +39,7 @@
                      allBoothsProductData =  [];
                 }
                 
-                
+                console.log(allBoothsProductData);
                 newcompanynamesArray = [];
                
                 jQuery.each( mxgetjosnusersData, function( key, value ) {
@@ -229,7 +230,6 @@
 		// Default resources are included in grapheditor resources
 		mxLoadResources = false;
 	</script>
-        
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-confirm.js?v=2.20"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Init.js?v=2.21"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>jscolor/jscolor.js?v=2.19"></script>
@@ -242,7 +242,7 @@
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.75"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=7.77"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=7.83"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=2.85"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=3.17"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.19"></script>
@@ -252,9 +252,14 @@
         <script type="text/javascript" src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/sweetalert2/latest/sweetalert2.min.js"></script>
       
-        <?php if($current_floor_plan_status == 'viewer' ){?>
+         
+    
+         
+         
+         
+         <?php if($current_floor_plan_status == 'viewer' ){?>
         
-        <?}?>
+         <?}?>
    
         
         
