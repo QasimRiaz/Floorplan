@@ -36,7 +36,6 @@ class WP_GitHub_floorplan_Updater {
 	/**
 	 * GitHub Updater version
 	 */
-	const VERSION = 1.6;
 
 	/**
 	 * @var $config the config for the updater
