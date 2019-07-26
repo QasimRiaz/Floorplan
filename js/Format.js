@@ -30,6 +30,7 @@ Format.prototype.init = function()
 	{
 		this.clearSelectionState();
 		this.refresh();
+                //this.multisitetab();
 	});
 	
 	graph.getSelectionModel().addListener(mxEvent.CHANGE, this.update);
@@ -39,9 +40,13 @@ Format.prototype.init = function()
 	graph.addListener(mxEvent.ROOT, mxUtils.bind(this, function()
 	{
 		this.refresh();
+                //this.multisitetab();
 	}));
 	
 	this.refresh();
+       // this.multisitetab();
+        
+        
 };
 
 /**
@@ -331,39 +336,16 @@ Format.prototype.refresh = function()
 	label.style.paddingTop = '8px';
 	label.style.height = (mxClient.IS_QUIRKS) ? '34px' : '25px';
 	label.style.width = '100%';
-    label.className = 'customebgcolor';
+        label.className = 'customebgcolor';
         
 	this.container.appendChild(div);
 	
 	if (graph.isSelectionEmpty())
 	{
-		//mxUtils.write(label, 'Floor Settings');
-		label.innerHTML = 'Static Layer Settings <i class="far fa-question-circle" title="helpText"></i>';//edit
-		// Adds button to hide the format panel since
-		// people don't seem to find the toolbar button
-		// and the menu item in the format menu
-//		var img = document.createElement('img');
-//		img.setAttribute('border', '0');
-//		img.setAttribute('src', Dialog.prototype.closeImage);
-//		img.setAttribute('title', mxResources.get('hide'));
-//		img.style.position = 'absolute';
-//		img.style.display = 'block';
-//		img.style.right = '0px';
-//		img.style.top = '8px';
-//		img.style.cursor = 'pointer';
-//		img.style.marginTop = '1px';
-//		img.style.marginRight = '17px';
-//		img.style.border = '1px solid transparent';
-//		img.style.padding = '1px';
-//		img.style.opacity = 0.5;
-//		label.appendChild(img)
-//		
-//		mxEvent.addListener(img, 'click', function()
-//		{
-//			ui.actions.get('formatPanel').funct();
-//		});
 		
-		div.appendChild(label);
+		//label.innerHTML = 'Floor Plan Settings <i class="far fa-question-circle" title="helpText"></i>';//edit
+		
+		//div.appendChild(label);
                
 		this.panels.push(new DiagramFormatPanel(this, ui, div));
 	}
@@ -490,28 +472,13 @@ Format.prototype.refresh = function()
                         addClickHandler(labelLegend, stylePanel, idx++);
 		}
 		
-		// Text
-		//mxUtils.write(label2, 'Assignment');
-		//div.appendChild(label2);
-
-		//var textPanel = div.cloneNode(false);
-		//textPanel.style.display = 'none';
-		//this.panels.push(new TextFormatPanel(this, ui, textPanel));
-		//this.container.appendChild(textPanel);
 		
-		// Arrange
-		//mxUtils.write(label3, mxResources.get('arrange'));
-		//div.appendChild(label3);
-
-		//var arrangePanel = div.cloneNode(false);
-		//arrangePanel.style.display = 'none';
-		//this.panels.push(new ArrangePanel(this, ui, arrangePanel));
-		//this.container.appendChild(arrangePanel);
-		
-		//addClickHandler(label2, textPanel, idx++);
-		//addClickHandler(label3, arrangePanel, idx++);
 	}
 };
+
+
+
+
 
 /**
  * Base class for format panels.
@@ -4255,7 +4222,7 @@ StyleFormatPanel.prototype.addFill = function(container)
                 graph.setCellStyles("fontSize", value, graph.getSelectionCells());
 
 		input.value = value;
-                 console.log(fontvalue);   
+                console.log(fontvalue);   
 		mxEvent.consume(evt);
 	};
         
@@ -4320,20 +4287,6 @@ StyleFormatPanel.prototype.addFill = function(container)
         btypename.style.float = 'left';
         mainrow.appendChild(btypename);
         
-        
-        
-          
-        var fontsizeinput = document.createElement('input');
-	fontsizeinput.type = 'number';
-	//boothNumber.value = '';
-        fontsizeinput.id = 'cellfontsize';
-        fontsizeinput.style.float = 'right';
-        fontsizeinput.style.padding = '4px';
-        fontsizeinput.style.width = '15%';
-        fontsizeinput.style.width = '15%';
-        fontsizeinput.style.marginRight = '8%';
-        fontsizeinput.style.marginTop = '10px';
-        fontsizeinput.value = fontvalue;
             
         mainrow.appendChild(input);
         mainrow.appendChild(stepper);
@@ -4342,20 +4295,47 @@ StyleFormatPanel.prototype.addFill = function(container)
 	container.appendChild(unOccp);
         container.appendChild(mainrow);
        
-        mxEvent.addListener(fontsizeinput, 'change', function(evt)
+        mxEvent.addListener(input, 'keypress', function(evt)
 	{
             
-            console.log();
-            var currentfontValue =  jQuery("#cellfontsize").val();
-            var cell = graph.getSelectionCells();
-            
-            graph.setCellStyles("fontSize", currentfontValue, graph.getSelectionCells());
-            
-            
+          
+             if(evt.which == 13) {
+           
+           var value = parseInt(input.value);
+           value = Math.min(999, Math.max(1, (isNaN(value)) ? 1 : value));
+	var cell = graph.getSelectionCells();
+                graph.setCellStyles("fontSize", value, graph.getSelectionCells());
+
+		input.value = value;
+             
+		mxEvent.consume(evt);
+           
+            }
             
             
         });
+        
+         mxEvent.addListener(input, 'change', function(evt)
+	{
+            
+          
+            
+           
+           var value = parseInt(input.value);
+           value = Math.min(999, Math.max(1, (isNaN(value)) ? 1 : value));
+	var cell = graph.getSelectionCells();
+                graph.setCellStyles("fontSize", value, graph.getSelectionCells());
 
+		input.value = value;
+               
+		mxEvent.consume(evt);
+           
+         
+            
+            
+        });
+        
+        
 	if (ss.style.shape == 'swimlane')
 	{
 		container.appendChild(this.createCellColorOption(mxResources.get('laneColor'), 'swimlaneFillColor', '#ffffff'));
@@ -4958,6 +4938,9 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
              var boothlevel = "";
              var boothdescripition = "";
              var titlestatus = '';
+             var depositestatus = 'unchecked';
+             var depositetype = '';
+             var depositeamount = '';
               
             
              jQuery.each(allBoothsProductData,function(boothIndex,boothObject){
@@ -4967,6 +4950,9 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
                       boothprice = boothObject.boothprice;
                       boothlevel = boothObject.boothlevel;
                       boothdescripition = boothObject.boothdescripition;
+                      depositestatus = boothObject.depositestatus;
+                      depositetype = boothObject.depositstype;
+                      depositeamount = boothObject.depositsamount;
                       
                      
                      
@@ -5022,7 +5008,7 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
             var classstatusshow ="";
             var boothlevelname = "";
             var alltaskesHtml = "";
-           
+            
             jQuery.each(arrayoflevelsObjects, function(rolekey, rolevalue) {
 
                    if(rolevalue.key == boothlevel ){
@@ -5053,12 +5039,47 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
     html+=multiboothsselectionErrorMsg; 
    
  console.log(titlestatus);
-html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 80%;" id="boothprice" value="'+boothprice+'" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Level <i class="far fa-question-circle" title="Set the Level the user will be assigned in ExpoGenie when they purchase this booth. Levels determine what Tasks show up on their Task list based on how you configured Levels and task assignment. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" style="border-radius: 5px;width:100%;">'+boothlevelname+'</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click into the booth that is available for self-purchase. Example content would be details around what the users get if they purchase this booth, such as booth size and other related benefits."></i></label></div><div class="col-sm-8"><textarea style="border-radius:5px;width:98%;height:120px;"id="boothdescripition" style="height:20px;">'+boothdescripition+'</textarea></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
-     if(popupstatus == 'success' || popupstatus == 'multiboothselection' ){   
+ 
+ var statushtml = '';
+ var depositedetail = "";
+ var selectedoptions = '<option value="percent" >Percentage</option><option value="fixed">Fixed Amount</option>';
+ if(depositestatus =="checked" ){
+     
+     statushtml = '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><input type="checkbox" id="depositsstatus" checked="true"></div></div>';
+ 
+     
+     if(depositetype =="percent"){
+         
+         
+        selectedoptions = '<option value="percent" selected="true">Percentage</option><option value="fixed">Fixed Amount</option>';
+         
+     }else{
+         
+       selectedoptions = '<option value="percent" >Percentage</option><option value="fixed" selected="true">Fixed Amount</option>';
+       
+     }
+                
+     depositedetail = '<div class="row depositsdetail" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><select id="depositstype" style="border-radius: 5px;width:100%;">'+selectedoptions+'</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="'+depositeamount+'" type="number" ></div></div>';
+     
+                        
+                      
+ }else{
+     
+    statushtml = '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth."></i></label></div><div class="col-sm-3"><input type="checkbox" id="depositsstatus" ></div></div>';
+    depositedetail = '<div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" style="border-radius: 5px;width:100%;">'+selectedoptions+'</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="'+depositeamount+'" type="number" ></div></div>';
+     
+ }
+
+
+var htmlfordeposite = statushtml + depositedetail;
+
+html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function(){if(jQuery("#depositsstatus").prop( "checked" )){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 80%;" id="boothprice" value="'+boothprice+'" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Level <i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" style="border-radius: 5px;width:100%;">'+boothlevelname+'</select></div></div>'+htmlfordeposite+'<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea style="border-radius:5px;width:98%;height:120px;"id="boothdescripition" style="height:20px;">'+boothdescripition+'</textarea></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
+
+    if(popupstatus == 'success' || popupstatus == 'multiboothselection' ){   
             
-            if(exhibitorstatus == 'deactive'){
-           if(titlestatus == ""){  
-            boothdetailpopup = jQuery.confirm({
+        if(exhibitorstatus == 'deactive'){
+            if(titlestatus == ""){  
+                boothdetailpopup = jQuery.confirm({
                 title: '<b style="text-align:center;">Self-booth Purchase</b>',
                 content: html,
                 html:true,
@@ -5071,16 +5092,17 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
             jQuery(".mycustometable tbody").sortable();
             jQuery("#updateproductbutton").append(updateproductlist);
             
-                    }else{
+            }else{
                 
-                 swal({
-                title: "Invalid Booth Selection",
-               text: "At least one booth in your current selection is missing booth number. Please assign booth numbers to all selected booths and try again.",
-                 type: "warning",
-                confirmButtonClass: "btn-warning",
-                confirmButtonText: "Ok"
-            });
+                swal({
+                       title: "Invalid Booth Selection",
+                       text: "At least one booth in your current selection is missing booth number. Please assign booth numbers to all selected booths and try again.",
+                       type: "warning",
+                       confirmButtonClass: "btn-warning",
+                       confirmButtonText: "Ok"
+                });
             }
+            
         }else{
             
              
@@ -5105,7 +5127,19 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
             var boothlevel = jQuery("#boothlevelvalue option:selected").val();
             var boothtasks = jQuery("#boothtasksvalues ").val();
             var boothdescripition = jQuery("#boothdescripition").val();
+             var depositstype = "";
+            var depositsamount = "";
+            var depositestatus = "unchecked";
             
+            if(boothlevel !="none"){
+                
+            if(jQuery("#depositsstatus").prop( "checked" )){
+                
+                 depositstype = jQuery("#depositstype option:selected").val(); 
+                 depositsamount = jQuery('#depositamount').val();
+                 depositestatus = 'checked';
+                
+            }
             
            jQuery.each(cell,function(cellindex,cellvalue){
                 
@@ -5125,7 +5159,7 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
                
                
                 console.log(boothdescripition);
-               boothdescripition =  boothdescripition.replace(/([,.!;"'])+/g, '');
+               boothdescripition =  boothdescripition.replace(/(["'])+/g, '');
                 console.log(boothdescripition);
                
                boothproductdata.boothprice = boothprice;
@@ -5134,7 +5168,9 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
                boothproductdata.boothstatus = boothstatus;
                boothproductdata.boothID = boothID;
                boothproductdata.boothtitle = boothtitle;
-               
+               boothproductdata.depositstype = depositstype;
+               boothproductdata.depositsamount = depositsamount;
+               boothproductdata.depositestatus = depositestatus;
                boothproductdata.cellID = CurentBoothID;
                
               if(checkBoothPurchaseable(CurentBoothID) == "selled"){
@@ -5148,6 +5184,9 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
                              allBoothsProductData[boothIndex].boothID=boothID;
                              allBoothsProductData[boothIndex].boothstatus=boothstatus;
                              allBoothsProductData[boothIndex].boothtitle=boothtitle;
+                             allBoothsProductData[boothIndex].depositstype=depositstype;
+                             allBoothsProductData[boothIndex].depositsamount=depositsamount;
+                             allBoothsProductData[boothIndex].depositestatus=depositestatus;
                         }
                         
                     });
@@ -5172,7 +5211,10 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
             });
            
            
-
+         }else{
+             
+             
+         }
 
         });
         
@@ -5246,11 +5288,12 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
              
             var addtext = "'add'";
             data.append('post_id', mxPostID);
-            var html = "<p class='successmessage'></p>";
+            var html = "<p class='successmessage' style='text-align: center;'></p>";
             var roleshtml = "";
             var boothlevelname = "";
             var alltaskesHtml = "";
             var classstatusshow ="";
+            boothlevelname+='<option value="none" selected>None</option>';
              jQuery.each(arrayoflevelsObjects, function(rolekey, rolevalue) {
 
                   
@@ -5286,10 +5329,22 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
             var cell = graph.getSelectionCells();  
             var boothprice = jQuery("#boothprice").val();
             var boothlevel = jQuery("#boothlevelvalue option:selected").val();
-            
             var boothdescripition = jQuery("#boothdescripition").val();
             var selectedBoothtitles ="";
-           jQuery.each(cell,function(cellindex,cellvalue){
+            var depositstype = "";
+            var depositsamount = "";
+            var depositestatus = "unchecked";
+        if(boothlevel !="none"){    
+            if(jQuery("#depositsstatus").prop( "checked" )){
+                
+                 depositstype = jQuery("#depositstype option:selected").val(); 
+                 depositsamount = jQuery('#depositamount').val();
+                 depositestatus = 'checked';
+                
+            }
+            
+            
+        jQuery.each(cell,function(cellindex,cellvalue){
                 
                 var boothproductdata =  {};
                var CurentBoothID = cellvalue.id;
@@ -5298,6 +5353,7 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
                var boothstatus  = cellvalue.getAttribute('boothproductid', '');
                var boothID  = cellvalue.getAttribute('boothproductid', '');
                var title  = cellvalue.getAttribute('mylabel', '');
+               var laststatusID = boothstatus;
                selectedBoothtitles+=title+' , ';
                
              
@@ -5313,16 +5369,25 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
                    boothstatus = 'updated';
                }
                
-               console.log(boothdescripition);
-                boothdescripition =  boothdescripition.replace(/([,.!;"'])+/g, '');
-                console.log(boothdescripition);
+               boothdescripition =  boothdescripition.replace(/(["'])+/g, '');
                boothproductdata.boothprice = boothprice;
                boothproductdata.boothlevel = boothlevel;
                boothproductdata.boothdescripition = boothdescripition;
                boothproductdata.boothstatus = boothstatus;
-               boothproductdata.boothID = boothID;
+               if(laststatusID == "" || laststatusID == "none" || laststatusID == "deleterequest"){
+                   boothproductdata.boothID = "";
+               }else{
+                   boothproductdata.boothID = boothID;
+                   
+               }
+               
                boothproductdata.boothtitle = boothtitle;
                boothproductdata.cellID = CurentBoothID;
+               boothproductdata.cellID = CurentBoothID;
+               
+               boothproductdata.depositstype = depositstype;
+               boothproductdata.depositsamount = depositsamount;
+               boothproductdata.depositestatus = depositestatus;
                
               if(checkBoothPurchaseable(CurentBoothID) == "selled"){
                     
@@ -5334,6 +5399,14 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
                              allBoothsProductData[boothIndex].boothdescripition=boothdescripition;
                              allBoothsProductData[boothIndex].boothstatus=boothstatus;
                              allBoothsProductData[boothIndex].boothtitle=boothtitle;
+                             if(laststatusID == "" || laststatusID == "none" || laststatusID == "deleterequest"){
+                                 
+                               allBoothsProductData[boothIndex].boothID="";  
+                                 
+                             }
+                             allBoothsProductData[boothIndex].depositstype=depositstype;
+                             allBoothsProductData[boothIndex].depositsamount=depositsamount;
+                             allBoothsProductData[boothIndex].depositestatus=depositestatus;
                              
                         }
                         
@@ -5360,7 +5433,11 @@ html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="co
            jQuery("#manageboothtypes").hide();
            jQuery("#updateboothdetail").show();
            jQuery("#dontsellbutton").show();
-
+       }else{
+           
+           jQuery('.successmessage').append('<label style="color:red">Please select a Level.</label>');
+           
+       }
 
         });
 selectedBoothtitles =selectedBoothtitles.slice(0, -1);
@@ -5370,12 +5447,9 @@ if(popupstatus == 'multiboothselection' )  {
    
       
 }
-console.log(titlestatus);
-html+='<div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 80%;" id="boothprice" value="0" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Level <i class="far fa-question-circle" title="Set the Level the user will be assigned in ExpoGenie when they purchase this booth. Levels determine what Tasks show up on their Task list based on how you configured Levels and task assignment. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" style="border-radius: 5px;width:100%;">'+boothlevelname+'</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click into the booth that is available for self-purchase. Example content would be details around what the users get if they purchase this booth, such as booth size and other related benefits."></i></label></div><div class="col-sm-8"><textarea style="border-radius:5px;width:98%;height:120px;"id="boothdescripition" style="height:20px;"></textarea></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
-            
-           
-console.log(exhibitorstatus);     
 
+html+='<script>jQuery("#depositsstatus").click(function(){if(jQuery("#depositsstatus").prop( "checked" )){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 80%;" id="boothprice" value="0" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Level <i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth."></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" style="border-radius: 5px;width:100%;">'+boothlevelname+'</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth"></i></label></div><div class="col-sm-3"><input type="checkbox" id="depositsstatus" ></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" style="border-radius: 5px;width:100%;"><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="" type="number" ></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea style="border-radius:5px;width:98%;height:120px;"id="boothdescripition" style="height:20px;"></textarea></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
+ 
     if(popupstatus == 'success' || popupstatus == 'multiboothselection' ){   
             
             if(exhibitorstatus == 'deactive'){
@@ -5496,6 +5570,8 @@ console.log(exhibitorstatus);
 	return container;
         
 };
+
+
 
 function checkboothstatus(ID){
     
@@ -6242,7 +6318,17 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                 
                                var oldboothowner = cell[0].getAttribute('boothOwner', '');
                                var cellID = cell[0].id;
-                               
+                               if (boothproductvaluecheck != "") {
+                                  
+                                                boothproductvalue = boothproductvaluecheck;
+
+                                                console.log(boothproductvalue);
+
+                                            } else {
+
+                                                boothproductvalue = "";
+
+                                            }
                                if(oldboothowner !="" && oldboothowner!='none'){
                                    
                                    jQuery.each(allBoothsProductData,function(boothIndex,boothObject){
@@ -6250,6 +6336,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                         if(boothObject.cellID == cellID){
 
                                              allBoothsProductData[boothIndex].boothstatus="deleterequest";
+                                             boothproductvalue = ""; 
                                         }
                         
                                     });
@@ -6260,17 +6347,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                
                                node.setAttribute('boothOwner', getexhibortervalue);
                                 //document.getElementById("boothproduct");
-                               if (boothproductvaluecheck != "") {
-                                  
-                                    boothproductvalue = boothproductvaluecheck;
-                                    
-                                    console.log(boothproductvalue);
-
-                                } else {
-
-                                    boothproductvalue = "";
-
-                                }
+                               
                                node.setAttribute('boothproductid', boothproductvalue);
                                
                                 if(legendlabelscolor != "none" && legendlabelscolor !=""){
@@ -7323,7 +7400,7 @@ mxEvent.addListener(shapeSelect, 'change', function(evt)
 	var span = document.createElement('span');
 	span.style.fontWeight = 'bold';
 	span.style.marginRight = '5px';
-	mxUtils.write(span, 'Shape');
+	mxUtils.write(span, 'Shape'); 
 	div.appendChild(span);
 	
 	div.appendChild(shapeSelect);
@@ -7346,7 +7423,7 @@ StyleFormatPanel.prototype.addGeometry = function(container)
 	span.style.width = '50px';
 	span.style.marginTop = '0px';
 	span.style.fontWeight = 'bold';
-	mxUtils.write(span, mxResources.get('size'));
+	mxUtils.write(span, mxResources.get('size')+' (feet)'); //danyal
 	div.appendChild(span);
 
 	var widthUpdate, heightUpdate, leftUpdate, topUpdate;
@@ -7478,12 +7555,12 @@ StyleFormatPanel.prototype.addGeometry = function(container)
 			
 			if (force || document.activeElement != width)
 			{
-				width.value = rect.width / mxPixelPerFeet + ((rect.width == '') ? '' : ' ft');
+				width.value = rect.width / mxPixelPerFeet + ((rect.width == '') ? '' : ' '); //danyal ft
 			}
 			
 			if (force || document.activeElement != height)
 			{
-				height.value = rect.height / mxPixelPerFeet + ((rect.height == '') ? '' : ' ft');
+				height.value = rect.height / mxPixelPerFeet + ((rect.height == '') ? '' : ' '); //danyal ft
 			}
 		}
 		else
@@ -7753,8 +7830,14 @@ DiagramFormatPanel.prototype.init = function()
 	var ui = this.editorUi;
 	var editor = ui.editor;
 	var graph = editor.graph;
-
-	this.container.appendChild(this.addView(this.createPanel()));
+        
+       
+        
+        
+        
+	
+        //this.container.appendChild(this.multisitesub(this.createPanel()));
+        this.container.appendChild(this.addView(this.createPanel()));
 
 	if (graph.isEnabled())
 	{
@@ -7823,52 +7906,27 @@ DiagramFormatPanel.prototype.addView = function(div)
 	var editor = ui.editor;
 	var graph = editor.graph;
 	
+	    div.style.padding = '0px';
+	var label = document.createElement('div');
+        
+	label.style.borderBottom = '1px solid #c0c0c0';
+	label.style.borderWidth = '1px';
+	label.style.textAlign = 'center';
+	label.style.fontWeight = 'bold';
+	label.style.overflow = 'hidden';
+	label.style.display = (mxClient.IS_QUIRKS) ? 'inline' : 'inline-block';
+	label.style.paddingTop = '8px';
+	label.style.height = (mxClient.IS_QUIRKS) ? '34px' : '25px';
+	label.style.width = '100%';
+        label.className = 'customebgcolor';
+        label.innerHTML = 'Static Layer Settings <i class="far fa-question-circle" title="helpText"></i>';//edit
+	
+        div.appendChild(label);
 	
 	
-	// Adds an option to view the XML of the graph
-
-	/*
-	div.appendChild(mxUtils.button('View XML', function()
-	{
-		var dlg = new EditDiagramDialog(ui);
-		ui.showDialog(dlg.container, 620, 420, true, true);
-		dlg.init();
-	}));
-	*/
-	
-	//div.appendChild(this.createTitle(mxResources.get('view')));//edit
-	
-	// Grid
-	//this.addGridOption(div);
-
 	if (graph.isEnabled())
 	{
-		// Guides
-//		div.appendChild(this.createOption(mxResources.get('guides'), function()
-//		{
-//			return graph.graphHandler.guidesEnabled;
-//		}, function(checked)
-//		{
-//			ui.actions.get('guides').funct();
-//		},
-//		{
-//			install: function(apply)
-//			{
-//				this.listener = function()
-//				{
-//					apply(graph.graphHandler.guidesEnabled);
-//				};
-//				
-//				ui.addListener('guidesEnabledChanged', this.listener);
-//			},
-//			destroy: function()
-//			{
-//				ui.removeListener(this.listener);
-//			}
-//		}));
-		
 
-		
 		
 		
 		
@@ -7943,8 +8001,16 @@ DiagramFormatPanel.prototype.addView = function(div)
 			//bg.appendChild(btn);
 		}
 		
-		div.appendChild(btn);
-	}
+                 var downloadbutton2 = document.createElement('div');
+            downloadbutton2.style.marginTop = '10px';//edit 20px
+            downloadbutton2.style.marginLeft = '10%';
+            downloadbutton2.style.marginBottom = '10px';
+            downloadbutton2.id = 'mainDivdownloadButton';
+                
+		downloadbutton2.appendChild(btn);
+                div.appendChild(downloadbutton2);
+                }
+	
 	
         
       
@@ -7957,7 +8023,7 @@ DiagramFormatPanel.prototype.addView = function(div)
             
             var downloadbutton = document.createElement('div');
             downloadbutton.style.marginTop = '10px';//edit 20px
-            downloadbutton.style.marginLeft = '10%';
+            downloadbutton.style.marginLeft = '18%';
             downloadbutton.style.marginBottom = '10px';
             downloadbutton.id = 'mainDivdownloadButton';
             
@@ -7971,7 +8037,7 @@ DiagramFormatPanel.prototype.addView = function(div)
            // downloadLink.style.padding = '10px';
            
             downloadLink.className = 'myCustomeButton';
-            downloadLink.style.padding = '5px 36px 5px 36px';
+            downloadLink.style.padding = '5px 33px 5px 33px';
             downloadLink.innerHTML = 'Download Static Layer';//edit
             downloadbutton.style.display = 'none';
             
@@ -7994,6 +8060,121 @@ DiagramFormatPanel.prototype.addView = function(div)
 	return div;
 };
 
+
+
+DiagramFormatPanel.prototype.multisitesub = function(div)
+{
+	var ui = this.editorUi;
+	var editor = ui.editor;
+	var graph = editor.graph;
+        
+	
+	
+        var addfloorplantitle = document.createElement('p');
+        addfloorplantitle.style.marginTop = "5%";
+     
+	addfloorplantitle.innerHTML = "<strong>Floor Plan Title</strong>";
+        
+        
+       var Maindiv = document.createElement('p');
+        
+        var inputtypefloorplantitle = document.createElement('input');
+        inputtypefloorplantitle.type = "text";
+        inputtypefloorplantitle.id = "loadedfloorplanid";
+        inputtypefloorplantitle.style.width = "80%";
+        
+        Maindiv.appendChild(inputtypefloorplantitle);
+        
+        
+         var errormsg = document.createElement('p');
+         errormsg.innerHTML = "<strong style='color:red;text-align:center;'>Floor Plan Title is requried.</strong>";
+         errormsg.id = "floorplantitlerequreidmsg";
+         errormsg.style.display = "none";
+       
+        var selectfloorplandiv = document.createElement('p');
+	
+        var selectfloorplantitle = document.createElement('p');
+	selectfloorplantitle.innerHTML = "<strong>Select Floor Plan</strong>";
+        
+        var selectfloorplanfield = document.createElement('select');
+            selectfloorplanfield.id= "floorplanselectionID";
+            var listfloorplanoption = document.createElement('option');
+            listfloorplanoption.value = 'new';
+            listfloorplanoption.text = "Add New Floor Plan";
+            selectfloorplanfield.appendChild(listfloorplanoption);
+          
+            
+        jQuery.each(arrayfloorplanlist, function(index1, value) {
+            
+            var listfloorplanoption = document.createElement('option');
+            listfloorplanoption.value = value.ID;
+            listfloorplanoption.text = value.title;
+            if(mxPostID == value.ID){
+                 inputtypefloorplantitle.value = value.title;
+                 currentslectedboothtitle = value.title;
+                 inputtypefloorplantitle
+                 listfloorplanoption.setAttribute('selected', 'selected');
+                
+            }
+            
+            selectfloorplanfield.appendChild(listfloorplanoption);
+        });
+        
+        
+        
+        
+        mxEvent.addListener(selectfloorplanfield, 'change', function()
+	{
+            var currentfloorplanID = jQuery("#floorplanselectionID option:selected").val();
+            var loadedfloorplantitle = jQuery("#loadedfloorplanid").val();
+           // if(loadedfloorplantitle !=""){
+               // jQuery("#floorplantitlerequreidmsg").hide();
+            if(currentfloorplanID == "new"){
+             var data = new FormData();
+             data.append('loadedfloorplantitle', loadedfloorplantitle);
+             jQuery.ajax({
+                url: baseCurrentSiteURl + '/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=createnewfloorplan',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function (data) {
+                    
+                     window.location.replace(baseCurrentSiteURl+"/floor-plan-editor/?floorplanID="+data);
+                    
+                }
+            });
+            }else{
+                
+                 window.location.replace(baseCurrentSiteURl+"/floor-plan-editor/?floorplanID="+currentfloorplanID);
+            }
+            
+           // }else{
+                
+              //  jQuery("#floorplantitlerequreidmsg").show();
+                
+                
+           // }
+           
+            
+        });
+        
+        selectfloorplanfield.style.width = "80%";
+        selectfloorplandiv.appendChild(selectfloorplanfield);
+      
+        
+        
+         div.appendChild(addfloorplantitle);
+         div.appendChild(Maindiv);
+         div.appendChild(errormsg);
+         
+         div.appendChild(selectfloorplantitle);
+         div.appendChild(selectfloorplandiv);
+        
+        
+	return div;
+};
 
 function updatealllengends(){
     

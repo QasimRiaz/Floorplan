@@ -436,6 +436,7 @@ Actions.prototype.init = function()
                        
                      
                        var status = jQuery("#togglelockunlock").attr("name");
+                        var loadedfloorplantitle = currentslectedboothtitle;
             
                        if(status == 'unlock'){
                            
@@ -452,6 +453,8 @@ Actions.prototype.init = function()
             
                        mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
                        var currentbgImage = ui.editor.graph.getBackgroundImage();
+                       
+                       console.log(currentbgImage);
                        if(currentbgImage == null ){
                             mxFloorBackground = "";
                         }else{
@@ -465,6 +468,7 @@ Actions.prototype.init = function()
                        data.append('sellboothsjson', JSON.stringify(allBoothsProductData));
                        data.append('floorBG', mxFloorBackground);
                        data.append('floorXml', mxFloorPlanXml);
+                       data.append('loadedfloorplantitle', loadedfloorplantitle);
                        var popuphtml = '<p><img src="'+baseCurrentSiteURl+'/wp-content/plugins/floorplan/load1.gif"/></p>'; 
                           
         

@@ -4,7 +4,7 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 3.20
+ * Version: 3.3
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -64,9 +64,112 @@ if($_GET['floorplanRequest'] == "savedfloorplansettings") {
     savedlockunlockstatus($_REQUEST);
     die();
     
+}else if($_GET['floorplanRequest'] == "createnewfloorplan"){
+    
+    
+    require_once('../../../wp-load.php');
+    
+    createnewfloorplan($_REQUEST);
+    die();
+    
 }
 
 
+
+function woo_in_cart($product_id) {
+    
+    global $woocommerce;
+ 
+    foreach($woocommerce->cart->get_cart() as $key => $val ) {
+        $_product = $val['data'];
+ 
+        if($product_id == $_product->id ) {
+            return true;
+        }
+    }
+ 
+    return false;
+}
+
+function createnewfloorplan($postData){
+    
+    try{
+	
+        
+        $user_ID = get_current_user_id();
+        $user_info = get_userdata($user_ID);  
+        $lastInsertId = floorplan_contentmanagerlogging('Add New Floor Plan',"Admin Action",$postData,$user_ID,$user_info->user_email,"");
+        
+        $digits = 6;
+        $floorplandefaultname ="Floor Plan - ".rand(pow(10, $digits-1), pow(10, $digits)-1);
+        
+        if(!empty($postData['loadedfloorplantitle'])){
+            
+            $floorplandefaultname = $postData['loadedfloorplantitle'];
+            
+        }
+        
+            // Gather post data.
+            $my_post = array(
+                'post_title' => $floorplandefaultname,
+                'post_content' => '',
+                'post_status' => '',
+                'post_author' => 1,
+                'post_type'=>'floor_plan',
+               
+            );
+
+            // Insert the post into the database.
+               $id = wp_insert_post($my_post);
+               $contentmanager_settings['ContentManager']['floorplanactiveid'] = $id;
+           
+            $boothTypes ="[";
+            
+            $boothTypes.='{"width":100,"height":100,"style":"DefaultStyle1;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=18;uno=#fff;occ=#fff;glass=0;comic=0;shadow=0;"},';
+            
+            $boothTypes.='{"width":200,"height":200,"style":"DefaultStyle2;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=18;uno=#fff;occ=#fff;glass=0;comic=0;shadow=0;"},';
+            
+            $boothTypes.='{"width":300,"height":200,"style":"DefaultStyle3;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=18;uno=#fff;occ=#fff;glass=0;comic=0;shadow=0;"}';
+            
+            $boothTypes.=']';
+            
+            $FloorBackground = '';
+            
+            
+            $legendlabel = "[";
+            $legendlabel.='{"ID":1,"colorstatus":true,"name":"Gold","colorcode":#00000},';
+            $legendlabel.='{"ID":2,"colorstatus":true,"name":"Sliver","colorcode":#00000},';
+            $legendlabel.='{"ID":3,"colorstatus":true,"name":"Red","colorcode":#00000}';
+           
+            $legendlabel .= "]";
+            
+            $FloorplanXml[0] = '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" pageWidth="2175" pageHeight="2175" ><root></root></mxGraphModel>';
+            
+            //   update_option( 'ContenteManager_Settings', $contentmanager_settings );
+               update_post_meta( $id, 'booth_types', $boothTypes );
+               update_post_meta( $id, 'floor_background', $FloorBackground);
+               update_post_meta( $id, 'floorplan_xml', $FloorplanXml[0] );
+               update_post_meta( $id, 'legendlabels', $legendlabel );
+               update_post_meta( $id, 'floorplantitle', 'Defualt Floor Plan' );
+               update_post_meta( $id, 'legendlabels', "" );
+               update_post_meta( $id, 'pricetegs', "" );
+               update_post_meta( $id, 'sellboothsjson', "" );
+               update_post_meta( $id, 'updateboothpurchasestatus', "" );
+             
+        
+        contentmanagerlogging_file_upload ($lastInsertId,serialize($post_request));
+        
+        echo $id;
+        
+        
+    }catch (Exception $e) {
+       
+     
+        return $e;
+        
+    }
+    
+}
 
 
 
@@ -100,6 +203,10 @@ function getproductdetail($productID){
     try{
 	
         $id = $productID['pro_id'];
+        
+        
+        
+        
         $floorplanID = $productID['floorplanID'];
         $woocommerce_rest_api_keys = get_option( 'ContenteManager_Settings' );
         $wooconsumerkey = $woocommerce_rest_api_keys['ContentManager']['wooconsumerkey'];
@@ -166,9 +273,19 @@ function getproductdetail($productID){
         
        $productdetail['floorplanstatus'] =  get_post_meta($floorplanID, 'updateboothpurchasestatus', true );
         
+       if(woo_in_cart($id)) {
+            
+          $productdetail['status'] = 'alreadyexistproduct';
+            
+            
+        }else{
+            
+            $productdetail['status'] = 'unassigned';
+        }
+       
        echo json_encode($productdetail);
        exit;
-        
+      
         
         
         
@@ -366,7 +483,14 @@ function getBoothList($postdata) {
 	update_post_meta( $postdata['post_id'], 'floor_background', $postdata['floorBG'] );
 	update_post_meta( $postdata['post_id'], 'floorplan_xml', $postdata['floorXml'] );
         update_post_meta( $postdata['post_id'], 'sellboothsjson', $postdata['sellboothsjson'] );
-        
+        $my_post = array(
+            'ID'           => $postdata['post_id'],
+            'post_title'   => $postdata['loadedfloorplantitle']
+           
+            );
+
+
+         wp_update_post( $my_post );
        
         
         
@@ -733,6 +857,19 @@ function array_msort($array, $cols)
 function floorplan_shortcode( $atts, $content = null ) {
     
     
+    
+    if(isset($_GET['floorplanID'])){
+        
+        
+        $id = $_GET['floorplanID'];
+        
+    }else{
+        
+        $id = "default";
+    }
+    
+   
+    
     $floorplanstatus = false;
     if (current_user_can('administrator') || current_user_can('contentmanager')) {
 		$floorplanstatus = true;
@@ -747,20 +884,51 @@ function floorplan_shortcode( $atts, $content = null ) {
 	}
 	if($floorplanstatus == true){
 		
-	extract(shortcode_atts(array("id" => '',"status" =>''), $atts));
+	extract(shortcode_atts(array("iid" => '',"status" =>''), $atts));
         $getAllusers_data = addslashes(json_encode(getAllusers_data()));
         
-        $contentmanager_settings = get_option( 'ContenteManager_Settings' );
-	$id = $contentmanager_settings['ContentManager']['floorplanactiveid'];
        
-        $wooconsumerkey = $contentmanager_settings['ContentManager']['wooconsumerkey'];
-        $wooseceretkey = $contentmanager_settings['ContentManager']['wooseceretkey'];
         
-        if(empty($id)){
+        if($id == "default"){
+         
+            $contentmanager_settings = get_option( 'ContenteManager_Settings' );
+            $id = $contentmanager_settings['ContentManager']['floorplanactiveid'];
+            $wooconsumerkey = $contentmanager_settings['ContentManager']['wooconsumerkey'];
+            $wooseceretkey = $contentmanager_settings['ContentManager']['wooseceretkey'];
+        
+        }
+        
+        
+        $args_floorplan = array(
+                 'posts_per_page'   => -1,
+                 'orderby'          => 'date',
+                 'order'            => 'DESC',
+                 'post_type'        => 'floor_plan',
+                 'post_status'      => 'draft',
+
+            );
+        $getlistofallpostsFloorplan = get_posts( $args_floorplan );
+       
+         foreach ($getlistofallpostsFloorplan as $listfloorplanindex => $listfloorplanValue) {
+                
+                
+                $listoffloorplan[$listfloorplanValue->ID]=$listfloorplanValue->post_title;
+                
+            }
+            
+            $listoffloorplan = json_encode($listoffloorplan);
+        
+        if(empty($id) || $id == 'new'){
               
             // Gather post data.
+            
+            $digits = 6;
+        $floorplandefaultname ="Floor Plan - ".rand(pow(10, $digits-1), pow(10, $digits)-1);
+        
+        
+            
             $my_post = array(
-                'post_title' => 'Defualt Floor Plan',
+                'post_title' => $floorplandefaultname, 
                 'post_content' => '',
                 'post_status' => '',
                 'post_author' => 1,
@@ -794,12 +962,16 @@ function floorplan_shortcode( $atts, $content = null ) {
             
             $FloorplanXml[0] = '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" pageWidth="2175" pageHeight="2175" ><root></root></mxGraphModel>';
             
-               update_option( 'ContenteManager_Settings', $contentmanager_settings );
+              // update_option( 'ContenteManager_Settings', $contentmanager_settings );
                update_post_meta( $id, 'booth_types', $boothTypes );
                update_post_meta( $id, 'floor_background', $FloorBackground);
                update_post_meta( $id, 'floorplan_xml', $FloorplanXml[0] );
                update_post_meta( $id, 'legendlabels', $legendlabel );
-            
+               update_post_meta( $id, 'floorplantitle', 'Defualt Floor Plan' );
+               update_post_meta( $id, 'legendlabels', "" );
+               update_post_meta( $id, 'pricetegs', "" );
+               update_post_meta( $id, 'sellboothsjson', "" );
+               update_post_meta( $id, 'updateboothpurchasestatus', "" );
              
          }
         
@@ -815,6 +987,11 @@ function floorplan_shortcode( $atts, $content = null ) {
             $floorplanstatuslockunlock = get_post_meta( $id, 'updateboothpurchasestatus', true );
             
             
+            
+            
+           
+            
+           
            
             $args = array(
                  'posts_per_page'   => -1,

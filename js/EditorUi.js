@@ -1033,8 +1033,13 @@ EditorUi = function(editor, container, lightbox)
                                                 
                                                 
                                                 var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+websiteURLhtml+'</div><div id="contactdiv" style="display:none;"class="tabcontent">Contact Us....</div>';
-
+                                                console.log(3)
                                                 jQuery('body').css('cursor', 'default');
+                                                
+                                                if(popupstatus == 'off'){
+                                                            
+                                                            popupstatus = 'on';
+                                                            
                                                     jQuery.confirm({
                                                         title: '<i class="far fa-id-card"></i> '+companynameas,
                                                         content: newopenhtml,
@@ -1043,7 +1048,12 @@ EditorUi = function(editor, container, lightbox)
                                                         cancelButton: false,
                                                      
                                                         closeIcon: true,
-                                                        columnClass: 'jconfirm-box-container-viewerBOx'
+                                                        columnClass: 'jconfirm-box-container-viewerBOx',
+                                                        cancel: function () {
+                                                                    //close
+                                                                    popupstatus = 'off';
+                                                                    
+                                                                }
 
                                                     });  
                                                      jQuery( ".closeIcon" ).each(function() {
@@ -1054,6 +1064,7 @@ EditorUi = function(editor, container, lightbox)
                                                             jQuery( this ).children().html( "Close" );
                                                             
                                                           });
+                                                      }
                                            
                                     }else{
                                            
@@ -1077,6 +1088,7 @@ EditorUi = function(editor, container, lightbox)
 
                                                         var finalresultProduct = jQuery.parseJSON(data);
                                                         var floorplanstatus = finalresultProduct.floorplanstatus;
+                                                        var productstatus = finalresultProduct.status;
                                                         var buttonsdiv = "";
                                                         console.log(finalresultProduct);
                                                         
@@ -1110,9 +1122,20 @@ EditorUi = function(editor, container, lightbox)
                                                 
                                                         }
                                                         if(finalresultProduct.stockstatus == 'instock'){
-
-                                                            htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+')"  >Add To Cart</a></p>';
+                                                            
+                                                            
+                                                            if(productstatus == 'alreadyexistproduct'){
+                                                                
+                                                                 htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-success btn-small" >Added</a></p>';
                                                         
+                                                                
+                                                            }else{
+                                                                
+                                                                htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+')"  >Add To Cart</a></p>';
+                                                         
+                                                            }
+                                                            
+                                                           
                                                         }else{
 
                                                             htmlforproductdetail += "<p style='float:right;'><strong style='color:red'>Stock Out</strong></p>";
@@ -1136,11 +1159,22 @@ EditorUi = function(editor, container, lightbox)
                                                         if(floorplanstatus == 'unlock'){
                                                             if(finalresultProduct.stockstatus == 'instock'){ 
                                                                 
-                                                                     buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-small btn-info "  onclick="addToCart('+postid+')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
+                                                                     
+                                                                      if(productstatus == 'alreadyexistproduct'){
                                                                 
+                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-success btn-small" >Added</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank"  >Check Out</a></div></div>'
+                                                                    
+                                                                
+                                                                        }else{
+                                                                
+                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-small btn-info "  onclick="addToCart('+postid+')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
+                                                                    
+                                                                    }
+                                                                     
+                                                                     
                                                                 }else{
                                                                     
-                                                                     buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;"><strong style="color:red">Out Of Stock </strong></p></div>'
+                                                                     buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;"><strong style="color:red">No Longer Available </strong></p></div>'
                                                        
                                                                     
                                                                 }
@@ -1162,8 +1196,11 @@ EditorUi = function(editor, container, lightbox)
                                                        
                                                         
                                                         var newopenhtml='<div class="tab"><button class="tablinks" >Product Info</button></div><div id="London" class="tabcontent">'+openhtml+'</div>'+buttonsdiv;
-
+                                                        if(popupstatus == 'off'){
+                                                            
+                                                            popupstatus = 'on';
                                                          var checkopenfunction  = jQuery.confirm({
+                                                             
                                                             title: '<i class="far fa-id-card"></i> '+popupstatustitle,
                                                             content: newopenhtml,
                                                             confirmButton: false,
@@ -1171,8 +1208,12 @@ EditorUi = function(editor, container, lightbox)
                                                             cancelButton: false,
                                                           
                                                             closeIcon: true,
-                                                            columnClass: 'jconfirm-box-container-viewerBOx viewerBOxwhenproducton'
-
+                                                            columnClass: 'jconfirm-box-container-viewerBOx viewerBOxwhenproducton',
+                                                            cancel: function () {
+                                                                    //close
+                                                                    popupstatus = 'off';
+                                                                    
+                                                                },
                                                         });
                                                         
                                                         jQuery( ".closeIcon" ).each(function() {
@@ -1183,6 +1224,7 @@ EditorUi = function(editor, container, lightbox)
                                                             jQuery( this ).children().html( "Close" );
                                                             
                                                           });
+                                                        }
                                                         
                                                     }
                                                  });   
@@ -1210,7 +1252,7 @@ EditorUi = function(editor, container, lightbox)
                                                var productDescription = '<h6 >' + htmlcompanydescription + '</h6>';
                                                htmlforassignedbooth = '<h5 >Booth Number:   <span style="font-size:14px;" >' + assignedboothname + '</span></h5>';
                                                companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
-                                                       var boothtitle = '<h5 ><strong>Booth Number: </strong>' + assignedboothname + '</h5>';
+                                               var boothtitle = '<h5 ><strong>Booth Number: </strong>' + assignedboothname + '</h5>';
                                                          
                                                          
                                                          
@@ -1229,6 +1271,10 @@ EditorUi = function(editor, container, lightbox)
                                                 
                                                 
                                                 jQuery('body').css('cursor', 'default');
+                                                 console.log(2)
+                                                    if(popupstatus == 'off'){
+                                                            
+                                                            popupstatus = 'on';
                                                     jQuery.confirm({
                                                         title: '<i class="far fa-id-card"></i> '+assignedboothname,
                                                         content: newopenhtml,
@@ -1237,7 +1283,12 @@ EditorUi = function(editor, container, lightbox)
                                                         cancelButton: false,
                                                      
                                                         closeIcon: true,
-                                                        columnClass: 'jconfirm-box-container-viewerBOx viewerBOxwhenproducton'
+                                                        columnClass: 'jconfirm-box-container-viewerBOx viewerBOxwhenproducton',
+                                                         cancel: function () {
+                                                                    //close
+                                                                    popupstatus = 'off';
+                                                                    
+                                                                }
 
                                                     });   
                                                 
@@ -1249,6 +1300,7 @@ EditorUi = function(editor, container, lightbox)
                                                             jQuery( this ).children().html( "Close" );
                                                             
                                                           });
+                                                      }
                                             }
                                                
                                        }

@@ -8,8 +8,10 @@
        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-1.12.4.js"></script>
 	<script type="text/javascript">
             var hex=new Array('0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f');
+            var popupstatus = 'off';
             pluginBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>';
             removeLegendLabel = "";
+            var currentslectedboothtitle = "";
 		mxBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>src';
 		mxPostID = '<?php echo $id; ?>';
 		mxBoothTypes = '<?php echo $boothTypes; ?>';
@@ -21,6 +23,9 @@
 		mxCurrentSiteTitle = '<?php echo $current_site_name; ?>';
 		mxCurrentSiteUrl = '<?php echo $current_site_url; ?>';
                 mxgetAllusersData = '<?php echo $getAllusers_data; ?>';
+                mxgetallfloorplanlist = '<?php echo $listoffloorplan; ?>';
+                
+                
                 mxgetjosnusersData = JSON.parse(mxgetAllusersData);
                 console.log(mxgetjosnusersData)
                 floorplanstatuslockunlock ='<?php echo $floorplanstatuslockunlock;?>';
@@ -87,6 +92,7 @@
                 var PricetegsObjects = [];
                 var arrayoflevelsObjects = [];
                 var arrayoftasksObjects = [];
+                var arrayfloorplanlist = [];
 		var json = {};
                 var legendsdilog;
 		//console.log(mxFloorPlanXml);
@@ -130,8 +136,27 @@
                         
 			arrayoflevelsObjects.push(json1);
 		   });
-                   console.log(arrayoflevelsObjects);
+                  
                 }
+                
+                if(mxgetallfloorplanlist !=""){
+                  
+                    mxgetallfloorplanlist = JSON.parse(mxgetallfloorplanlist);
+                    
+                    jQuery.each(mxgetallfloorplanlist, function(index1, value1) {
+			json1 = {};
+			json1.ID = index1;
+			json1.title =value1;
+			
+                        
+			arrayfloorplanlist.push(json1);
+		   });
+                   
+                 
+                   
+                }
+                
+                
                 
                 if(arrayoftasks !=""){
                     console.log(arrayoftasks);
@@ -168,9 +193,9 @@
                 
                 
              
-		//console.log(jsonBooth);
 		
-                
+		
+               
                
 	</script>
 
@@ -230,19 +255,26 @@
 		// Default resources are included in grapheditor resources
 		mxLoadResources = false;
 	</script>
-        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-confirm.js?v=2.20"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Init.js?v=2.21"></script>
+        
+        
+        
+        
+       
+          <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-confirm.js?v=2.20"></script>
+      
+	
+        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Init.js?v=2.21"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>jscolor/jscolor.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>sanitizer/sanitizer.min.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=2.57"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=4.26"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=4.37"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.31"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.45"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.60"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.75"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.78"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=7.83"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=9.27"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=2.85"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=3.17"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.19"></script>
@@ -257,9 +289,7 @@
          
          
          
-         <?php if($current_floor_plan_status == 'viewer' ){?>
-        
-         <?}?>
+      
    
         
         
@@ -320,7 +350,41 @@
 		})();
                 
                  
+                    
+                    
+                    
+                    
+
+jQuery(window).load(function() {
+   
+   jQuery('.block-msg-default').remove();
+   jQuery('.blockOverlay').remove();
+  
+});
+                        
+
+
+                   
+
+                       
+                    
+               
                 
                 
 	</script>
         
+        
+          
+         <?php if($current_floor_plan_status != 'viewer' ){?>
+        
+        
+   
+        
+        
+        <div class="blockUI" style="display:none;"></div>
+        <div class="blockUI blockOverlay" style="z-index: 1000; border: none; margin: 0px; padding: 0px; width: 100%; height: 100%; top: 0px; left: 0px; background: rgba(142, 159, 167, 0.8); opacity: 1; cursor: wait; position: absolute;"></div>
+        <div class="blockUI block-msg-default blockElement" style="z-index: 1011; position: absolute; padding: 0px; margin: 0px;  top: 300px;  text-align: center; color: rgb(0, 0, 0);  cursor: wait; height: 200px;left: 47%;">
+            <div class="blockui-default-message" style="color: #fff;">
+        <i class="fa fa-circle-o-notch fa-spin fa-2x"></i><h2 style="color: #fff;">Please Wait..</h2></div></div> 
+    
+         <?}?>
