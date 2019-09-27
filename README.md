@@ -1,1 +1,11 @@
-~Current Version:3.33~
+~Current Version:3.40~
+
+
+
+-------------------27-09-2019-----------------
+Release Items
+
+1.Add Upload Static Layer Confirmation
+2.Remove "s" from "Legends"
+3.Exhibitor list on FP case sensitive
+

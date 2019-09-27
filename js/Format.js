@@ -7963,24 +7963,48 @@ DiagramFormatPanel.prototype.addView = function(div)
 		{
 			var btn = mxUtils.button(mxResources.get('image'), function(evt)
 			{
+				
+				
+				
+				
+				
+				
 				//ui.showBackgroundImageDialog();
 				//mxEvent.consume(evt);
 				
-				window.openFile = new OpenFile(mxUtils.bind(this, function()
-				{
-					ui.hideDialog();
-				}));
-				
-				window.openFile.setConsumer(mxUtils.bind(this, function(xml, filename)
-				{
-					ui.newBackgroundImage = filename;
-					ui.showBackgroundImageDialog();
-				}));
-		
-				// Removes openFile if dialog is closed
-				ui.showDialog(new OpenDialog(this).container, 320, 120, true, true, function()
-				{
-					window.openFile = null;
+				swal({
+                                        
+					title: "Are you sure?",
+					text: 'Performing this action will replace the current static layer on the floor plan and cannot be undone. It is highly recommended you first download the static layer and save the current version. If you need to make a change on the static layer of the floor plan and are unsure, please contact support@expo-genie.com for assistance.',
+					type: "info",
+					showCancelButton: true,
+					confirmButtonText: "Yes",
+					cancelButtonText: "No",
+					confirmButtonClass: "btn-info",
+					closeOnConfirm: false
+				}).then(function(isConfirm) {
+					
+					
+				if(isConfirm) {
+					window.openFile = new OpenFile(mxUtils.bind(this, function()
+					{
+						ui.hideDialog();
+						
+					}));
+					
+					window.openFile.setConsumer(mxUtils.bind(this, function(xml, filename)
+					{
+						ui.newBackgroundImage = filename;
+						ui.showBackgroundImageDialog();
+					}));
+			
+					// Removes openFile if dialog is closed
+					ui.showDialog(new OpenDialog(this).container, 320, 120, true, true, function()
+					{
+						window.openFile = null;
+					});
+				}
+
 				});
 				
 			})

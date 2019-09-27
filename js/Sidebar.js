@@ -909,8 +909,8 @@ Sidebar.prototype.addGeneralPalette = function(expand)
            // this.addPaletteFunctionsCustom('general1', "Custom Booth Types", (expand != null) ? expand : true, fns);
         }else{
            
-        
-         this.addLegendsFunctions(graph, 'generalLegends', "Legends", (expand != null) ? expand : true, LegendsOfObjects); 
+        //danyal edit lagend lable
+         this.addLegendsFunctions(graph, 'generalLegends', "Legend", (expand != null) ? expand : true, LegendsOfObjects); 
          this.addExhibitorsFunctions(graph, 'generalExhibitors', "Exhibitors", (expand != null) ? expand : true, mxgetjosnusersData); 
             
         }

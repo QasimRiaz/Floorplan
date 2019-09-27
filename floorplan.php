@@ -4,7 +4,7 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 3.33
+ * Version: 3.40
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -987,7 +987,10 @@ function floorplan_shortcode( $atts, $content = null ) {
             $floorplanstatuslockunlock = get_post_meta( $id, 'updateboothpurchasestatus', true );
             
             
-            
+            $user_ID = get_current_user_id();
+            $user_info = get_userdata($user_ID);  
+            $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Viewer Loading',"User view",$FloorplanXml[0],$user_ID,$user_info->user_email,"specialLoging");
+        
             
            
             

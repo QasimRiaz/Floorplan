@@ -57,15 +57,18 @@
                     
                 });
                   console.log(newcompanynamesArray)
-                function mysortfunction(a, b) {
-
-                    
-                    if(a.companyname < b.companyname) { return -1; }
-                    if(a.companyname > b.companyname) { return 1; }
-                    return 0;
-                    
-                }
-                newcompanynamesArray.sort(mysortfunction);
+				  
+				  
+				  
+                //danyal case senstive
+				function SortByName(a, b){
+				  var aName = a.companyname.toLowerCase();
+				  var bName = b.companyname.toLowerCase(); 
+				  return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+				}
+				
+				newcompanynamesArray = newcompanynamesArray.sort(SortByName);
+                //#end
                 
                 console.log(newcompanynamesArray)
                 
@@ -269,12 +272,12 @@
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=2.57"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=4.37"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.31"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.45"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.46"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.60"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.78"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=9.27"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=9.28"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=2.85"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=3.17"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.19"></script>
