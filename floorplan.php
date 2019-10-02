@@ -4,7 +4,7 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 3.40
+ * Version: 3.42
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -711,7 +711,7 @@ function getAllusers_data(){
                     
                 }
               
-                $allUsersData[$index]['companyname'] = ucfirst($all_meta_for_user[$site_prefix.'company_name'][0]);
+                $allUsersData[$index]['companyname'] = $all_meta_for_user[$site_prefix.'company_name'][0];
                 $allUsersData[$index]['companylogourl'] = $all_meta_for_user[$site_prefix.'user_profile_url'][0];
                 $allUsersData[$index]['exhibitorsid'] = $aid->ID;
                
