@@ -2256,7 +2256,13 @@ Graph.prototype.getTooltipForCell = function(cell)
                              
                             if(mxgetjosnusersData[key].exhibitorsid == boothOwner){
                                 newcompanyname = mxgetjosnusersData[key].companyname;
-                                companylogourll = mxgetjosnusersData[key].COL;
+                                if(mxgetjosnusersData[key].COL!="" && mxgetjosnusersData[key].COL==null){
+                                    
+                                    companylogourll = mxgetjosnusersData[key].COL;
+                                }else{
+                                    companylogourll = mxgetjosnusersData[key].companylogourl;
+                                    
+                                }
                                
                             }
                           });
