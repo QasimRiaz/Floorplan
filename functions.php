@@ -27,16 +27,16 @@
                 
                 
                 mxgetjosnusersData = JSON.parse(mxgetAllusersData);
-                console.log(mxgetjosnusersData)
+                //console.log(mxgetjosnusersData)
                 floorplanstatuslockunlock ='<?php echo $floorplanstatuslockunlock;?>';
                 
                 
               
                 allBoothsProductData = '<?php echo $sellboothsjson; ?>';
-                 console.log(allBoothsProductData);
+                // console.log(allBoothsProductData);
                 if(allBoothsProductData !=""){
                     allBoothsProductData = allBoothsProductData.replace(/\\/g, '');
-                     console.log(allBoothsProductData);
+                     //console.log(allBoothsProductData);
                     allBoothsProductData = JSON.parse(allBoothsProductData);
                     
                 }else{
@@ -44,7 +44,7 @@
                      allBoothsProductData =  [];
                 }
                 
-                console.log(allBoothsProductData);
+                //console.log(allBoothsProductData);
                 newcompanynamesArray = [];
                
                 jQuery.each( mxgetjosnusersData, function( key, value ) {
@@ -56,7 +56,7 @@
                     newcompanynamesArray.push(indexarray);
                     
                 });
-                  console.log(newcompanynamesArray)
+                 // console.log(newcompanynamesArray)
 				  
 				  
 				  
@@ -70,7 +70,7 @@
 				newcompanynamesArray = newcompanynamesArray.sort(SortByName);
                 //#end
                 
-                console.log(newcompanynamesArray)
+               // console.log(newcompanynamesArray)
                 
                 
                 boothsproducts ='<?php echo $boothsproductsData; ?>';
@@ -273,7 +273,7 @@
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=4.37"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.31"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.46"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.60"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.61"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.19"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.78"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.19"></script>

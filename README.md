@@ -1,4 +1,4 @@
-~Current Version:3.42~
+~Current Version:3.43~
 
 
 
@@ -9,3 +9,6 @@ Release Items
 2.Remove "s" from "Legends"
 3.Exhibitor list on FP case sensitive
 
+-------------------10-10-2019--3.43 Bug Fix release---------------
+
+1. Show logo on booth tooltip
