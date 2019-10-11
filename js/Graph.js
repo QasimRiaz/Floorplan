@@ -2256,7 +2256,7 @@ Graph.prototype.getTooltipForCell = function(cell)
                              
                             if(mxgetjosnusersData[key].exhibitorsid == boothOwner){
                                 newcompanyname = mxgetjosnusersData[key].companyname;
-                                if(mxgetjosnusersData[key].COL!="" && mxgetjosnusersData[key].COL==null){
+                                if(mxgetjosnusersData[key].COL!="" && mxgetjosnusersData[key].COL!=null){
                                     
                                     companylogourll = mxgetjosnusersData[key].COL;
                                 }else{
