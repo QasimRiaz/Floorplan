@@ -5126,7 +5126,7 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
             var boothprice = jQuery("#boothprice").val();
             var boothlevel = jQuery("#boothlevelvalue option:selected").val();
             var boothtasks = jQuery("#boothtasksvalues ").val();
-            var boothdescripition = jQuery("#boothdescripition").val();
+            var boothdescripition = unescape(jQuery("#boothdescripition").val());
              var depositstype = "";
             var depositsamount = "";
             var depositestatus = "unchecked";

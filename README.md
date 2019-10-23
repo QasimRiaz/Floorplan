@@ -1,4 +1,4 @@
-~Current Version:3.45~
+~Current Version:3.46~
 
 
 
@@ -12,3 +12,7 @@ Release Items
 -------------------10-10-2019--3.43 Bug Fix release---------------
 
 1. Show logo on booth tooltip
+
+-------------------23-10-2019--3.46 Bug Fix release---------------
+
+-Fixed Product description
