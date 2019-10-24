@@ -1105,7 +1105,7 @@ EditorUi = function(editor, container, lightbox)
                                                             
                                                         } 
                                                          
-                                                          var productDescription = '<h6 >' + finalresultProduct.description + '</h6>';
+                                                          var productDescription = '<h6 >' + unescape(finalresultProduct.description) + '</h6>';
                                                          
                                                         
                                                        
@@ -1114,7 +1114,7 @@ EditorUi = function(editor, container, lightbox)
                                                          
                                                         htmlforproductdetail += "<div class='row'><div class='col-sm-6'><h2>"+finalresultProduct.title+"</h2><p><strong>Price : "+finalresultProduct.price+"</strong></p></div><div class='col-sm-3'><p style='text-align:center;margin-top: 25px;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div>";
                                                       
-                                                        htmlforproductdetail += "<p>"+finalresultProduct.description+"</p><hr>";
+                                                        htmlforproductdetail += "<p>"+unescape(finalresultProduct.description)+"</p><hr>";
                                                          if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
                                                      htmlcompanydescription = '<h6 ><div >'+unescape(companydescription)+'</div></h6>';
