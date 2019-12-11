@@ -427,6 +427,13 @@ Actions.prototype.init = function()
                                     
             
         });
+        
+        this.addAction('floorplanview', function(evt)
+	{
+            window.open(baseCurrentSiteURl+'/floor-plan-viewer/');
+            
+        }, null, null, 'FloorPlanView');
+        
         this.addAction('save', function(evt)
 	{
                     

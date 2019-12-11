@@ -939,9 +939,17 @@ EditorUi = function(editor, container, lightbox)
                                         var htmlforassignedbooth = '';
                                         var boothtitle ="";
                                         var htmlforaddress = '';
-                                         var imagesrc ="";
-                                         var websiteURLhtml = "";
-                                        console.log(userid);
+                                        var imagesrc ="";
+                                        var websiteURLhtml = "";
+                                        var contactname = "";
+                                        var contactphonenumber="";
+                                        var contactemail = "";
+                                        var contactnameHTML = "";
+                                        var contactphonenumberHTML = "";
+                                        var contactemailHTML = "";
+                                        
+                                        
+                                       
                                         if(userid !="" && userid != "none" && reportData){
                                            
                                                 
@@ -955,6 +963,11 @@ EditorUi = function(editor, container, lightbox)
                                                   profilelogourl = index.companylogourl;
                                                   companywebsite = index.COW;
                                                   companydescription  = index.COD;
+                                                  contactname  = index.CON;
+                                                  contactphonenumber  = index.COP;
+                                                  contactemail  = index.COE;
+                                                  
+                                                  
                                                  
                                                     if (companywebsite == null || companywebsite == '') {
                                                         
@@ -967,7 +980,41 @@ EditorUi = function(editor, container, lightbox)
                                               
                                                         
                                                     }
-                                                 
+                                                    
+                                                    if (contactname == null || contactname == '') {
+                                                        
+                                                         contactnameHTML = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         contactnameHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Name:</strong></div><div class="col-sm-5">'+contactname+'</div></div>';	
+                                              
+                                                        
+                                                    }
+                                                    
+                                                    if (contactphonenumber == null || contactphonenumber == '') {
+                                                        
+                                                         contactphonenumberHTML = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         contactphonenumberHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Phone:</strong></div><div class="col-sm-5">'+contactphonenumber+'</div></div>';	
+                                              
+                                                        
+                                                    }
+                                                    if (contactemail == null || contactemail == '') {
+                                                        
+                                                         contactemailHTML = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         contactemailHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Email:</strong></div><div class="col-sm-5">'+contactemail+'</div></div>';	
+                                              
+                                                        
+                                                    }
                                                  
                                                       if (companylogourlnew == null || companylogourlnew == '') {
                                                           
@@ -1005,9 +1052,6 @@ EditorUi = function(editor, container, lightbox)
                                                       htmlforassignedbooth = '';
                                                       }
                                                       
-                                                      
-                                                      
-                                                      
                                                       if (index.address_line_1 != "") {
 
                                                         htmlforaddress = '<p>' + index.address_line_1 + ', ' + index.usercity + ', ' + index.usercountry + '</p>';
@@ -1020,10 +1064,8 @@ EditorUi = function(editor, container, lightbox)
                                                             
                                                             companynameas = "";
                                                         }
-                                                  }
-                                                  
-                                                   
-                                              });
+                                                    }
+                                                });
                                               
                                               
                                                
@@ -1031,9 +1073,9 @@ EditorUi = function(editor, container, lightbox)
                                                 //openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
                                                 var openhtml = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
                                                 
+                                                var contactinformation = contactnameHTML+contactphonenumberHTML+contactemailHTML;
+                                                var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+websiteURLhtml+'</div><div id="contactdiv" class="tabcontent" style="display:none;">'+contactinformation+'</div>';
                                                 
-                                                var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+websiteURLhtml+'</div><div id="contactdiv" style="display:none;"class="tabcontent">Contact Us....</div>';
-                                                console.log(3)
                                                 jQuery('body').css('cursor', 'default');
                                                 
                                                 if(popupstatus == 'off'){
@@ -1112,8 +1154,15 @@ EditorUi = function(editor, container, lightbox)
                                                         
                                                         var productICon = "<p style='float:right;margin-top: 10px;'><img width='125' src='"+finalresultProduct.src+"'></p>";
                                                          
-                                                        htmlforproductdetail += "<div class='row'><div class='col-sm-6'><h2>"+finalresultProduct.title+"</h2><p><strong>Price : "+finalresultProduct.price+"</strong></p></div><div class='col-sm-3'><p style='text-align:center;margin-top: 25px;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div>";
-                                                      
+                                                         if(userloggedinstatus == true){ 
+                                                        
+                                                            htmlforproductdetail += "<div class='row'><div class='col-sm-6'><h2>"+finalresultProduct.title+"</h2><p><strong>Price : "+finalresultProduct.price+"</strong></p></div><div class='col-sm-3'><p style='text-align:center;margin-top: 25px;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div>";
+                                                       
+                                                        }else{
+                                                            htmlforproductdetail += "<div class='row'><div class='col-sm-6'><h2>"+finalresultProduct.title+"</h2></div><div class='col-sm-3'><p style='text-align:center;margin-top: 25px;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div>";
+                                                        
+                                                            
+                                                        }
                                                         htmlforproductdetail += "<p>"+unescape(finalresultProduct.description)+"</p><hr>";
                                                          if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
@@ -1142,8 +1191,16 @@ EditorUi = function(editor, container, lightbox)
                                                         }
 
                                                       if(finalresultProduct.productstatus == "exist"){ 
-                                                      
-                                                         var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >'+productprice+''+boothtitle+productDescription+'</div><div class="col-sm-2">'+productICon+'</div></div>';	
+                                                          
+                                                          
+                                                        if(userloggedinstatus == true){ 
+                                                        
+                                                            var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >'+productprice+''+boothtitle+productDescription+'</div><div class="col-sm-2">'+productICon+'</div></div>';	
+                                                        
+                                                        }else{
+                                                            
+                                                            var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >'+boothtitle+productDescription+'</div><div class="col-sm-2">'+productICon+'</div></div>';	
+                                                        }
                                                          var popupstatustitle = "Available for Purchase"; 
                                                         }else{
                                                             

@@ -3480,9 +3480,18 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                             var companywebsite = index.COW;
                                             var htmlforassignedbooth='';
                                             var htmlforaddress = '' ;
-                                             var imagesrc ="";
+                                            var imagesrc ="";
+                                            var contactname = "";
+                                            var contactphonenumber="";
+                                            var contactemail = "";
+                                            var contactnameHTML = "";
+                                            var contactphonenumberHTML = "";
+                                            var contactemailHTML = "";
+                                        
                                               companydescription  = index.COD;
-                                             
+                                              contactname  = index.CON;
+                                              contactphonenumber  = index.COP;
+                                              contactemail  = index.COE;
                                             
                                              if (companylogourlnew == null || companylogourlnew == '') {
                                                           
@@ -3530,7 +3539,40 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                                 htmlforaddress = '<p>'+index.address_line_1+', '+index.usercity+', '+index.usercountry+'</p></hr>';
 
                                             }
-                                            
+                                             if (contactname == null || contactname == '') {
+                                                        
+                                                         contactnameHTML = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         contactnameHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Name:</strong></div><div class="col-sm-5">'+contactname+'</div></div>';	
+                                              
+                                                        
+                                                    }
+                                                    
+                                                    if (contactphonenumber == null || contactphonenumber == '') {
+                                                        
+                                                         contactphonenumberHTML = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         contactphonenumberHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Phone:</strong></div><div class="col-sm-5">'+contactphonenumber+'</div></div>';	
+                                              
+                                                        
+                                                    }
+                                                    if (contactemail == null || contactemail == '') {
+                                                        
+                                                         contactemailHTML = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         contactemailHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Email:</strong></div><div class="col-sm-5">'+contactemail+'</div></div>';	
+                                              
+                                                        
+                                                    }
                                             
                                           
                                                  var boothtitle = imagesrc;     
@@ -3538,8 +3580,9 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                                  var openhtml = '<div class="row" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+htmlforassignedbooth+htmlcompanydescription+'</div></div>';	
                                               
                                                  //var openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top: 6%;float:left;text-align:center"><img width="200" src="'+companylogourlnew+'" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >'+index.companyname+'</h1>'+htmlforaddress+'<hr>'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div></div>';
-                                                 var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+websiteURLhtml+'</div><div id="contactdiv" style="display:none;"class="tabcontent">Contact Us....</div>';
- 
+                                                 var contactinformation = contactnameHTML+contactphonenumberHTML+contactemailHTML;
+                                                 var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+websiteURLhtml+'</div><div id="contactdiv" class="tabcontent" style="display:none;">'+contactinformation+'</div>';
+                                                
                                              
                                                  jQuery('body').css('cursor', 'default');
                                                     jQuery.confirm({
@@ -3675,13 +3718,13 @@ function toggletabs(tabID){
          
     
      jQuery("#mainprofile").removeClass("unactive");
-     jQuery("#contactus").addClass("unactive");
+     jQuery("#contacttab").addClass("unactive");
      jQuery("#mainprofilediv").show();
      jQuery("#contactdiv").hide();
      
      }else{
          
-        jQuery("#contactus").removeClass("unactive");
+        jQuery("#contacttab").removeClass("unactive");
         jQuery("#mainprofile").addClass("unactive");
         jQuery("#mainprofilediv").hide();
         jQuery("#contactdiv").show();

@@ -216,6 +216,11 @@ Toolbar.prototype.init = function()
              
              
              
+             var abcd = this.addItems(['-', 'floorplanview']);
+             abcd[1].setAttribute('title', 'Public View');
+             abcd[1].setAttribute('class', 'mycustomstylelink');
+             abcd[1].innerHTML= '<button style="margin-left: 10px;" target="_blank" class="myCustomeButton">Public View</button>';//'Save';//('title', 'Save');
+             
                 
         }else{
             

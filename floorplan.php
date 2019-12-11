@@ -4,7 +4,7 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 3.49
+ * Version: 3.50
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -962,7 +962,7 @@ function floorplan_shortcode( $atts, $content = null ) {
             
             $FloorplanXml[0] = '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" pageWidth="2175" pageHeight="2175" ><root></root></mxGraphModel>';
             
-              // update_option( 'ContenteManager_Settings', $contentmanager_settings );
+               update_option( 'ContenteManager_Settings', $contentmanager_settings );
                update_post_meta( $id, 'booth_types', $boothTypes );
                update_post_meta( $id, 'floor_background', $FloorBackground);
                update_post_meta( $id, 'floorplan_xml', $FloorplanXml[0] );

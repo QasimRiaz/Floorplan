@@ -2226,7 +2226,7 @@ Graph.prototype.zoomOut = function()
  */
 Graph.prototype.getTooltipForCell = function(cell)
 {
-	console.log(cell);
+	
         
         
         
@@ -2235,24 +2235,27 @@ Graph.prototype.getTooltipForCell = function(cell)
 	var tip = '';
 	var cellStyle = cell.style;
         var labelvalue = cell.getAttribute('mylabel', '');
-        var boothDetail = unescape(cell.getAttribute('companydescripiton', ''));
+       
         var boothOwner = cell.getAttribute('boothOwner', '');
+        var  boothproductid = cell.getAttribute('boothproductid', '');
+        
+        
         var companylogourll = "";
         var newcompanyname = "";
-        var boothdetail = boothDetail;
+        var boothdetail = "";
+        var companyurl = "";
+        var showDescription ="";
         
         if(labelvalue !=""){
             var boothlebabl = 'Booth number: '+labelvalue;
         }else{
             var boothlebabl = "Booth number: ";
         }
-        if(boothOwner !="<None>" && boothOwner !=""){
-            
-            
-            
-        jQuery.each(mxgetjosnusersData, function (key, valuee) {
-                               
-                             
+        
+        if(boothOwner !="" && boothOwner != "none" && boothOwner !="<None>" ){
+             
+             
+                        jQuery.each(mxgetjosnusersData, function (key, valuee) {
                              
                             if(mxgetjosnusersData[key].exhibitorsid == boothOwner){
                                 newcompanyname = mxgetjosnusersData[key].companyname;
@@ -2263,60 +2266,70 @@ Graph.prototype.getTooltipForCell = function(cell)
                                     companylogourll = mxgetjosnusersData[key].companylogourl;
                                     
                                 }
+                                if(mxgetjosnusersData[key].COL!="" && mxgetjosnusersData[key].COL!=null){
+                                    
+                                    companyurl = mxgetjosnusersData[key].COW;
+                                }else{
+                                    companyurl = "";
+                                    
+                                }
+                                if(mxgetjosnusersData[key].COD!="" && mxgetjosnusersData[key].COD!=null){
+                                    
+                                    boothdetail = mxgetjosnusersData[key].COD;
+                                }else{
+                                    boothdetail = "";
+                                    
+                                }
                                
                             }
                           });
-                      }
-                      if(companylogourll != '' && companylogourll != null){
+            if(companylogourll != '' && companylogourll != null){
                          
-                                tip = '<img src="'+companylogourll+'"  width="50" /> <br />'+newcompanyname+'<br />'+boothlebabl+'</br>'+boothdetail;
-                        }else{
-                            
-                                tip = newcompanyname+'<br />'+boothlebabl+'</br>'+boothdetail;
-                        }
+                tip = '<img src="'+companylogourll+'"  width="50" /> <br />'+newcompanyname+'<br />'+companyurl+'<br />'+boothlebabl+'</br>'+boothdetail;
+             }else{
+                
+                tip = newcompanyname+'<br />'+companyurl+'<br />'+boothlebabl+'</br>'+boothdetail;
+            }
 	
-	
-//	if (mxUtils.isNode(cell.value))
-//	{
-//		var tmp = cell.value.getAttribute('tooltip');
-//		
-//		if (tmp != null)
-//		{
-//			if (tmp != null && this.isReplacePlaceholders(cell))
-//			{
-//				tmp = this.replacePlaceholders(cell, tmp);
-//			}
-//			
-//			tip = this.sanitizeHtml(tmp);
-//		}
-//		else
-//		{
-//			var ignored = ['label', 'tooltip', 'placeholders', 'placeholder'];
-//			var attrs = cell.value.attributes;
-//			
-//			// Hides links in edit mode
-//			if (this.isEnabled())
-//			{
-//				ignored.push('link');
-//			}
-//			
-//			for (var i = 0; i < attrs.length; i++)
-//			{
-//				if (mxUtils.indexOf(ignored, attrs[i].nodeName) < 0 && attrs[i].nodeValue.length > 0)
-//				{
-//					tip += ((attrs[i].nodeName != 'link') ? attrs[i].nodeName + ':' : '') +
-//						mxUtils.htmlEntities(attrs[i].nodeValue) + '\n';
-//				}
-//			}
-//			
-//			if (tip.length > 0)
-//			{
-//				tip = tip.substring(0, tip.length - 1);
-//			}
-//		}
-//	}
-	
-	return tip;
+            return tip; 
+             
+        }else{
+            
+            if(boothproductid !="" && boothproductid !="undefined" && boothproductid !="none"){
+
+
+                                                    jQuery.each(allBoothsProductData,function(boothIndex,boothObject){
+                                                        
+                                                        if(boothObject.boothID == boothproductid){
+                                                            
+                                                            var boothdescripition = boothObject.boothdescripition;
+                                                            if(boothdescripition == null){
+
+                                                                boothdescripition="";
+
+                                                             } 
+                                                             boothdetail = unescape(boothdescripition);
+                                                        }
+                                                        
+                                                    });
+                                                    tip = boothlebabl+'</br>'+boothdetail;
+                                                    return tip;
+
+                                                       
+            }else{
+            
+            
+                var boothDetail = unescape(cell.getAttribute('companydescripiton', ''));
+                boothdetail = boothDetail;
+                tip = boothlebabl+'</br>'+boothdetail;
+                return tip;
+            }
+    }
+        
+        
+        
+        
+           
 };
 
 /**
