@@ -2266,7 +2266,7 @@ Graph.prototype.getTooltipForCell = function(cell)
                                     companylogourll = mxgetjosnusersData[key].companylogourl;
                                     
                                 }
-                                if(mxgetjosnusersData[key].COL!="" && mxgetjosnusersData[key].COL!=null){
+                                if(mxgetjosnusersData[key].COW!="" && mxgetjosnusersData[key].COW!=null){
                                     
                                     companyurl = mxgetjosnusersData[key].COW;
                                 }else{

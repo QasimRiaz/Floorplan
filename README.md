@@ -1,4 +1,4 @@
-~Current Version:3.50~
+~Current Version:3.51~
 
 
 
@@ -25,3 +25,6 @@ Release Items
 3.Floor Plan - Public View for Booths for Sale
 4.Move Floor Plan View Button
 
+-------------------13-12-2019--3.51 Bug Fix release---------------
+
+1. Remove Null value when Url empty
