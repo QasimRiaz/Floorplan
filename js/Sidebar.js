@@ -3546,7 +3546,7 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                                         
                                                     }else{
                                                         
-                                                         contactnameHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Name:</strong></div><div class="col-sm-5">'+contactname+'</div></div>';	
+                                                         contactnameHTML = '<div class="row" style="margin-bottom: 10px;margin-top: 15px;"><div class="col-sm-3" ><strong>Contact Name:</strong></div><div class="col-sm-5">'+contactname+'</div></div>';	
                                               
                                                         
                                                     }
@@ -3558,7 +3558,7 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                                         
                                                     }else{
                                                         
-                                                         contactphonenumberHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Phone:</strong></div><div class="col-sm-5">'+contactphonenumber+'</div></div>';	
+                                                         contactphonenumberHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Phone:</strong></div><div class="col-sm-5">'+contactphonenumber+'</div></div>';	
                                               
                                                         
                                                     }
@@ -3569,7 +3569,7 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                                         
                                                     }else{
                                                         
-                                                         contactemailHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Email:</strong></div><div class="col-sm-5">'+contactemail+'</div></div>';	
+                                                         contactemailHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Email:</strong></div><div class="col-sm-5">'+contactemail+'</div></div>';	
                                               
                                                         
                                                     }

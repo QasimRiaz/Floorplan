@@ -27,4 +27,8 @@ Release Items
 
 -------------------13-12-2019--3.51 Bug Fix release---------------
 
-1. Remove Null value when Url empty
+1. Remove Null value when URL empty
+
+-------------------20-12-2019--3.52 Change request Fix release---------------
+
+1. Adjust the Contact Information layout

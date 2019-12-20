@@ -988,7 +988,7 @@ EditorUi = function(editor, container, lightbox)
                                                         
                                                     }else{
                                                         
-                                                         contactnameHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Name:</strong></div><div class="col-sm-5">'+contactname+'</div></div>';	
+                                                         contactnameHTML = '<div class="row" style="margin-bottom: 10px;margin-top: 15px;"><div class="col-sm-3" ><strong>Contact Name:</strong></div><div class="col-sm-5">'+contactname+'</div></div>';	
                                               
                                                         
                                                     }
@@ -1000,7 +1000,7 @@ EditorUi = function(editor, container, lightbox)
                                                         
                                                     }else{
                                                         
-                                                         contactphonenumberHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Phone:</strong></div><div class="col-sm-5">'+contactphonenumber+'</div></div>';	
+                                                         contactphonenumberHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Phone:</strong></div><div class="col-sm-5">'+contactphonenumber+'</div></div>';	
                                               
                                                         
                                                     }
@@ -1011,7 +1011,7 @@ EditorUi = function(editor, container, lightbox)
                                                         
                                                     }else{
                                                         
-                                                         contactemailHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-1" ></div><div class="col-sm-3" ><strong>Contact Email:</strong></div><div class="col-sm-5">'+contactemail+'</div></div>';	
+                                                         contactemailHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Email:</strong></div><div class="col-sm-5">'+contactemail+'</div></div>';	
                                               
                                                         
                                                     }
@@ -1074,7 +1074,7 @@ EditorUi = function(editor, container, lightbox)
                                                 var openhtml = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
                                                 
                                                 var contactinformation = contactnameHTML+contactphonenumberHTML+contactemailHTML;
-                                                var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+websiteURLhtml+'</div><div id="contactdiv" class="tabcontent" style="display:none;">'+contactinformation+'</div>';
+                                                var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+websiteURLhtml+'</div><div  id="contactdiv" class="tabcontent" style="display:none;">'+contactinformation+'</div>';
                                                 
                                                 jQuery('body').css('cursor', 'default');
                                                 
