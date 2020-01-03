@@ -929,6 +929,8 @@ EditorUi = function(editor, container, lightbox)
                                         var  boothproductid = cell.getAttribute('boothproductid', '');
                                         
                                         var reportData = jQuery.parseJSON(mxgetAllusersData);
+                                        
+                                        
                                         var openhtml = "";
                                         var tablehtml = '';
                                         var curr_dat = '';
@@ -963,9 +965,14 @@ EditorUi = function(editor, container, lightbox)
                                                   profilelogourl = index.companylogourl;
                                                   companywebsite = index.COW;
                                                   companydescription  = index.COD;
+                                                  
                                                   contactname  = index.CON;
                                                   contactphonenumber  = index.COP;
                                                   contactemail  = index.COE;
+                                                  
+                                                  console.log(contactname);
+                                                  console.log(contactphonenumber);
+                                                  console.log(contactemail);
                                                   
                                                   
                                                  
@@ -1073,8 +1080,17 @@ EditorUi = function(editor, container, lightbox)
                                                 //openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
                                                 var openhtml = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
                                                 
-                                                var contactinformation = contactnameHTML+contactphonenumberHTML+contactemailHTML;
-                                                var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent">'+openhtml+websiteURLhtml+'</div><div  id="contactdiv" class="tabcontent" style="display:none;">'+contactinformation+'</div>';
+                                                
+												var contactinformation = contactnameHTML+contactphonenumberHTML+contactemailHTML;
+												
+												
+												if(contactname == undefined  && contactphonenumber == undefined && contactemail == undefined ){
+                                                                                                    
+													var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent" style="margin-bottom: 10px;">'+openhtml+websiteURLhtml+'</div>';
+												}
+												else {
+													var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent" style="margin-bottom: 10px;">'+openhtml+websiteURLhtml+'</div><div  id="contactdiv" class="tabcontent" style="display:none;min-height: 130px;margin-bottom: 10px;">'+contactinformation+'</div>';
+												}
                                                 
                                                 jQuery('body').css('cursor', 'default');
                                                 

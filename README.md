@@ -1,4 +1,4 @@
-~Current Version:3.51~
+~Current Version:3.53~
 
 
 
@@ -32,3 +32,7 @@ Release Items
 -------------------20-12-2019--3.52 Change request Fix release---------------
 
 1. Adjust the Contact Information layout
+
+-------------------20-12-2019--3.53 Change request Fix release---------------
+
+1. Adjust the Pop-up Contact Information
