@@ -530,7 +530,9 @@ Actions.prototype.init = function()
                                        confirmButtonText: "Close",
                                        onClose:function(){
                                            
-                                           
+                                           jQuery("#savebutton").attr('disabled', 'disabled');
+                                           jQuery("#savebutton").css('cursor', 'not-allowed');
+                                          
                                            location.reload();
                                         }
                                        });

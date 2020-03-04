@@ -212,7 +212,7 @@ Toolbar.prototype.init = function()
              var elts = this.addItems(['-', 'save']);
              elts[1].setAttribute('title', 'Save');
              elts[1].setAttribute('class', 'mycustomstylelink');
-             elts[1].innerHTML= '<button class="myCustomeButton">Save</button>';//'Save';//('title', 'Save');
+             elts[1].innerHTML= '<button id="savebutton" class="myCustomeButton">Save</button>';//'Save';//('title', 'Save');
              
              
              
