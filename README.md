@@ -1,4 +1,4 @@
-~Current Version:3.53~
+~Current Version:3.54~
 
 
 
@@ -36,3 +36,8 @@ Release Items
 -------------------20-12-2019--3.53 Change request Fix release---------------
 
 1. Adjust the Pop-up Contact Information
+
+
+-------------------04-02-2020--3.54 Prevent FLoor plan popup close---------------
+
+1. Prevent FLoor plan popup close

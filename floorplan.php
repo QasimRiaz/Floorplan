@@ -4,7 +4,7 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 3.53
+ * Version: 3.54
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -476,7 +476,15 @@ function getBoothList($postdata) {
         
         
         $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Settings Saved',"Admin Action","",$user_ID,$user_info->user_email,$postdata);
-      
+        
+        // $Flo_test= '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" ';
+            
+        
+        $CurrentXML = simplexml_load_string(stripslashes($postdata['floorXml']));
+        
+        
+        
+        if($CurrentXML !== FALSE ){
         
         
 	update_post_meta( $postdata['post_id'], 'booth_types', trim($boothTypes) );
@@ -509,7 +517,11 @@ function getBoothList($postdata) {
             
             
         }
-        
+        }else{
+            
+            echo 'faildXmlError';
+            
+        }
         
         
         

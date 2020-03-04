@@ -484,6 +484,7 @@ Actions.prototype.init = function()
                                        html:popuphtml,
                                        type: "info",
                                        confirmButtonClass: "btn-info",
+                                       allowOutsideClick: false,
                                        showConfirmButton: false,
                                        closeOnClickOutside: false
                                    });
@@ -500,21 +501,45 @@ Actions.prototype.init = function()
                                     ui.updateGraphStatus();
                                     
                                     swal.close();
+                                    
                                    
-                                    swal({
+                                    if(data == "faildXmlError"){
+                                        swal({
+                                       title: "Error",
+                                       text:"There was an error during the requested operation. The Floor plan was not saved successfully. Please try again.",
+                                       type: "error",
+                                       confirmButtonClass: "btn-danger",
+                                       allowOutsideClick: false,
+                                       confirmButtonText: "Close",
+                                       onClose:function(){
+                                           
+                                           
+                                           //location.reload();
+                                        }
+                                       });
+                                      
+                                    }else{
+                                        
+                                        
+                                      swal({
                                        title: "Success",
                                        text:"Floor Plan settings has been updated successfully.",
                                        type: "success",
                                        confirmButtonClass: "btn-success",
+                                       allowOutsideClick: false,
                                        confirmButtonText: "Close",
                                        onClose:function(){
                                            
                                            
                                            location.reload();
-                                           
-                                       }
+                                        }
+                                       });
                                       
-                                   });
+                                        
+                                        
+                                    }
+                                    
+                                    
                                           
                                 
                                    
