@@ -1,4 +1,4 @@
-~Current Version:3.55~
+~Current Version:3.60~
 
 
 
@@ -37,7 +37,8 @@ Release Items
 
 1. Adjust the Pop-up Contact Information
 
+-------------------11-05-2020--3.60 New release---------------
 
--------------------04-02-2020--3.54 Prevent FLoor plan popup close---------------
-
-1. Prevent FLoor plan popup close
+1. Legend Labels Logic Update
+2.Multiple Tags per Booth
+3.Prevent 'Please wait' Popup on FLoor plan

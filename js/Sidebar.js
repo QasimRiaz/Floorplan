@@ -911,8 +911,9 @@ Sidebar.prototype.addGeneralPalette = function(expand)
            
         //danyal edit lagend lable
          this.addLegendsFunctions(graph, 'generalLegends', "Legend", (expand != null) ? expand : true, LegendsOfObjects); 
+         this.addBoothtagsFunctions(graph, 'generalboothtags', "Booth Tags", (expand != null) ? expand : false, BoothTagsObjects); 
          this.addExhibitorsFunctions(graph, 'generalExhibitors', "Exhibitors", (expand != null) ? expand : true, mxgetjosnusersData); 
-            
+         
         }
     
       
@@ -3263,6 +3264,123 @@ Sidebar.prototype.addPaletteFunctionsCustom = function(id, title, expanded, fns,
 		}
 	}));
 };
+
+Sidebar.prototype.addBoothtagsFunctions = function(graph, id, title, expanded, fns,condition)
+{
+         if(condition){
+        
+         }
+        
+	this.addPalette(id, title, false, mxUtils.bind(this, function(addcontent)
+	{           
+                   
+                    
+                    var div = document.createElement('ul');
+                    div.className ="legendslist";
+                    var boothdetailleft = "";
+                    jQuery.each(BoothTagsObjects, function (key, value) {
+                        
+                        var li = document.createElement('li');
+                        li.className = 'boothtagtLi';
+                        
+                        var anchor = document.createElement('a');
+                        anchor.innerHTML = value.name;
+                        anchor.id = value.ID;
+                        
+                      mxEvent.addListener(anchor, 'mouseenter', function(sender, evt)
+                            {
+                                    var cells = graph.getChildVertices(graph.getDefaultParent());
+                                    
+                                     jQuery(cells).each(function () {
+                                           
+                                            var cell = this; //abdd[i];
+                                            
+                                            if (cell != null)
+                                                {
+                                                    
+                                                   var usercurrentid = cell.getAttribute('boothtags', ''); 
+                                                   
+                                                   var boothtagsArray = usercurrentid.split(",");
+                                                   
+                                                                    if (jQuery.inArray(value.ID ,boothtagsArray) !=-1) {
+
+                                                                        var overlays = graph.getCellOverlays(cell);
+                                                                            if (overlays == null)
+                                                                            {
+                                                                                // Creates a new overlay with an image and a tooltip
+                                                                                var overlay = new mxCellOverlay(
+                                                                                        new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
+                                                                                        'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
+
+                                                                                // Installs a handler for clicks on the overlay							
+                                                                                overlay.addListener(mxEvent.CLICK, function (sender, evt2)
+                                                                                {
+                                                                                    mxUtils.alert('Overlay clicked');
+                                                                                });
+
+                                                                                // Sets the overlay for the cell in the graph
+                                                                                graph.addCellOverlay(cell, overlay);
+                                                                            }
+
+
+                                                                    }
+
+                                                             
+                                                        
+                                                   
+                                                    
+                                                }
+                                            
+                                           
+                                        });
+                              
+                                
+                            });
+                            
+                            mxEvent.addListener(anchor, 'mouseleave', function()
+                            {
+                                var cells = graph.getChildVertices(graph.getDefaultParent());
+                                    
+                                     jQuery(cells).each(function () {
+                                           
+                                            var cell = this; //abdd[i];
+                                            
+                                            if (cell != null)
+                                                {
+                                                    
+                                                   var usercurrentid = cell.getAttribute('boothtags', ''); 
+                                                   
+                                                   var boothtagsArray = usercurrentid.split(",");
+                                                   if (jQuery.inArray(value.ID ,boothtagsArray) !=-1) {
+
+                                                            graph.removeCellOverlays(cell);
+
+
+                                                    }
+                                               }
+                                            
+                                           
+                                        });    
+                                
+                                
+                               
+                            });
+        
+                            //div.innerHTML+='<li  class="pointedonmap '+pointclassname+'"><a onmouseover="bigImg('+mxgetjosnusersData[key].exhibitorsid+','+graph+')" onclick="getallDetialuser('+mxgetjosnusersData[key].exhibitorsid+')" >'+mxgetjosnusersData[key].companyname+'</a></li>';
+                            li.appendChild(anchor);
+                            div.appendChild(li);
+                        
+                    
+
+                });
+                    
+        
+              addcontent.appendChild(div);         
+            //  jQuery('.geSidebarContainer').append(div);         	
+		
+	}));
+};
+
 Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns,condition)
 {
          if(condition){

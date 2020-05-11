@@ -927,6 +927,28 @@ EditorUi = function(editor, container, lightbox)
                                         var boothdetail  = cell.getAttribute('boothDetail', '');
                                         var companydescription  = cell.getAttribute('companydescripiton', '');
                                         var  boothproductid = cell.getAttribute('boothproductid', '');
+                                        var  tagslist = cell.getAttribute('boothtags', '');
+                                        var tagsnameslist ="";
+                                        if(tagslist !=""){
+                                         jQuery.each(BoothTagsObjects, function(index1, value) {
+            
+                                            
+                                            var foreachvalues = tagslist.split(',');
+
+                                            if(jQuery.inArray(value.ID, foreachvalues ) !=-1){
+
+                                              tagsnameslist+=value.name+","
+
+                                           }
+
+
+                                            
+                                        });
+                                        tagsnameslist = tagsnameslist.replace(/,\s*$/, "");
+                                        console.log(tagsnameslist);
+                          
+                                     }
+                                        
                                         
                                         var reportData = jQuery.parseJSON(mxgetAllusersData);
                                         
@@ -1309,24 +1331,30 @@ EditorUi = function(editor, container, lightbox)
                                                 
                                             }else{
                                                 
-                                                var tablehtml = '';
+                                               var tablehtml = '';
                                                var curr_dat = '';
                                                var companylogourlnew = '';
                                                var htmlforassignedbooth = '';
                                                var htmlforaddress = '';
-                                                  if(companydescription != "" && typeof companydescription !== "undefined" ){
+                                               if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
                                                      htmlcompanydescription = '<div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
                                                      
                                                 
                                                 
-                                                        }
+                                                }
                                                         
                                                var productDescription = '<h6 >' + htmlcompanydescription + '</h6>';
                                                htmlforassignedbooth = '<h5 >Booth Number:   <span style="font-size:14px;" >' + assignedboothname + '</span></h5>';
                                                companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
                                                var boothtitle = '<h5 ><strong>Booth Number: </strong>' + assignedboothname + '</h5>';
-                                                         
+                                               if(tagsnameslist == ""){
+                                                   
+                                                   var boothtagslist = "";    
+                                               }else{
+                                                 var boothtagslist = "<p><h5><strong>Tags:</strong></h5> "+tagsnameslist+"</p>";      
+                                               }                                               
+                                                     
                                                          
                                                          
                                                           
@@ -1334,12 +1362,8 @@ EditorUi = function(editor, container, lightbox)
                                               // openhtml = '<div class="row"><div class="col-sm-4" style="margin-top: 2%;">'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-6"></div></div>';	
                                                 
                                                 //  var openhtml = '<div class="row" style="padding:30px;" ><div class="col-sm-5">'+imagesrc+''+htmlforaddress+''+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-5">'+htmlforproductdetail+'</div></div>';
-                                                        var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+''+productDescription+'</div></div>';	
-                                                        
-                                                        
-                                                       
-                                                        
-                                                        var newopenhtml='<div class="tab"><button class="tablinks" >Booth Info</button></div><div id="London" class="tabcontent">'+openhtml+'</div>';
+                                                var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+''+productDescription+boothtagslist+'</div></div>';	
+                                                var newopenhtml='<div class="tab"><button class="tablinks" >Booth Info</button></div><div id="London" class="tabcontent">'+openhtml+'</div>';
 
                                                 
                                                 

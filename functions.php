@@ -9,13 +9,18 @@
 	<script type="text/javascript">
             var hex=new Array('0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f');
             var popupstatus = 'off';
+          
             pluginBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>';
             removeLegendLabel = "";
+            boothTagsList = "";
+
             var currentslectedboothtitle = "";
 		mxBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>src';
 		mxPostID = '<?php echo $id; ?>';
 		mxBoothTypes = '<?php echo $boothTypes; ?>';
                 mxLegendLabelsTypes = '<?php echo $FloorplanLegends; ?>';
+                mxBoothtagsTypes = '<?php echo $FloorplanTags; ?>';
+                
 		mxFloorBackground = '<?php echo $FloorBackground; ?>';
 		mxFloorPlanXml = '<?php echo $FloorplanXml[0]; ?>';
                
@@ -92,6 +97,7 @@
                 
 		var ArrayOfObjects = [];
                 var LegendsOfObjects = [];
+                var BoothTagsObjects = [];
                 var PricetegsObjects = [];
                 var arrayoflevelsObjects = [];
                 var arrayoftasksObjects = [];
@@ -112,6 +118,7 @@
 			json.style = jsonBooth[index].style;
 			ArrayOfObjects.push(json);
 		});
+                
                 if(mxLegendLabelsTypes !=""){
                 
                 var jsonLegends = JSON.parse(mxLegendLabelsTypes);
@@ -123,8 +130,24 @@
 			json1.colorstatus = jsonLegends[index1].colorstatus;
 			json1.name = jsonLegends[index1].name,
 			json1.colorcode = jsonLegends[index1].colorcode;
+                        json1.colorcodeOcc = jsonLegends[index1].colorcodeOcc;
                         
 			LegendsOfObjects.push(json1);
+		});
+                
+                
+                }
+                
+                if(mxBoothtagsTypes !=""){
+                
+                var jsonLegends = JSON.parse(mxBoothtagsTypes);
+                
+               
+                jQuery.each(jsonLegends, function(index1, value1) {
+			json1 = {};
+			json1.ID = jsonLegends[index1].ID;
+			json1.name = jsonLegends[index1].name,
+			BoothTagsObjects.push(json1);
 		});
                 
                 
@@ -208,15 +231,16 @@
         <?php if($current_floor_plan_status == 'viewer' ){?>
         <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/main.css">
         <?php } ?>
-        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/grapheditor.css?v=1.60">
+        <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/grapheditor.css?v=1.62">
        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/sweetalert2/latest/sweetalert2.min.css">
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mobile-detect.min.js?v=2.19"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+        
 
       <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/jquery-confirm.css?v=2.15">
-        
+      <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/spectrum.css?v=2.15">
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 	<script type="text/javascript">
 		// Parses URL parameters. Supported parameters are:
 		// - lang=xy: Specifies the language of the user interface.
@@ -260,35 +284,35 @@
 	</script>
         
         
-        
+       
         
        
-        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-confirm.js?v=2.20"></script>
-        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Init.js?v=2.21"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>jscolor/jscolor.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>sanitizer/sanitizer.min.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=2.57"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=4.58"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.32"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.56"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.70"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.89"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.19"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=9.33"></script>
+        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-confirm.js?v=2.21"></script>
+        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Init.js?v=2.22"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>jscolor/jscolor.js?v=2.22"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>sanitizer/sanitizer.min.js?v=2.22"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=2.85"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=4.73"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.61"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.69"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.74"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.75"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.83"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.77"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=4.62"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=2.95"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=3.17"></script>
-        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.19"></script>
-        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery.printPage.js?v=2.19"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=3.78"></script>
+        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.78"></script>
+        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery.printPage.js?v=2.78"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
         <script type="text/javascript" src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/sweetalert2/latest/sweetalert2.min.js"></script>
       
-         
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     
          
-         
+         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/spectrum.js?v=2.78"></script> 
          
       
    
@@ -300,6 +324,16 @@
              
                 jQuery(document).ready(function() {
                     jQuery(".geSprite-print").printPage();
+                    jQuery(".customepickcolor").spectrum({
+                        showPalette: true,
+                        chooseText: "Apply",
+                        cancelText: "Cancel",
+                        palette: [
+                        ['black', 'white', 'blanchedalmond'],
+                        ['rgb(255, 128, 0);', 'hsv 100 70 50', 'lightyellow']
+                        ]
+                    });
+                    
                 });
                 
 		(function()
@@ -374,12 +408,45 @@ jQuery(window).load(function() {
                 
 	</script>
         
-        
+        <style>
+            
+            .select2-results__options {
+    background: #ffffff !important;
+    border: 1px #cccccc solid !important;
+}
+.select2-container--default .select2-dropdown .select2-search {
+    border-bottom: none; 
+    padding: 0px 0px; 
+    border-top: none; 
+    margin-top: 0px; 
+}
+.select2-search--dropdown {
+    
+    padding: 0px; 
+}
+.select2-results__option, .select2-search--dropdown {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.select2-container--default .select2-dropdown .select2-search input {
+    padding: 0px
+    
+}
+.select2-results__option[aria-selected] {
+   
+    color: #333 !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+    
+     color: #333 !important;
+}
+            
+        </style>
           
          <?php if($current_floor_plan_status != 'viewer' ){?>
         
         
-   
+            
         
         
         <div class="blockUI" style="display:none;"></div>
@@ -389,3 +456,5 @@ jQuery(window).load(function() {
         <i class="fa fa-circle-o-notch fa-spin fa-2x"></i><h2 style="color: #fff;">Please Wait..</h2></div></div> 
     
          <?}?>
+
+         

@@ -5311,14 +5311,17 @@ var mxUtils =
 	 * value - New value for the given key.
 	 */
 	setCellStyles: function(model, cells, key, value)
-	{
+	{         
+                
+                 
 		if (cells != null && cells.length > 0)
-		{
+		{       
+                        
 			model.beginUpdate();
 			try
 			{
 				for (var i = 0; i < cells.length; i++)
-				{
+				{       
 					if (cells[i] != null)
 					{
 						var style = mxUtils.setStyle(model.getStyle(cells[i]), key, value);
@@ -5330,7 +5333,24 @@ var mxUtils =
 			{
 				model.endUpdate();
 			}
-		}
+		}else{
+                    model.beginUpdate();
+			try
+			{
+				
+				
+					if (cells != null)
+					{
+						var style = mxUtils.setStyle(model.getStyle(cells), key, value);
+						model.setStyle(cells, style);
+					}
+				
+			}
+			finally
+			{
+				model.endUpdate();
+			}
+                }
 	},
 	
 	/**
@@ -65068,7 +65088,9 @@ mxGraph.prototype.selectChildCell = function()
  * isChild - Boolean indicating if the first child cell should be selected.
  */
 mxGraph.prototype.selectCell = function(isNext, isParent, isChild)
-{
+{       
+    
+        console.log("TestHere");
 	var sel = this.selectionModel;
 	var cell = (sel.cells.length > 0) ? sel.cells[0] : null;
 	
@@ -65220,7 +65242,8 @@ mxGraph.prototype.selectCells = function(vertices, edges, parent)
  * evt - Optional mouseevent that triggered the selection.
  */
 mxGraph.prototype.selectCellForEvent = function(cell, evt)
-{
+{       
+        
 	var isSelected = this.isCellSelected(cell);
 	
 	if (this.isToggleEvent(evt))
@@ -65238,6 +65261,9 @@ mxGraph.prototype.selectCellForEvent = function(cell, evt)
 	{
 		this.setSelectionCell(cell);
 	}
+        console.log("select2");
+        jQuery('.select2').select2();
+        
 };
 
 /**
@@ -65262,6 +65288,7 @@ mxGraph.prototype.selectCellsForEvent = function(cells, evt)
 	{
 		this.setSelectionCells(cells);
 	}
+        jQuery('.select2').select2();
 };
 
 /**
