@@ -4683,6 +4683,23 @@ StyleFormatPanel.prototype.addBoothTags = function(container)
                           var legendlabelsdropdown = jQuery("#boothtagstypedropdown").val();
                           jQuery.each(cell,function(cellindex,cellvalue){
                              
+                              var startfloorplanedtitng = {};
+                              startfloorplanedtitng.action = "Apply Booth Tags";
+                              var valuexmlstring = "";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
+                            startfloorplanedtitng.boothid = cellvalue.id;
+                            startfloorplanedtitng.preboothdetail = valuexmlstring;
+                               startfloorplanedtitng.preboothstyle = cellvalue.style;
+                            
+                            startfloorplanedtitng.datetime = new Date(jQuery.now());
+                            
+                             
+                             
                                //document.getElementById("boothtagstypedropdown");
                                //var seletedlegendlabelsvalue = legendlabelsdropdown.options[legendlabelsdropdown.selectedIndex].value;
                 //               console.log(legendlabelsdropdown)
@@ -4739,10 +4756,20 @@ StyleFormatPanel.prototype.addBoothTags = function(container)
                             
                             
                             node.setAttribute('boothtags', legendlabelsdropdown);
-                               
+                                
                                 cellvalue.value = node;
                                 graph.cellLabelChanged(cellvalue, '');
-                                    
+                                
+                                 var valuexmlstring = "";
+                                jQuery.each(cellvalue.value, function (valueindex, valuevalue) {
+
+                                    if (valueindex == 'outerHTML') {
+                                        valuexmlstring = valuevalue;
+                                    }
+                                });
+                               startfloorplanedtitng.postboothdetail = valuexmlstring;
+                                startfloorplanedtitng.postboothstyle = cellvalue.style;
+                                expogenielogging.push(startfloorplanedtitng);    
                             });
                          
                        
@@ -4998,17 +5025,12 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
                                               
                                                html+='</table></div>';
                                                html+='<p id="legendsbuttons" style="'+classstatusshow+' text-align:center;margin: 10px 0px 0px 0px;"><button class="btn btn-large btn-info" onclick="updatealllengends()">Save</button><button style="margin-left: 11px;background-color: #b0b0b0; border-color: #b0b0b0;" class="btn btn-large btn-info" onclick="closelegendsdilog()">Cancel</button></p>';
-                                               
                                                html+='<hr>';
-                                               
-                                               
-                                               
                                                
                                                html+='<table class="table mycustometable">';
                                                html+='<tr ><th></th><th>Label</th><th title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." style="text-align:center;">Color Override <i class="far fa-question-circle" title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only."></i></th><th>Unoccupied</th><th>Occupied</th></tr>';
                                                html+='<tr><td style="width:5%;"><b>Add New</b></td><td style="width: 25%;"><input title="Label" type="text" id="addnewlegendname" ></td>';
                                                html+='<td style="width: 10%;text-align: center;"><label  title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." class="switch"><input type="checkbox" onclick="hidecolorselection('+addtext+')"  id="addnewlegendstatus" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Unoccupied Color" type="color"  id="addnewlegendcolorcode" ></td><td style="width: 10%;text-align: center;"><input title="Select Occupied Color" type="color"  id="addnewlegendcolorcodeOcc" ></td><td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintolegendtypes()">Add</button></td></tr>';
-                                              
                                                html+='</table>';
                                               
                                                
@@ -5040,6 +5062,24 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
                           var cell = graph.getSelectionCells();  
                           document.getElementById("applybuttonlegend").focus();
                           jQuery.each(cell,function(cellindex,cellvalue){
+                              
+                          var startfloorplanedtitng = {}; 
+                           startfloorplanedtitng.action = "Apply Legend Label";
+                                var valuexmlstring = "";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
+                                startfloorplanedtitng.boothid = cellvalue.id;
+                                startfloorplanedtitng.preboothdetail = valuexmlstring;
+                                startfloorplanedtitng.preboothstyle = cellvalue.style;
+                                startfloorplanedtitng.datetime = new Date(jQuery.now());
+                               
+
+                       
+                              
                              
                                console.log(cellvalue);
                                var legendlabelsdropdown = document.getElementById("legendlabeltypedropdown");
@@ -5158,7 +5198,18 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
                                
                                 cellvalue.value = node;
                                 graph.cellLabelChanged(cellvalue, '');
-                                    
+                                 var valuexmlstring = "";
+                                jQuery.each(cellvalue.value, function (valueindex, valuevalue) {
+
+                                    if (valueindex == 'outerHTML') {
+                                        valuexmlstring = valuevalue;
+                                    }
+                                });
+                                startfloorplanedtitng.postboothdetail = valuexmlstring;
+                                startfloorplanedtitng.postboothstyle = cellvalue.style;
+                                expogenielogging.push(startfloorplanedtitng);
+                                
+                                
                             });
                             
                         jQuery("#legendlabeltypedropdown").select2();
@@ -5605,7 +5656,20 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
             }
             
            jQuery.each(cell,function(cellindex,cellvalue){
-                
+                 var startfloorplanedtitng = {}; 
+                                var valuexmlstring = "";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
+                            startfloorplanedtitng.boothid = cellvalue.id;
+                            startfloorplanedtitng.preboothdetail = valuexmlstring;
+                               startfloorplanedtitng.preboothstyle = cellvalue.style;
+                            
+                            startfloorplanedtitng.datetime = new Date(jQuery.now());
+                            startfloorplanedtitng.event = "Updateproduct";
                var boothproductdata =  {};
                var CurentBoothID = cellvalue.id;
                 var boothtitle = cellvalue.getAttribute('mylabel', '');
@@ -5650,6 +5714,10 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                              allBoothsProductData[boothIndex].depositstype=depositstype;
                              allBoothsProductData[boothIndex].depositsamount=depositsamount;
                              allBoothsProductData[boothIndex].depositestatus=depositestatus;
+                             
+                             
+                             startfloorplanedtitng.postboothdetail = JSON.stringify(allBoothsProductData[boothIndex]);
+                             expogenielogging.push(startfloorplanedtitng);
                         }
                         
                     });
@@ -5657,7 +5725,8 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                }else{
                
                allBoothsProductData.push(boothproductdata);
-               
+                startfloorplanedtitng.postboothdetail = JSON.stringify(boothproductdata);
+                    expogenielogging.push(startfloorplanedtitng);
                }
                
                
@@ -5809,6 +5878,25 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
             
         jQuery.each(cell,function(cellindex,cellvalue){
                 
+                
+                            var startfloorplanedtitng = {}; 
+                            startfloorplanedtitng.action = "Add Product";
+                                var valuexmlstring = "";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
+                            startfloorplanedtitng.boothid = cellvalue.id;
+                            startfloorplanedtitng.preboothdetail = valuexmlstring;
+                              startfloorplanedtitng.preboothstyle = cellvalue.style;
+                            
+                            
+                            startfloorplanedtitng.datetime = new Date(jQuery.now());
+                            
+                
+                
                 var boothproductdata =  {};
                var CurentBoothID = cellvalue.id;
                var boothtitle = cellvalue.getAttribute('mylabel', '');
@@ -5870,14 +5958,17 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                              allBoothsProductData[boothIndex].depositstype=depositstype;
                              allBoothsProductData[boothIndex].depositsamount=depositsamount;
                              allBoothsProductData[boothIndex].depositestatus=depositestatus;
-                             
+                           startfloorplanedtitng.postboothdetail = JSON.stringify(allBoothsProductData[boothIndex]);
+                 expogenielogging.push(startfloorplanedtitng);    
                         }
                         
                     });
-                    
+                  
                }else{
                
                allBoothsProductData.push(boothproductdata);
+               startfloorplanedtitng.postboothdetail = JSON.stringify(boothproductdata);
+                 expogenielogging.push(startfloorplanedtitng);
                
                }
                
@@ -6137,7 +6228,10 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                      
                      
                 }
-                
+        
+        
+        
+        
         var getshowdescripiton = getWords(companydescripiton);
         var companydescripitonInput = document.createElement('input');
         
@@ -6205,7 +6299,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         heading.style. fontWeight = 'bold';
        
 	stylePanel.appendChild(heading);
-       stylePanel.appendChild(icontegat);
+        stylePanel.appendChild(icontegat);
        
       
        
@@ -6260,6 +6354,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                 }
 	
         
+       
 //        var productdivtitle = document.createElement('div');
 //        
 //        productdivtitle.style.width = '100%';
@@ -6456,10 +6551,37 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                 gradientSelect.appendChild(gradientOption);
         
         });
-	
-	
-
-	var listener = mxUtils.bind(this, function()
+        
+    jQuery.each(cell,function(cellindex,cellvalue){    
+        
+	var startfloorplanedtitng = {};
+        
+        var mylabel = cellvalue.getAttribute('mylabel', '');
+        var boothproductid = cellvalue.getAttribute('boothproductid', '');
+        var boothowner = cellvalue.getAttribute('boothOwner', '');
+        var valuexmlstring = "";
+        jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+        
+                if(valueindex == 'outerHTML'){
+                    valuexmlstring = valuevalue;
+                }
+        });
+        startfloorplanedtitng.action = "Select and Apply";
+        startfloorplanedtitng.boothlable = mylabel;
+        startfloorplanedtitng.boothid = cellvalue.id;
+        startfloorplanedtitng.boothownerid = boothowner;
+        startfloorplanedtitng.postboothdetail = valuexmlstring;
+        startfloorplanedtitng.postboothstyle = cellvalue.style;
+      
+        startfloorplanedtitng.datetime = new Date(jQuery.now());
+        
+        
+        expogenielogging.push(startfloorplanedtitng);
+        
+    });
+    console.log(expogenielogging);
+    
+        var listener = mxUtils.bind(this, function()
 	{       
 		ss = this.format.getSelectionState();
                 var cell = graph.getSelectionCells();
@@ -6550,11 +6672,24 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         
         jQuery("#descripitonhtmltext").append(unescape(getWords(updatedescripionvalue))+'....');
         
-        
+                            
                           var cell = graph.getSelectionCells();  
                           document.getElementById("applybutton").focus();
                           jQuery.each(cell,function(cellindex,cellvalue){
+                              
+                              
+                             var startfloorplanedtitng = {};
+                             var valuexmlstring = "";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
                              
+                             
+                               startfloorplanedtitng.preboothdetail = valuexmlstring;
+                               startfloorplanedtitng.preboothstyle = cellvalue.style;
                                var getdetailvalue = document.getElementById("boothdetail").value;
                                var getboothnumber = document.getElementById("boothnumber").value;
                               
@@ -6757,7 +6892,43 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 
                                 cellvalue.value = node;
                                 graph.cellLabelChanged(cellvalue, '');
-                                    
+                                
+                                var startfloorplanedtitng = {};
+                                startfloorplanedtitng.action = "Update Company Description";
+                                var mylabel = cellvalue.getAttribute('mylabel', '');
+                                var boothproductid = cellvalue.getAttribute('boothproductid', '');
+                                var boothowner = cellvalue.getAttribute('boothOwner', '');
+                                var legendlabels = cellvalue.getAttribute('legendlabels', '');
+                                var legendlabelscolorUn = cellvalue.getAttribute('legendlabelscolorUn', '');
+                                var pricetegid = cellvalue.getAttribute('pricetegid', '');
+                                var legendlabelscolorOcc = cellvalue.getAttribute('legendlabelscolorOcc', '');
+								var companydescripiton = cellvalue.getAttribute('companydescripiton', '');
+                              
+                                
+                                var valuexmlstring = "";
+                                jQuery.each(cellvalue.value, function (valueindex, valuevalue) {
+
+                                    if (valueindex == 'outerHTML') {
+                                        valuexmlstring = valuevalue;
+                                    }
+                                });
+                                
+                                startfloorplanedtitng.boothlable = mylabel;
+                                startfloorplanedtitng.boothid = cellvalue.id;
+                                startfloorplanedtitng.boothownerid = boothowner;
+                                startfloorplanedtitng.boothproductid = boothproductid;
+                                startfloorplanedtitng.legendlabels = legendlabels;
+                                startfloorplanedtitng.legendlabelscolorUn = legendlabelscolorUn;
+                                startfloorplanedtitng.legendlabelscolorOcc = legendlabelscolorOcc;
+                                startfloorplanedtitng.pricetegid = pricetegid;
+                                startfloorplanedtitng.postboothdetail = valuexmlstring;
+                                startfloorplanedtitng.postboothstyle = cellvalue.style;
+                                startfloorplanedtitng.datetime = new Date(jQuery.now());
+                                
+				startfloorplanedtitng.companydescripiton = companydescripiton;
+                                expogenielogging.push(startfloorplanedtitng);
+                                
+                                
                             });
                             
         
@@ -6778,11 +6949,21 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         });
         mxEvent.addListener(detailsubmit, 'click', function()
 	{
-                          
+                         
                           var cell = graph.getSelectionCells();  
                           document.getElementById("applybutton").focus();
                           jQuery.each(cell,function(cellindex,cellvalue){
-                             
+                              var startfloorplanedtitng = {};
+                              var valuexmlstring = "";
+                              startfloorplanedtitng.action = "Update Booth";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
+                              startfloorplanedtitng.preboothdetail = valuexmlstring;
+                               startfloorplanedtitng.preboothstyle = cellvalue.style;
                                var getdetailvalue = document.getElementById("boothdetail").value;
                               
                               
@@ -7021,7 +7202,44 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 
                                 cellvalue.value = node;
                                 graph.cellLabelChanged(cellvalue, '');
-                                    
+                                
+                                
+                                
+                              
+                                
+                                var mylabel = cellvalue.getAttribute('mylabel', '');
+                                var boothproductid = cellvalue.getAttribute('boothproductid', '');
+                                var boothowner = cellvalue.getAttribute('boothOwner', '');
+                                var legendlabels = cellvalue.getAttribute('legendlabels', '');
+                                var legendlabelscolorUn = cellvalue.getAttribute('legendlabelscolorUn', '');
+                                var pricetegid = cellvalue.getAttribute('pricetegid', '');
+                                var legendlabelscolorOcc = cellvalue.getAttribute('legendlabelscolorOcc', '');
+                               
+                                
+                                 var valuexmlstring = "";
+                                jQuery.each(cellvalue.value, function (valueindex, valuevalue) {
+
+                                    if (valueindex == 'outerHTML') {
+                                        valuexmlstring = valuevalue;
+                                    }
+                                });
+                                
+                                
+                                startfloorplanedtitng.boothlable = mylabel;
+                                startfloorplanedtitng.boothid = cellvalue.id;
+                                startfloorplanedtitng.boothownerid = boothowner;
+                                startfloorplanedtitng.boothproductid = boothproductid;
+                                startfloorplanedtitng.legendlabels = legendlabels;
+                                 startfloorplanedtitng.datetime = new Date(jQuery.now());
+                                startfloorplanedtitng.legendlabelscolorUn = legendlabelscolorUn;
+                                startfloorplanedtitng.legendlabelscolorOcc = legendlabelscolorOcc;
+                                startfloorplanedtitng.pricetegid = pricetegid;
+                                
+                                startfloorplanedtitng.postboothdetail = valuexmlstring;
+                                startfloorplanedtitng.postboothstyle = cellvalue.style;
+                                expogenielogging.push(startfloorplanedtitng);
+                                
+                                
                             });
                             
                             

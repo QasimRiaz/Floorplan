@@ -3863,8 +3863,18 @@ EditorUi.prototype.hideDialog = function(cancel)
 EditorUi.prototype.pickColor = function(color, apply)
 {
 	var graph = this.editor.graph;
-	var selState = graph.cellEditor.saveSelection();
+        var selState = graph.cellEditor.saveSelection();
 	
+        var startfloorplanedtitng = {};
+        
+        startfloorplanedtitng.selectedcolor = color;
+        startfloorplanedtitng.selectedcolorstate = selState;
+        startfloorplanedtitng.datetime = new Date(jQuery.now());
+	startfloorplanedtitng.event = "opencolordilogun/occ";
+	expogenielogging.push(startfloorplanedtitng);
+        
+        
+        
 	var dlg = new ColorDialog(this, color || 'none', function(color)
 	{
 		graph.cellEditor.restoreSelection(selState);

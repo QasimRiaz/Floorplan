@@ -42,3 +42,8 @@ Release Items
 1. Legend Labels Logic Update
 2.Multiple Tags per Booth
 3.Prevent 'Please wait' Popup on FLoor plan
+
+
+-------------------28-07-2020 4.01 New release---------------
+
+1.Activity log

@@ -40960,8 +40960,30 @@ mxGraphModel.prototype.cloneCellImpl = function(cell, mapping, includeChildren)
         console.log(OldId);
         console.log(cloneID);
         
-       
-        
+                                var startfloorplanedtitng = {};
+                                
+                                var mylabel = clone.getAttribute('mylabel', '');
+                                var boothproductid = clone.getAttribute('boothproductid', '');
+                                var boothowner = clone.getAttribute('boothOwner', '');
+                                var legendlabels = clone.getAttribute('legendlabels', '');
+                                var legendlabelscolorUn = clone.getAttribute('legendlabelscolorUn', '');
+                                var pricetegid = clone.getAttribute('pricetegid', '');
+                                var legendlabelscolorOcc = clone.getAttribute('legendlabelscolorOcc', '');
+				var companydescripiton = clone.getAttribute('companydescripiton', '');
+                              
+                                startfloorplanedtitng.oldboothID = OldId;  
+                                startfloorplanedtitng.boothlable = mylabel;
+                                startfloorplanedtitng.boothid = clone.id;
+                                startfloorplanedtitng.boothownerid = boothowner;
+                                startfloorplanedtitng.boothproductid = boothproductid;
+                                startfloorplanedtitng.legendlabels = legendlabels;
+                                startfloorplanedtitng.legendlabelscolorUn = legendlabelscolorUn;
+                                startfloorplanedtitng.legendlabelscolorOcc = legendlabelscolorOcc;
+                                startfloorplanedtitng.pricetegid = pricetegid;
+				startfloorplanedtitng.datetime = new Date(jQuery.now());
+                                startfloorplanedtitng.event = "clonedbooth";
+				startfloorplanedtitng.companydescripiton = companydescripiton;
+                                expogenielogging.push(startfloorplanedtitng);
         
 	mapping[mxObjectIdentity.get(cell)] = clone;
 	

@@ -569,9 +569,24 @@ Actions.prototype.init = function()
                             confirmButtonClass: "btn-info",
                             confirmButtonText: "Ok"
                         });
-                           
+                        
+                       var startfloorplanedtitng = {};
+                
+                        startfloorplanedtitng.datetime = new Date(jQuery.now());
+                        startfloorplanedtitng.action = "Try to Save Floorplan";
+                        startfloorplanedtitng.status = "Error";
+								
+                                expogenielogging.push(startfloorplanedtitng);
+                
                        }else{
-            
+                           
+                       var startfloorplanedtitng = {};    
+                           
+                       startfloorplanedtitng.datetime = new Date(jQuery.now());
+                        startfloorplanedtitng.action = "Try to Save Floorplan";
+                        startfloorplanedtitng.status = "Saved Successfully";
+								
+                        expogenielogging.push(startfloorplanedtitng);
             
                        mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
                        var currentbgImage = ui.editor.graph.getBackgroundImage();
@@ -590,6 +605,7 @@ Actions.prototype.init = function()
                        data.append('sellboothsjson', JSON.stringify(allBoothsProductData));
                        data.append('floorBG', mxFloorBackground);
                        data.append('floorXml', mxFloorPlanXml);
+                        data.append('speciallog', JSON.stringify(expogenielogging));
                        data.append('loadedfloorplantitle', loadedfloorplantitle);
                        var popuphtml = '<p><img src="'+baseCurrentSiteURl+'/wp-content/plugins/floorplan/load1.gif"/></p>'; 
                           
