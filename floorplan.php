@@ -4,7 +4,7 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 3.55
+ * Version: 5.00
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -38,6 +38,14 @@ if($_GET['floorplanRequest'] == "savedfloorplansettings") {
     require_once('../../../wp-load.php');
     
     savedalllegendstypes($_POST);
+    die();
+    
+}else if($_GET['floorplanRequest'] == "savedallboothtags"){
+    
+    
+    require_once('../../../wp-load.php');
+    
+    savedallboothtags($_POST);
     die();
     
 }else if($_GET['floorplanRequest'] == "savedallpricetegs"){
@@ -151,6 +159,7 @@ function createnewfloorplan($postData){
                update_post_meta( $id, 'floorplan_xml', $FloorplanXml[0] );
                update_post_meta( $id, 'legendlabels', $legendlabel );
                update_post_meta( $id, 'floorplantitle', 'Defualt Floor Plan' );
+               update_post_meta( $id, 'legendlabels', "" );
                update_post_meta( $id, 'legendlabels', "" );
                update_post_meta( $id, 'pricetegs', "" );
                update_post_meta( $id, 'sellboothsjson', "" );
@@ -322,6 +331,28 @@ function savedallpricetegs($Dataarray){
     }
     
 }
+
+
+function savedallboothtags($Dataarray){
+    
+    try{
+	$user_ID = get_current_user_id();
+        $user_info = get_userdata($user_ID);  
+        $lastInsertId = floorplan_contentmanagerlogging('Save All Booth Tags',"Admin Action",$Dataarray,$user_ID,$user_info->user_email,"");
+      
+        $id = $Dataarray['post_id'];
+        update_post_meta( $id, 'boothtags', $Dataarray['boothtagsArray'] );
+         contentmanagerlogging_file_upload ($lastInsertId,serialize($Dataarray['boothtagsArray']));
+        echo 'update';
+    }catch (Exception $e) {
+       
+     
+        return $e;
+        
+    }
+    
+}
+
 function savedalllegendstypes($Dataarray){
     
     try{
@@ -469,12 +500,15 @@ function getBoothList($postdata) {
 	
 	//echo $boothTypes = get_post_meta( $_REQUEST['post_id'], 'booth_types', true );
     try{
-	$boothTypes = $postdata['boothTypes'];
-       // $boothTypes = json_encode($boothTypes);
+	
+        $boothTypes = $postdata['boothTypes'];
         $user_ID = get_current_user_id();
+        
+        if(!empty($user_ID) || $user_ID !=0 ){
+        
         $user_info = get_userdata($user_ID);  
         
-        
+        $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Activity Log',"Admin Action","",$user_ID,$user_info->user_email,$postdata['speciallog']);
         $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Settings Saved',"Admin Action","",$user_ID,$user_info->user_email,$postdata);
         
         // $Flo_test= '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" ';
@@ -523,7 +557,12 @@ function getBoothList($postdata) {
             
         }
         
-        
+        }else{
+            
+           $lastInsertId = floorplan_contentmanagerlogging('Floor Plan - User Not Loged In',"Admin Action",$postdata,$user_ID,$user_info->user_email,$postdata['speciallog']);
+           echo 'failduserlogin';
+            
+        }
         
         
     }catch (Exception $e) {
@@ -979,7 +1018,7 @@ function floorplan_shortcode( $atts, $content = null ) {
             $legendlabel.='{"ID":3,"colorstatus":true,"name":"Red","colorcode":#00000}';
            
             $legendlabel .= "]";
-            
+            $boothtags = "[]";
             $FloorplanXml[0] = '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" pageWidth="2175" pageHeight="2175" ><root></root></mxGraphModel>';
             
                update_option( 'ContenteManager_Settings', $contentmanager_settings );
@@ -988,7 +1027,9 @@ function floorplan_shortcode( $atts, $content = null ) {
                update_post_meta( $id, 'floorplan_xml', $FloorplanXml[0] );
                update_post_meta( $id, 'legendlabels', $legendlabel );
                update_post_meta( $id, 'floorplantitle', 'Defualt Floor Plan' );
-               update_post_meta( $id, 'legendlabels', "" );
+               
+               update_post_meta( $id, 'boothtags', $boothtags);
+               
                update_post_meta( $id, 'pricetegs', "" );
                update_post_meta( $id, 'sellboothsjson', "" );
                update_post_meta( $id, 'updateboothpurchasestatus', "" );
@@ -1002,6 +1043,7 @@ function floorplan_shortcode( $atts, $content = null ) {
             $FloorBackground   = get_post_meta( $id, 'floor_background', true );
             $FloorplanXml[0]   = get_post_meta( $id, 'floorplan_xml', true );
             $FloorplanLegends  = get_post_meta( $id, 'legendlabels', true );
+            $FloorplanTags  = get_post_meta( $id, 'boothtags', true );
             $mxPriceTegsObject = get_post_meta( $id, 'pricetegs', true );
             $sellboothsjson = get_post_meta( $id, 'sellboothsjson', true );
             $floorplanstatuslockunlock = get_post_meta( $id, 'updateboothpurchasestatus', true );

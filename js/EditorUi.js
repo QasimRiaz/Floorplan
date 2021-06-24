@@ -927,6 +927,28 @@ EditorUi = function(editor, container, lightbox)
                                         var boothdetail  = cell.getAttribute('boothDetail', '');
                                         var companydescription  = cell.getAttribute('companydescripiton', '');
                                         var  boothproductid = cell.getAttribute('boothproductid', '');
+                                        var  tagslist = cell.getAttribute('boothtags', '');
+                                        var tagsnameslist ="";
+                                        if(tagslist !=""){
+                                         jQuery.each(BoothTagsObjects, function(index1, value) {
+            
+                                            
+                                            var foreachvalues = tagslist.split(',');
+
+                                            if(jQuery.inArray(value.ID, foreachvalues ) !=-1){
+
+                                              tagsnameslist+=value.name+","
+
+                                           }
+
+
+                                            
+                                        });
+                                        tagsnameslist = tagsnameslist.replace(/,\s*$/, "");
+                                        console.log(tagsnameslist);
+                          
+                                     }
+                                        
                                         
                                         var reportData = jQuery.parseJSON(mxgetAllusersData);
                                         
@@ -1170,15 +1192,15 @@ EditorUi = function(editor, container, lightbox)
                                                         
                                                         var productICon = "<p style='float:right;margin-top: 10px;'><img width='125' src='"+finalresultProduct.src+"'></p>";
                                                          
-                                                         if(userloggedinstatus == true){ 
+                                                         
                                                         
                                                             htmlforproductdetail += "<div class='row'><div class='col-sm-6'><h2>"+finalresultProduct.title+"</h2><p><strong>Price : "+finalresultProduct.price+"</strong></p></div><div class='col-sm-3'><p style='text-align:center;margin-top: 25px;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div>";
                                                        
-                                                        }else{
-                                                            htmlforproductdetail += "<div class='row'><div class='col-sm-6'><h2>"+finalresultProduct.title+"</h2></div><div class='col-sm-3'><p style='text-align:center;margin-top: 25px;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div>";
+                                                        //}else{
+                                                           // htmlforproductdetail += "<div class='row'><div class='col-sm-6'><h2>"+finalresultProduct.title+"</h2></div><div class='col-sm-3'><p style='text-align:center;margin-top: 25px;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div>";
                                                         
                                                             
-                                                        }
+                                                       // }
                                                         htmlforproductdetail += "<p>"+unescape(finalresultProduct.description)+"</p><hr>";
                                                          if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
@@ -1188,7 +1210,7 @@ EditorUi = function(editor, container, lightbox)
                                                         }
                                                         if(finalresultProduct.stockstatus == 'instock'){
                                                             
-                                                            
+                                                           if(userloggedinstatus == true){  
                                                             if(productstatus == 'alreadyexistproduct'){
                                                                 
                                                                  htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-success btn-small" >Added</a></p>';
@@ -1196,10 +1218,14 @@ EditorUi = function(editor, container, lightbox)
                                                                 
                                                             }else{
                                                                 
-                                                                htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+')"  >Add To Cart</a></p>';
+                                                                htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'log\')"  >Add To Cart</a></p>';
                                                          
                                                             }
+                                                        }else{
                                                             
+                                                           htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
+                                                          
+                                                        }
                                                            
                                                         }else{
 
@@ -1209,14 +1235,14 @@ EditorUi = function(editor, container, lightbox)
                                                       if(finalresultProduct.productstatus == "exist"){ 
                                                           
                                                           
-                                                        if(userloggedinstatus == true){ 
+                                                        //if(userloggedinstatus == true){ 
                                                         
                                                             var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >'+productprice+''+boothtitle+productDescription+'</div><div class="col-sm-2">'+productICon+'</div></div>';	
                                                         
-                                                        }else{
+                                                        //}else{
                                                             
-                                                            var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >'+boothtitle+productDescription+'</div><div class="col-sm-2">'+productICon+'</div></div>';	
-                                                        }
+                                                          //  var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >'+boothtitle+productDescription+'</div><div class="col-sm-2">'+productICon+'</div></div>';	
+                                                        //}
                                                          var popupstatustitle = "Available for Purchase"; 
                                                         }else{
                                                             
@@ -1226,24 +1252,29 @@ EditorUi = function(editor, container, lightbox)
 
                                                       //  var openhtml = '<div class="row" style="padding:30px;" ><div class="col-sm-5">'+imagesrc+''+htmlforaddress+''+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-5">'+htmlforproductdetail+'</div></div>';
                                                        
-                                                      if(userloggedinstatus == true){  
+                                                      //if(userloggedinstatus == true){  
                                                       if(finalresultProduct.productstatus == "exist"){ 
                                                         
                                                         if(floorplanstatus == 'unlock'){
                                                             if(finalresultProduct.stockstatus == 'instock'){ 
                                                                 
-                                                                     
-                                                                      if(productstatus == 'alreadyexistproduct'){
+                                                                if(userloggedinstatus == true){       
+                                                                if(productstatus == 'alreadyexistproduct'){
                                                                 
                                                                         buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-success btn-small" >Added</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank"  >Check Out</a></div></div>'
                                                                     
                                                                 
                                                                         }else{
                                                                 
-                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-small btn-info "  onclick="addToCart('+postid+')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
+                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
                                                                     
-                                                                    }
-                                                                     
+                                                                }
+                                                                 
+                                                                }else{
+                                                         
+                                                                    buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></div></div>'
+                                                                    
+                                                                }    
                                                                      
                                                                 }else{
                                                                     
@@ -1258,10 +1289,7 @@ EditorUi = function(editor, container, lightbox)
                                                      }else{
                                                            buttonsdiv = '';
                                                        }
-                                                     }else{
-                                                         
-                                                         buttonsdiv = '';
-                                                     }
+                                                     
                                                         
                                                         jQuery('body').css('cursor', 'default');
                                                         
@@ -1309,24 +1337,30 @@ EditorUi = function(editor, container, lightbox)
                                                 
                                             }else{
                                                 
-                                                var tablehtml = '';
+                                               var tablehtml = '';
                                                var curr_dat = '';
                                                var companylogourlnew = '';
                                                var htmlforassignedbooth = '';
                                                var htmlforaddress = '';
-                                                  if(companydescription != "" && typeof companydescription !== "undefined" ){
+                                               if(companydescription != "" && typeof companydescription !== "undefined" ){
                                                 
                                                      htmlcompanydescription = '<div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
                                                      
                                                 
                                                 
-                                                        }
+                                                }
                                                         
                                                var productDescription = '<h6 >' + htmlcompanydescription + '</h6>';
                                                htmlforassignedbooth = '<h5 >Booth Number:   <span style="font-size:14px;" >' + assignedboothname + '</span></h5>';
                                                companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
                                                var boothtitle = '<h5 ><strong>Booth Number: </strong>' + assignedboothname + '</h5>';
-                                                         
+                                               if(tagsnameslist == ""){
+                                                   
+                                                   var boothtagslist = "";    
+                                               }else{
+                                                 var boothtagslist = "<p><h5><strong>Tags:</strong></h5> "+tagsnameslist+"</p>";      
+                                               }                                               
+                                                     
                                                          
                                                          
                                                           
@@ -1334,12 +1368,8 @@ EditorUi = function(editor, container, lightbox)
                                               // openhtml = '<div class="row"><div class="col-sm-4" style="margin-top: 2%;">'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-6"></div></div>';	
                                                 
                                                 //  var openhtml = '<div class="row" style="padding:30px;" ><div class="col-sm-5">'+imagesrc+''+htmlforaddress+''+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-5">'+htmlforproductdetail+'</div></div>';
-                                                        var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+''+productDescription+'</div></div>';	
-                                                        
-                                                        
-                                                       
-                                                        
-                                                        var newopenhtml='<div class="tab"><button class="tablinks" >Booth Info</button></div><div id="London" class="tabcontent">'+openhtml+'</div>';
+                                                var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+''+productDescription+boothtagslist+'</div></div>';	
+                                                var newopenhtml='<div class="tab"><button class="tablinks" >Booth Info</button></div><div id="London" class="tabcontent">'+openhtml+'</div>';
 
                                                 
                                                 
@@ -1460,18 +1490,27 @@ EditorUi = function(editor, container, lightbox)
  }
 
 
- function addToCart(p_id) {
+ function addToCart(p_id,request) {
      
-     console.log(p_id);
+            console.log(request);
           jQuery("body").css("cursor", "progress");
           jQuery.get(baseCurrentSiteURl+'/?add-to-cart=' + p_id+'&quantity=1', function() {
              var checkouturl = baseCurrentSiteURl+'/checkout/';
              var addONs = baseCurrentSiteURl+'/product-category/add-ons/';
              jQuery("#"+p_id).empty();
              jQuery("#"+p_id+'_checkout').attr("disabled", false);
-             var enbutton = "<a class='btn btn-success btn-small' >Added</a>"
-             jQuery("#"+p_id).append(enbutton);
-             jQuery("body").css("cursor", "default");
+            
+             if(request == 'log'){ 
+                var enbutton = "<a class='btn btn-success btn-small' >Added</a>"
+                jQuery("#"+p_id).append(enbutton);
+             }else{
+                 
+                 top.window.location.href = baseCurrentSiteURl+"/exhibitor-entry/";
+             }
+             
+              
+              
+            jQuery("body").css("cursor", "default");
             
           });
        }
@@ -3839,8 +3878,18 @@ EditorUi.prototype.hideDialog = function(cancel)
 EditorUi.prototype.pickColor = function(color, apply)
 {
 	var graph = this.editor.graph;
-	var selState = graph.cellEditor.saveSelection();
+        var selState = graph.cellEditor.saveSelection();
 	
+        var startfloorplanedtitng = {};
+        
+        startfloorplanedtitng.selectedcolor = color;
+        startfloorplanedtitng.selectedcolorstate = selState;
+        startfloorplanedtitng.datetime = new Date(jQuery.now());
+	startfloorplanedtitng.event = "opencolordilogun/occ";
+	expogenielogging.push(startfloorplanedtitng);
+        
+        
+        
 	var dlg = new ColorDialog(this, color || 'none', function(color)
 	{
 		graph.cellEditor.restoreSelection(selState);

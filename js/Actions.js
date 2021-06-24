@@ -219,9 +219,124 @@ Actions.prototype.init = function()
         this.addAction('listofalllegendslabels', function(evt)
 	{
             
-           getallboothtypes();
-            
-            
+           //getallboothtypes();
+           //this.addAction.getallboothtypes();
+            //var ui = this.editorUi;
+     //var graph = ui.editor.graph;
+     //var ss = this.format.getSelectionState();
+
+     var data = new FormData();
+     var addtext = "'add'";
+     var classstatusshow ="";
+     data.append('post_id', mxPostID);
+    
+                                           
+                                           var html = "<p class='successmessage'></p>";
+                                           
+                                           
+                                        
+    
+                                           
+                                          // if(data == 'empty'){
+                                               
+                                               
+                                               
+                                         //  }else{
+                                               
+                                               
+                                             //  var boothtypeslist = JSON.parse(data);
+                                               
+                                               
+                                              // console.log(boothtypeslist);
+                                               html+='<div style="max-height: 350px;overflow: auto;"><table class="table mycustometable" id="listofalllegends">';
+                                               
+                                              if(LegendsOfObjects.length > 0){
+                                                    classstatusshow = "";  
+                                              }else{
+                                                    
+                                                    classstatusshow='display:none;';
+                                               }
+                                               //html+='<tr id="showheaderlegend" style="'+classstatusshow+'"><th>Position</th><th>Label</th><th>Active</th><th>Color</th><th>Delete</th></tr>';
+                                               html+='<tr id="showheaderlegend" style="'+classstatusshow+'"><th style="text-align:center;">Position</th><th style="text-align:center;">Label</th><th style="text-align:center;" title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." style="text-align:center;">Color Override <i class="far fa-question-circle" title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only."></i></th><th style="text-align:center;">Unoccupied</th><th style="text-align:center;">Occupied</th><th style="text-align:center;">Delete</th></tr>';
+                                               
+                                             
+    
+    
+                                            jQuery.each(LegendsOfObjects, function(index1, value) {
+                                                  var IDCODE = "'"+value.ID+"'" ;
+                                                  var statusremove = 'removeable';
+                                                  var localxml = mxUtils.getXml(ui.editor.getGraphXml());
+                                                  
+                                                  var localxml = mxUtils.getXml(ui.editor.getGraphXml());
+                                                  var xmlDoc = jQuery.parseXML(localxml);
+                                                  $xml = jQuery(xmlDoc);
+                                                  jQuery($xml).find("MyNode").each(function () {
+                    
+                                                        var legendlabels = jQuery(this).attr('legendlabels');
+                                                        if (legendlabels == value.ID) {
+
+                                                            statusremove = 'notremoveable';
+                                                            
+
+                                                        }
+                                                    });
+                                                  
+                                                  
+                                                  html+='<tr class="lengendsrows" id="'+value.ID+'" ><td style="width:5%;text-align:center;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 25%;"><input type="text" title="Label" value="'+value.name+'" id="boothtypename_'+value.ID+'" /></td>';
+                                                  if(value.colorstatus == true){
+                                                       
+                                                       html+='<td style="width: 10%;text-align: center;"><label style=""  title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Unoccupied Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td><td style="width: 10%;text-align: center;"><input title="Select Occupied Color" type="color" value="'+value.colorcodeOcc+'" id="boothtypecolorOcc_'+value.ID+'" /></td>';
+                                                 
+                                                  }else{
+                                                       
+                                                       html+='<td style="width: 10%;text-align: center;"><label title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" ><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input style="display:none;" title="Select Unoccupied Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td><td style="width: 10%;text-align: center;"><input title="Select Occupied Color" style="display:none;" type="color" value="'+value.colorcodeOcc+'" id="boothtypecolorOcc_'+value.ID+'" /></td>';
+                                                 
+                                                  }
+                                                  if(statusremove == 'notremoveable'){
+                                                      
+                                                      html+='<td style="width: 10%;text-align: center;"><i style="color: gray;" title="The selected label cannot be deleted as it is assigned to one or more booths. Please try deleting again after removing the label from all booths." class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></td></tr>';
+                                              
+                                                  }else{
+                                                      
+                                                      html+='<td style="width: 10%;text-align: center;"><a style="cursor: pointer;"  title="Remove" onclick="removethisrow('+IDCODE+')" ><i class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></a></td></tr>';
+                                              
+                                                  }
+                                                      
+                                                   
+                                               });
+                                              
+                                               html+='</table></div>';
+                                               html+='<p id="legendsbuttons" style="'+classstatusshow+' text-align:center;margin: 10px 0px 0px 0px;"><button class="btn btn-large btn-info" onclick="updatealllengends()">Save</button><button style="margin-left: 11px;background-color: #b0b0b0; border-color: #b0b0b0;" class="btn btn-large btn-info" onclick="closelegendsdilog()">Cancel</button></p>';
+                                               
+                                               html+='<hr>';
+                                               
+                                               
+                                               
+                                               
+                                               html+='<table class="table mycustometable">';
+                                               html+='<tr ><th></th><th>Label</th><th title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." style="text-align:center;">Color Override <i class="far fa-question-circle" title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only."></i></th><th>Unoccupied</th><th>Occupied</th><th></th></tr>';
+                                               html+='<tr><td style="width:5%;"><b>Add New</b></td><td style="width: 25%;"><input title="Label" type="text" id="addnewlegendname" ></td>';
+                                               html+='<td style="width: 10%;text-align: center;"><label  title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." class="switch"><input type="checkbox" onclick="hidecolorselection('+addtext+')"  id="addnewlegendstatus" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Unoccupied Color" type="color"  id="addnewlegendcolorcode" ></td><td style="width: 10%;text-align: center;"><input title="Select Occupied Color" type="color"  id="addnewlegendcolorcodeOcc" ></td><td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintolegendtypes()">Add</button></td></tr>';
+                                              
+                                               html+='</table>';
+                                              
+                                               
+                                               
+                                         //  }
+                                            
+                                            legendsdilog = jQuery.confirm({
+                                                    title: '<b style="text-align:center;">Legend Labels</b>',
+                                                    content: html,
+                                                    html:true,
+                                               
+                                                    closeIcon: true,
+                                                    columnClass: 'jconfirm-box-container-special-boothtypes',
+                                                   cancelButton: false ,// hides the cancel button.
+                                                   confirmButton: false, // hides the confirm button.
+
+
+                                                });
+                                           jQuery(".mycustometable tbody").sortable();
             
         });
         this.addAction('listofallpricetags', function(evt)
@@ -454,9 +569,24 @@ Actions.prototype.init = function()
                             confirmButtonClass: "btn-info",
                             confirmButtonText: "Ok"
                         });
-                           
+                        
+                       var startfloorplanedtitng = {};
+                
+                        startfloorplanedtitng.datetime = new Date(jQuery.now());
+                        startfloorplanedtitng.action = "Try to Save Floorplan";
+                        startfloorplanedtitng.status = "Error";
+								
+                                expogenielogging.push(startfloorplanedtitng);
+                
                        }else{
-            
+                           
+                       var startfloorplanedtitng = {};    
+                           
+                       startfloorplanedtitng.datetime = new Date(jQuery.now());
+                        startfloorplanedtitng.action = "Try to Save Floorplan";
+                        startfloorplanedtitng.status = "Saved Successfully";
+								
+                        expogenielogging.push(startfloorplanedtitng);
             
                        mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
                        var currentbgImage = ui.editor.graph.getBackgroundImage();
@@ -475,6 +605,7 @@ Actions.prototype.init = function()
                        data.append('sellboothsjson', JSON.stringify(allBoothsProductData));
                        data.append('floorBG', mxFloorBackground);
                        data.append('floorXml', mxFloorPlanXml);
+                        data.append('speciallog', JSON.stringify(expogenielogging));
                        data.append('loadedfloorplantitle', loadedfloorplantitle);
                        var popuphtml = '<p><img src="'+baseCurrentSiteURl+'/wp-content/plugins/floorplan/load1.gif"/></p>'; 
                           
@@ -501,12 +632,19 @@ Actions.prototype.init = function()
                                     ui.updateGraphStatus();
                                     
                                     swal.close();
+                                    var errormsg = "There was an error during the requested operation. The Floor plan was not saved successfully. Please try again.";
                                     
-                                   
+                                    if(data == "failduserlogin"){
+                                        
+                                        
+                                        errormsg = "Your session has been expried. Please try to login again."
+                                    }
+                                    
                                     if(data == "faildXmlError"){
+                                        
                                         swal({
                                        title: "Error",
-                                       text:"There was an error during the requested operation. The Floor plan was not saved successfully. Please try again.",
+                                       text:errormsg,
                                        type: "error",
                                        confirmButtonClass: "btn-danger",
                                        allowOutsideClick: false,
@@ -517,6 +655,23 @@ Actions.prototype.init = function()
                                            //location.reload();
                                         }
                                        });
+                                        
+                                    }else if(data == "failduserlogin"){
+                                        
+                                        swal({
+                                       title: "Error",
+                                       text:errormsg,
+                                       type: "error",
+                                       confirmButtonClass: "btn-danger",
+                                       allowOutsideClick: false,
+                                       confirmButtonText: "Close",
+                                       onClose:function(){
+                                           
+                                           
+                                           location.reload();
+                                        }
+                                       });
+                                      
                                       
                                     }else{
                                         
@@ -1795,3 +1950,12 @@ Action.prototype.isSelected = function()
 {
 	return this.selectedCallback();
 };
+
+
+Action.prototype.getallboothtypes=function(){
+    
+    
+    
+                                    
+                          
+}

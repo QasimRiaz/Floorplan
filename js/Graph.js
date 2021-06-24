@@ -795,7 +795,8 @@ Graph = function(container, model, renderHint, stylesheet, themes)
 	
 		// On connect the target is selected and we clone the cell of the preview edge for insert
 		this.connectionHandler.selectCells = function(edge, target)
-		{
+		{       
+                        console.log("TestHere");
 			this.graph.setSelectionCell(target || edge);
 		};
 		
@@ -2083,7 +2084,7 @@ Graph.prototype.isCellConnectable = function(cell)
 Graph.prototype.selectAll = function(parent)
 {
 	parent = parent || this.getDefaultParent();
-
+        console.log("SelectAll");
 	if (!this.isCellLocked(parent))
 	{
 		mxGraph.prototype.selectAll.apply(this, arguments);
@@ -2108,7 +2109,7 @@ Graph.prototype.selectAll = function(parent)
 Graph.prototype.selectCells = function(vertices, edges, parent)
 {
 	parent = parent || this.getDefaultParent();
-
+        
 	if (!this.isCellLocked(parent))
 	{
 		mxGraph.prototype.selectCells.apply(this, arguments);

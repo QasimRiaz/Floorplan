@@ -999,9 +999,12 @@ BaseFormatPanel.prototype.createColorOption = function(label, getColorFn, setCol
 		if (!applying)
 		{
 			applying = true;
+                       // console.log(color);
 			btn.innerHTML = '<div style="width:' + ((mxClient.IS_QUIRKS) ? '30' : '36') +
 				'px;height:12px;margin:3px;border:1px solid black;background-color:' +
 				((color != null && color != mxConstants.NONE) ? color : defaultColor) + ';"></div>';
+                        
+                      //  console.log(btn.innerHTML);
 			
 			// Fine-tuning in Firefox, quirks mode and IE8 standards
 			if (mxClient.IS_MT || mxClient.IS_QUIRKS || document.documentMode == 8)
@@ -1047,13 +1050,54 @@ BaseFormatPanel.prototype.createColorOption = function(label, getColorFn, setCol
 		}
 	};
 
-	btn = mxUtils.button('', mxUtils.bind(this, function(evt)
+//	btn = mxUtils.button('', mxUtils.bind(this, function(evt)
+//	{      
+//                jQuery("#colorpicker_"+label).val(value);
+//                //jQuery("#colorpicker_"+label).spectrum("set", value);
+//                jQuery("#colorpicker_"+label).click();
+//                //jQuery("#colorpicker_"+label).next().click();
+//                mxEvent.consume(evt);
+//	}));
+        
+        
+        btn = mxUtils.button('', mxUtils.bind(this, function(evt)
 	{
 		this.editorUi.pickColor(value, apply);
+                 applybutton
 		mxEvent.consume(evt);
 	}));
-	
+        
+	var colorpicker = document.createElement('input');
+	colorpicker.id = 'colorpicker_'+label;
+        colorpicker.type = 'color';
+        //colorpicker.className = 'customepickcolor';
+        colorpicker.style.display = 'none';
+        
+       
+//        jQuery(colorpicker).change(function(){
+//            
+//                console.log("valuechanged");
+//                var selectedcolor = jQuery(this).val();
+//                apply(selectedcolor);
+//                jQuery('.select2').select2();
+//        });
+       
+        
+//        mxEvent.addListener(colorpicker, 'change', function(evt)
+//	{
+//		console.log("valuechanged");
+//                
+//                var selectedcolor = jQuery(this).val();
+//                apply(selectedcolor);
+//                jQuery('.select2').select2();
+//                mxEvent.consume(evt);
+//	});
+        
+        
+        
+        //div.appendChild(colorpicker);
 	btn.style.position = 'absolute';
+        btn.id = label;
 	btn.style.marginTop = '-4px';
 	btn.style.right = (mxClient.IS_QUIRKS) ? '0px' : '56px';//edit '0px' : '20px';
 	btn.style.height = '22px';
@@ -1137,56 +1181,99 @@ BaseFormatPanel.prototype.createCellColorOption = function(label, colorKey, defa
                         
                             
                             var boothOwner = celldata.getAttribute('boothOwner', '');
-                            console.log(boothOwner);
-                            var exist = false;
-                            if (boothOwner && boothOwner != 'none') {
-                                exist = true;
-                            }else{
-                                
-                                
-                            }
+                            var legendlabels = celldata.getAttribute('legendlabels', '');
+                            var legendlabelscolorUn = celldata.getAttribute('legendlabelscolorUn', '');
                             
-                            if ((colorKey == 'occ' && exist) || (colorKey == 'uno' && !exist))
-                            {
                                 
-                                graph.setCellStyles(colorKey, color, graph.getSelectionCells());
-                               // graph.setCellStyles('fillColor', color, graph.getSelectionCells());
+                                var occcolor = celldata.getAttribute('occ', '');
+                                var unoccolor = celldata.getAttribute('uno', '');
                                 
-                                
-                                
-                            } else {
-                                graph.setCellStyles(colorKey, color, graph.getSelectionCells());
-
-                            }
                             
+                            var legendlabelscolorOcc = celldata.getAttribute('legendlabelscolorOcc', '');
                             
-                            var cellStyle = celldata.style;
-                           
-                            var tokens = (cellStyle != null) ? cellStyle.split(';') : [];
-                            jQuery.each(tokens,function(index,value){
-                                            
-                                            
-                                    var getboothname = (value != null) ? value.split('=') : []; 
-                                    if(getboothname[0]=="fillColor"){
-                                        
-                                        if ((colorKey == 'occ' && exist) || (colorKey == 'uno' && !exist))
-                                        {    
-                                           // console.log(color)
-                                            celldata.style = cellStyle.replace(getboothname[0]+'='+getboothname[1], "fillColor="+color);
-                                        }
-
-                                           
-
+                            var legendlabelscolorOcc = celldata.getAttribute('legendlabelscolorOcc', '');
+                            graph.setCellStyles(colorKey, color, celldata);
+                            
+                            if(boothOwner != "none" && boothOwner != ""){
+                                    
+                                  
+                                    if(legendlabels != "none" && legendlabels != "" ){
                                        
+                                        graph.setCellStyles("fillColor", legendlabelscolorOcc, celldata);
+                                        
+                                    }else{
+                                        
+                                        if(colorKey == "uno"){
+                                            
+                                           // graph.setCellStyles("fillColor", occcolor, celldata);
+                                        }else{
+                                            
+                                            graph.setCellStyles("fillColor", color, celldata); 
+                                        }
+                                        
+                                        
                                     }
-                            });
+                                    
+                                     
+                                }else{
+                                    
+                                    
+                                    if(legendlabels != "none" && legendlabels != "" ){
+                                            
+                                         
+                                        graph.setCellStyles("fillColor", legendlabelscolorUn, celldata);
+                                        
+                                    }else{
+                              
+                                       // graph.setCellStyles("fillColor", color, celldata);
+                                        if(colorKey == "occ"){
+                                            
+                                            //graph.setCellStyles("fillColor", unoccolor, celldata);
+                                       
+                                        }else{
+                                            
+                                            graph.setCellStyles("fillColor", color, celldata); 
+                                        }
+   
+                                    }
+                                    
+                                }
+                            
+                            
+                            
+                          
+                            
+//                            var cellStyle = celldata.style;
+//                           
+//                            var tokens = (cellStyle != null) ? cellStyle.split(';') : [];
+//                            jQuery.each(tokens,function(index,value){
+//                                            
+//                                            
+//                                    var getboothname = (value != null) ? value.split('=') : []; 
+//                                    if(getboothname[0]=="fillColor"){
+//                                        
+//                                        if ((colorKey == 'occ' && exist) || (colorKey == 'uno' && !exist))
+//                                        {    
+//                                           // console.log(color)
+//                                            celldata.style = cellStyle.replace(getboothname[0]+'='+getboothname[1], "fillColor="+color);
+//                                        }
+//
+//                                           
+//
+//                                       
+//                                    }
+//                            });
                             
                           
 
                             ui.fireEvent(new mxEventObject('styleChanged', 'keys', [colorKey],
-                                    'values', [color], 'cells', graph.getSelectionCells()));
+                                    'values', [color], 'cells', celldata));
+                                    
+                                    
                         });
-                        
+                     console.log("select2");   
+                     jQuery(".select2").select2();
+                    
 		}
 		finally
 		{
@@ -1214,6 +1301,8 @@ BaseFormatPanel.prototype.createCellColorOption = function(label, colorKey, defa
 			graph.getModel().removeListener(this.listener);
 		}
 	}, callbackFn);
+        
+       
 };
 
 
@@ -3548,6 +3637,7 @@ StyleFormatPanel.prototype.init = function()
 	this.addGeometry(this.container);
         
         this.container.appendChild(this.addLegendLabel(this.createPanel()));
+        this.container.appendChild(this.addBoothTags(this.createPanel()));
         this.container.appendChild(this.addPricetegs(this.createPanel()));
         
         
@@ -3580,7 +3670,9 @@ StyleFormatPanel.prototype.init = function()
 	}
 	
 	this.container.appendChild(this.addStyleOps(opsPanel));
-       
+        jQuery('#boothtagstypedropdown').select2();
+      
+        
 };
 
 		
@@ -4148,6 +4240,7 @@ StyleFormatPanel.prototype.addFill = function(container)
 		{
 			gradientSelect.style.display = 'none';
 		}
+                
 	});
 	
 	var fillKey = (ss.style.shape == 'image') ? mxConstants.STYLE_IMAGE_BACKGROUND : mxConstants.STYLE_FILLCOLOR;
@@ -4343,7 +4436,366 @@ StyleFormatPanel.prototype.addFill = function(container)
 
 	return container;
 };
+StyleFormatPanel.prototype.addBoothTags = function(container)
+{
+	var ui = this.editorUi;
+	var graph = ui.editor.graph;
+	var ss = this.format.getSelectionState();
 
+	container.style.paddingTop = '6px';
+	container.style.paddingBottom = '6px';
+        container.style.borderBottom = '0px';
+	
+        var tags = document.createElement('div');
+	tags.style.border = '1px solid #c0c0c0';
+	tags.style.borderWidth = '0px 0px 1px 0px';
+	tags.style.textAlign = 'center';
+	tags.style.fontWeight = 'bold';
+	tags.style.overflow = 'hidden';
+	tags.style.display = (mxClient.IS_QUIRKS) ? 'inline' : 'inline-block';
+	tags.style.paddingTop = '8px';
+	tags.style.height = (mxClient.IS_QUIRKS) ? '34px' : '25px';
+	tags.style.width = '100%';
+        tags.className = ' customebgcolor';
+	this.container.appendChild(tags);
+	
+	//mxUtils.write(label, 'Legend Labels');
+       // tags.innerHTML = 'Booth Tags <i class="far fa-question-circle" title="Use this setting to \'group\' or \'categorize\' booths together on the interactive floor plan. Users will be able to view and identify booths tagged with these labels. Note you also have the option to override the booth color settings above with a legend label color. \n Be sure to click \'Apply Legend Label\' to apply any changes in this section, and click \'Save\' to publish these changes to the live floor plan. "></i>';
+        
+        tags.innerHTML = 'Booth Tags <i class="far fa-question-circle" title="Use this setting to \'Group\' or \'Categorize\' booths together on the interactive floor plan. Users will be able to view and identify booths tagged with these labels."></i>';
+        
+        var TagsstylePanel = this.createPanel();
+	TagsstylePanel.style.paddingTop = '2px';
+	TagsstylePanel.style.paddingBottom = '2px';
+	TagsstylePanel.style.paddingLeft = '0px';
+	TagsstylePanel.style.position = 'relative';
+	TagsstylePanel.style.marginLeft = '-2px';
+	TagsstylePanel.style.borderWidth = '0px';
+	TagsstylePanel.className = 'geToolbarContainer';
+	
+	if (mxClient.IS_QUIRKS)
+	{
+		TagsstylePanel.style.display = 'block';
+	}
+        
+       
+	
+		
+	var cell = graph.getSelectionCells();
+	boothTagsList = "";
+        
+        if (mxUtils.isNode(cell[0].value))
+                {   
+                    
+                     
+                     
+                     
+                      boothTagsList = cell[0].getAttribute('boothtags', '');
+                      
+                     
+                     
+                }
+	
+	
+        var createDivTags = document.createElement('div');
+        
+        var submitbuttonlebalTags = this.createTitle('');
+	submitbuttonlebalTags.style.paddingBottom = '6px';
+	TagsstylePanel.appendChild(submitbuttonlebalTags);
+        
+        
+        var selectboothtags = document.createElement('select');
+        selectboothtags.style.width = '70%';
+        selectboothtags.style.marginRight = '10px';
+	selectboothtags.id = 'boothtagstypedropdown';
+        selectboothtags.className = 'select2';
+        selectboothtags.dataPlaceholder = 'Select Booth Tags';
+        selectboothtags.title = 'Select Booth Tags';
+        selectboothtags.multiple = 'multiple';
+        
+         var optiontags = document.createElement("option");
+         //optiontags.value = '';
+         //optiontags.text = 'None';
+        
+       if(boothTagsList == ""){
+            
+          //  optiontags.setAttribute('selected', 'selected');
+            
+        }
+        
+        
+       // selectboothtags.appendChild(optiontags);
+       
+        jQuery.each(BoothTagsObjects, function(index1, value) {
+            
+			 var option = document.createElement("option");
+                         option.value = value.ID;
+                         option.text = value.name;
+                         
+                           if(boothTagsList !="" && boothTagsList !=undefined){
+                            var foreachvalues = boothTagsList.split(',');
+                            }else{
+        
+                             var foreachvalues =[];
+                            }
+                         if(jQuery.inArray(value.ID, foreachvalues ) !=-1){
+            
+                           option.setAttribute('selected', 'selected');
+            
+                        }
+                         
+                         
+                         selectboothtags.appendChild(option);
+        });
+        
+        
+        createDivTags.appendChild(selectboothtags);
+        
+         var manageboothtypesTags = document.createElement('a');
+        manageboothtypesTags.className = 'myCustomeButton';
+        manageboothtypesTags.style.padding = '5px 4px 5px 4px';
+        manageboothtypesTags.style.marginLeft = '10px';
+       // manageboothtypes.setAttribute('onclick', 'getallboothtypes()');
+        manageboothtypesTags.innerHTML = 'Manage';
+        
+        createDivTags.appendChild(manageboothtypesTags);
+     
+	TagsstylePanel.appendChild(createDivTags);
+        
+        var boothtagsbuttonsubmit = document.createElement('button');
+	boothtagsbuttonsubmit.id = 'applybuttonboothtags';
+        boothtagsbuttonsubmit.title = '';
+       
+        boothtagsbuttonsubmit.style.width = '56%';
+        boothtagsbuttonsubmit.style.float = 'right';
+        boothtagsbuttonsubmit.style.marginTop = '10px';
+        boothtagsbuttonsubmit.style.marginRight = '50px';
+        boothtagsbuttonsubmit.className = 'myCustomeButton';
+        
+        
+        boothtagsbuttonsubmit.innerHTML = 'Apply Booth Tags';
+        
+         mxEvent.addListener(manageboothtypesTags, 'click', function()
+	{
+                                var data = new FormData();
+                                var addtext = "'add'";
+                                var classstatusshow ="";
+                                data.append('post_id', mxPostID);
+    
+                                           
+                                           var html = "<p class='successmessage'></p>";
+                                           html+='<div style="max-height: 350px;overflow: auto;"><table class="table mycustometable" id="listofalllegends">';
+                                               
+                                           if(BoothTagsObjects.length > 0){
+                                                    classstatusshow = "";  
+                                              }else{
+                                                    
+                                                    classstatusshow='display:none;';
+                                               }
+                                               html+='<tr id="showheaderlegend" style="'+classstatusshow+'"><th style="text-align:center;">Position</th><th style="text-align:center;">Tag Title</th><th style="text-align:center;">Delete</th></tr>';
+                                               
+                                             
+    
+                                                console.log(BoothTagsObjects)
+                                            jQuery.each(BoothTagsObjects, function(index1, value) {
+                                                  var IDCODE = "'"+value.ID+"'" ;
+                                                  var statusremove = 'removeable';
+                                                  var localxml = mxUtils.getXml(ui.editor.getGraphXml());
+                                                  
+                                                  var localxml = mxUtils.getXml(ui.editor.getGraphXml());
+                                                  var xmlDoc = jQuery.parseXML(localxml);
+                                                  $xml = jQuery(xmlDoc);
+                                                   console.log($xml);
+                                                   console.log(statusremove);
+                                                  jQuery($xml).find("MyNode").each(function () {
+                    
+                                                        var boothtagsArray = jQuery(this).attr('boothtags');
+                                                        console.log(boothtagsArray);
+                                                        if(boothtagsArray !="" && boothtagsArray !=undefined){
+                                                            var boothTagsListarray = boothtagsArray.split(',');
+                                                        }else{
+                                                            
+                                                            var boothTagsListarray = [];
+                                                        }
+                                                        if(jQuery.inArray(value.ID, boothTagsListarray)!=-1) {
+
+                                                            statusremove = 'notremoveable';
+                                                            
+
+                                                        }
+                                                    });
+                                                  
+                                                  
+                                                  html+='<tr class="lengendsrows" id="'+value.ID+'" ><td style="width:5%;text-align:center;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 25%;"><input type="text" title="Label" value="'+value.name+'" id="boothtypename_'+value.ID+'" /></td>';
+                                                  
+                                                  if(statusremove == 'notremoveable'){
+                                                      
+                                                      html+='<td style="width: 10%;text-align: center;"><i style="color: gray;" title="The selected tag cannot be deleted as it is assigned to one or more booths. Please try deleting again after removing the label from all booths." class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></td></tr>';
+                                              
+                                                  }else{
+                                                      
+                                                      html+='<td style="width: 10%;text-align: center;"><a style="cursor: pointer;"  title="Remove" onclick="removethisrow('+IDCODE+')" ><i class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></a></td></tr>';
+                                              
+                                                  }
+                                                      
+                                                   
+                                               });
+                                              
+                                               html+='</table></div>';
+                                               html+='<p id="legendsbuttons" style="'+classstatusshow+' text-align:center;margin: 10px 0px 0px 0px;"><button class="btn btn-large btn-info" onclick="updateallboothstags()">Save</button><button style="margin-left: 11px;background-color: #b0b0b0; border-color: #b0b0b0;" class="btn btn-large btn-info" onclick="closelegendsdilog()">Cancel</button></p>';
+                                               
+                                               html+='<hr>';
+                                               
+                                               
+                                               
+                                               
+                                               html+='<table class="table mycustometable">';
+                                               html+='<tr ><th></th><th>Label</th></tr>';
+                                               html+='<tr><td style="width:5%;"><b>Add New</b></td><td style="width: 25%;"><input title="Label" type="text" id="addnewlegendname" ></td>';
+                                               html+='<td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintoboothtagstypes()">Add</button></td></tr>';
+                                              
+                                               html+='</table>';
+                                              
+                                               
+                                               
+                                         //  }
+                                            
+                                            legendsdilog = jQuery.confirm({
+                                                    title: '<b style="text-align:center;">Booth Tags</b>',
+                                                    content: html,
+                                                    html:true,
+                                               
+                                                    closeIcon: true,
+                                                    columnClass: 'jconfirm-box-container-special-boothtypes',
+                                                   cancelButton: false ,// hides the cancel button.
+                                                   confirmButton: false, // hides the confirm button
+
+
+                                                });
+                                           jQuery(".mycustometable tbody").sortable();     
+            
+        });
+        
+        mxEvent.addListener(boothtagsbuttonsubmit, 'click', function()
+	{
+                          var cell = graph.getSelectionCells();  
+                          document.getElementById("applybuttonlegend").focus();
+                          var legendlabelsdropdown = jQuery("#boothtagstypedropdown").val();
+                          jQuery.each(cell,function(cellindex,cellvalue){
+                             
+                              var startfloorplanedtitng = {};
+                              startfloorplanedtitng.action = "Apply Booth Tags";
+                              var valuexmlstring = "";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
+                            startfloorplanedtitng.boothid = cellvalue.id;
+                            startfloorplanedtitng.preboothdetail = valuexmlstring;
+                               startfloorplanedtitng.preboothstyle = cellvalue.style;
+                            
+                            startfloorplanedtitng.datetime = new Date(jQuery.now());
+                            
+                             
+                             
+                               //document.getElementById("boothtagstypedropdown");
+                               //var seletedlegendlabelsvalue = legendlabelsdropdown.options[legendlabelsdropdown.selectedIndex].value;
+                //               console.log(legendlabelsdropdown)
+                             
+           
+              //                 console.log(foreachvalues)
+                            
+                              
+                              
+                            var labelvalue = "";
+                            var boothdetailvalue = "";
+                            var assigenduserID = "none";
+                            var companydescripiton = "";
+                            var boothproductid = "none";
+                            var seletedpricetegkeyvalue = "none";
+                            var seletedlegendlabelsvalue="";
+                            var selectedlegendcolorcodeun="";
+                            var selectedlegendcolorcodeocc="";
+                              
+                            if (mxUtils.isNode(cellvalue.value))
+                                {  
+                                   
+                                     
+                                    
+                                     assigenduserID = cellvalue.getAttribute('boothOwner', '');
+                                     labelvalue = cellvalue.getAttribute('mylabel', '');
+                                     boothdetailvalue = cellvalue.getAttribute('boothDetail', '');
+                                     companydescripiton = cellvalue.getAttribute('companydescripiton', '');
+                                     boothproductid = cellvalue.getAttribute('boothproductid', '');
+                                     seletedpricetegkeyvalue = cellvalue.getAttribute('pricetegid', '');
+                                     
+                                  
+                                     seletedlegendlabelsvalue = cellvalue.getAttribute('legendlabels', '');
+                                     selectedlegendcolorcodeun = cellvalue.getAttribute('legendlabelscolorUn', '');
+                                     selectedlegendcolorcodeocc = cellvalue.getAttribute('legendlabelscolorOcc', '');
+                          
+                                }
+                            
+                            var doc = mxUtils.createXmlDocument();
+                            var node = doc.createElement('MyNode')
+                          
+                            node.setAttribute('boothOwner', assigenduserID);
+                            node.setAttribute('mylabel', labelvalue);
+                            node.setAttribute('boothDetail', boothdetailvalue);
+                            
+                            node.setAttribute('legendlabels', seletedlegendlabelsvalue);
+                            node.setAttribute('legendlabelscolorUn', selectedlegendcolorcodeun);
+                            node.setAttribute('legendlabelscolorOcc', selectedlegendcolorcodeocc);
+                            node.setAttribute('companydescripiton', companydescripiton);
+                            node.setAttribute('boothproductid', boothproductid);
+                            node.setAttribute('pricetegid', seletedpricetegkeyvalue);   
+                                  
+                               
+                            
+                            
+                            node.setAttribute('boothtags', legendlabelsdropdown);
+                                
+                                cellvalue.value = node;
+                                graph.cellLabelChanged(cellvalue, '');
+                                
+                                 var valuexmlstring = "";
+                                jQuery.each(cellvalue.value, function (valueindex, valuevalue) {
+
+                                    if (valueindex == 'outerHTML') {
+                                        valuexmlstring = valuevalue;
+                                    }
+                                });
+                               startfloorplanedtitng.postboothdetail = valuexmlstring;
+                                startfloorplanedtitng.postboothstyle = cellvalue.style;
+                                expogenielogging.push(startfloorplanedtitng);    
+                            });
+                         
+                       
+                        jQuery("#legendlabeltypedropdown").select2();
+                        jQuery("#boothtagstypedropdown").val(legendlabelsdropdown);
+                        jQuery("#boothtagstypedropdown").select2().trigger("change");
+                        
+                        
+                        
+            
+        });
+        
+        TagsstylePanel.appendChild(boothtagsbuttonsubmit);
+        
+        
+            container.appendChild(TagsstylePanel);
+    
+
+	
+        container.style.paddingTop = '0px';
+        
+	return container;
+        
+  
+
+};
 StyleFormatPanel.prototype.addLegendLabel = function(container)
 {
 	var ui = this.editorUi;
@@ -4370,6 +4822,8 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
 	//mxUtils.write(label, 'Legend Labels');
         label.innerHTML = 'Legend Labels <i class="far fa-question-circle" title="Use this setting to \'group\' or \'categorize\' booths together on the interactive floor plan. Users will be able to view and identify booths tagged with these labels. Note you also have the option to override the booth color settings above with a legend label color. \n Be sure to click \'Apply Legend Label\' to apply any changes in this section, and click \'Save\' to publish these changes to the live floor plan. "></i>';
         
+       
+       
         
         var stylePanel = this.createPanel();
 	stylePanel.style.paddingTop = '2px';
@@ -4396,6 +4850,7 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
                      
                      
                       legendlabelID = cell[0].getAttribute('legendlabels', '');
+                     
                       
                      
                      
@@ -4410,15 +4865,14 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
 	submitbuttonlebal.style.paddingBottom = '6px';
 	stylePanel.appendChild(submitbuttonlebal);
         
-        
-        
+      
         
         
         var selectboothtypes = document.createElement('select');
         selectboothtypes.style.width = '70%';
         selectboothtypes.style.marginRight = '10px';
 	selectboothtypes.id = 'legendlabeltypedropdown';
-        
+        selectboothtypes.className = 'select2';
          var option = document.createElement("option");
          option.value = '';
         
@@ -4455,7 +4909,7 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
         var manageboothtypes = document.createElement('a');
         manageboothtypes.className = 'myCustomeButton';
         manageboothtypes.style.padding = '5px 4px 5px 4px';
-        manageboothtypes.style.marginRight = '1%';
+        manageboothtypes.style.marginLeft = '10px';
        // manageboothtypes.setAttribute('onclick', 'getallboothtypes()');
         manageboothtypes.innerHTML = 'Manage';
         
@@ -4521,7 +4975,7 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
                                                     
                                                     classstatusshow='display:none;';
                                                }
-                                               html+='<tr id="showheaderlegend" style="'+classstatusshow+'"><th>Position</th><th>Label</th><th>Active</th><th>Color</th><th>Delete</th></tr>';
+                                               html+='<tr id="showheaderlegend" style="'+classstatusshow+'"><th style="text-align:center;">Position</th><th style="text-align:center;">Label</th><th style="text-align:center;" >Color Override <i class="far fa-question-circle" title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only."></i></th><th style="text-align:center;">Unoccupied</th><th style="text-align:center;">Occupied</th><th style="text-align:center;">Delete</th></tr>';
                                                
                                              
     
@@ -4546,14 +5000,14 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
                                                     });
                                                   
                                                   
-                                                  html+='<tr class="lengendsrows" id="'+value.ID+'" ><td style="width:10%;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 30%;"><input type="text" title="Label" value="'+value.name+'" id="boothtypename_'+value.ID+'" /></td>';
+                                                  html+='<tr class="lengendsrows" id="'+value.ID+'" ><td style="width:5%;text-align:center;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 25%;"><input type="text" title="Label" value="'+value.name+'" id="boothtypename_'+value.ID+'" /></td>';
                                                   if(value.colorstatus == true){
                                                        
-                                                       html+='<td style="width: 10%;text-align: center;"><label style="" title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td>';
+                                                       html+='<td style="width: 10%;text-align: center;"><label style="" title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Unoccupied Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td><td style="width: 10%;text-align: center;"><input title="Select Occupied Color" type="color" value="'+value.colorcodeOcc+'" id="boothtypecolorOcc_'+value.ID+'" /></td>';
                                                  
                                                   }else{
                                                        
-                                                       html+='<td style="width: 10%;text-align: center;"><label  title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" ><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input style="display:none;" title="Select Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td>';
+                                                       html+='<td style="width: 10%;text-align: center;"><label  title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" ><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input style="display:none;" title="Select Unoccupied Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td><td style="width: 10%;text-align: center;"><input title="Select Occupied Color" style="display:none;" type="color" value="'+value.colorcodeOcc+'" id="boothtypecolorOcc_'+value.ID+'" /></td>';
                                                  
                                                   }
                                                   if(statusremove == 'notremoveable'){
@@ -4571,17 +5025,12 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
                                               
                                                html+='</table></div>';
                                                html+='<p id="legendsbuttons" style="'+classstatusshow+' text-align:center;margin: 10px 0px 0px 0px;"><button class="btn btn-large btn-info" onclick="updatealllengends()">Save</button><button style="margin-left: 11px;background-color: #b0b0b0; border-color: #b0b0b0;" class="btn btn-large btn-info" onclick="closelegendsdilog()">Cancel</button></p>';
-                                               
                                                html+='<hr>';
                                                
-                                               
-                                               
-                                               
                                                html+='<table class="table mycustometable">';
-                                               html+='<tr ><th></th><th>Label</th><th>Active</th><th>Color</th><th></th></tr>';
-                                               html+='<tr><td style="width:10%;"><b>Add New</b></td><td style="width: 30%;"><input title="Label" type="text" id="addnewlegendname" ></td>';
-                                               html+='<td style="width: 10%;text-align: center;"><label  title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+addtext+')"  id="addnewlegendstatus" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color"  id="addnewlegendcolorcode" ></td><td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintolegendtypes()">Add</button></td></tr>';
-                                              
+                                               html+='<tr ><th></th><th>Label</th><th title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." style="text-align:center;">Color Override <i class="far fa-question-circle" title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only."></i></th><th>Unoccupied</th><th>Occupied</th></tr>';
+                                               html+='<tr><td style="width:5%;"><b>Add New</b></td><td style="width: 25%;"><input title="Label" type="text" id="addnewlegendname" ></td>';
+                                               html+='<td style="width: 10%;text-align: center;"><label  title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." class="switch"><input type="checkbox" onclick="hidecolorselection('+addtext+')"  id="addnewlegendstatus" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Unoccupied Color" type="color"  id="addnewlegendcolorcode" ></td><td style="width: 10%;text-align: center;"><input title="Select Occupied Color" type="color"  id="addnewlegendcolorcodeOcc" ></td><td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintolegendtypes()">Add</button></td></tr>';
                                                html+='</table>';
                                               
                                                
@@ -4613,30 +5062,53 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
                           var cell = graph.getSelectionCells();  
                           document.getElementById("applybuttonlegend").focus();
                           jQuery.each(cell,function(cellindex,cellvalue){
+                              
+                          var startfloorplanedtitng = {}; 
+                           startfloorplanedtitng.action = "Apply Legend Label";
+                                var valuexmlstring = "";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
+                                startfloorplanedtitng.boothid = cellvalue.id;
+                                startfloorplanedtitng.preboothdetail = valuexmlstring;
+                                startfloorplanedtitng.preboothstyle = cellvalue.style;
+                                startfloorplanedtitng.datetime = new Date(jQuery.now());
+                               
+
+                       
+                              
                              
-                            
+                               console.log(cellvalue);
                                var legendlabelsdropdown = document.getElementById("legendlabeltypedropdown");
                                var seletedlegendlabelsvalue = legendlabelsdropdown.options[legendlabelsdropdown.selectedIndex].value;
-                               var selectedlegendcolorcode = "none";
+                               var selectedlegendcolorcodeun = "none";
+                               var selectedlegendcolorcodeocc = "none";
                               jQuery.each(LegendsOfObjects, function(index1, value) {
                                  
                                   if(value.ID == seletedlegendlabelsvalue){
                                       
-                                      selectedlegendcolorcode = value.colorcode ;
+                                      selectedlegendcolorcodeun = value.colorcode ;
+                                      selectedlegendcolorcodeocc = value.colorcodeOcc ;
                                       
                                       
                                   }
                                   
                               });
-                            console.log();
+                           
                             var labelvalue = "";
                             var boothdetailvalue = "";
                             var assigenduserID = "none";
                             var companydescripiton = "";
                             var boothproductid = "none";
                             var seletedpricetegkeyvalue = "none";
+                            var boothtags="";
                             if (mxUtils.isNode(cellvalue.value))
                                 {  
+                                   
+                                     
                                     
                                      assigenduserID = cellvalue.getAttribute('boothOwner', '');
                                      labelvalue = cellvalue.getAttribute('mylabel', '');
@@ -4644,9 +5116,10 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
                                      companydescripiton = cellvalue.getAttribute('companydescripiton', '');
                                      boothproductid = cellvalue.getAttribute('boothproductid', '');
                                      seletedpricetegkeyvalue = cellvalue.getAttribute('pricetegid', '');
-                                    
+                                     boothtags = cellvalue.getAttribute('boothtags', '');
+                                   
                                 }
-                                
+                            
                             var doc = mxUtils.createXmlDocument();
                             var node = doc.createElement('MyNode')
                           
@@ -4655,17 +5128,13 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
                             node.setAttribute('boothDetail', boothdetailvalue);
                             
                             node.setAttribute('legendlabels', seletedlegendlabelsvalue);
-                            node.setAttribute('legendlabelscolor', selectedlegendcolorcode);
+                            node.setAttribute('legendlabelscolorUn', selectedlegendcolorcodeun);
+                            node.setAttribute('legendlabelscolorOcc', selectedlegendcolorcodeocc);
                             node.setAttribute('companydescripiton', companydescripiton);
                             node.setAttribute('boothproductid', boothproductid);
-                            node.setAttribute('pricetegid', seletedpricetegkeyvalue);   
+                            node.setAttribute('pricetegid', seletedpricetegkeyvalue); 
+                            node.setAttribute('boothtags', boothtags);
                                   
-                               if(selectedlegendcolorcode != "none" && selectedlegendcolorcode != "" ){
-                                    console.log(selectedlegendcolorcode)
-                                    graph.setCellStyles("fillColor", selectedlegendcolorcode, graph.getSelectionCells());
-                               
-                               }else{
-                                   
                                  var cellStyle = cellvalue.style;
                                  var tokens = (cellStyle != null) ? cellStyle.split(';') : [];
                                  var occcolor="";
@@ -4682,41 +5151,84 @@ StyleFormatPanel.prototype.addLegendLabel = function(container)
                                         
                                          unoccou = getboothname[1];
                                     }
-                                });
-                                 
-                                 if (assigenduserID != 'none') {
-                                     
-                                      // console.log(occcolor+'------owner');
-                                        graph.setCellStyles("fillColor", occcolor, graph.getSelectionCells());
+                                });      
+                            
+                               console.log(assigenduserID);
+                               if(assigenduserID != "none" && assigenduserID != ""){
+                                    console.log(selectedlegendcolorcodeocc);
+                                    if(seletedlegendlabelsvalue != "none" && seletedlegendlabelsvalue != ""){
+                                       
+                                       if(selectedlegendcolorcodeocc == "none"){
+                                           graph.setCellStyles("fillColor", occcolor, cellvalue);
+                                           
+                                       }else{
+                                           
+                                          graph.setCellStyles("fillColor", selectedlegendcolorcodeocc, cellvalue);  
+                                       }
+                                       
+                                        
+                                    }else{
+                                        console.log(occcolor+'OCCcolor');
+                                        graph.setCellStyles("fillColor", occcolor, cellvalue);
+                                       
+                                    }
                                     
-                                    } else {
-                                      //  console.log(unoccou+'------notowner');
-                                        graph.setCellStyles("fillColor", unoccou, graph.getSelectionCells());
-                                    } 
                                     
-                                     
+                                }else{
+                                    console.log(selectedlegendcolorcodeocc);
+                                    if(seletedlegendlabelsvalue != "none" && seletedlegendlabelsvalue != ""){
+                                    
+                                        //graph.setCellStyles("fillColor", selectedlegendcolorcodeun, cellvalue);
+                                         if(selectedlegendcolorcodeun == "none"){
+                                           graph.setCellStyles("fillColor", unoccou, cellvalue);
+                                           
+                                       }else{
+                                           
+                                          graph.setCellStyles("fillColor", selectedlegendcolorcodeun, cellvalue);  
+                                       }
+                                       
+                                    }else{
+                                        console.log(occcolor+'UOCCColor');
+                                        graph.setCellStyles("fillColor", unoccou, cellvalue);
+                                        
+   
+                                    }
+                                    
                                 }
                                
-                                
                                 cellvalue.value = node;
                                 graph.cellLabelChanged(cellvalue, '');
-                                    
+                                 var valuexmlstring = "";
+                                jQuery.each(cellvalue.value, function (valueindex, valuevalue) {
+
+                                    if (valueindex == 'outerHTML') {
+                                        valuexmlstring = valuevalue;
+                                    }
+                                });
+                                startfloorplanedtitng.postboothdetail = valuexmlstring;
+                                startfloorplanedtitng.postboothstyle = cellvalue.style;
+                                expogenielogging.push(startfloorplanedtitng);
+                                
+                                
                             });
                             
-                            
-                                   
+                        jQuery("#legendlabeltypedropdown").select2();
+                        jQuery("#boothtagstypedropdown").select2();
+                        
+                        
+                        
+                        
                    
                 });
         
 
-     
+        
 	stylePanel.appendChild(legendbuttonsubmit);
         
 	
             container.appendChild(stylePanel);
+           
     
-
-	
         container.style.paddingTop = '0px';
         
 	return container;
@@ -4809,7 +5321,7 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
         var productstatus  ="";
         var currentBoothID = cell[0].id;
         
-        console.log(cell.length);
+        //console.log(cell.length);
         
         if(cell.length > 1){
         jQuery.each(cell,function(cellindex,cellvalue){
@@ -4823,7 +5335,7 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
                 productstatus = 'selled';
             }
             
-            console.log(productstatus);
+           // console.log(productstatus);
             
         });
         }else{
@@ -5144,7 +5656,20 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
             }
             
            jQuery.each(cell,function(cellindex,cellvalue){
-                
+                 var startfloorplanedtitng = {}; 
+                                var valuexmlstring = "";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
+                            startfloorplanedtitng.boothid = cellvalue.id;
+                            startfloorplanedtitng.preboothdetail = valuexmlstring;
+                               startfloorplanedtitng.preboothstyle = cellvalue.style;
+                            
+                            startfloorplanedtitng.datetime = new Date(jQuery.now());
+                            startfloorplanedtitng.event = "Updateproduct";
                var boothproductdata =  {};
                var CurentBoothID = cellvalue.id;
                 var boothtitle = cellvalue.getAttribute('mylabel', '');
@@ -5189,6 +5714,10 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                              allBoothsProductData[boothIndex].depositstype=depositstype;
                              allBoothsProductData[boothIndex].depositsamount=depositsamount;
                              allBoothsProductData[boothIndex].depositestatus=depositestatus;
+                             
+                             
+                             startfloorplanedtitng.postboothdetail = JSON.stringify(allBoothsProductData[boothIndex]);
+                             expogenielogging.push(startfloorplanedtitng);
                         }
                         
                     });
@@ -5196,7 +5725,8 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                }else{
                
                allBoothsProductData.push(boothproductdata);
-               
+                startfloorplanedtitng.postboothdetail = JSON.stringify(boothproductdata);
+                    expogenielogging.push(startfloorplanedtitng);
                }
                
                
@@ -5348,6 +5878,25 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
             
         jQuery.each(cell,function(cellindex,cellvalue){
                 
+                
+                            var startfloorplanedtitng = {}; 
+                            startfloorplanedtitng.action = "Add Product";
+                                var valuexmlstring = "";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
+                            startfloorplanedtitng.boothid = cellvalue.id;
+                            startfloorplanedtitng.preboothdetail = valuexmlstring;
+                              startfloorplanedtitng.preboothstyle = cellvalue.style;
+                            
+                            
+                            startfloorplanedtitng.datetime = new Date(jQuery.now());
+                            
+                
+                
                 var boothproductdata =  {};
                var CurentBoothID = cellvalue.id;
                var boothtitle = cellvalue.getAttribute('mylabel', '');
@@ -5409,14 +5958,17 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                              allBoothsProductData[boothIndex].depositstype=depositstype;
                              allBoothsProductData[boothIndex].depositsamount=depositsamount;
                              allBoothsProductData[boothIndex].depositestatus=depositestatus;
-                             
+                           startfloorplanedtitng.postboothdetail = JSON.stringify(allBoothsProductData[boothIndex]);
+                 expogenielogging.push(startfloorplanedtitng);    
                         }
                         
                     });
-                    
+                  
                }else{
                
                allBoothsProductData.push(boothproductdata);
+               startfloorplanedtitng.postboothdetail = JSON.stringify(boothproductdata);
+                 expogenielogging.push(startfloorplanedtitng);
                
                }
                
@@ -5676,7 +6228,10 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                      
                      
                 }
-                
+        
+        
+        
+        
         var getshowdescripiton = getWords(companydescripiton);
         var companydescripitonInput = document.createElement('input');
         
@@ -5744,7 +6299,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         heading.style. fontWeight = 'bold';
        
 	stylePanel.appendChild(heading);
-       stylePanel.appendChild(icontegat);
+        stylePanel.appendChild(icontegat);
        
       
        
@@ -5799,6 +6354,7 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                 }
 	
         
+       
 //        var productdivtitle = document.createElement('div');
 //        
 //        productdivtitle.style.width = '100%';
@@ -5995,10 +6551,37 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                 gradientSelect.appendChild(gradientOption);
         
         });
-	
-	
-
-	var listener = mxUtils.bind(this, function()
+        
+    jQuery.each(cell,function(cellindex,cellvalue){    
+        
+	var startfloorplanedtitng = {};
+        
+        var mylabel = cellvalue.getAttribute('mylabel', '');
+        var boothproductid = cellvalue.getAttribute('boothproductid', '');
+        var boothowner = cellvalue.getAttribute('boothOwner', '');
+        var valuexmlstring = "";
+        jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+        
+                if(valueindex == 'outerHTML'){
+                    valuexmlstring = valuevalue;
+                }
+        });
+        startfloorplanedtitng.action = "Select and Apply";
+        startfloorplanedtitng.boothlable = mylabel;
+        startfloorplanedtitng.boothid = cellvalue.id;
+        startfloorplanedtitng.boothownerid = boothowner;
+        startfloorplanedtitng.postboothdetail = valuexmlstring;
+        startfloorplanedtitng.postboothstyle = cellvalue.style;
+      
+        startfloorplanedtitng.datetime = new Date(jQuery.now());
+        
+        
+        expogenielogging.push(startfloorplanedtitng);
+        
+    });
+    console.log(expogenielogging);
+    
+        var listener = mxUtils.bind(this, function()
 	{       
 		ss = this.format.getSelectionState();
                 var cell = graph.getSelectionCells();
@@ -6089,11 +6672,24 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         
         jQuery("#descripitonhtmltext").append(unescape(getWords(updatedescripionvalue))+'....');
         
-        
+                            
                           var cell = graph.getSelectionCells();  
                           document.getElementById("applybutton").focus();
                           jQuery.each(cell,function(cellindex,cellvalue){
+                              
+                              
+                             var startfloorplanedtitng = {};
+                             var valuexmlstring = "";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
                              
+                             
+                               startfloorplanedtitng.preboothdetail = valuexmlstring;
+                               startfloorplanedtitng.preboothstyle = cellvalue.style;
                                var getdetailvalue = document.getElementById("boothdetail").value;
                                var getboothnumber = document.getElementById("boothnumber").value;
                               
@@ -6128,7 +6724,8 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                             var doc = mxUtils.createXmlDocument();
                             var node = doc.createElement('MyNode');
                             var legendlabels = "";
-                            var legendlabelscolor = "";
+                            var legendlabelscolorUn = "";
+                            var legendlabelscolorOcc = "";
                             var seletedpricetegkeyvalue = "none";
                             node.setAttribute('mylabel', getboothnumber);
                             node.setAttribute('boothDetail', getdetailvalue);
@@ -6137,11 +6734,13 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                             if(cell.length == 1){
                                 
                               legendlabels = cell[0].getAttribute('legendlabels', '');
-                              legendlabelscolor = cell[0].getAttribute('legendlabelscolor', '');
+                              legendlabelscolorUn = cell[0].getAttribute('legendlabelscolorUn', '');
+                              legendlabelscolorOcc = cell[0].getAttribute('legendlabelscolorOcc', '');
                               seletedpricetegkeyvalue = cell[0].getAttribute('pricetegid', '');
                               
                                node.setAttribute('legendlabels', legendlabels);
-                               node.setAttribute('legendlabelscolor', legendlabelscolor);
+                               node.setAttribute('legendlabelscolorUn', legendlabelscolorUn);
+                               node.setAttribute('legendlabelscolorOcc', legendlabelscolorOcc);
                                node.setAttribute('pricetegid', seletedpricetegkeyvalue);
                                var e = document.getElementById("exhibitorID");
                                if (e.options[e.selectedIndex].value != "") {
@@ -6166,21 +6765,54 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                 }
                                node.setAttribute('boothproductid', boothproductvalue);
                                
-                               
-                                if(legendlabelscolor != "none" && legendlabelscolor !=""){
+                                if(getexhibortervalue != "none" ){
                                     
-                                    graph.setCellStyles("fillColor", legendlabelscolor, graph.getSelectionCells());
+                                    
+                                    if(legendlabels != "none" && legendlabels !=""){
+                                    
+                                       
+                                        if(legendlabelscolorOcc == "none"){
+                                            
+                                              graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+                                            
+                                        }else{
+                                            
+                                             graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
+                                        }
+                                        
+                                        
+                                    
+                                    }else{
+                              
+                                        graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+   
+                                    }
+                                    
                                     
                                 }else{
-                              
-                                 if (getexhibortervalue != 'none') {
-                                        
-                                        graph.setCellStyles("fillColor", ss.style.occ, graph.getSelectionCells());
                                     
-                                    } else {
-                                        graph.setCellStyles("fillColor", ss.style.uno, graph.getSelectionCells());
-                                    }  
+                                    if(legendlabels != "none" && legendlabels !=""){
+                                    
+                                      //  graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
+                                        if(legendlabelscolorUn == "none"){
+                                            
+                                              graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+                                            
+                                        }else{
+                                            
+                                             graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
+                                        }
+                                        
+                                    
+                                    }else{
+                              
+                                        graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+   
+                                    }
+                                    
+                                    
                                 }
+                                
                             }else{
                                
                                   
@@ -6196,22 +6828,61 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                      console.log(boothownerlastvalue);
                                      boothownerlastvalue = cellvalue.getAttribute('boothOwner', '');
                                      legendlabels = cellvalue.getAttribute('legendlabels', '');
-                                     legendlabelscolor = cellvalue.getAttribute('legendlabelscolor', '');
+                                     legendlabelscolorUn = cellvalue.getAttribute('legendlabelscolorUn', '');
+                                     legendlabelscolorOcc = cellvalue.getAttribute('legendlabelscolorOcc', '');
                                      boothproductlastvalue = cellvalue.getAttribute('boothproductid', '');
                                      seletedpricetegkeyvalue = cellvalue.getAttribute('pricetegid', '');
                                     
                                 }
                                 
-                                if(legendlabelscolor != "none" && legendlabelscolor !=""){
+                                
+                                if(boothownerlastvalue != "none" ){
                                     
-                                    graph.setCellStyles("fillColor", legendlabelscolor, graph.getSelectionCells());
+                                    if(legendlabels != "none" && legendlabels !=""){
+                                    
+                                      //  graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
+                                        
+                                        if(legendlabelscolorOcc == "none" ){
+                                              graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+                                            
+                                        }else{
+                                            
+                                             graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
+                                        }
+                                        
+                                    
+                                    }else{
+                              
+                                        graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+   
+                                    }
+                                    
+                                    
+                                }else{
+                                    
+                                    if(legendlabels != "none" && legendlabels !=""){
+                                    
+                                       // graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
+                                         if(legendlabelscolorUn == "none" ){
+                                              graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+                                            
+                                        }else{
+                                            
+                                             graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
+                                        }
+                                    
+                                    }else{
+                              
+                                        graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+   
+                                    }
+                                    
                                     
                                 }
-                                
-                                
                                 node.setAttribute('boothOwner', boothownerlastvalue);
                                 node.setAttribute('legendlabels', legendlabels);
-                                node.setAttribute('legendlabelscolor', legendlabelscolor);
+                                node.setAttribute('legendlabelscolorUn', legendlabelscolorUn);
+                                node.setAttribute('legendlabelscolorOcc', legendlabelscolorOcc);
                                 node.setAttribute('boothproductid', boothproductlastvalue);
                                 node.setAttribute('pricetegid', seletedpricetegkeyvalue);
                             }
@@ -6221,7 +6892,43 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 
                                 cellvalue.value = node;
                                 graph.cellLabelChanged(cellvalue, '');
-                                    
+                                
+                                var startfloorplanedtitng = {};
+                                startfloorplanedtitng.action = "Update Company Description";
+                                var mylabel = cellvalue.getAttribute('mylabel', '');
+                                var boothproductid = cellvalue.getAttribute('boothproductid', '');
+                                var boothowner = cellvalue.getAttribute('boothOwner', '');
+                                var legendlabels = cellvalue.getAttribute('legendlabels', '');
+                                var legendlabelscolorUn = cellvalue.getAttribute('legendlabelscolorUn', '');
+                                var pricetegid = cellvalue.getAttribute('pricetegid', '');
+                                var legendlabelscolorOcc = cellvalue.getAttribute('legendlabelscolorOcc', '');
+								var companydescripiton = cellvalue.getAttribute('companydescripiton', '');
+                              
+                                
+                                var valuexmlstring = "";
+                                jQuery.each(cellvalue.value, function (valueindex, valuevalue) {
+
+                                    if (valueindex == 'outerHTML') {
+                                        valuexmlstring = valuevalue;
+                                    }
+                                });
+                                
+                                startfloorplanedtitng.boothlable = mylabel;
+                                startfloorplanedtitng.boothid = cellvalue.id;
+                                startfloorplanedtitng.boothownerid = boothowner;
+                                startfloorplanedtitng.boothproductid = boothproductid;
+                                startfloorplanedtitng.legendlabels = legendlabels;
+                                startfloorplanedtitng.legendlabelscolorUn = legendlabelscolorUn;
+                                startfloorplanedtitng.legendlabelscolorOcc = legendlabelscolorOcc;
+                                startfloorplanedtitng.pricetegid = pricetegid;
+                                startfloorplanedtitng.postboothdetail = valuexmlstring;
+                                startfloorplanedtitng.postboothstyle = cellvalue.style;
+                                startfloorplanedtitng.datetime = new Date(jQuery.now());
+                                
+				startfloorplanedtitng.companydescripiton = companydescripiton;
+                                expogenielogging.push(startfloorplanedtitng);
+                                
+                                
                             });
                             
         
@@ -6242,11 +6949,21 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
         });
         mxEvent.addListener(detailsubmit, 'click', function()
 	{
-                          
+                         
                           var cell = graph.getSelectionCells();  
                           document.getElementById("applybutton").focus();
                           jQuery.each(cell,function(cellindex,cellvalue){
-                             
+                              var startfloorplanedtitng = {};
+                              var valuexmlstring = "";
+                              startfloorplanedtitng.action = "Update Booth";
+                                jQuery.each(cellvalue.value,function(valueindex,valuevalue){  
+
+                                        if(valueindex == 'outerHTML'){
+                                            valuexmlstring = valuevalue;
+                                        }
+                                });
+                              startfloorplanedtitng.preboothdetail = valuexmlstring;
+                               startfloorplanedtitng.preboothstyle = cellvalue.style;
                                var getdetailvalue = document.getElementById("boothdetail").value;
                               
                               
@@ -6281,7 +6998,9 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                             var doc = mxUtils.createXmlDocument();
                             var node = doc.createElement('MyNode');
                             var legendlabels = "";
-                            var legendlabelscolor = "";
+                            var legendlabelscolorUn = "";
+                            var legendlabelscolorOcc = "";
+                            var boothtagsvalue = "";
                             
                             
                             
@@ -6296,13 +7015,18 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                               
                               
                               legendlabels = cell[0].getAttribute('legendlabels', '');
-                              legendlabelscolor = cell[0].getAttribute('legendlabelscolor', '');
+                              legendlabelscolorUn = cell[0].getAttribute('legendlabelscolorUn', '');
+                              legendlabelscolorOcc = cell[0].getAttribute('legendlabelscolorOcc', '');
+                              boothtagsvalue = cell[0].getAttribute('boothtags', '');
                               var seletedpricetegkeyvalue = cell[0].getAttribute('pricetegid', '');
                               var boothproductvaluecheck = cell[0].getAttribute('boothproductid', '');
                               
                                node.setAttribute('legendlabels', legendlabels);
-                               node.setAttribute('legendlabelscolor', legendlabelscolor);
+                               node.setAttribute('legendlabelscolorUn', legendlabelscolorUn);
+                               node.setAttribute('legendlabelscolorOcc', legendlabelscolorOcc);
+                               
                                node.setAttribute('pricetegid', seletedpricetegkeyvalue);
+                               node.setAttribute('boothtags', boothtagsvalue);
                                
                                
                                var e = document.getElementById("exhibitorID");
@@ -6352,19 +7076,49 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                
                                node.setAttribute('boothproductid', boothproductvalue);
                                
-                                if(legendlabelscolor != "none" && legendlabelscolor !=""){
+                                if(getexhibortervalue != "none" ){
                                     
-                                    graph.setCellStyles("fillColor", legendlabelscolor, graph.getSelectionCells());
+                                   if(legendlabels != "none" && legendlabels !=""){
+                                       
+                                        console.log()
+                                        if(legendlabelscolorOcc == "none"){
+                                            
+                                             graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+                                             
+                                        }else{
+                                            
+                                             graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
+                                        }
+                                       
+                                    
+                                    }else{
+                              
+                                        graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+   
+                                    }
+                                    
                                     
                                 }else{
-                              
-                                 if (getexhibortervalue != 'none') {
-                                        
-                                        graph.setCellStyles("fillColor", ss.style.occ, graph.getSelectionCells());
                                     
-                                    } else {
-                                        graph.setCellStyles("fillColor", ss.style.uno, graph.getSelectionCells());
-                                    }  
+                                    if(legendlabels != "none" && legendlabels !=""){
+                                    
+                                       
+                                        
+                                        if(legendlabelscolorUn == "none"){
+                                            
+                                             graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+                                        }else{
+                                             graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
+                                            
+                                        }
+                                    
+                                    }else{
+                              
+                                        graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+   
+                                    }
+                                    
+                                    
                                 }
                             }else{
                                
@@ -6376,31 +7130,71 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
                                 var boothownerlastvalue  = "";
                                 var boothproductlastvalue  = "";
                                 var seletedpricetegkeyvalue  = "none";
+                                var boothvaluetag  = "";
                                 if (mxUtils.isNode(cellvalue.value))
                                 {  
                                      console.log(boothownerlastvalue);
                                      boothownerlastvalue = cellvalue.getAttribute('boothOwner', '');
                                      
                                       legendlabels = cellvalue.getAttribute('legendlabels', '');
-                                      legendlabelscolor = cellvalue.getAttribute('legendlabelscolor', '');
+                                      legendlabelscolorUn = cell[0].getAttribute('legendlabelscolorUn', '');
+                                      legendlabelscolorOcc = cell[0].getAttribute('legendlabelscolorOcc', '');
                                       boothproductlastvalue = cellvalue.getAttribute('boothproductid', '');
                                       seletedpricetegkeyvalue = cellvalue.getAttribute('pricetegid', '');
+                                      boothvaluetag = cellvalue.getAttribute('boothtags', '');
                                      
                                     
                                 }
                                 
-                                if(legendlabelscolor != "none" && legendlabelscolor !=""){
+                                
+                                if(boothownerlastvalue != "none"  ){
                                     
-                                    graph.setCellStyles("fillColor", legendlabelscolor, graph.getSelectionCells());
+                                    if(legendlabels != "none" && legendlabels !=""){
+                                        
+                                       if(legendlabelscolorOcc == "none"){
+                                           
+                                           graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+                                       }else{
+                                           
+                                            graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
+                                       } 
+                                      
+                                    
+                                    }else{
+                              
+                                        graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+   
+                                    }
+                                    
+                                    
+                                }else{
+                                    
+                                    if(legendlabels != "none" && legendlabels !=""){
+                                    
+                                       // graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
+                                         if(legendlabelscolorUn == "none"){
+                                           
+                                           graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+                                       }else{
+                                           
+                                            graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
+                                       } 
+                                    }else{
+                              
+                                        graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+   
+                                    }
+                                    
                                     
                                 }
                                 
-                                
                                 node.setAttribute('boothOwner', boothownerlastvalue);
                                 node.setAttribute('legendlabels', legendlabels);
-                                node.setAttribute('legendlabelscolor', legendlabelscolor);
+                                node.setAttribute('legendlabelscolorUn', legendlabelscolorUn);
+                                node.setAttribute('legendlabelscolorOcc', legendlabelscolorOcc);
                                 node.setAttribute('boothproductid', boothproductlastvalue);
                                 node.setAttribute('pricetegid', seletedpricetegkeyvalue);
+                                node.setAttribute('pricetegid', boothvaluetag);
                             }
                             
                                
@@ -6408,11 +7202,49 @@ StyleFormatPanel.prototype.addExhibitors = function(container)
 
                                 cellvalue.value = node;
                                 graph.cellLabelChanged(cellvalue, '');
-                                    
+                                
+                                
+                                
+                              
+                                
+                                var mylabel = cellvalue.getAttribute('mylabel', '');
+                                var boothproductid = cellvalue.getAttribute('boothproductid', '');
+                                var boothowner = cellvalue.getAttribute('boothOwner', '');
+                                var legendlabels = cellvalue.getAttribute('legendlabels', '');
+                                var legendlabelscolorUn = cellvalue.getAttribute('legendlabelscolorUn', '');
+                                var pricetegid = cellvalue.getAttribute('pricetegid', '');
+                                var legendlabelscolorOcc = cellvalue.getAttribute('legendlabelscolorOcc', '');
+                               
+                                
+                                 var valuexmlstring = "";
+                                jQuery.each(cellvalue.value, function (valueindex, valuevalue) {
+
+                                    if (valueindex == 'outerHTML') {
+                                        valuexmlstring = valuevalue;
+                                    }
+                                });
+                                
+                                
+                                startfloorplanedtitng.boothlable = mylabel;
+                                startfloorplanedtitng.boothid = cellvalue.id;
+                                startfloorplanedtitng.boothownerid = boothowner;
+                                startfloorplanedtitng.boothproductid = boothproductid;
+                                startfloorplanedtitng.legendlabels = legendlabels;
+                                 startfloorplanedtitng.datetime = new Date(jQuery.now());
+                                startfloorplanedtitng.legendlabelscolorUn = legendlabelscolorUn;
+                                startfloorplanedtitng.legendlabelscolorOcc = legendlabelscolorOcc;
+                                startfloorplanedtitng.pricetegid = pricetegid;
+                                
+                                startfloorplanedtitng.postboothdetail = valuexmlstring;
+                                startfloorplanedtitng.postboothstyle = cellvalue.style;
+                                expogenielogging.push(startfloorplanedtitng);
+                                
+                                
                             });
                             
                             
-                                   
+                             jQuery(".select2").select2();    
+                             
                    
                 });
         
@@ -8202,6 +9034,109 @@ DiagramFormatPanel.prototype.multisitesub = function(div)
 	return div;
 };
 
+function updateallboothstags(){
+    
+    jQuery('body').css({'cursor' : 'wait'});
+    var data = new FormData();
+    BoothTagsObjects = [];
+    data.append('post_id', mxPostID);
+    jQuery( ".lengendsrows" ).each(function( index ) {
+           var currentrowID =  jQuery(this).attr("id");
+           var currentrowName =  jQuery("#boothtypename_"+currentrowID).val();
+           var currentrowprice =  jQuery("#boothtypeprice_"+currentrowID).val();
+           currentrowName = currentrowName.replace(/([,.!;"'])+/g, '');
+           var currentrowLengendStatus =  jQuery().attr("id");
+           
+           
+           
+           
+           
+           
+           var saveddataarray ={};
+           saveddataarray.ID =currentrowID;
+           saveddataarray.name =currentrowName;
+           
+           //saveddataarray.price =currentrowprice;
+           BoothTagsObjects.push(saveddataarray);
+           //console.log(BoothTagsObjects);
+    });
+    
+    
+   jQuery("#boothtagstypedropdown").empty();
+    
+    var option = document.createElement("option");
+       option.value = '';
+       option.text = 'None';
+       if(boothTagsList == "" ){
+           option.setAttribute('selected', 'selected');
+       }
+       
+    jQuery("#boothtagstypedropdown").append(option);
+    if(boothTagsList !="" && boothTagsList != undefined){
+         var boothTagsListarray = boothTagsList.split(',');
+    }else{
+        
+        var boothTagsListarray =[];
+    }
+   
+    
+    jQuery.each(BoothTagsObjects, function(index1, value) {
+       
+        
+       var option = document.createElement("option");
+       
+      
+       
+       if(jQuery.inArray(value.ID, boothTagsListarray )!=-1){
+           
+          
+           option.setAttribute('selected', 'selected');
+       }
+       
+       option.value = value.ID;
+       option.text = value.name;
+      jQuery("#boothtagstypedropdown").append(option);
+      
+        
+    });
+    
+    jQuery("#boothtagstypedropdown").select2();
+    data.append('boothtagsArray', JSON.stringify(BoothTagsObjects));
+    jQuery.ajax({
+        url: baseCurrentSiteURl+'/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=savedallboothtags',
+        data:data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        type: 'POST',
+        success: function(data) {
+                   jQuery('body').css({'cursor' : 'default'});
+                  
+                   if(data == 'update'){
+                       
+                       jQuery(".successmessage").append("<h6 style='background: #95e87a;color: #fff;text-align: center;'>Booth tags have been updated successfully.</h6>");
+                       
+                   }
+                   
+                    setTimeout(function() {
+                        jQuery( ".successmessage" ).empty();
+                        }, 3000); // <-- time in milliseconds
+                   
+
+        },error: function (xhr, ajaxOptions, thrownError) {
+                            swal({
+                                title: "Error",
+                                text: "There was an error during the requested operation. Please try again.",
+                                type: "error",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Ok"
+                            });
+            }
+    });
+   
+    
+}
+
 function updatealllengends(){
     
     jQuery('body').css({'cursor' : 'wait'});
@@ -8219,11 +9154,13 @@ function updatealllengends(){
              {
                 var  currentrowLengendStatus = true;
                 var currentrowColorCode =  jQuery("#boothtypecolor_"+currentrowID).val();
+                var currentrowColorCodeOcc =  jQuery("#boothtypecolorOcc_"+currentrowID).val();
              }
              else
              {
                 var  currentrowLengendStatus = false;
                 var currentrowColorCode =  "none";
+                var currentrowColorCodeOcc = "none";
              }
            
            
@@ -8234,6 +9171,8 @@ function updatealllengends(){
            saveddataarray.colorstatus =currentrowLengendStatus
            saveddataarray.name =currentrowName;
            saveddataarray.colorcode =currentrowColorCode;
+           saveddataarray.colorcodeOcc =currentrowColorCodeOcc;
+           
            //saveddataarray.price =currentrowprice;
            LegendsOfObjects.push(saveddataarray);
            console.log(LegendsOfObjects);
@@ -8408,6 +9347,41 @@ function makeid() {
   return text;
 }
 
+
+
+function insertnewrowintoboothtagstypes(){
+    
+    
+    if(jQuery("#addnewlegendname").val() !=""){
+    
+     jQuery('body').css({'cursor' : 'wait'});
+     var saveddataarray ={};
+     var insertRowhtml = "";
+     saveddataarray.ID =  makeid();
+     
+     var IDCODE = "'"+saveddataarray.ID+"'";
+     var legendlabel = jQuery("#addnewlegendname").val();
+   
+     saveddataarray.name  = legendlabel.replace(/([,.!;"'])+/g, '');
+    
+     insertRowhtml+='<tr class="lengendsrows" id="'+saveddataarray.ID+'" ><td style="width:5%;text-align: center;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td style="width: 25%;"><input type="text" title="Label" value="'+saveddataarray.name+'" id="boothtypename_'+saveddataarray.ID+'" /></td>';
+                                                 
+    
+     insertRowhtml+='<td style="width: 10%;text-align: center;"><a style="cursor: pointer;"  title="Remove" onclick="removethisrow('+IDCODE+')" ><i class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></a></td></tr>';
+                                              
+    // LegendsOfObjects.push(saveddataarray);
+     
+        
+     jQuery("#showheaderlegend").show();
+     jQuery("#legendsbuttons").show();   
+     jQuery("#addnewlegendname").val("");
+    
+     jQuery("#listofalllegends").append(insertRowhtml);
+     jQuery('body').css({'cursor' : 'default'});
+     
+    }
+     
+}
 function insertnewrowintolegendtypes(){
     
     
@@ -8423,19 +9397,21 @@ function insertnewrowintolegendtypes(){
    
      saveddataarray.name  = legendlabel.replace(/([,.!;"'])+/g, '');
     
-     insertRowhtml+='<tr class="lengendsrows" id="'+saveddataarray.ID+'" ><td style="width:65px;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td style="width: 30%;"><input type="text" title="Label" value="'+saveddataarray.name+'" id="boothtypename_'+saveddataarray.ID+'" /></td>';
+     insertRowhtml+='<tr class="lengendsrows" id="'+saveddataarray.ID+'" ><td style="width:5%;text-align: center;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td style="width: 25%;"><input type="text" title="Label" value="'+saveddataarray.name+'" id="boothtypename_'+saveddataarray.ID+'" /></td>';
                                                  
      if (jQuery("#addnewlegendstatus").prop('checked')){
          
           saveddataarray.colorstatus =  true; 
           saveddataarray.colorcode =  jQuery("#addnewlegendcolorcode").val();
-          insertRowhtml+='<td style="width: 10%;text-align: center;"><label  title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')" id="lengendcolorstatus_'+saveddataarray.ID+'" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color"  value="'+saveddataarray.colorcode+'" id="boothtypecolor_'+saveddataarray.ID+'" /></td>';
+          saveddataarray.colorcodeOcc =  jQuery("#addnewlegendcolorcodeOcc").val();
+          insertRowhtml+='<td style="width: 10%;text-align: center;"><label  title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')" id="lengendcolorstatus_'+saveddataarray.ID+'" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Unoccupied Color" type="color"  value="'+saveddataarray.colorcode+'" id="boothtypecolor_'+saveddataarray.ID+'" /></td><td style="width: 10%;text-align: center;"><input title="Select Occupied Color" type="color"  value="'+saveddataarray.colorcodeOcc+'" id="boothtypecolorOcc_'+saveddataarray.ID+'" /></td>';
                                                  
      }else{
          
         saveddataarray.colorstatus =  false; 
         saveddataarray.colorcode =  "none";
-        insertRowhtml+='<td style="width: 10%;text-align: center;"><label  title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+saveddataarray.ID+'" ><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color" style="display:none;" value="'+saveddataarray.colorcode+'" id="boothtypecolor_'+saveddataarray.ID+'" /></td>';
+        saveddataarray.colorcodeOcc = "none";
+        insertRowhtml+='<td style="width: 10%;text-align: center;"><label  title="Enabling this will override both the Occupied AND the Unoccupied color of selected booths. Leave this disabled if you only want the Legend Label to be a text label only." class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+saveddataarray.ID+'" ><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Unoccupied Color" type="color" style="display:none;" value="'+saveddataarray.colorcode+'" id="boothtypecolor_'+saveddataarray.ID+'" /></td><td style="width: 10%;text-align: center;"><input title="Select Occupied Color" type="color" style="display:none;" value="'+saveddataarray.colorcodeOcc+'" id="boothtypecolorOcc_'+saveddataarray.ID+'" /></td>';
                                                 
      }
      insertRowhtml+='<td style="width: 10%;text-align: center;"><a style="cursor: pointer;"  title="Remove" onclick="removethisrow('+IDCODE+')" ><i class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></a></td></tr>';
@@ -8446,6 +9422,7 @@ function insertnewrowintolegendtypes(){
         jQuery("#showheaderlegend").show();
         jQuery("#legendsbuttons").show();   
      jQuery("#addnewlegendcolorcode").val("#000000");
+     jQuery("#addnewlegendcolorcodeOcc").val("#000000");
      jQuery("#addnewlegendname").val("");
     
      jQuery("#addnewlegendstatus").removeAttr('checked');
@@ -8518,11 +9495,13 @@ function hidecolorselection(id){
                  
                  
                   jQuery("#addnewlegendcolorcode").show();
+                  jQuery("#addnewlegendcolorcodeOcc").show();
                  
                  
              }else{
                  
                  jQuery("#addnewlegendcolorcode").hide();
+                 jQuery("#addnewlegendcolorcodeOcc").hide();
              }
         
     }else{
@@ -8532,11 +9511,13 @@ function hidecolorselection(id){
                  
                  
                   jQuery("#boothtypecolor_"+id).show();
+                  jQuery("#boothtypecolorOcc_"+id).show();
                  
                  
              }else{
                  
                  jQuery("#boothtypecolor_"+id).hide();
+                  jQuery("#boothtypecolorOcc_"+id).hide();
              }
         
         
@@ -8649,7 +9630,7 @@ function getallpricetegs(){
                                                     html:true,
                                                
                                                     closeIcon: true,
-                                                    columnClass: 'jconfirm-box-container-special-boothtypes',
+                                                    columnClass: 'jconfirm-box-container-special-tagsbooth',
                                                    cancelButton: false ,// hides the cancel button.
                                                    confirmButton: false, // hides the confirm button.
 
@@ -8660,98 +9641,7 @@ function getallpricetegs(){
                           
 }
 
-function getallboothtypes(){
-    
-  
-     var data = new FormData();
-     var addtext = "'add'";
-     var classstatusshow ="";
-     data.append('post_id', mxPostID);
-    
-                                           
-                                           var html = "<p class='successmessage'></p>";
-                                           
-                                           
-                                        
-    
-                                           
-                                          // if(data == 'empty'){
-                                               
-                                               
-                                               
-                                         //  }else{
-                                               
-                                               
-                                             //  var boothtypeslist = JSON.parse(data);
-                                               
-                                               
-                                              // console.log(boothtypeslist);
-                                               html+='<div style="max-height: 350px;overflow: auto;"><table class="table mycustometable" id="listofalllegends">';
-                                               
-                                              if(LegendsOfObjects.length > 0){
-                                                    classstatusshow = "";  
-                                              }else{
-                                                    
-                                                    classstatusshow='display:none;';
-                                               }
-                                               html+='<tr id="showheaderlegend" style="'+classstatusshow+'"><th>Position</th><th>Label</th><th>Active</th><th>Color</th><th>Delete</th></tr>';
-                                               
-                                             
-    
-    
-                                            jQuery.each(LegendsOfObjects, function(index1, value) {
-                                                  var IDCODE = "'"+value.ID+"'" ;
-                                                  html+='<tr class="lengendsrows" id="'+value.ID+'" ><td style="width:10%;"><i title="Move" style="margin-top: 8px;cursor: move;" class="hi-icon fusion-li-icon fas fa-arrows-alt-v fa-lg"></i></td><td    style="width: 30%;"><input type="text" title="Label" value="'+value.name+'" id="boothtypename_'+value.ID+'" /></td>';
-                                                  if(value.colorstatus == true){
-                                                       
-                                                       html+='<td style="width: 10%;text-align: center;"><label style="" title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td>';
-                                                 
-                                                  }else{
-                                                       
-                                                       html+='<td style="width: 10%;text-align: center;"><label  title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+IDCODE+')"  id="lengendcolorstatus_'+value.ID+'" ><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input style="display:none;" title="Select Color" type="color" value="'+value.colorcode+'" id="boothtypecolor_'+value.ID+'" /></td>';
-                                                 
-                                                  }
-                                                  
-                                                      html+='<td style="width: 10%;text-align: center;"><a style="cursor: pointer;"  title="Remove" onclick="removethisrow('+IDCODE+')" ><i class="hi-icon fusion-li-icon fa fa-times-circle fa-lg"></i></a></td></tr>';
-                                              
-                                                   
-                                               });
-                                              
-                                               html+='</table></div>';
-                                               html+='<p id="legendsbuttons" style="'+classstatusshow+' text-align:center;margin: 10px 0px 0px 0px;"><button class="btn btn-large btn-info" onclick="updatealllengends()">Save</button><button style="margin-left: 11px;background-color: #b0b0b0; border-color: #b0b0b0;" class="btn btn-large btn-info" onclick="closelegendsdilog()">Cancel</button></p>';
-                                               
-                                               html+='<hr>';
-                                               
-                                               
-                                               
-                                               
-                                               html+='<table class="table mycustometable">';
-                                               html+='<tr ><th></th><th>Label</th><th>Active</th><th>Color</th><th></th></tr>';
-                                               html+='<tr><td style="width:10%;"><b>Add New</b></td><td style="width: 30%;"><input title="Label" type="text" id="addnewlegendname" ></td>';
-                                               html+='<td style="width: 10%;text-align: center;"><label  title="Use Color On/Off" class="switch"><input type="checkbox" onclick="hidecolorselection('+addtext+')"  id="addnewlegendstatus" checked><span class="slider round"></span></label></td><td style="width: 10%;text-align: center;"><input title="Select Color" type="color"  id="addnewlegendcolorcode" ></td><td style="width: 10%;text-align: center;"><button class="btn btn-large btn-info" onclick="insertnewrowintolegendtypes()">Add</button></td></tr>';
-                                              
-                                               html+='</table>';
-                                              
-                                               
-                                               
-                                         //  }
-                                            
-                                            legendsdilog = jQuery.confirm({
-                                                    title: '<b style="text-align:center;">Legend Labels</b>',
-                                                    content: html,
-                                                    html:true,
-                                               
-                                                    closeIcon: true,
-                                                    columnClass: 'jconfirm-box-container-special-boothtypes',
-                                                   cancelButton: false ,// hides the cancel button.
-                                                   confirmButton: false, // hides the confirm button.
 
-
-                                                });
-                                           jQuery(".mycustometable tbody").sortable();
-                                    
-                          
-}
 
 function closelegendsdilog(){
     
