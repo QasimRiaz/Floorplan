@@ -4,7 +4,11 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
+<<<<<<< HEAD
  * Version: 5.00
+=======
+ * Version: 4.01
+>>>>>>> origin/master
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -504,10 +508,13 @@ function getBoothList($postdata) {
         $boothTypes = $postdata['boothTypes'];
         $user_ID = get_current_user_id();
         
+<<<<<<< HEAD
         if(!empty($user_ID) || $user_ID !=0 ){
         
         $user_info = get_userdata($user_ID);  
         
+=======
+>>>>>>> origin/master
         $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Activity Log',"Admin Action","",$user_ID,$user_info->user_email,$postdata['speciallog']);
         $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Settings Saved',"Admin Action","",$user_ID,$user_info->user_email,$postdata);
         
