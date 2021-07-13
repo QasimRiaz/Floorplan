@@ -1170,7 +1170,7 @@ EditorUi = function(editor, container, lightbox)
                                                         var floorplanstatus = finalresultProduct.floorplanstatus;
                                                         var productstatus = finalresultProduct.status;
                                                         var buttonsdiv = "";
-                                                        console.log(finalresultProduct);
+                                                        console.log(finalresultProduct.deposit_enable_type);
                                                         
                                                         
                                                          var htmlforproductdetail = "";
@@ -1218,13 +1218,36 @@ EditorUi = function(editor, container, lightbox)
                                                                 
                                                             }else{
                                                                 
-                                                                htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'log\')"  >Add To Cart</a></p>';
-                                                         
+                                                                
+                                                                if(finalresultProduct.deposit_enable_type == 'optional'){
+                                                                    
+                                                                    htmlforproductdetail = '<p  id="'+boothproductid+'"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></p>'
+                                                                    
+                                                                }else{
+                                                                    
+                                                                   htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a></p>';
+                                                           
+                                                                }
+                                                                    
+                                                                    
+                                                               
                                                             }
                                                         }else{
-                                                            
-                                                           htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
-                                                          
+                                                                    
+                                                                   
+                                                                if(finalresultProduct.deposit_enable_type == 'optional'){
+                                                                    
+                                                                    htmlforproductdetail += '<p  id="'+boothproductid+'"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Purchase Now</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'woo\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'woo\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></p>';
+                                                                    
+                                                                    
+                                                                }else{
+                                                                    
+                                                                    htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\',\'full\','+finalresultProduct.slug+')"  >Purchase Now</a></p>';
+                                                              
+                                                                    
+                                                                }
+                                                                
+                                                                
                                                         }
                                                            
                                                         }else{
@@ -1266,13 +1289,39 @@ EditorUi = function(editor, container, lightbox)
                                                                 
                                                                         }else{
                                                                 
-                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
+                                                                            if(finalresultProduct.deposit_enable_type == 'optional'){
                                                                     
-                                                                }
+                                                                                buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
+                                                                    
+                                                                            }else{
+                                                                                
+                                                                                buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
+                                                                      
+                                                                                
+                                                                            }
+                                                                    
+                                                                            
+                                                                            
+                                                                            
+                                                                        }
                                                                  
                                                                 }else{
                                                          
-                                                                    buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></div></div>'
+                                                                    //buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></div></div>'
+                                                                    console.log(finalresultProduct.deposit_enable_type);
+                                                                    if(finalresultProduct.deposit_enable_type == 'optional'){
+                                                                    
+                                                                        //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
+                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Purchase Now</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'woo\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'woo\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div></div>'
+                                                                    
+                                                                    }else{
+                                                                    
+                                                                        //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
+                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'woo\',\'full\','+finalresultProduct.slug+')"  >Purchase Now</a></div></div>'
+                                                                    
+                                                                    }
+                                                                    
+                                                                    
                                                                     
                                                                 }    
                                                                      
@@ -1490,29 +1539,57 @@ EditorUi = function(editor, container, lightbox)
  }
 
 
- function addToCart(p_id,request) {
+ function addToCart(p_id,request,price,slug) {
      
-            console.log(request);
+            
           jQuery("body").css("cursor", "progress");
-          jQuery.get(baseCurrentSiteURl+'/?add-to-cart=' + p_id+'&quantity=1', function() {
-             var checkouturl = baseCurrentSiteURl+'/checkout/';
-             var addONs = baseCurrentSiteURl+'/product-category/add-ons/';
-             jQuery("#"+p_id).empty();
-             jQuery("#"+p_id+'_checkout').attr("disabled", false);
-            
-             if(request == 'log'){ 
-                var enbutton = "<a class='btn btn-success btn-small' >Added</a>"
-                jQuery("#"+p_id).append(enbutton);
-             }else{
-                 
-                 top.window.location.href = baseCurrentSiteURl+"/exhibitor-entry/";
-             }
-             
+          var data = new FormData();
+          if(price == "full"){
               
+              data.append('wc_deposit_option',  'no');
+          }else{
               
-            jQuery("body").css("cursor", "default");
-            
-          });
+             data.append('wc_deposit_option',  'yes'); 
+          }
+          
+          data.append('quantity',  1);
+          data.append('add-to-cart',  p_id);
+          
+     
+          jQuery.ajax({
+                url: baseCurrentSiteURl+'/?add-to-cart=199&quantity=1',
+                data:data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function(data) {
+                    
+                        
+                    var checkouturl = baseCurrentSiteURl+'/checkout/';
+                    var addONs = baseCurrentSiteURl+'/product-category/add-ons/';
+                    jQuery("#"+p_id).empty();
+                    jQuery("#"+p_id+'_checkout').attr("disabled", false);
+
+                    if(request == 'log'){ 
+                       var enbutton = "<a class='btn btn-success btn-small' >Added</a>"
+                       jQuery("#"+p_id).append(enbutton);
+                    }else{
+
+                        top.window.location.href = baseCurrentSiteURl+"/exhibitor-entry/";
+                    }
+                    jQuery("body").css("cursor", "default");
+                  
+                    
+                }
+            });
+     
+     
+     
+//           jQuery.post(baseCurrentSiteURl+'/?add-to-cart=' + p_id+'&quantity=1', function(data) {
+//             
+//            
+//          });
        }
 
 // Extends mxEventSource

@@ -910,7 +910,6 @@ Sidebar.prototype.addGeneralPalette = function(expand)
         }else{
            
         //danyal edit lagend lable
-<<<<<<< HEAD
          
          
          if(LegendsOfObjects.length === 0) {
@@ -932,10 +931,6 @@ Sidebar.prototype.addGeneralPalette = function(expand)
            this.addBoothtagsFunctions(graph, 'generalboothtags', "Booth Tags", true, BoothTagsObjects); 
          
          }
-=======
-         this.addLegendsFunctions(graph, 'generalLegends', "Legend", (expand != null) ? expand : true, LegendsOfObjects); 
-         this.addBoothtagsFunctions(graph, 'generalboothtags', "Booth Tags", (expand != null) ? expand : false, BoothTagsObjects); 
->>>>>>> origin/master
          this.addExhibitorsFunctions(graph, 'generalExhibitors', "Exhibitors", (expand != null) ? expand : true, mxgetjosnusersData); 
          
         }
@@ -3295,11 +3290,7 @@ Sidebar.prototype.addBoothtagsFunctions = function(graph, id, title, expanded, f
         
          }
         
-<<<<<<< HEAD
 	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
-=======
-	this.addPalette(id, title, false, mxUtils.bind(this, function(addcontent)
->>>>>>> origin/master
 	{           
                    
                     

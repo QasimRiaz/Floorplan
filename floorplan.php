@@ -4,11 +4,7 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
-<<<<<<< HEAD
- * Version: 5.00
-=======
- * Version: 4.01
->>>>>>> origin/master
+ * Version: 5.01
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -236,8 +232,9 @@ function getproductdetail($productID){
          );
         $client = new WC_API_Client( $url, $wooconsumerkey, $wooseceretkey, $options );
         $get_product = wc_get_product( $id );
-        
-       
+        $get_deposit_type = get_post_meta($id, "_wc_deposit_type",true);
+        $get_deposit_amount = get_post_meta($id, "_wc_deposit_amount",true);
+        $get_depositenable_type = get_post_meta($id, "_wc_deposit_enabled",true);
         
         if(empty($get_product)){
             
@@ -248,10 +245,14 @@ function getproductdetail($productID){
         }
         
         $productdetail['title'] =  addslashes($get_product->name);
-        $productdetail['slug'] =  $get_product->slug;
+        $productdetail['slug'] =  $get_product->get_slug();
         $productdetail['description'] =  $get_product->description;
         $productdetail['price'] =  (int)$get_product->regular_price;
         $productdetail['stockstatus'] =  $get_product->stock_status;
+        $productdetail['deposit_type'] =  $get_deposit_type;
+        $productdetail['deposit_amount'] =  $get_deposit_amount;
+        $productdetail['deposit_enable_type'] =  $get_depositenable_type;
+        
         $productdetail['currencysymbole'] =  get_woocommerce_currency_symbol( $currency );
         
         $levelname =  $get_product->tax_class;
@@ -504,17 +505,11 @@ function getBoothList($postdata) {
 	
 	//echo $boothTypes = get_post_meta( $_REQUEST['post_id'], 'booth_types', true );
     try{
-	
-        $boothTypes = $postdata['boothTypes'];
+	$boothTypes = $postdata['boothTypes'];
+       // $boothTypes = json_encode($boothTypes);
         $user_ID = get_current_user_id();
-        
-<<<<<<< HEAD
-        if(!empty($user_ID) || $user_ID !=0 ){
-        
         $user_info = get_userdata($user_ID);  
         
-=======
->>>>>>> origin/master
         $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Activity Log',"Admin Action","",$user_ID,$user_info->user_email,$postdata['speciallog']);
         $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Settings Saved',"Admin Action","",$user_ID,$user_info->user_email,$postdata);
         
@@ -564,12 +559,7 @@ function getBoothList($postdata) {
             
         }
         
-        }else{
-            
-           $lastInsertId = floorplan_contentmanagerlogging('Floor Plan - User Not Loged In',"Admin Action",$postdata,$user_ID,$user_info->user_email,$postdata['speciallog']);
-           echo 'failduserlogin';
-            
-        }
+        
         
         
     }catch (Exception $e) {

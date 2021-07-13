@@ -5453,8 +5453,8 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
              var depositestatus = 'unchecked';
              var depositetype = '';
              var depositeamount = '';
-              
-            
+             var despositeenablestatus = "no";
+             console.log(allBoothsProductData)
              jQuery.each(allBoothsProductData,function(boothIndex,boothObject){
                  
                  if(boothObject.cellID == firstBoothiD){
@@ -5464,6 +5464,7 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
                       boothdescripition = boothObject.boothdescripition;
                       depositestatus = boothObject.depositestatus;
                       depositetype = boothObject.depositstype;
+                      despositeenablestatus = boothObject.despositeenablestatus;
                       depositeamount = boothObject.depositsamount;
                       
                      
@@ -5555,10 +5556,18 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
  var statushtml = '';
  var depositedetail = "";
  var selectedoptions = '<option value="percent" >Percentage</option><option value="fixed">Fixed Amount</option>';
- if(depositestatus =="checked" ){
+ if(despositeenablestatus == "forced" || despositeenablestatus == "optional" || depositestatus == "checked"){
      
-     statushtml = '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><input type="checkbox" id="depositsstatus" checked="true"></div></div>';
- 
+           if(despositeenablestatus == "optional"){
+               
+                statushtml = '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><select class="form-control" id="depositsstatus"><option value="optional" selected="true">Yes - deposits are optional</option><option value="forced">Yes - deposits are required</option><option value="no" >No</option></select></div></div>';
+      
+            }else{
+                
+                statushtml = '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><select class="form-control" id="depositsstatus"><option value="optional" >Yes - deposits are optional</option><option value="forced" selected="true">Yes - deposits are required</option><option value="no" >No</option></select></div></div>';
+       
+            }
+                        
      
      if(depositetype =="percent"){
          
@@ -5571,21 +5580,21 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
        
      }
                 
-     depositedetail = '<div class="row depositsdetail" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><select id="depositstype" style="border-radius: 5px;width:100%;">'+selectedoptions+'</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="'+depositeamount+'" type="number" ></div></div>';
+     depositedetail = '<div class="row depositsdetail" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control">'+selectedoptions+'</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="'+depositeamount+'" type="number" ></div></div>';
      
                         
                       
  }else{
      
-    statushtml = '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth."></i></label></div><div class="col-sm-3"><input type="checkbox" id="depositsstatus" ></div></div>';
-    depositedetail = '<div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" style="border-radius: 5px;width:100%;">'+selectedoptions+'</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="'+depositeamount+'" type="number" ></div></div>';
+    statushtml = '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth."></i></label></div><div class="col-sm-3"><select class="form-control" id="depositsstatus"><option value="optional">Yes - deposits are optional</option><option value="forced">Yes - deposits are required</option><option value="no" selected="true">No</option></select></div></div>';
+    depositedetail = '<div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" >'+selectedoptions+'</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="'+depositeamount+'" type="number" ></div></div>';
      
  }
 
 
 var htmlfordeposite = statushtml + depositedetail;
 
-html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function(){if(jQuery("#depositsstatus").prop( "checked" )){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 80%;" id="boothprice" value="'+boothprice+'" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Level <i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" style="border-radius: 5px;width:100%;">'+boothlevelname+'</select></div></div>'+htmlfordeposite+'<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea style="border-radius:5px;width:98%;height:120px;"id="boothdescripition" style="height:20px;">'+unescape(boothdescripition)+'</textarea></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
+html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function(){if(jQuery("#depositsstatus option:selected").val() !="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 99%;" id="boothprice" value="'+boothprice+'" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Level <i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" class="form-control">'+boothlevelname+'</select></div></div>'+htmlfordeposite+'<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea id="boothdescripition" class="form-control" rows="8">'+unescape(boothdescripition)+'</textarea></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
 
     if(popupstatus == 'success' || popupstatus == 'multiboothselection' ){   
             
@@ -5644,10 +5653,11 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
              var depositstype = "";
             var depositsamount = "";
             var depositestatus = "unchecked";
+            var despositeenablestatus = jQuery("#depositsstatus option:selected").val();
             
             if(boothlevel !="none"){
                 
-            if(jQuery("#depositsstatus").prop( "checked" )){
+            if(despositeenablestatus == "forced" || despositeenablestatus == "optional" || depositestatus == "checked"){
                 
                  depositstype = jQuery("#depositstype option:selected").val(); 
                  depositsamount = jQuery('#depositamount').val();
@@ -5698,6 +5708,8 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                boothproductdata.depositstype = depositstype;
                boothproductdata.depositsamount = depositsamount;
                boothproductdata.depositestatus = depositestatus;
+               boothproductdata.despositeenablestatus = despositeenablestatus;
+               
                boothproductdata.cellID = CurentBoothID;
                
               if(checkBoothPurchaseable(CurentBoothID) == "selled"){
@@ -5714,6 +5726,7 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                              allBoothsProductData[boothIndex].depositstype=depositstype;
                              allBoothsProductData[boothIndex].depositsamount=depositsamount;
                              allBoothsProductData[boothIndex].depositestatus=depositestatus;
+                             allBoothsProductData[boothIndex].despositeenablestatus=despositeenablestatus;
                              
                              
                              startfloorplanedtitng.postboothdetail = JSON.stringify(allBoothsProductData[boothIndex]);
@@ -5732,7 +5745,7 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                
                
            });
-           
+            console.log(allBoothsProductData);
             boothdetailpopup.close();
             swal({
                 title: "Success",
@@ -5866,10 +5879,12 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
             var depositstype = "";
             var depositsamount = "";
             var depositestatus = "unchecked";
+            var despositeenablestatus = jQuery("#depositsstatus option:selected").val();
         if(boothlevel !="none"){    
-            if(jQuery("#depositsstatus").prop( "checked" )){
+            if(despositeenablestatus == "forced" || despositeenablestatus == "optional" || depositestatus == "checked"){
                 
-                 depositstype = jQuery("#depositstype option:selected").val(); 
+                 depositstype = jQuery("#depositstype option:selected").val();
+                 
                  depositsamount = jQuery('#depositamount').val();
                  depositestatus = 'checked';
                 
@@ -5937,6 +5952,8 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                boothproductdata.cellID = CurentBoothID;
                
                boothproductdata.depositstype = depositstype;
+               boothproductdata.despositeenablestatus = despositeenablestatus;
+               
                boothproductdata.depositsamount = depositsamount;
                boothproductdata.depositestatus = depositestatus;
                
@@ -5956,6 +5973,8 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                                  
                              }
                              allBoothsProductData[boothIndex].depositstype=depositstype;
+                             allBoothsProductData[boothIndex].despositeenablestatus=despositeenablestatus;
+                             
                              allBoothsProductData[boothIndex].depositsamount=depositsamount;
                              allBoothsProductData[boothIndex].depositestatus=depositestatus;
                            startfloorplanedtitng.postboothdetail = JSON.stringify(allBoothsProductData[boothIndex]);
@@ -6002,7 +6021,7 @@ if(popupstatus == 'multiboothselection' )  {
       
 }
 
-html+='<script>jQuery("#depositsstatus").click(function(){if(jQuery("#depositsstatus").prop( "checked" )){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 80%;" id="boothprice" value="0" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Level <i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth."></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" style="border-radius: 5px;width:100%;">'+boothlevelname+'</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth"></i></label></div><div class="col-sm-3"><input type="checkbox" id="depositsstatus" ></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" style="border-radius: 5px;width:100%;"><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="" type="number" ></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea style="border-radius:5px;width:98%;height:120px;"id="boothdescripition" style="height:20px;"></textarea></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
+html+='<script>jQuery("#depositsstatus").click(function(){if(jQuery("#depositsstatus option:selected").val()!="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 99%;" id="boothprice" value="0" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Level <i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth."></i></label></div><div class="col-sm-3"><select class="form-control" id="boothlevelvalue" >'+boothlevelname+'</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth"></i></label></div><div class="col-sm-3"><select class="form-control" id="depositsstatus"><option value="optional">Yes - deposits are optional</option><option value="forced">Yes - deposits are required</option><option value="no" selected="true">No</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" ><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="" type="number" ></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea rows="8" class="form-control" id="boothdescripition" ></textarea></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
  
     if(popupstatus == 'success' || popupstatus == 'multiboothselection' ){   
             

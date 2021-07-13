@@ -632,19 +632,12 @@ Actions.prototype.init = function()
                                     ui.updateGraphStatus();
                                     
                                     swal.close();
-                                    var errormsg = "There was an error during the requested operation. The Floor plan was not saved successfully. Please try again.";
                                     
-                                    if(data == "failduserlogin"){
-                                        
-                                        
-                                        errormsg = "Your session has been expried. Please try to login again."
-                                    }
-                                    
+                                   
                                     if(data == "faildXmlError"){
-                                        
                                         swal({
                                        title: "Error",
-                                       text:errormsg,
+                                       text:"There was an error during the requested operation. The Floor plan was not saved successfully. Please try again.",
                                        type: "error",
                                        confirmButtonClass: "btn-danger",
                                        allowOutsideClick: false,
@@ -655,23 +648,6 @@ Actions.prototype.init = function()
                                            //location.reload();
                                         }
                                        });
-                                        
-                                    }else if(data == "failduserlogin"){
-                                        
-                                        swal({
-                                       title: "Error",
-                                       text:errormsg,
-                                       type: "error",
-                                       confirmButtonClass: "btn-danger",
-                                       allowOutsideClick: false,
-                                       confirmButtonText: "Close",
-                                       onClose:function(){
-                                           
-                                           
-                                           location.reload();
-                                        }
-                                       });
-                                      
                                       
                                     }else{
                                         
