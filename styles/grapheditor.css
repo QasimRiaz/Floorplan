@@ -921,6 +921,10 @@ html td.mxWindowTitle {
     float: right !important;
     margin-top: 36px !important;
 }
+.backtodash{
+    
+    margin-top: 10px;
+}
 
 .unselect{
     
@@ -1139,3 +1143,87 @@ input:checked + .slider:before {
     margin-left: auto !important;
     margin-right: auto !important;
 }
+
+
+
+.toast-fixed {
+  
+  position: fixed;
+  right: 0rem;
+  top: 1.5rem;
+  z-index: 120;
+  width: 82%;
+  margin-top: -15px;
+}
+.toast {
+  background: rgba(66, 66, 66, 0.95);
+  -webkit-animation: fadeInExpand 150ms;
+          animation: fadeInExpand 150ms;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.3);
+  margin-bottom: 0.5rem;
+  padding: 0.1rem;
+}
+.toast--alert {
+  background: rgba(255, 255, 153, 0.95);
+}
+.toast--error {
+  background: rgba(222, 28, 37, 0.95);
+}
+.toast--success {
+  background: rgba(47, 180, 86, 0.95);
+}
+.toast--dismiss {
+  cursor: pointer;
+  position: relative;
+}
+.toast--dismiss:before,
+.toast--dismiss:after {
+  background: #fff;
+  content: "";
+  height: 1rem;
+  position: absolute;
+  opacity: 0.8;
+  right: 0.8rem;
+  top: 0.5rem;
+  width: 0.2rem;
+}
+.toast--dismiss:before {
+  transform: rotate(45deg);
+}
+.toast--dismiss:after {
+  transform: rotate(-45deg);
+}
+.toast--alert.toast--dismiss:before,
+.toast--alert.toast--dismiss:after {
+  background: #333;
+}
+.toast__text {
+  color: #fff;
+  line-height: 110%;
+  font-size: 13px;
+  margin: 0;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+  text-align: left;
+}
+.toast--alert .toast__text {
+  color: #333;
+}
+.toast__btn {
+  background: #fff;
+  border: 1px solid #424242;
+  border-radius: 3px;
+  color: #424242;
+  display: inline-block;
+  font-size: 1.4rem;
+  line-height: 1;
+  margin: 0.8rem 0 0.4rem 0.8rem;
+  padding: 0.6rem 1.2rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.toast__btn:hover {
+  opacity: 0.8;
+}
+
+
