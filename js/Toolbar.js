@@ -221,6 +221,12 @@ Toolbar.prototype.init = function()
              abcd[1].setAttribute('class', 'mycustomstylelink');
              abcd[1].innerHTML= '<button style="margin-left: 10px;" target="_blank" class="myCustomeButton">Public View</button>';//'Save';//('title', 'Save');
              
+             
+              var abcde = this.addItems(['-', 'floorplanexit']);
+             abcde[1].setAttribute('title', 'Exit');
+             abcde[1].setAttribute('class', 'mycustomstylelink');
+             abcde[1].innerHTML= '<button style="margin-left: 10px;" target="_top" id="exitfloorplan" class="myCustomeButton">Exit</button>';//'Save';//('title', 'Save');
+             
                 
         }else{
             

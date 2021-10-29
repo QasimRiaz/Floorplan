@@ -549,6 +549,38 @@ Actions.prototype.init = function()
             
         }, null, null, 'FloorPlanView');
         
+        this.addAction('floorplanexit', function(evt)
+	{
+            
+           
+          
+          
+           var data = new FormData();
+           data.append('status', 'unlock');
+           data.append('post_id', mxPostID);
+           var urlnew = mxCurrentSiteUrl + '/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=savedlockunlockstatus';
+           jQuery.ajax({
+                            url: urlnew,
+                            data: data,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            type: 'POST',
+                            success: function (data) {
+                                
+                                window.onbeforeunload = null;
+                                window.location.replace(mxCurrentSiteUrl+"/dashboard/");
+                                
+                            }
+                        });
+           
+            
+            //window.open(baseCurrentSiteURl+'/dashboard/');
+            
+        }, null, null, 'FloorPlanExit');
+        
+        
+        
         this.addAction('save', function(evt)
 	{
                     
@@ -560,25 +592,25 @@ Actions.prototype.init = function()
                        var status = jQuery("#togglelockunlock").attr("name");
                         var loadedfloorplantitle = currentslectedboothtitle;
             
-                       if(status == 'unlock'){
+                       //if(status == 'unlock'){
                            
-                        swal({
-                            title: "Alert",
-                            text: "You must unlock the floor plan before saving your changes.",
-                            type: "info",
-                            confirmButtonClass: "btn-info",
-                            confirmButtonText: "Ok"
-                        });
+//                        swal({
+//                            title: "Alert",
+//                            text: "You must unlock the floor plan before saving your changes.",
+//                            type: "info",
+//                            confirmButtonClass: "btn-info",
+//                            confirmButtonText: "Ok"
+//                        });
                         
-                       var startfloorplanedtitng = {};
+//                       var startfloorplanedtitng = {};
+//                
+//                        startfloorplanedtitng.datetime = new Date(jQuery.now());
+//                        startfloorplanedtitng.action = "Try to Save Floorplan";
+//                        startfloorplanedtitng.status = "Error";
+//								
+//                                expogenielogging.push(startfloorplanedtitng);
                 
-                        startfloorplanedtitng.datetime = new Date(jQuery.now());
-                        startfloorplanedtitng.action = "Try to Save Floorplan";
-                        startfloorplanedtitng.status = "Error";
-								
-                                expogenielogging.push(startfloorplanedtitng);
-                
-                       }else{
+                      // }else{
                            
                        var startfloorplanedtitng = {};    
                            
@@ -687,7 +719,7 @@ Actions.prototype.init = function()
                                                     });
                                     }
                         });
-                    }
+                    //}
                        
                        
 	      

@@ -4,7 +4,7 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 5.01
+ * Version: 5.20
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -527,6 +527,8 @@ function getBoothList($postdata) {
 	update_post_meta( $postdata['post_id'], 'floor_background', $postdata['floorBG'] );
 	update_post_meta( $postdata['post_id'], 'floorplan_xml', $postdata['floorXml'] );
         update_post_meta( $postdata['post_id'], 'sellboothsjson', $postdata['sellboothsjson'] );
+        update_post_meta( $postdata['post_id'], 'updateboothpurchasestatus', "unlock" );
+        
         $my_post = array(
             'ID'           => $postdata['post_id'],
             'post_title'   => $postdata['loadedfloorplantitle']
@@ -1033,8 +1035,9 @@ function floorplan_shortcode( $atts, $content = null ) {
              
          }
         
-        
-         
+            if($atts['status'] != 'viewer'){
+               update_post_meta( $id, 'updateboothpurchasestatus', 'lock' );
+            }
             $boothsproductsData;
             $boothTypes        = get_post_meta( $id, 'booth_types', true );
             $FloorBackground   = get_post_meta( $id, 'floor_background', true );
@@ -1045,7 +1048,13 @@ function floorplan_shortcode( $atts, $content = null ) {
             $sellboothsjson = get_post_meta( $id, 'sellboothsjson', true );
             $floorplanstatuslockunlock = get_post_meta( $id, 'updateboothpurchasestatus', true );
             
+             
             
+            
+            $exhibitorflowstatusKey = "exhibitorentryflowstatus";
+            $exhibitorflowstatus = get_option($exhibitorflowstatusKey);
+
+            $userentryflow = $exhibitorflowstatus['status'];
             $user_ID = get_current_user_id();
             $user_info = get_userdata($user_ID);  
             $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Viewer Loading',"User view",$FloorplanXml[0],$user_ID,$user_info->user_email,"specialLoging");
@@ -1123,7 +1132,16 @@ function floorplan_shortcode( $atts, $content = null ) {
             }
         
         
-         
+        $key = 'custome_exhibitor_flow_settings_data';
+        $exhibitorEntryLevel = get_option($key);
+        $packageboothflow = "disabled";
+        
+        if($exhibitorEntryLevel[2]['statusactive'] == true){
+            
+            $packageboothflow = "enabled";
+            
+        }
+        
             
         $current_site_logo = $contentmanager_settings['ContentManager']['adminsitelogo'];
         $current_site_name = get_bloginfo( 'name' );

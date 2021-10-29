@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-~Current Version:5.01~
+~Current Version:5.20~
 =======
 ~Current Version:5.01~
 >>>>>>> origin/master
@@ -51,3 +51,7 @@ Release Items
 -------------------28-07-2020 4.01 New release---------------
 
 1.Activity log
+
+-------------------10-29-2021--- New Release 5.20 --------------
+
+Big Release included with Exhibitor Entry Wizard

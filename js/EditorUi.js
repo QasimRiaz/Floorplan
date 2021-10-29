@@ -921,12 +921,13 @@ EditorUi = function(editor, container, lightbox)
                                         var valuessrting = cell.style;
                                          var companydescription ="";
                                          var htmlcompanydescription = "";
-                                        
+                                        console.log('cell-------Detail');
                                         
                                         var userid  = cell.getAttribute('boothOwner', '');
                                         var boothdetail  = cell.getAttribute('boothDetail', '');
                                         var companydescription  = cell.getAttribute('companydescripiton', '');
                                         var  boothproductid = cell.getAttribute('boothproductid', '');
+                                        var  boothID = cell.id;
                                         var  tagslist = cell.getAttribute('boothtags', '');
                                         var tagsnameslist ="";
                                         if(tagslist !=""){
@@ -1237,19 +1238,19 @@ EditorUi = function(editor, container, lightbox)
                                                                    
                                                                 if(finalresultProduct.deposit_enable_type == 'optional'){
                                                                     
-                                                                    htmlforproductdetail += '<p  id="'+boothproductid+'"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Purchase Now</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'woo\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'woo\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></p>';
+                                                                        //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
+                                                                        htmlforproductdetail = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div></div>'
                                                                     
+                                                                    }else{
                                                                     
-                                                                }else{
+                                                                        //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
+                                                                        htmlforproductdetail = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a></div></div>'
                                                                     
-                                                                    htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\',\'full\','+finalresultProduct.slug+')"  >Purchase Now</a></p>';
-                                                              
-                                                                    
-                                                                }
+                                                                    }
                                                                 
                                                                 
-                                                        }
-                                                           
+                                                            }
+                                                          
                                                         }else{
 
                                                             htmlforproductdetail += "<p style='float:right;'><strong style='color:red'>Stock Out</strong></p>";
@@ -1279,8 +1280,90 @@ EditorUi = function(editor, container, lightbox)
                                                       if(finalresultProduct.productstatus == "exist"){ 
                                                         
                                                         if(floorplanstatus == 'unlock'){
+                                                            
+                                                            
                                                             if(finalresultProduct.stockstatus == 'instock'){ 
                                                                 
+                                                                
+                                                                if(mxUserentryflow == "checked" && mxCurrentPackageBooths.length !== 0){
+                                                                
+                                                                if(jQuery.inArray(boothID, mxCurrentPackageBooths)!== -1) {
+                                                              
+                                                                        if(userloggedinstatus == true){
+
+                                                                                if (productstatus == 'alreadyexistproduct') {
+
+                                                                                    buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-success btn-small" >Added</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>'
+                                                                     
+
+                                                                                } else {
+
+
+                                                                                    //if (finalresultProduct.deposit_enable_type == 'optional') {
+
+                                                                                        //buttonsdiv = '<p  id="' + boothproductid + '"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' + postid + ',\'log\' ,\'deposit\',' + finalresultProduct.slug + ')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart(' + postid + ',\'log\' ,\'full\',' + finalresultProduct.slug + ')">Pay in Full</a></div></div><p style="font-size: 11px;margin-top: 10px;color: #005e00;">This Booth is included in current selected package.</p></p>'
+
+                                                                                    //} else {
+
+                                                                                       
+                                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart(' + postid + ',\'log\',\'full\',' + finalresultProduct.slug + ')"  >Add To Cart</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>'
+                                                                     
+                                                                                    //}
+
+
+
+                                                                                }
+
+
+                                                                        }else{
+
+                                                                            if (productstatus == 'alreadyexistproduct') {
+
+                                                                                    
+                                                                                    buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-success btn-small" >Added</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>'
+                                                                     
+
+                                                                            }else{
+                                                                                
+                                                                                buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>'
+                                                                     
+                                                                                
+                                                                            }
+                                                                            //if(finalresultProduct.deposit_enable_type == 'optional'){
+                                                                    
+                                                                                //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
+                                                                                //buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div><p style="font-size: 11px;margin-top: 10px;color: #005e00;">This Booth is included in current selected package.</p></div>'
+                                                                    
+                                                                                //}else{
+                                                                    
+                                                                                //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
+                                                                               
+                                                                            //}
+
+
+                                                                        }
+                                                                }else{
+                                                               
+                                                                            if(finalresultProduct.deposit_enable_type == 'optional'){
+                                                                    
+                                                                                //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
+                                                                                buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div></div>'
+                                                                    
+                                                                                }else{
+                                                                    
+                                                                                //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
+                                                                                buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a></div></div>'
+                                                                    
+                                                                            }
+                                                                        
+                                                                        
+                                                                }
+                                                               
+                                                                
+                                                               
+                                                                }else{
+                                                                
+                                                                   
                                                                 if(userloggedinstatus == true){       
                                                                 if(productstatus == 'alreadyexistproduct'){
                                                                 
@@ -1308,23 +1391,25 @@ EditorUi = function(editor, container, lightbox)
                                                                 }else{
                                                          
                                                                     //buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></div></div>'
-                                                                    console.log(finalresultProduct.deposit_enable_type);
+                                                                   if(mxUserentryflow == "checked"){
                                                                     if(finalresultProduct.deposit_enable_type == 'optional'){
                                                                     
                                                                         //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
-                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Purchase Now</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'woo\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'woo\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div></div>'
+                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div></div>'
                                                                     
                                                                     }else{
                                                                     
                                                                         //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
-                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'woo\',\'full\','+finalresultProduct.slug+')"  >Purchase Now</a></div></div>'
+                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a></div></div>'
                                                                     
                                                                     }
-                                                                    
+                                                                }
                                                                     
                                                                     
                                                                 }    
-                                                                     
+                                                                }  
+                                                                    
+                                                                    
                                                                 }else{
                                                                     
                                                                      buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;"><strong style="color:red">No Longer Available </strong></p></div>'
@@ -1348,8 +1433,8 @@ EditorUi = function(editor, container, lightbox)
                                                         var newopenhtml='<div class="tab"><button class="tablinks" >Product Info</button></div><div id="London" class="tabcontent">'+openhtml+'</div>'+buttonsdiv;
                                                         if(popupstatus == 'off'){
                                                             
-                                                            popupstatus = 'on';
-                                                         var checkopenfunction  = jQuery.confirm({
+                                                         popupstatus = 'on';
+                                                         checkopenfunction  = jQuery.confirm({
                                                              
                                                             title: '<i class="far fa-id-card"></i> '+popupstatustitle,
                                                             content: newopenhtml,
@@ -1564,7 +1649,7 @@ EditorUi = function(editor, container, lightbox)
                 processData: false,
                 type: 'POST',
                 success: function(data) {
-                    
+                   
                         
                     var checkouturl = baseCurrentSiteURl+'/checkout/';
                     var addONs = baseCurrentSiteURl+'/product-category/add-ons/';
@@ -1574,6 +1659,16 @@ EditorUi = function(editor, container, lightbox)
                     if(request == 'log'){ 
                        var enbutton = "<a class='btn btn-success btn-small' >Added</a>"
                        jQuery("#"+p_id).append(enbutton);
+                       
+                       var productcount = parseInt(window.parent.jQuery("#entryflowcartcounter").text());
+                       console.log(productcount+'------------------')
+                       productcount = productcount +1;
+                       window.parent.jQuery("#entryflowcartcounter").empty();
+                       window.parent.jQuery("#entryflowcartcounter").text(productcount);
+                       //checkopenfunction.close();
+                       window.top.scrollTo({top: 0, behavior: 'smooth'});
+                      
+                       
                     }else{
 
                         top.window.location.href = baseCurrentSiteURl+"/exhibitor-entry/";
@@ -3617,8 +3712,40 @@ EditorUi.prototype.createUi = function()
         helpbuttondiv.appendChild(helpbutton);
         
         
+        
+        var divmaintopbar = this.createDiv('backtodashtop');
+            
+            
+        var sitenamehtml = document.createElement('div');
+        var sitenamehtml3 = document.createElement('div');
+        var sitenamehtml2 = document.createElement('div');
+        
+        
+        sitenamehtml.className = 'toast-fixed';
+        sitenamehtml3.className = 'js-toast-container';
+        sitenamehtml2.className = 'toast toast--error toast--dismiss';
+        
+    
+    
+        sitenamehtml2.innerHTML  ='<p class="toast__text">Important: Your users cannot purchase booths online while you are in the floor plan editor. It is recommended to exit the editor as soon as you\'re done making edits.</p>';
+        
+        sitenamehtml3.append(sitenamehtml2);
+        sitenamehtml.append(sitenamehtml3);
+        divmaintopbar.append(sitenamehtml);
+        
+        mxEvent.addListener(sitenamehtml2, 'click', function()
+	{
+            
+            jQuery(".toast-fixed").remove();
+            
+        });
+        
+        
+        
+        
         this.backtodashboard.container.appendChild(helpbuttondiv);
         this.backtodashboard.container.appendChild(this.backdashboardhtml);
+        this.backtodashboard.container.appendChild(divmaintopbar);
         
       
         
@@ -3737,7 +3864,6 @@ EditorUi.prototype.createUi = function()
 /**
  * Creates a new toolbar for the given container.
  */
-
 EditorUi.prototype.createBackButtonContainer = function()
 {
 	var div = this.createDiv('backtodash');
@@ -3745,9 +3871,46 @@ EditorUi.prototype.createBackButtonContainer = function()
         sitenamehtml.className = 'customemenulink';
         sitenamehtml.innerHTML  ='< Back to dashboard';
         sitenamehtml.href = mxCurrentSiteUrl+'/dashboard/';
-        div.append(sitenamehtml);
+        //div.append(sitenamehtml);
         return div;
 };
+
+//EditorUi.prototype.createBackButtonContainer = function()
+//{
+//	var div = this.createDiv('backtodash');
+//            
+//            
+//        var sitenamehtml = document.createElement('div');
+//        var sitenamehtml3 = document.createElement('div');
+//        var sitenamehtml2 = document.createElement('div');
+//        
+//        
+//        sitenamehtml.className = 'toast-fixed';
+//        sitenamehtml3.className = 'js-toast-container';
+//        sitenamehtml2.className = 'toast toast--error toast--dismiss';
+//        
+//    
+//    
+//        sitenamehtml2.innerHTML  ='<p class="toast__text">Important: Your users cannot purchase booths online while you are in the floor plan editor. Be sure to exit the editor as soon as you\'re done making edits. You will also be logged out of the floor plan editor automatically if idle for 2 minutes.</p>';
+//        
+//        sitenamehtml3.append(sitenamehtml2);
+//        sitenamehtml.append(sitenamehtml3);
+//        div.append(sitenamehtml);
+//        
+//        mxEvent.addListener(sitenamehtml2, 'click', function()
+//	{
+//            
+//            jQuery(".toast-fixed").remove();
+//            
+//        });
+//        
+////        var sitenamehtml = document.createElement('a');
+////        sitenamehtml.className = 'customemenulink';
+////        sitenamehtml.innerHTML  ='< Back to dashboard';
+////        sitenamehtml.href = mxCurrentSiteUrl+'/dashboard/';
+////        div.append(sitenamehtml);
+//        return div;
+//};
 EditorUi.prototype.createSiteTitleContainer = function()
 {
 	
