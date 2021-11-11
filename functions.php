@@ -9,7 +9,7 @@
 	<script type="text/javascript">
             
            
-            
+            var flowstatus = "";
             var hex=new Array('0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f');
             var popupstatus = 'off';
             var checkopenfunction;
@@ -28,8 +28,8 @@
 		mxFloorPlanXml = '<?php echo $FloorplanXml[0]; ?>';
                 mxCurrentPackageBooths = '<?php echo $_SESSION['listofselectedbooths']; ?>';
                 mxUserentryflow = '<?php echo $userentryflow; ?>';
-                
-                
+                flowstatus = top.location.href;
+                console.log(flowstatus)
                 if(mxCurrentPackageBooths!=""){
                     
                     mxCurrentPackageBooths = JSON.parse(mxCurrentPackageBooths);
@@ -313,7 +313,7 @@
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>jscolor/jscolor.js?v=2.22"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>sanitizer/sanitizer.min.js?v=2.22"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=2.88"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=5.70"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=5.74"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.61"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.80"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.74"></script>
