@@ -5580,14 +5580,14 @@ StyleFormatPanel.prototype.addPricetegs = function(container)
        
      }
                 
-     depositedetail = '<div class="row depositsdetail" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control">'+selectedoptions+'</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="'+depositeamount+'" type="number" ></div></div>';
+     depositedetail = '<div class="row depositsdetail" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control">'+selectedoptions+'</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" min="0" class="form-control" min="0" value="'+depositeamount+'" type="number" ><p class="depositeerror"></p></div></div>';
      
                         
                       
  }else{
      
     statushtml = '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth."></i></label></div><div class="col-sm-3"><select class="form-control" id="depositsstatus"><option value="optional">Deposit OR Pay in Full</option><option value="forced">Deposit Only - No Option to Pay in Full</option><option value="no" selected="true">No</option></select></div></div>';
-    depositedetail = '<div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" >'+selectedoptions+'</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="'+depositeamount+'" type="number" ></div></div>';
+    depositedetail = '<div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" >'+selectedoptions+'</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="'+depositeamount+'" type="number" ><p class="depositeerror"></p></div></div>';
      
  }
 
@@ -5608,6 +5608,7 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                 columnClass: 'jconfirm-box-container-special-boothtypes',
                 cancelButton: false ,// hides the cancel button.
                 confirmButton: false, // hides the confirm button.
+                 backgroundDismiss: false,
             });
            
             jQuery(".mycustometable tbody").sortable();
@@ -5662,6 +5663,8 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                  depositstype = jQuery("#depositstype option:selected").val(); 
                  depositsamount = jQuery('#depositamount').val();
                  depositestatus = 'checked';
+                 
+                 
                 
             }
             
@@ -5746,6 +5749,19 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                
            });
             console.log(allBoothsProductData);
+            
+            if(depositestatus == "checked" && depositsamount==""){
+                console.log(depositsamount);
+                
+                
+                jQuery(".depositeerror").append("<label style='margin-top: 10px;color:red'>Deposit Amount is required field.</label>");
+                setTimeout(function() {
+                // reset CSS
+                 jQuery(".depositeerror").empty();
+                }, 5000);
+            
+            
+            }else{
             boothdetailpopup.close();
             swal({
                 title: "Success",
@@ -5753,7 +5769,7 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                 type: "success",
                 confirmButtonClass: "btn-success",
                 confirmButtonText: "Ok"
-            });
+            });}
            
            
          }else{
@@ -5992,7 +6008,16 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
                }
                
            });
-           
+           if(depositestatus == "checked" && depositsamount==""){
+               
+               
+                jQuery(".depositeerror").append("<label style='margin-top: 10px;color:red'>Deposit Amount is required field.</label>");
+                setTimeout(function() {
+                // reset CSS
+                 jQuery(".depositeerror").empty();
+                }, 5000);
+               
+           }else{
             boothdetailpopup.close();
             swal({
                 title: "Success",
@@ -6006,6 +6031,7 @@ html+='<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function
            jQuery("#manageboothtypes").hide();
            jQuery("#updateboothdetail").show();
            jQuery("#dontsellbutton").show();
+       }
        }else{
            
            jQuery('.successmessage').append('<label style="color:red">Please select a Level.</label>');
@@ -6021,7 +6047,7 @@ if(popupstatus == 'multiboothselection' )  {
       
 }
 
-html+='<script>jQuery("#depositsstatus").click(function(){if(jQuery("#depositsstatus option:selected").val()!="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 1%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 99%;" id="boothprice" value="0" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth"></i></label></div><div class="col-sm-3"><select class="form-control" id="depositsstatus"><option value="optional">Deposit OR Pay in Full</option><option value="forced">Deposit Only - No Option to Pay in Full</option><option value="no" selected="true">No</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" ><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="" type="number" ></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea rows="8" class="form-control" id="boothdescripition" ></textarea></div></div><div class="row" style="margin-bottom: 1%; margin-left: 133px; color: gray"><h5 class="eg-sub-title"><strong>IF this booth is purchased, THEN</strong></h5></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Assign/Re-Assign User Level <i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" class="form-control">'+boothlevelname+'</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
+html+='<script>jQuery("#depositsstatus").click(function(){if(jQuery("#depositsstatus option:selected").val()!="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">'+selectedBoothtitles+'</div></div><div class="row" style="margin-bottom: 1%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">'+currencysymbole+'</strong></span><input type="number" style="color:#333;height:32px;width: 99%;" id="boothprice" value="0" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth"></i></label></div><div class="col-sm-3"><select class="form-control" id="depositsstatus"><option value="optional">Deposit OR Pay in Full</option><option value="forced">Deposit Only - No Option to Pay in Full</option><option value="no" selected="true">No</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" ><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="" min="0" type="number" ><p class="depositeerror"></p></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea rows="8" class="form-control" id="boothdescripition" ></textarea></div></div><div class="row" style="margin-bottom: 1%; margin-left: 133px; color: gray"><h5 class="eg-sub-title"><strong>IF this booth is purchased, THEN</strong></h5></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Assign/Re-Assign User Level <i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" class="form-control">'+boothlevelname+'</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';      
  
     if(popupstatus == 'success' || popupstatus == 'multiboothselection' ){   
             
@@ -6038,6 +6064,7 @@ html+='<script>jQuery("#depositsstatus").click(function(){if(jQuery("#depositsst
                     columnClass: 'jconfirm-box-container-special-boothtypes',
                     cancelButton: false ,// hides the cancel button.
                     confirmButton: false, // hides the confirm button.
+                     backgroundDismiss: false,
                 });
                 
            
