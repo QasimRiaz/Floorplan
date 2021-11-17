@@ -1183,7 +1183,7 @@ EditorUi = function(editor, container, lightbox)
                                                             
                                                         }else{
                                                             
-                                                            if(flowstatus.indexOf("/entry-wizard") != -1){  
+                                                            if(flowstatus.indexOf("mood=wizard") != -1){    
                                                                 var productprice = '<p><h5 ><strong>Price: </strong>' + finalresultProduct.currencysymbole+finalresultProduct.price + '</h5>';
                                                             }else{
                                                                 var productprice = "";
@@ -1317,7 +1317,7 @@ EditorUi = function(editor, container, lightbox)
 
                                                                                     //} else {
 
-                                                                                       if(flowstatus.indexOf("/entry-wizard") != -1){ 
+                                                                                       if(flowstatus.indexOf("mood=wizard") != -1){  
                                                                                             buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart(' + postid + ',\'log\',\'full\',' + finalresultProduct.slug + ')"  >Add To Cart</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>'
                                                                                         }else{
                                                                                             
@@ -1331,7 +1331,7 @@ EditorUi = function(editor, container, lightbox)
 
 
                                                                         }else{
-                                                                            if(flowstatus.indexOf("/entry-wizard") != -1){ 
+                                                                            if(flowstatus.indexOf("mood=wizard") != -1){  
                                                                             
                                                                             if (productstatus == 'alreadyexistproduct') {
 
@@ -1411,7 +1411,7 @@ EditorUi = function(editor, container, lightbox)
                                                                 }else{
                                                          
                                                                     //buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></div></div>'
-                                                                   if(flowstatus.indexOf("/entry-wizard") != -1){ 
+                                                                   if(flowstatus.indexOf("mood=wizard") != -1){  
                                                                     if(finalresultProduct.deposit_enable_type == 'optional'){
                                                                     
                                                                         //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
@@ -2363,7 +2363,7 @@ EditorUi.prototype.initCanvas = function()
 			}
 			
 			this.chromelessToolbar.style.display = '';
-			mxUtils.setOpacity(this.chromelessToolbar, opacity || 30);
+			mxUtils.setOpacity(this.chromelessToolbar, opacity ||Â 30);
 		});
 
 		if (urlParams['layers'] == '1')
