@@ -28,9 +28,7 @@
 		mxFloorPlanXml = '<?php echo $FloorplanXml[0]; ?>';
                 mxCurrentPackageBooths = '<?php echo $_SESSION['listofselectedbooths']; ?>';
                 mxUserentryflow = '<?php echo $userentryflow; ?>';
-               if(jQuery('#exhibitorwizardtopbar', window.parent.document).length != 0){
-				flowstatus = top.location.href;
-                }
+                flowstatus = location.href;
                 console.log(flowstatus)
                 if(mxCurrentPackageBooths!=""){
                     
@@ -315,7 +313,7 @@
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>jscolor/jscolor.js?v=2.22"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>sanitizer/sanitizer.min.js?v=2.22"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=2.88"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=5.74"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=5.75"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.61"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.80"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.74"></script>
