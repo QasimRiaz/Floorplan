@@ -28,9 +28,7 @@
 		mxFloorPlanXml = '<?php echo $FloorplanXml[0]; ?>';
                 mxCurrentPackageBooths = '<?php echo $_SESSION['listofselectedbooths']; ?>';
                 mxUserentryflow = '<?php echo $userentryflow; ?>';
-               if(jQuery('#exhibitorwizardtopbar', window.parent.document).length != 0){
-				flowstatus = top.location.href;
-                }
+                flowstatus = location.href;
                 console.log(flowstatus)
                 if(mxCurrentPackageBooths!=""){
                     
