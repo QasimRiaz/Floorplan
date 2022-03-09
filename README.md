@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-~Current Version:5.26~
-=======
-~Current Version:5.01~
->>>>>>> origin/master
+Current Version:5.29~
 
 
 
@@ -55,8 +51,3 @@ Release Items
 -------------------10-29-2021--- New Release 5.20 --------------
 
 Big Release included with Exhibitor Entry Wizard
-
--------------------17-11-2021--- New Release 5.26 --------------
-
-fixed the embed bug
-fixed the deposite amount field requried

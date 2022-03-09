@@ -2,13 +2,44 @@
 <?php $FloorplanXml[0] = str_replace('"n<','<',$FloorplanXml[0]);
       $FloorplanXml[0] = str_replace('>n"','>',$FloorplanXml[0]);
 
-
 ?>
+<?php
+function remove_item_from_cart() {
+    global $woocommerce;
+$cart = $woocommerce->instance()->cart;
+$id = $_POST['product_id'];
+$cart_id = $cart->generate_cart_id($id);
+$cart_item_id = $cart->find_product_in_cart($cart_id);
+echo $id;
+if($cart_item_id){
+   $cart->set_quantity($cart_item_id, 0);
+   return true;
+} 
+return false;
+}
+
+add_action('wp_ajax_remove_item_from_cart', 'remove_item_from_cart');
+add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
+?>
+
 
        <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-1.12.4.js"></script>
 	<script type="text/javascript">
             
-           
+            var floorPlanSetting = '<?php echo json_encode( $floorPlanSettings ); ?>';
+            var loggedInUser = '<?php echo   json_encode($loggedInUsers)  ; ?>';
+            var TurnUsers = '<?php echo   ($value) ; ?>';
+            var pro = '<?php echo   json_encode($get_product)  ; ?>';
+            console.log(pro);
+            var cartCount='<?php
+                    $cartcount = WC()->cart->get_cart_contents_count();
+                    if ($cartcount > 0) { echo $cartcount; }
+                ?>';
+            console.log("---------start------------");
+            console.log(loggedInUser);
+            console.log("-----------middle----------");
+            console.log(cartCount);
+            console.log("--------end-------------");
             var flowstatus = "";
             var hex=new Array('0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f');
             var popupstatus = 'off';
@@ -69,7 +100,7 @@
                 startfloorplanedtitng.action = 'Start Editing';
                 expogenielogging.push(startfloorplanedtitng);
                 jQuery.each( mxgetjosnusersData, function( key, value ) {
-                    
+                   
                     var indexarray = {};
                     
                     indexarray.userID = key;
@@ -313,21 +344,22 @@
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>jscolor/jscolor.js?v=2.22"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>sanitizer/sanitizer.min.js?v=2.22"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=2.88"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=5.75"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.61"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=9.14"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.64"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.80"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=2.74"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=3.31"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.75"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.89"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.90"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.77"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=5.30"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=6.79"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=3.01"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=3.78"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.78"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery.printPage.js?v=2.78"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-        <script type="text/javascript" src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
+        <!-- <script type="text/javascript" src="https://cdn.tinymce.com/4/tinymce.min.js"></script> -->
+        <script type="text/javascript" src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/sweetalert2/latest/sweetalert2.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
@@ -416,11 +448,11 @@ jQuery(window).load(function() {
 
 <?php if($current_floor_plan_status != 'viewer' ){?>
 <script>
-                    var tid = setTimeout(mycode, 120000);
+                    var tid = setTimeout(mycode, 300000);
                     function mycode() {
                       // do some stuff...
                       
-                      tid = setTimeout(mycode, 120000); // repeat myself
+                      tid = setTimeout(mycode, 300000); // repeat myself
                       if(expogenielogging.length !="" && expogenielogging.length > 1){
                           var Scurrenttime = jQuery.now();
                           var Ecurrenttime = jQuery.now() - 120000;
