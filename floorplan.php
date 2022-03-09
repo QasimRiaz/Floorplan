@@ -4,7 +4,9 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 5.29
+
+ * Version: 6.00
+
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -80,8 +82,121 @@ if($_GET['floorplanRequest'] == "savedfloorplansettings") {
     createnewfloorplan($_REQUEST);
     die();
     
+}else if($_GET['floorplanRequest'] == "productremoverequest") { 
+    require_once('../../../wp-load.php');
+ 
+    //productremoverequest($_REQUEST)
+    productremoverequest();
+      
+    die();
+    
+}else if($_GET['floorplanRequest'] == "reservedBoothRequest") { 
+    require_once('../../../wp-load.php');
+ 
+    //productremoverequest($_REQUEST)
+    reservedBoothRequest();
+      
+    die();
+    
+
+}else if($_GET['floorplanRequest'] == "getCartTotal") { 
+    require_once('../../../wp-load.php');
+ 
+    //productremoverequest($_REQUEST)
+    getCartTotal();
+      
+    die();
+    
 }
 
+// function remove_item_cart()
+// {
+//     # code...
+//     echo "Yes"
+// }
+function getCartTotal()
+{
+    $cartcount = WC()->cart->get_cart_contents_count();
+    return $cartcount;
+    
+}
+
+function productremoverequest()
+{
+    # code...
+    global $woocommerce;
+    $cart = $woocommerce->instance()->cart;
+    $id = $_POST['p_id'];
+    $cart_id = $cart->generate_cart_id($id);
+    $cart_item_id = $cart->find_product_in_cart($cart_id);
+    echo $id;
+    if($cart_item_id){
+      $cart->set_quantity($cart_item_id, 0);
+     }
+}
+function reservedBoothRequest()
+{
+    # code...
+    $id = $_POST['p_id'];
+    $user_ID = get_current_user_id();
+    $blog_id = get_current_blog_id();
+    $array=array();
+    $reservedBoothsInMeta= get_user_meta($user_ID,'wp_'.$blog_id.'_userBoothReserved');
+    echo "Reserverd";
+    echo "<pre>";  
+    print_r($reservedBoothsInMeta);
+    echo "Reserverd";
+    if(empty($reservedBoothsInMeta))
+    {   
+        echo "===EMPTY==";
+        array_push($reservedBoothsInMeta,$id);
+        echo "<pre>";
+        print_r($reservedBoothsInMeta);
+        update_post_meta($id,'Reserved',$user_ID);
+        update_user_option($user_ID,'userBoothReserved',$reservedBoothsInMeta);
+    }else{
+        foreach ($reservedBoothsInMeta as $key => $value) {
+             echo "=====";
+             print_r($value);
+             echo "=====";
+             echo "==[0]==";
+             print_r($value[0]);
+             echo "==[0]==";
+            array_push($array,$value[$key]);
+            // echo "=====";
+        }
+        echo "<pre>";
+        echo "Before Push";
+            print_r($array);
+            array_push($array, $id);
+            echo "<pre>";
+            echo "After Push";
+            print_r($array);
+        update_post_meta($id,'Reserved',$user_ID);
+        update_user_option($user_ID,'userBoothReserved',$array);
+        // foreach ($array as $key => $value) {
+        //     echo "=====";
+        //     print_r($value);
+        //     echo "=====";
+        // }
+    }
+    
+    // print_r($reservedBoothsInMeta);
+    // echo "=====";
+    //print_r(json_encode($array));
+     //$array=explode(",",$reservedBoothsInMeta);
+    // echo "=====";
+ 
+         // array_push($array,$id);
+//     echo "<pre>";
+//    // print_r($array);
+//     print_r($reservedBoothsInMeta);
+//     $array=serialize( $reservedBoothsInMeta);
+     
+    //  echo "<pre>";
+    //  print_r($reservedBoothsInMeta);
+     //update_user_option($user_ID,'userBoothReserved','');
+}
 
 
 function woo_in_cart($product_id) {
@@ -98,6 +213,7 @@ function woo_in_cart($product_id) {
  
     return false;
 }
+
 
 function createnewfloorplan($postData){
     
@@ -143,7 +259,83 @@ function createnewfloorplan($postData){
             
             $FloorBackground = '';
             
+            // Getting floorplan settings from wp options
+            $floorPlanSettingsString ='floorPlanSettings';
+            $floorPlanSettings = get_option($floorPlanSettingsString);
+
+            // $user_ID = get_current_user_id();
+            $blog_id = get_current_blog_id();
+            $arr = array();
+            $args = array(
+                'role__not_in' => 'Administrator',
+            );
+            $user_query =new WP_User_Query( $args  );
+            $lisstofuser = $user_query->get_results();
+            foreach($lisstofuser as $key=> $a_value) {
+                $user_Info=get_user_meta($a_value->ID,'nickname');
+                $user_Priroty_Num=get_user_meta($a_value->ID,'wp_'.$blog_id.'_priorityNum');
+             
+                $user_option=get_user_meta($a_value->ID,'ID','wp_'.$blog_id.'_myTurn');
+                $user_Status=get_user_meta($a_value->ID,'wp_'.$blog_id.'_userBoothStatus');
+                $user_Remove_status=get_user_meta($a_value->ID,'wp_'.$blog_id.'_RemoveFromQueue');
+                // echo "<pre>";
+                // print_r(  $user_option[0]);
+                if(empty($user_Remove_status[0]) && !empty($user_Priroty_Num[0]) && $user_Priroty_Num[0]!="-")
+                {
+                        array_push($arr,(object)[
+                        'Email' => $user_Info[0],
+                        'PrirotyNumber' => $user_Priroty_Num[0],
+                        'turn'=> $user_option[0],
+                        'Id' => $a_value->ID,
+                        'Status'=>$user_Status[0],
+                        ]);
+                        
+                 }
+            }
+            $array_Pr=array();
+            foreach($arr as $key=> $a_value) {
+                // echo "<pre>";
+                // print_r($a_value);
             
+                //   echo "----------trtrtrtrtrt-----------";
+                if($a_value->turn=='Checked')
+                {
+                     array_push($array_Pr,$a_value->PrirotyNumber);
+                 
+                }
+              
+            }  
+            $value = max($array_Pr);   
+            // global $cartCounts;
+            // $cartCount= $cartCounts->instance()->cart->cart_contents_count();
+            $loggedInUser = get_user_meta($user_ID);  
+            $getroledata = unserialize($loggedInUser['wp_'.$blog_id.'_capabilities'][0]);
+            echo "<pre>";
+            print_r($getroledata);
+            reset($getroledata);
+            $rolename = key($getroledata);
+            $get_all_roles_array = 'wp_'.$blog_id.'_user_roles';
+            $all_roles = get_option($get_all_roles_array);
+            foreach ($all_roles as $key => $name) { 
+                if($rolename == $key){
+                    $userLevel=$name['name'];
+                }
+            }
+          
+            $getroledata = unserialize($loggedInUser['wp_'.$blog_id.'_capabilities'][0]);
+            reset($getroledata);
+            $rolename = key($getroledata);
+            
+            $loggedInUsers=array(
+                'ID'=>$user_ID,
+                'UserLevel'=>$rolename,
+                'priorityNum'=>$loggedInUser['wp_'.$blog_id.'_priorityNum'],
+                'status'=>$loggedInUser['wp_'.$blog_id.'_userBoothStatus'],
+                'turn'=>$loggedInUser['wp_'.$blog_id.'_myTurn'],
+                'OverrideBoothLimit'=>$loggedInUser['wp_'.$blog_id.'_OverrideNumberOfBooths'][0],
+                'ReservedBooth'=>unserialize($loggedInUser['wp_'.$blog_id.'_userBoothReserved'][0]),
+                'OverrideCheck'=>($loggedInUser['wp_'.$blog_id.'_Override_Check'][0]),
+            );
             $legendlabel = "[";
             $legendlabel.='{"ID":1,"colorstatus":true,"name":"Gold","colorcode":#00000},';
             $legendlabel.='{"ID":2,"colorstatus":true,"name":"Sliver","colorcode":#00000},';
@@ -208,19 +400,18 @@ function savedlockunlockstatus($post_request){
 }
 
 function getproductdetail($productID){
-    
+    require_once plugin_dir_path( __DIR__ ) . 'EGPL/includes/floorplan-manager.php';
     try{
-	
+        $demo = new FloorPlanManager();
+        $AllBoothsList = $demo->getAllbooths();
         $id = $productID['pro_id'];
-        
-        
-        
-        
         $floorplanID = $productID['floorplanID'];
         $woocommerce_rest_api_keys = get_option( 'ContenteManager_Settings' );
         $wooconsumerkey = $woocommerce_rest_api_keys['ContentManager']['wooconsumerkey'];
         $wooseceretkey = $woocommerce_rest_api_keys['ContentManager']['wooseceretkey'];
-        
+        $user_ID = get_current_user_id();
+        $blog_id = get_current_blog_id();
+        $loggedInUser = get_user_meta($user_ID); 
         require_once( 'lib/woocommerce-api.php' );
         $url = get_site_url();
         $options = array(
@@ -232,10 +423,31 @@ function getproductdetail($productID){
          );
         $client = new WC_API_Client( $url, $wooconsumerkey, $wooseceretkey, $options );
         $get_product = wc_get_product( $id );
+        $get_products = get_post_meta( $id );
+        $number=0;
+        if($user_ID)
+        {
+                foreach ($AllBoothsList as $boothIndex=>$boothValue ){
+                    if($boothValue['bootheOwnerID'] == $user_ID ){  
+                    $number++;
+                    }           
+                }
+        }
+        // echo "<pre>";
+        // print_r($get_product);
+        // echo "<pre>";
+        // echo"-----------------------";
+        // print_r($get_products);exit;
         $get_deposit_type = get_post_meta($id, "_wc_deposit_type",true);
+        $get_override_check = get_post_meta($id, "overrideCheck",true);
+        $get_reserved_check = get_post_meta($id, "reservedStatus",true);
+        $get_reserved_status = get_post_meta($id, "Reserved",true);
         $get_deposit_amount = get_post_meta($id, "_wc_deposit_amount",true);
+        $get_BoothLevel_amount = get_post_meta($id, "LevelOfBooth",true);
+        $get_Booth_Owner = get_post_meta($id, "BoothForUser",true);
         $get_depositenable_type = get_post_meta($id, "_wc_deposit_enabled",true);
-        
+        $get_role_type = get_post_meta($id, "_wc_deposit_enabled",true);
+     
         if(empty($get_product)){
             
             $productdetail['productstatus'] =  'removed';
@@ -244,21 +456,25 @@ function getproductdetail($productID){
             $productdetail['productstatus'] =  'exist';
         }
         
+        $productdetail['NumberOfReservedBooths']=unserialize($loggedInUser['wp_'.$blog_id.'_userBoothReserved'][0]);
         $productdetail['title'] =  addslashes($get_product->name);
         $productdetail['slug'] =  $get_product->get_slug();
         $productdetail['description'] =  $get_product->description;
+        $productdetail['OverrideCheck'] =  $get_override_check;
+        $productdetail['reservedStatus'] =  $get_reserved_check;
+        $productdetail['Reserved'] =   $get_reserved_status;
+        $productdetail['PurchaseCount'] =   $number;
+      
         $productdetail['price'] =  (int)$get_product->regular_price;
         $productdetail['stockstatus'] =  $get_product->stock_status;
         $productdetail['deposit_type'] =  $get_deposit_type;
         $productdetail['deposit_amount'] =  $get_deposit_amount;
+        $productdetail['LevelOfBooth'] =  $get_BoothLevel_amount;
+        $productdetail['Booth_Purchaser'] = $get_Booth_Owner;
         $productdetail['deposit_enable_type'] =  $get_depositenable_type;
         
         $productdetail['currencysymbole'] =  get_woocommerce_currency_symbol( $currency );
-        
         $levelname =  $get_product->tax_class;
-        
-        
-        
          global $wp_roles;
             $all_roles = $wp_roles->roles;
             foreach ($all_roles as $key => $name) {
@@ -268,25 +484,25 @@ function getproductdetail($productID){
                      $productdetail['level'] = $name['name'];
                 }
             }
-         
-         
-        
+        if(!empty($get_product->image_id)){            
+             $productdetail['src'] = wp_get_attachment_thumb_url($get_product->image_id);         
+        }else{ 
+        $productdetail['src'] =  $url.'/wp-content/plugins/floorplan/icon01.png'; 
+        }        
+       $productdetail['floorplanstatus'] =  get_post_meta($floorplanID, 'updateboothpurchasestatus', true ); 
       
-        
-        if(!empty($get_product->image_id)){
-            
-             $productdetail['src'] = wp_get_attachment_thumb_url($get_product->image_id);
-            
-        }else{
-            
-        
-        $productdetail['src'] =  $url.'/wp-content/plugins/floorplan/icon01.png';
-        
-        }
-        
-        
-       $productdetail['floorplanstatus'] =  get_post_meta($floorplanID, 'updateboothpurchasestatus', true );
-        
+       $counts=0;
+        $woocommerce = new WC_API_Client( $url, $wooconsumerkey, $wooseceretkey, $options );
+        foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) { 
+            $product_id = $cart_item['product_id'];
+            $getproduct_detail = $woocommerce->products->get(  $product_id  );
+            if($getproduct_detail->product->categories[0] != 'Package' && $getproduct_detail->product->categories[0] != 'Add-ons')
+            {
+                $counts++;
+            }        
+         }
+   
+       $productdetail['CartTotal']=$counts; 
        if(woo_in_cart($id)) {
             
           $productdetail['status'] = 'alreadyexistproduct';
@@ -296,7 +512,9 @@ function getproductdetail($productID){
             
             $productdetail['status'] = 'unassigned';
         }
-       
+        // echo "<pre>";
+        // print_r($get_product);
+         
        echo json_encode($productdetail);
        exit;
       
@@ -391,8 +609,9 @@ function ajax_test_enqueue_scripts() {
 
 }
 
+//COde
 
-
+//COde
 add_action( 'wp_ajax_nopriv_post_love_add_love', 'post_love_add_love' );
 //add_action( 'wp_ajax_nopriv_getBoothList', 'getBoothList' );
 add_action( 'wp_ajax_nopriv_getExhibitordata', 'getExhibitordata' );
@@ -504,12 +723,20 @@ function getBoothtypesList($postdata) {
 function getBoothList($postdata) {
 	
 	//echo $boothTypes = get_post_meta( $_REQUEST['post_id'], 'booth_types', true );
+   
+
+    // echo '<pre>';
+    // print_r("Qasimriaz");exit;
+
     try{
 	$boothTypes = $postdata['boothTypes'];
        // $boothTypes = json_encode($boothTypes);
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);  
         
+      
+
+
         $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Activity Log',"Admin Action","",$user_ID,$user_info->user_email,$postdata['speciallog']);
         $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Settings Saved',"Admin Action","",$user_ID,$user_info->user_email,$postdata);
         
@@ -520,12 +747,14 @@ function getBoothList($postdata) {
         
         
         
+
+
         if($CurrentXML !== FALSE ){
         
         
-	update_post_meta( $postdata['post_id'], 'booth_types', trim($boothTypes) );
-	update_post_meta( $postdata['post_id'], 'floor_background', $postdata['floorBG'] );
-	update_post_meta( $postdata['post_id'], 'floorplan_xml', $postdata['floorXml'] );
+        update_post_meta( $postdata['post_id'], 'booth_types', trim($boothTypes) );
+        update_post_meta( $postdata['post_id'], 'floor_background', $postdata['floorBG'] );
+        update_post_meta( $postdata['post_id'], 'floorplan_xml', $postdata['floorXml'] );
         update_post_meta( $postdata['post_id'], 'sellboothsjson', $postdata['sellboothsjson'] );
         update_post_meta( $postdata['post_id'], 'updateboothpurchasestatus', "unlock" );
         
@@ -551,7 +780,7 @@ function getBoothList($postdata) {
             $productpicID = floorplanBoothImage($defaultImage);
            
             
-            $responce = $demo->createAllBoothPorducts($postdata['post_id'],$postdata['sellboothsjson'],$postdata['floorXml'],$productpicID);exit;
+            $responce = $demo->createAllBoothPorducts($postdata['post_id'],$postdata['sellboothsjson'],$postdata['floorXml'],$productpicID);
             
             
         }
@@ -590,11 +819,11 @@ function getExhibitordata() {
              $userdataarray['first_name'] = '';
         }
         
-        if(isset($all_meta_for_user['lanme'][0])){
-            $userdataarray['lanme'] = $all_meta_for_user['lanme'][0];
+        if(isset($all_meta_for_user['last_name'][0])){
+            $userdataarray['last_name'] = $all_meta_for_user['last_name'][0];
         }else{
             
-             $userdataarray['lanme'] = '';
+             $userdataarray['last_name'] = '';
         }
         if(isset($all_meta_for_user['wp_capabilities'][0])){
             
@@ -676,6 +905,34 @@ function getExhibitordata() {
         }else{
             
              $userdataarray['userzipcode'] = '';
+        } if(isset($all_meta_for_user['customefield_company_description_u7lyg'][0])){
+            $allUsersData[$index]['customefield_company_description_u7lyg'] = $all_meta_for_user['customefield_company_description_u7lyg'][0];
+        }else{
+
+             $allUsersData[$index]['customefield_company_description_u7lyg'] = '';
+        } if(isset($all_meta_for_user['customefield_contact_first_name_xkf3r'][0])){
+            $allUsersData[$index]['customefield_contact_first_name_xkf3r'] = $all_meta_for_user['customefield_contact_first_name_xkf3r'][0];
+        }else{
+
+             $allUsersData[$index]['customefield_contact_first_name_xkf3r'] = '';
+        }
+        if(isset($all_meta_for_user['customefield_contact_last_name_3eyrd'][0])){
+            $allUsersData[$index]['customefield_contact_last_name_3eyrd'] = $all_meta_for_user['customefield_contact_last_name_3eyrd'][0];
+        }else{
+
+             $allUsersData[$index]['customefield_contact_last_name_3eyrd'] = '';
+        }
+        if(isset($all_meta_for_user['customefield_contact_email_py8cr'][0])){
+            $allUsersData[$index]['customefield_contact_email_py8cr'] = $all_meta_for_user['customefield_contact_email_py8cr'][0];
+        }else{
+
+             $allUsersData[$index]['customefield_contact_email_py8cr'] = '';
+        }
+        if(isset($all_meta_for_user['customefield_contact_phone_39ev0'][0])){
+            $allUsersData[$index]['customefield_contact_phone_39ev0'] = $all_meta_for_user['customefield_contact_phone_39ev0'][0];
+        }else{
+
+             $allUsersData[$index]['customefield_contact_phone_39ev0'] = '';
         }
         
        
@@ -727,9 +984,11 @@ function getAllusers_data(){
         }
        
         
-        
+       
+        $site_prefixs = 'wp_'.$blog_id.'_';
+        $blog_id = get_current_blog_id();
         foreach ($authors as $aid) {
-        
+         
             $user_data = get_userdata($aid->ID);
             $index = $aid->ID;
             $all_meta_for_user = get_user_meta($aid->ID);
@@ -769,12 +1028,12 @@ function getAllusers_data(){
                     
                 }
               
+              
                 $allUsersData[$index]['companyname'] = $all_meta_for_user[$site_prefix.'company_name'][0];
                 $allUsersData[$index]['companylogourl'] = $all_meta_for_user[$site_prefix.'user_profile_url'][0];
                 $allUsersData[$index]['exhibitorsid'] = $aid->ID;
+                
                
-                
-                
                 
                 if(isset($all_meta_for_user['first_name'][0])){
                     $allUsersData[$index]['first_name'] = $all_meta_for_user['first_name'][0];
@@ -783,11 +1042,11 @@ function getAllusers_data(){
                     $allUsersData[$index]['first_name'] = '';
                 }       
         
-                if(isset($all_meta_for_user['lanme'][0])){
-                    $allUsersData[$index]['lanme'] = $all_meta_for_user['lanme'][0];
+                if(isset($all_meta_for_user['last_name'][0])){
+                    $allUsersData[$index]['last_name'] = $all_meta_for_user['last_name'][0];
                 }else{
 
-                     $allUsersData[$index]['lanme'] = '';
+                     $allUsersData[$index]['last_name'] = '';
                 }
                 if(isset($all_meta_for_user['wp_capabilities'][0])){
 
@@ -861,20 +1120,83 @@ function getAllusers_data(){
                      $allUsersData[$index]['userzipcode'] = '';
                 }
                
+                // if(isset($all_meta_for_user['wp_'.$blog_id.'_task_contact_phone_yjsw7'][0])){
+                //     $allUsersData[$index]['contactNumber'] = $all_meta_for_user['wp_'.$blog_id.'_task_contact_phone_yjsw7'][0];
+                // }else{
+
+                //      $allUsersData[$index]['contactNumber'] = '';
+                // }
+                // if(isset($all_meta_for_user['wp_'.$blog_id.'_task_contact_name_gppkg'][0])){
+                //     $allUsersData[$index]['contactName'] = $all_meta_for_user['wp_'.$blog_id.'_task_contact_name_gppkg'][0];
+                // }else{
+
+                //      $allUsersData[$index]['contactName'] = '';
+                // }
+                // if(isset($all_meta_for_user['wp_'.$blog_id.'_task_company_description_u69fg'][0])){
+                //     $allUsersData[$index]['compnayDesp'] = $all_meta_for_user['wp_'.$blog_id.'_task_company_description_u69fg'][0];
+                // }else{
+
+                //      $allUsersData[$index]['compnayDesp'] = '';
+                // }
+                // if(isset($all_meta_for_user['wp_'.$blog_id.'_task_company_website_1nphd'][0])){
+                //     $allUsersData[$index]['compnaywebsite'] = $all_meta_for_user['wp_'.$blog_id.'_task_company_website_1nphd'][0];
+                // }else{
+
+                //      $allUsersData[$index]['compnaywebsite'] = '';
+                // }
+                // if(isset($all_meta_for_user['wp_'.$blog_id.'_customefield_company_description_u7lyg'][0])){
+                //     $allUsersData[$index]['wp_'.$blog_id.'_customefield_company_description_u7lyg'] = $all_meta_for_user['wp_'.$blog_id.'_customefield_company_description_u7lyg'][0];
+                // }else{
+
+                //      $allUsersData[$index]['wp_'.$blog_id.'_customefield_company_description_u7lyg'] = '';
+                // }
+                // if(isset($all_meta_for_user['wp_'.$blog_id.'_customefield_company_description_u7lyg'][0])){
+                //     $allUsersData[$index]['company_description'] = $all_meta_for_user['wp_'.$blog_id.'_customefield_company_description_u7lyg'][0];
+                // }else{
+
+                //      $allUsersData[$index]['wp_'.$blog_id.'_customefield_company_description_u7lyg'] = '';
+                // }
+                // if(isset($all_meta_for_user['wp_'.$blog_id.'_customefield_contact_first_name_xkf3r'][0])){
+                //     $allUsersData[$index]['wp_'.$blog_id.'_customefield_contact_first_name_xkf3r'] = $all_meta_for_user['wp_'.$blog_id.'_customefield_contact_first_name_xkf3r'][0];
+                // }else{
+
+                //      $allUsersData[$index]['wp_'.$blog_id.'_customefield_contact_first_name_xkf3r'] = '';
+                // }
+                // if(isset($all_meta_for_user['wp_'.$blog_id.'_customefield_contact_last_name_3eyrd'][0])){
+                //     $allUsersData[$index]['wp_'.$blog_id.'_customefield_contact_last_name_3eyrd'] = $all_meta_for_user['wp_'.$blog_id.'_customefield_contact_last_name_3eyrd'][0];
+                // }else{
+
+                //      $allUsersData[$index]['wp_'.$blog_id.'_customefield_contact_last_name_3eyrd'] = '';
+                // }
+                
+                // if(isset($all_meta_for_user['wp_'.$blog_id.'_customefield_contact_email_py8cr'][0])){
+                //     $allUsersData[$index]['wp_'.$blog_id.'_customefield_contact_email_py8cr'] = $all_meta_for_user['wp_'.$blog_id.'_customefield_contact_email_py8cr'][0];
+                // }else{
+
+                //      $allUsersData[$index]['wp_'.$blog_id.'_customefield_contact_email_py8cr'] = '';
+                // }
+                // if(isset($all_meta_for_user['wp_'.$blog_id.'_customefield_contact_phone_39ev0'][0])){
+                //     $allUsersData[$index]['wp_'.$blog_id.'_customefield_contact_phone_39ev0'] = $all_meta_for_user['wp_'.$blog_id.'_customefield_contact_phone_39ev0'][0];
+                // }else{
+
+                //      $allUsersData[$index]['wp_'.$blog_id.'_customefield_contact_phone_39ev0'] = '';
+                // }
+               
                 //array_push($cart,$allUsersData);
 
-            }
+             }
             
            } 
             
         }
-        
+    
         
         
         if(!empty($allUsersData)){ 
         uasort($allUsersData, 'compareByName');
         
         }
+        
        
         return $allUsersData;
     
@@ -914,7 +1236,7 @@ function array_msort($array, $cols)
 
 function floorplan_shortcode( $atts, $content = null ) {
     
-    
+    $blog_id = get_current_blog_id();
     
     if(isset($_GET['floorplanID'])){
         
@@ -981,7 +1303,7 @@ function floorplan_shortcode( $atts, $content = null ) {
             // Gather post data.
             
             $digits = 6;
-        $floorplandefaultname ="Floor Plan - ".rand(pow(10, $digits-1), pow(10, $digits)-1);
+         $floorplandefaultname ="Floor Plan - ".rand(pow(10, $digits-1), pow(10, $digits)-1);
         
         
             
@@ -1009,8 +1331,77 @@ function floorplan_shortcode( $atts, $content = null ) {
             $boothTypes.=']';
             
             $FloorBackground = '';
+            $arr = array();
+            $args = array(
+                'role__not_in' => 'Administrator',
+            );
+            $user_query =new WP_User_Query( $args  );
+            $lisstofuser = $user_query->get_results();
+            foreach($lisstofuser as $key=> $a_value) {
+                $user_Info=get_user_meta($a_value->ID,'nickname');
+                $user_Priroty_Num=get_user_meta($a_value->ID,'wp_'.$blog_id.'_priorityNum');
+             
+                $user_option=get_user_meta($a_value->ID,'wp_'.$blog_id.'_myTurn');
+                $user_Status=get_user_meta($a_value->ID,'wp_'.$blog_id.'_userBoothStatus');
+                $user_Remove_status=get_user_meta($a_value->ID,'wp_'.$blog_id.'_RemoveFromQueue');
+                // echo "<pre>";
+                // print_r(  $user_option[0]);
+                if(empty($user_Remove_status[0]) && !empty($user_Priroty_Num[0]) && $user_Priroty_Num[0]!="-")
+                {
+                        array_push($arr,(object)[
+                        'Email' => $user_Info[0],
+                        'PrirotyNumber' => $user_Priroty_Num[0],
+                        'turn'=> $user_option[0],
+                        'Id' => $a_value->ID,
+                        'Status'=>$user_Status[0],
+                        ]);
+                        
+                 }
+            }
             
+            $array_Pr=array();
+            foreach($arr as $key=> $a_value) {
             
+                //   echo "----------trtrtrtrtrt-----------";
+                if($a_value->turn=='Checked')
+                {
+                     array_push($array_Pr,$a_value->PrirotyNumber);
+                 
+                }
+             
+            } 
+            $value = max($array_Pr);  
+            // Getting floorplan settings from wp options
+            $floorPlanSettingsString ='floorPlanSettings';
+            $floorPlanSettings = get_option($floorPlanSettingsString);
+            // global $cartCounts;
+            // $cartCount= $cartCounts->instance()->cart->cart_contents_count();
+            $user_ID = get_current_user_id();
+            echo $user_ID ;
+           
+            $loggedInUser = get_user_meta($user_ID);
+            $getroledata = unserialize($loggedInUser['wp_'.$blog_id.'_capabilities'][0]);
+            echo "<pre>";
+            print_r($getroledata);
+            reset($getroledata);
+            $rolename = key($getroledata);
+            $get_all_roles_array = 'wp_'.$blog_id.'_user_roles';
+            $all_roles = get_option($get_all_roles_array);
+            foreach ($all_roles as $key => $name) { 
+                if($rolename == $key){
+                    $userLevel=$name['name'];
+                }
+            }
+            $loggedInUsers=array(
+                'ID'=>$user_ID,
+                'UserLevel'=>$rolename,
+                'priorityNum'=>$loggedInUser['wp_'.$blog_id.'_priorityNum'][0],
+                'status'=>$loggedInUser['wp_'.$blog_id.'_userBoothStatus'],
+                'turn'=>$loggedInUser['wp_'.$blog_id.'_myTurn'],
+                'OverrideBoothLimit'=>$loggedInUser['wp_'.$blog_id.'_OverrideNumberOfBooths'][0],
+                'ReservedBooth'=>unserialize($loggedInUser['wp_'.$blog_id.'_userBoothReserved'][0]),
+                'OverrideCheck'=>($loggedInUser['wp_'.$blog_id.'_Override_Check'][0]),
+            );  
             $legendlabel = "[";
             $legendlabel.='{"ID":1,"colorstatus":true,"name":"Gold","colorcode":#00000},';
             $legendlabel.='{"ID":2,"colorstatus":true,"name":"Sliver","colorcode":#00000},';
@@ -1048,14 +1439,78 @@ function floorplan_shortcode( $atts, $content = null ) {
             $sellboothsjson = get_post_meta( $id, 'sellboothsjson', true );
             $floorplanstatuslockunlock = get_post_meta( $id, 'updateboothpurchasestatus', true );
             
+            // Getting floorplan settings from wp options
+            $floorPlanSettingsString ='floorPlanSettings';
+            $floorPlanSettings = get_option($floorPlanSettingsString); 
+            // $user_ID = get_current_user_id();
+            $arr = array();
+            $args = array(
+                'role__not_in' => 'Administrator',
+            );
+            $user_query =new WP_User_Query( $args  );
+            $lisstofuser = $user_query->get_results();
+            foreach($lisstofuser as $key=> $a_value) {
+                $user_Info=get_user_meta($a_value->ID,'nickname');
+                $user_Priroty_Num=get_user_meta($a_value->ID,'wp_'.$blog_id.'_priorityNum');
              
+                $user_option=get_user_meta($a_value->ID,'wp_'.$blog_id.'_myTurn');
+                $user_Status=get_user_meta($a_value->ID,'wp_'.$blog_id.'_userBoothStatus');
+                $user_Remove_status=get_user_meta($a_value->ID,'wp_'.$blog_id.'_RemoveFromQueue');
+                // echo "<pre>";
+                // print_r(  $user_option[0]);
+                if(empty($user_Remove_status[0]) && !empty($user_Priroty_Num[0]) && $user_Priroty_Num[0]!="-")
+                {
+                        array_push($arr,(object)[
+                        'Email' => $user_Info[0],
+                        'PrirotyNumber' => $user_Priroty_Num[0],
+                        'turn'=> $user_option[0],
+                        'Id' => $a_value->ID,
+                        'Status'=>$user_Status[0],
+                        ]);
+                        
+                 }
+            }
+            $array_Pr=array();
+            foreach($arr as $key=> $a_value) {
+                // echo "<pre>";
+                // print_r($a_value);
             
+                //   echo "----------trtrtrtrtrt-----------";
+                if($a_value->turn=='Checked')
+                {
+                     array_push($array_Pr,$a_value->PrirotyNumber);
+                 
+                }
+              
+            }  
+            $value = max($array_Pr);  
             
             $exhibitorflowstatusKey = "exhibitorentryflowstatus";
             $exhibitorflowstatus = get_option($exhibitorflowstatusKey);
-
+            // global $cartCounts;
+            // $cartCount= $cartCounts->instance()->cart->cart_contents_count();
             $userentryflow = $exhibitorflowstatus['status'];
             $user_ID = get_current_user_id();
+            $user = wp_get_current_user();
+
+            $blog_id = get_current_blog_id();
+            $loggedInUser = get_user_meta($user_ID); 
+            $getroledata = unserialize($loggedInUser['wp_'.$blog_id.'_capabilities'][0]);
+            reset($getroledata);
+            $rolename = key($getroledata);
+            $get_all_roles_array = 'wp_'.$blog_id.'_user_roles';
+            
+           
+            $loggedInUsers=array(
+                'ID'=>$user_ID,
+                'UserLevel'=>$rolename,
+                'priorityNum'=>$loggedInUser['wp_'.$blog_id.'_priorityNum'][0],
+                'status'=>$loggedInUser['wp_'.$blog_id.'_userBoothStatus'],
+                'turn'=>$loggedInUser['wp_'.$blog_id.'_myTurn'],
+                'OverrideBoothLimit'=>$loggedInUser['wp_'.$blog_id.'_OverrideNumberOfBooths'][0],
+                'ReservedBooth'=>unserialize($loggedInUser['wp_'.$blog_id.'_userBoothReserved'][0]),
+                'OverrideCheck'=>($loggedInUser['wp_'.$blog_id.'_Override_Check'][0]),
+            );
             $user_info = get_userdata($user_ID);  
             $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Viewer Loading',"User view",$FloorplanXml[0],$user_ID,$user_info->user_email,"specialLoging");
         
