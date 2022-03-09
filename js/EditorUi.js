@@ -6,6 +6,7 @@
  */
 var checkinitalstatus;
 
+<<<<<<< HEAD
 EditorUi = function (editor, container, lightbox) {
   var floorPlanSettings = JSON.parse(floorPlanSetting);
   //console.log(floorPlanSettings["Open_users"]);
@@ -249,6 +250,1575 @@ EditorUi = function (editor, container, lightbox) {
       nodes = newNodes;
     }
   });
+=======
+EditorUi = function(editor, container, lightbox)
+{
+	mxEventSource.call(this);
+	this.destroyFunctions = [];
+
+	this.editor = editor || new Editor();
+	this.container = container || document.body;
+	var graph = this.editor.graph;
+	graph.lightbox = lightbox;
+
+	// Pre-fetches submenu image or replaces with embedded image if supported
+	if (mxClient.IS_SVG)
+	{
+		mxPopupMenu.prototype.submenuImage = 'data:image/gif;base64,R0lGODlhCQAJAIAAAP///zMzMyH5BAEAAAAALAAAAAAJAAkAAAIPhI8WebHsHopSOVgb26AAADs=';
+	}
+	else
+	{
+		new Image().src = mxPopupMenu.prototype.submenuImage;
+	}
+
+	// Pre-fetches connect image
+	if (!mxClient.IS_SVG && mxConnectionHandler.prototype.connectImage != null)
+	{
+		new Image().src = mxConnectionHandler.prototype.connectImage.src;
+	}
+	
+	// Disables graph and forced panning in chromeless mode
+	if (this.editor.chromeless)
+	{
+		this.footerHeight = 0;
+		graph.isEnabled = function() { return false; };
+		graph.panningHandler.isForcePanningEvent = function(me)
+		{
+			return !mxEvent.isPopupTrigger(me.getEvent());
+		};
+	}
+	
+    // Creates the user interface
+	this.actions = new Actions(this);
+	this.menus = this.createMenus();
+	this.createDivs();
+	this.createUi();
+	this.refresh();
+	
+	// Disables HTML and text selection
+	var textEditing =  mxUtils.bind(this, function(evt)
+	{
+		if (evt == null)
+		{
+			evt = window.event;
+		}
+		
+		return this.isSelectionAllowed(evt) ||  graph.isEditing();
+	});
+
+	// Disables text selection while not editing and no dialog visible
+	if (this.container == document.body)
+	{
+		this.menubarContainer.onselectstart = textEditing;
+		this.menubarContainer.onmousedown = textEditing;
+		this.toolbarContainer.onselectstart = textEditing;
+		this.toolbarContainer.onmousedown = textEditing;
+		this.diagramContainer.onselectstart = textEditing;
+		this.diagramContainer.onmousedown = textEditing;
+		this.sidebarContainer.onselectstart = textEditing;
+		this.sidebarContainer.onmousedown = textEditing;
+		this.formatContainer.onselectstart = textEditing;
+		this.formatContainer.onmousedown = textEditing;
+		this.footerContainer.onselectstart = textEditing;
+		this.footerContainer.onmousedown = textEditing;
+		
+		if (this.tabContainer != null)
+		{
+			// Mouse down is needed for drag and drop
+			this.tabContainer.onselectstart = textEditing;
+		}
+	}
+	
+	// And uses built-in context menu while editing
+	if (!this.editor.chromeless)
+	{
+		if (mxClient.IS_IE && (typeof(document.documentMode) === 'undefined' || document.documentMode < 9))
+		{
+			mxEvent.addListener(this.diagramContainer, 'contextmenu', textEditing);
+		}
+		else
+		{
+			// Allows browser context menu outside of diagram and sidebar
+			this.diagramContainer.oncontextmenu = textEditing;
+		}
+	}
+	else
+	{
+		graph.panningHandler.usePopupTrigger = false;
+	}
+
+	// Contains the main graph instance inside the given panel
+	graph.init(this.diagramContainer);
+
+	// Creates hover icons
+	this.hoverIcons = this.createHoverIcons();
+	
+	// Adds tooltip when mouse is over scrollbars to show space-drag panning option
+	mxEvent.addListener(this.diagramContainer, 'mousemove', mxUtils.bind(this, function(evt)
+	{
+		var off = mxUtils.getOffset(this.diagramContainer);
+		
+		if (mxEvent.getClientX(evt) - off.x - this.diagramContainer.clientWidth > 0 ||
+			mxEvent.getClientY(evt) - off.y - this.diagramContainer.clientHeight > 0)
+		{
+			this.diagramContainer.setAttribute('title', mxResources.get('panTooltip'));
+		}
+		else
+		{
+			this.diagramContainer.removeAttribute('title');
+		}
+	}));
+
+   	// Escape key hides dialogs, adds space+drag panning
+	var spaceKeyPressed = false;
+	
+	// Overrides hovericons to disable while space key is pressed
+	var hoverIconsIsResetEvent = this.hoverIcons.isResetEvent;
+	
+	this.hoverIcons.isResetEvent = function(evt, allowShift)
+	{
+		return spaceKeyPressed || hoverIconsIsResetEvent.apply(this, arguments);
+	};
+	
+	this.keydownHandler = mxUtils.bind(this, function(evt)
+	{
+		if (evt.which == 32 /* Space */)
+		{
+			spaceKeyPressed = true;
+			this.hoverIcons.reset();
+			graph.container.style.cursor = 'move';
+			
+			// Disables scroll after space keystroke with scrollbars
+			if (!graph.isEditing() && mxEvent.getSource(evt) == graph.container)
+			{
+				mxEvent.consume(evt);
+			}
+		}
+		else if (!mxEvent.isConsumed(evt) && evt.keyCode == 27 /* Escape */)
+		{
+			this.hideDialog();
+		}
+	});
+   	
+	mxEvent.addListener(document, 'keydown', this.keydownHandler);
+	
+	this.keyupHandler = mxUtils.bind(this, function(evt)
+	{
+		graph.container.style.cursor = '';
+		spaceKeyPressed = false;
+	});
+
+	mxEvent.addListener(document, 'keyup', this.keyupHandler);
+    
+    // Forces panning for middle and right mouse buttons
+	var panningHandlerIsForcePanningEvent = graph.panningHandler.isForcePanningEvent;
+	graph.panningHandler.isForcePanningEvent = function(me)
+	{
+		// Ctrl+left button is reported as right button in FF on Mac
+		return panningHandlerIsForcePanningEvent.apply(this, arguments) ||
+			spaceKeyPressed || (mxEvent.isMouseEvent(me.getEvent()) &&
+			(this.usePopupTrigger || !mxEvent.isPopupTrigger(me.getEvent())) &&
+			((!mxEvent.isControlDown(me.getEvent()) &&
+			mxEvent.isRightMouseButton(me.getEvent())) ||
+			mxEvent.isMiddleMouseButton(me.getEvent())));
+	};
+
+	// Ctrl/Cmd+Enter applies editing value except in Safari where Ctrl+Enter creates
+	// a new line (while Enter creates a new paragraph and Shift+Enter stops)
+	var cellEditorIsStopEditingEvent = graph.cellEditor.isStopEditingEvent;
+	graph.cellEditor.isStopEditingEvent = function(evt)
+	{
+		return cellEditorIsStopEditingEvent.apply(this, arguments) ||
+			(evt.keyCode == 13 && ((!mxClient.IS_SF && mxEvent.isControlDown(evt)) ||
+			(mxClient.IS_MAC && mxEvent.isMetaDown(evt)) ||
+			(mxClient.IS_SF && mxEvent.isShiftDown(evt))));
+	};
+	
+	// Switches toolbar for text editing
+	var textMode = false;
+	var fontMenu = null;
+	var sizeMenu = null;
+	var nodes = null;
+	
+	var updateToolbar = mxUtils.bind(this, function()
+	{
+		if (textMode != graph.cellEditor.isContentEditing())
+		{
+			var node = this.toolbar.container.firstChild;
+			var newNodes = [];
+			
+			while (node != null)
+			{
+				var tmp = node.nextSibling;
+				
+				if (mxUtils.indexOf(this.toolbar.staticElements, node) < 0)
+				{
+					node.parentNode.removeChild(node);
+					newNodes.push(node);
+				}
+				
+				node = tmp;
+			}
+			
+			// Saves references to special items
+			var tmp1 = this.toolbar.fontMenu;
+			var tmp2 = this.toolbar.sizeMenu;
+			
+			if (nodes == null)
+			{
+				this.toolbar.createTextToolbar();
+			}
+			else
+			{
+				for (var i = 0; i < nodes.length; i++)
+				{
+					this.toolbar.container.appendChild(nodes[i]);
+				}
+				
+				// Restores references to special items
+				this.toolbar.fontMenu = fontMenu;
+				this.toolbar.sizeMenu = sizeMenu;
+			}
+			
+			textMode = graph.cellEditor.isContentEditing();
+			fontMenu = tmp1;
+			sizeMenu = tmp2;
+			nodes = newNodes;
+		}
+	});
+
+	var ui = this;
+	
+	// Overrides cell editor to update toolbar
+	var cellEditorStartEditing = graph.cellEditor.startEditing;
+	graph.cellEditor.startEditing = function()
+	{       
+            
+                console.log('Testtooltip');
+		cellEditorStartEditing.apply(this, arguments);
+		updateToolbar();
+		
+		if (graph.cellEditor.isContentEditing())
+		{
+			var updating = false;
+			
+			var updateCssHandler = function()
+			{
+				if (!updating)
+				{
+					updating = true;
+				
+					window.setTimeout(function()
+					{
+						var selectedElement = graph.getSelectedElement();
+						var node = selectedElement;
+						
+						while (node != null && node.nodeType != mxConstants.NODETYPE_ELEMENT)
+						{
+							node = node.parentNode;
+						}
+						
+						if (node != null)
+						{
+							var css = mxUtils.getCurrentStyle(node);
+	
+							if (css != null && ui.toolbar != null)
+							{
+								// Strips leading and trailing quotes
+								var ff = css.fontFamily;
+								
+								if (ff.charAt(0) == '\'')
+								{
+									ff = ff.substring(1);
+								}
+								
+								if (ff.charAt(ff.length - 1) == '\'')
+								{
+									ff = ff.substring(0, ff.length - 1);
+								}
+								
+								ui.toolbar.setFontName(ff);
+								ui.toolbar.setFontSize(parseInt(css.fontSize));
+							}
+						}
+						
+						updating = false;
+					}, 0);
+				}
+			};
+			
+			mxEvent.addListener(graph.cellEditor.textarea, 'input', updateCssHandler)
+			mxEvent.addListener(graph.cellEditor.textarea, 'touchend', updateCssHandler);
+			mxEvent.addListener(graph.cellEditor.textarea, 'mouseup', updateCssHandler);
+			mxEvent.addListener(graph.cellEditor.textarea, 'keyup', updateCssHandler);
+			updateCssHandler();
+		}
+	};
+	
+	var cellEditorStopEditing = graph.cellEditor.stopEditing;
+	graph.cellEditor.stopEditing = function(cell, trigger)
+	{
+		cellEditorStopEditing.apply(this, arguments);
+		updateToolbar();
+	};
+	
+    // Enables scrollbars and sets cursor style for the container
+	graph.container.setAttribute('tabindex', '0');
+   	graph.container.style.cursor = 'default';
+    
+	// Workaround for page scroll if embedded via iframe
+	if (window.self === window.top && graph.container.parentNode != null)
+	{
+		graph.container.focus();
+	}
+
+   	// Keeps graph container focused on mouse down
+   	var graphFireMouseEvent = graph.fireMouseEvent;
+   	graph.fireMouseEvent = function(evtName, me, sender)
+   	{
+   		if (evtName == mxEvent.MOUSE_DOWN)
+   		{
+   			this.container.focus();
+   		}
+   		
+   		graphFireMouseEvent.apply(this, arguments);
+   	};
+
+   	// Configures automatic expand on mouseover
+	graph.popupMenuHandler.autoExpand = true;
+
+    // Installs context menu
+	if (this.menus != null)
+	{
+		graph.popupMenuHandler.factoryMethod = mxUtils.bind(this, function(menu, cell, evt)
+		{
+			this.menus.createPopupMenu(menu, cell, evt);
+		});
+	}
+	
+	// Hides context menu
+	mxEvent.addGestureListeners(document, mxUtils.bind(this, function(evt)
+	{
+		graph.popupMenuHandler.hideMenu();
+	}));
+
+    // Create handler for key events
+	this.keyHandler = this.createKeyHandler(editor);
+    
+	// Getter for key handler
+	this.getKeyHandler = function()
+	{
+		return keyHandler;
+	};
+	
+	// Stores the current style and assigns it to new cells
+	var styles = ['rounded', 'shadow', 'glass', 'dashed', 'dashPattern', 'comic', 'labelBackgroundColor'];
+	var connectStyles = ['shape', 'edgeStyle', 'curved', 'rounded', 'elbow', 'comic'];
+	
+	// Note: Everything that is not in styles is ignored (styles is augmented below)
+	this.setDefaultStyle = function(cell)
+	{
+		var state = graph.view.getState(cell);
+		
+		if (state != null)
+		{
+			// Ignores default styles
+			var clone = cell.clone();
+			clone.style = ''
+			var defaultStyle = graph.getCellStyle(clone);
+			var values = [];
+			var keys = [];
+
+			for (var key in state.style)
+			{
+				if (defaultStyle[key] != state.style[key])
+				{
+					values.push(state.style[key]);
+					keys.push(key);
+				}
+			}
+			
+			// Handles special case for value "none"
+			var cellStyle = graph.getModel().getStyle(state.cell);
+			var tokens = (cellStyle != null) ? cellStyle.split(';') : [];
+			
+			for (var i = 0; i < tokens.length; i++)
+			{
+				var tmp = tokens[i];
+		 		var pos = tmp.indexOf('=');
+		 					 		
+		 		if (pos >= 0)
+		 		{
+		 			var key = tmp.substring(0, pos);
+		 			var value = tmp.substring(pos + 1);
+		 			
+		 			if (defaultStyle[key] != null && value == 'none')
+		 			{
+		 				values.push(value);
+		 				keys.push(key);
+		 			}
+		 		}
+			}
+
+			// Resets current style
+			if (graph.getModel().isEdge(state.cell))
+			{
+				graph.currentEdgeStyle = {};
+			}
+			else
+			{
+				graph.currentVertexStyle = {}
+			}
+
+			this.fireEvent(new mxEventObject('styleChanged', 'keys', keys, 'values', values, 'cells', [state.cell]));
+		}
+	};
+	
+	this.clearDefaultStyle = function()
+	{
+		graph.currentEdgeStyle = graph.defaultEdgeStyle;
+		graph.currentVertexStyle = {};
+		
+		// Updates UI
+		this.fireEvent(new mxEventObject('styleChanged', 'keys', [], 'values', [], 'cells', []));
+	};
+
+	// Keys that should be ignored if the cell has a value (known: new default for all cells is html=1 so
+    // for the html key this effecticely only works for edges inserted via the connection handler)
+	var valueStyles = ['fontFamily', 'fontSize', 'fontColor'];
+	
+	// Keys that always update the current edge style regardless of selection
+	var alwaysEdgeStyles = ['edgeStyle', 'startArrow', 'startFill', 'startSize', 'endArrow', 'endFill', 'endSize', 'jettySize', 'orthogonalLoop'];
+	
+	// Keys that are ignored together (if one appears all are ignored)
+	var keyGroups = [['startArrow', 'startFill', 'startSize', 'endArrow', 'endFill', 'endSize', 'jettySize', 'orthogonalLoop'],
+	                 ['strokeColor', 'strokeWidth'],
+	                 ['fillColor', 'gradientColor'],
+	                 valueStyles,
+	                 ['align'],
+	                 ['html']];
+	
+	// Adds all keys used above to the styles array
+	for (var i = 0; i < keyGroups.length; i++)
+	{
+		for (var j = 0; j < keyGroups[i].length; j++)
+		{
+			styles.push(keyGroups[i][j]);
+		}
+	}
+	
+	for (var i = 0; i < connectStyles.length; i++)
+	{
+		styles.push(connectStyles[i]);
+	}
+
+	// Implements a global current style for edges and vertices that is applied to new cells
+	var insertHandler = function(cells, asText)
+	{
+		graph.getModel().beginUpdate();
+		try
+		{
+			// Applies only basic text styles
+			if (asText)
+			{
+				var edge = graph.getModel().isEdge(cell);
+				var current = (edge) ? graph.currentEdgeStyle : graph.currentVertexStyle;
+				var textStyles = ['fontSize', 'fontFamily', 'fontColor'];
+				
+				for (var j = 0; j < textStyles.length; j++)
+				{
+					var value = current[textStyles[j]];
+					
+					if (value != null)
+					{
+						graph.setCellStyles(textStyles[j], value, cells);
+					}
+				}
+			}
+			else
+			{
+				for (var i = 0; i < cells.length; i++)
+				{
+					var cell = cells[i];
+
+					// Removes styles defined in the cell style from the styles to be applied
+					var cellStyle = graph.getModel().getStyle(cell);
+					var tokens = (cellStyle != null) ? cellStyle.split(';') : [];
+					var appliedStyles = styles.slice();
+					
+					for (var j = 0; j < tokens.length; j++)
+					{
+						var tmp = tokens[j];
+				 		var pos = tmp.indexOf('=');
+				 					 		
+				 		if (pos >= 0)
+				 		{
+				 			var key = tmp.substring(0, pos);
+				 			var index = mxUtils.indexOf(appliedStyles, key);
+				 			
+				 			if (index >= 0)
+				 			{
+				 				appliedStyles.splice(index, 1);
+				 			}
+				 			
+				 			// Handles special cases where one defined style ignores other styles
+				 			for (var k = 0; k < keyGroups.length; k++)
+				 			{
+				 				var group = keyGroups[k];
+				 				
+				 				if (mxUtils.indexOf(group, key) >= 0)
+				 				{
+				 					for (var l = 0; l < group.length; l++)
+				 					{
+							 			var index2 = mxUtils.indexOf(appliedStyles, group[l]);
+							 			
+							 			if (index2 >= 0)
+							 			{
+							 				appliedStyles.splice(index2, 1);
+							 			}
+				 					}
+				 				}
+				 			}
+				 		}
+					}
+	
+					// Applies the current style to the cell
+					var edge = graph.getModel().isEdge(cell);
+					var current = (edge) ? graph.currentEdgeStyle : graph.currentVertexStyle;
+					
+					for (var j = 0; j < appliedStyles.length; j++)
+					{
+						var key = appliedStyles[j];
+						var styleValue = current[key];
+	
+						if (styleValue != null && (key != 'shape' || edge))
+						{
+							// Special case: Connect styles are not applied here but in the connection handler
+							if (!edge || mxUtils.indexOf(connectStyles, key) < 0)
+							{
+								graph.setCellStyles(key, styleValue, [cell]);
+							}
+						}
+					}
+				}
+			}
+		}
+		finally
+		{
+			graph.getModel().endUpdate();
+		}
+	};
+
+	graph.addListener('cellsInserted', function(sender, evt)
+	{
+		insertHandler(evt.getProperty('cells'));
+	});
+	
+	graph.addListener('textInserted', function(sender, evt)
+	{
+		insertHandler(evt.getProperty('cells'), true);
+	});
+	
+	graph.connectionHandler.addListener(mxEvent.CONNECT, function(sender, evt)
+	{
+		var cells = [evt.getProperty('cell')];
+		
+		if (evt.getProperty('terminalInserted'))
+		{
+			cells.push(evt.getProperty('terminal'));
+		}
+		
+		insertHandler(cells);
+	});
+
+	this.addListener('styleChanged', mxUtils.bind(this, function(sender, evt)
+	{
+		// Checks if edges and/or vertices were modified
+		var cells = evt.getProperty('cells');
+		var vertex = false;
+		var edge = false;
+		
+		if (cells.length > 0)
+		{
+			for (var i = 0; i < cells.length; i++)
+			{
+				vertex = graph.getModel().isVertex(cells[i]) || vertex;
+				edge = graph.getModel().isEdge(cells[i]) || edge;
+				
+				if (edge && vertex)
+				{
+					break;
+				}
+			}
+		}
+		else
+		{
+			vertex = true;
+			edge = true;
+		}
+		
+		var keys = evt.getProperty('keys');
+		var values = evt.getProperty('values');
+
+		for (var i = 0; i < keys.length; i++)
+		{
+			var common = mxUtils.indexOf(valueStyles, keys[i]) >= 0;
+			
+			// Ignores transparent stroke colors
+			if (keys[i] != 'strokeColor' || (values[i] != null && values[i] != 'none'))
+			{
+				// Special case: Edge style and shape
+				if (mxUtils.indexOf(connectStyles, keys[i]) >= 0)
+				{
+					if (edge || mxUtils.indexOf(alwaysEdgeStyles, keys[i]) >= 0)
+					{
+						if (values[i] == null)
+						{
+							delete graph.currentEdgeStyle[keys[i]];
+						}
+						else
+						{
+							graph.currentEdgeStyle[keys[i]] = values[i];
+						}
+					}
+					// Uses style for vertex if defined in styles
+					else if (vertex && mxUtils.indexOf(styles, keys[i]) >= 0)
+					{
+						if (values[i] == null)
+						{
+							delete graph.currentVertexStyle[keys[i]];
+						}
+						else
+						{
+							graph.currentVertexStyle[keys[i]] = values[i];
+						}
+					}
+				}
+				else if (mxUtils.indexOf(styles, keys[i]) >= 0)
+				{
+					if (vertex || common)
+					{
+						if (values[i] == null)
+						{
+							delete graph.currentVertexStyle[keys[i]];
+						}
+						else
+						{
+							graph.currentVertexStyle[keys[i]] = values[i];
+						}
+					}
+					
+					if (edge || common || mxUtils.indexOf(alwaysEdgeStyles, keys[i]) >= 0)
+					{
+						if (values[i] == null)
+						{
+							delete graph.currentEdgeStyle[keys[i]];
+						}
+						else
+						{
+							graph.currentEdgeStyle[keys[i]] = values[i];
+						}
+					}
+				}
+			}
+		}
+		
+		if (this.toolbar != null)
+		{
+			this.toolbar.setFontName(graph.currentVertexStyle['fontFamily'] || Menus.prototype.defaultFont);
+			this.toolbar.setFontSize(graph.currentVertexStyle['fontSize'] || Menus.prototype.defaultFontSize);
+			
+			if (this.toolbar.edgeStyleMenu != null)
+			{
+				// Updates toolbar icon for edge style
+				var edgeStyleDiv = this.toolbar.edgeStyleMenu.getElementsByTagName('div')[0];
+
+				if (graph.currentEdgeStyle['edgeStyle'] == 'orthogonalEdgeStyle' && graph.currentEdgeStyle['curved'] == '1')
+				{
+					edgeStyleDiv.className = 'geSprite geSprite-curved';
+				}
+				else if (graph.currentEdgeStyle['edgeStyle'] == 'straight' || graph.currentEdgeStyle['edgeStyle'] == 'none' ||
+						graph.currentEdgeStyle['edgeStyle'] == null)
+				{
+					edgeStyleDiv.className = 'geSprite geSprite-straight';
+				}
+				else if (graph.currentEdgeStyle['edgeStyle'] == 'entityRelationEdgeStyle')
+				{
+					edgeStyleDiv.className = 'geSprite geSprite-entity';
+				}
+				else if (graph.currentEdgeStyle['edgeStyle'] == 'elbowEdgeStyle')
+				{
+					edgeStyleDiv.className = 'geSprite geSprite-' + ((graph.currentEdgeStyle['elbow'] == 'vertical') ?
+						'verticalelbow' : 'horizontalelbow');
+				}
+				else if (graph.currentEdgeStyle['edgeStyle'] == 'isometricEdgeStyle')
+				{
+					edgeStyleDiv.className = 'geSprite geSprite-' + ((graph.currentEdgeStyle['elbow'] == 'vertical') ?
+						'verticalisometric' : 'horizontalisometric');
+				}
+				else
+				{
+					edgeStyleDiv.className = 'geSprite geSprite-orthogonal';
+				}
+			}
+			
+			if (this.toolbar.edgeShapeMenu != null)
+			{
+				// Updates icon for edge shape
+				var edgeShapeDiv = this.toolbar.edgeShapeMenu.getElementsByTagName('div')[0];
+				
+				if (graph.currentEdgeStyle['shape'] == 'link')
+				{
+					edgeShapeDiv.className = 'geSprite geSprite-linkedge';
+				}
+				else if (graph.currentEdgeStyle['shape'] == 'flexArrow')
+				{
+					edgeShapeDiv.className = 'geSprite geSprite-arrow';
+				}
+				else if (graph.currentEdgeStyle['shape'] == 'arrow')
+				{
+					edgeShapeDiv.className = 'geSprite geSprite-simplearrow';
+				}
+				else
+				{
+					edgeShapeDiv.className = 'geSprite geSprite-connection';
+				}
+			}
+			
+			// Updates icon for optinal line start shape
+			if (this.toolbar.lineStartMenu != null)
+			{
+				var lineStartDiv = this.toolbar.lineStartMenu.getElementsByTagName('div')[0];
+				
+				lineStartDiv.className = this.getCssClassForMarker('start',
+						graph.currentEdgeStyle['shape'], graph.currentEdgeStyle[mxConstants.STYLE_STARTARROW],
+						mxUtils.getValue(graph.currentEdgeStyle, 'startFill', '1'));
+			}
+
+			// Updates icon for optinal line end shape
+			if (this.toolbar.lineEndMenu != null)
+			{
+				var lineEndDiv = this.toolbar.lineEndMenu.getElementsByTagName('div')[0];
+				
+				lineEndDiv.className = this.getCssClassForMarker('end',
+						graph.currentEdgeStyle['shape'], graph.currentEdgeStyle[mxConstants.STYLE_ENDARROW],
+						mxUtils.getValue(graph.currentEdgeStyle, 'endFill', '1'));
+			}
+		}
+	}));
+	
+	// Update font size and font family labels
+	if (this.toolbar != null)
+	{
+		var update = mxUtils.bind(this, function()
+		{
+			var ff = graph.currentVertexStyle['fontFamily'] || 'Helvetica';
+			var fs = String(graph.currentVertexStyle['fontSize'] || '12');
+	    	var state = graph.getView().getState(graph.getSelectionCell());
+	    	
+	    	if (state != null)
+	    	{
+	    		ff = state.style[mxConstants.STYLE_FONTFAMILY] || ff;
+	    		fs = state.style[mxConstants.STYLE_FONTSIZE] || fs;
+	    		
+	    		if (ff.length > 10)
+	    		{
+	    			ff = ff.substring(0, 8) + '...';
+	    		}
+	    	}
+	    	
+	    	this.toolbar.setFontName(ff);
+	    	this.toolbar.setFontSize(fs);
+		});
+		
+	    graph.getSelectionModel().addListener(mxEvent.CHANGE, update);
+	    graph.getModel().addListener(mxEvent.CHANGE, update);
+	}
+	
+	// Makes sure the current layer is visible when cells are added
+	graph.addListener(mxEvent.CELLS_ADDED, function(sender, evt)
+	{
+		var cells = evt.getProperty('cells');
+		var parent = evt.getProperty('parent');
+		
+		if (graph.getModel().isLayer(parent) && !graph.isCellVisible(parent) && cells != null && cells.length > 0)
+		{
+			graph.getModel().setVisible(parent, true);
+		}
+	});
+	
+	// Global handler to hide the current menu
+	this.gestureHandler = mxUtils.bind(this, function(evt)
+	{
+		if (this.currentMenu != null && mxEvent.getSource(evt) != this.currentMenu.div)
+		{
+			this.hideCurrentMenu();
+		}
+	});
+	
+	mxEvent.addGestureListeners(document, this.gestureHandler);
+
+	// Updates the editor UI after the window has been resized or the orientation changes
+	// Timeout is workaround for old IE versions which have a delay for DOM client sizes.
+	// Should not use delay > 0 to avoid handle multiple repaints during window resize
+	this.resizeHandler = mxUtils.bind(this, function()
+   	{
+   		window.setTimeout(mxUtils.bind(this, function()
+   		{
+   			this.refresh();
+   		}), 0);
+   	});
+	
+   	mxEvent.addListener(window, 'resize', this.resizeHandler);
+   	
+   	this.orientationChangeHandler = mxUtils.bind(this, function()
+   	{
+   		this.refresh();
+   	});
+   	
+   	mxEvent.addListener(window, 'orientationchange', this.orientationChangeHandler);
+   	
+	// Workaround for bug on iOS see
+	// http://stackoverflow.com/questions/19012135/ios-7-ipad-safari-landscape-innerheight-outerheight-layout-issue
+	if (mxClient.IS_IOS && !window.navigator.standalone)
+	{
+		this.scrollHandler = mxUtils.bind(this, function()
+	   	{
+	   		window.scrollTo(0, 0);
+	   	});
+		
+	   	mxEvent.addListener(window, 'scroll', this.scrollHandler);
+	}
+
+	/**
+	 * Sets the initial scrollbar locations after a file was loaded.
+	 */
+	this.editor.addListener('resetGraphView', mxUtils.bind(this, function()
+	{
+		this.resetScrollbars();
+	}));
+	
+	/**
+	 * Repaints the grid.
+	 */
+	this.addListener('gridEnabledChanged', mxUtils.bind(this, function()
+	{
+		graph.view.validateBackground();
+	}));
+	
+	this.addListener('backgroundColorChanged', mxUtils.bind(this, function()
+	{
+		graph.view.validateBackground();
+	}));
+
+	/**
+	 * Repaints the grid.
+	 */
+	graph.addListener('gridSizeChanged', mxUtils.bind(this, function()
+	{
+		if (graph.isGridEnabled())
+		{
+			graph.view.validateBackground();
+		}
+	}));
+
+   	// Resets UI, updates action and menu states
+   	this.editor.resetGraph();
+   	this.init();
+   	this.open();
+	
+        
+	// Load/Populate Graph from xml on load
+	if(mxFloorPlanXml)
+	{
+		var data = this.editor.graph.zapGremlins(mxUtils.trim(mxFloorPlanXml));
+                 
+                
+                
+		this.editor.setGraphXml(mxUtils.parseXml(data).documentElement);
+                 mxGraph.prototype.cellsEditable =false;
+                if(mxCurrentfloorplanstatus == 'viewer'){
+                    
+                    
+                 
+                       
+                      //  this.editor.graph.setEnabled(false);
+                  mxCellState.prototype.setCursor('pointer') ;
+                  mxSelectionCellsHandler.prototype.setEnabled(false);
+                  mxDragSource.prototype.setEnabled(false);
+                  mxGraph.prototype.cellsLocked=true ;
+                  mxGraph.prototype.cellsMovable =  false;
+                  mxEditor.prototype.disableContextMenu = true;
+                  mxPopupMenu.prototype.enabled = false;
+
+
+                  
+                  //var highlight = new mxCellTracker(graph, '#00FF00');
+		  this.editor.graph.addListener(mxEvent.CLICK, function(sender, evt)
+				{
+					var cell = evt.getProperty('cell');
+                                        
+                                        console.log(cell)
+                                    if(typeof(cell) != "undefined"){
+                                        var assignedboothname = "";
+                                           jQuery('body').css('cursor', 'wait');
+                                        assignedboothname = cell.getAttribute('mylabel', '');
+                                        var valuessrting = cell.style;
+                                         var companydescription ="";
+                                         var htmlcompanydescription = "";
+                                        console.log('cell-------Detail');
+                                        
+                                        var userid  = cell.getAttribute('boothOwner', '');
+                                        var boothdetail  = cell.getAttribute('boothDetail', '');
+                                        var companydescription  = cell.getAttribute('companydescripiton', '');
+                                        var  boothproductid = cell.getAttribute('boothproductid', '');
+                                        var  boothID = cell.id;
+                                        var  tagslist = cell.getAttribute('boothtags', '');
+                                        var tagsnameslist ="";
+                                        if(tagslist !=""){
+                                         jQuery.each(BoothTagsObjects, function(index1, value) {
+            
+                                            
+                                            var foreachvalues = tagslist.split(',');
+
+                                            if(jQuery.inArray(value.ID, foreachvalues ) !=-1){
+
+                                              tagsnameslist+=value.name+","
+
+                                           }
+
+
+                                            
+                                        });
+                                        tagsnameslist = tagsnameslist.replace(/,\s*$/, "");
+                                        console.log(tagsnameslist);
+                          
+                                     }
+                                        
+                                        
+                                        var reportData = jQuery.parseJSON(mxgetAllusersData);
+                                        
+                                        
+                                        var openhtml = "";
+                                        var tablehtml = '';
+                                        var curr_dat = '';
+                                        var companynameas="";
+                                        var companylogourlnew="";
+                                        var profilelogourl="";
+                                        var companywebsite="";
+                                        var htmlforassignedbooth = '';
+                                        var boothtitle ="";
+                                        var htmlforaddress = '';
+                                        var imagesrc ="";
+                                        var websiteURLhtml = "";
+                                        var contactname = "";
+                                        var contactphonenumber="";
+                                        var contactemail = "";
+                                        var contactnameHTML = "";
+                                        var contactphonenumberHTML = "";
+                                        var contactemailHTML = "";
+                                        
+                                        
+                                       
+                                        if(userid !="" && userid != "none" && reportData){
+                                           
+                                                
+                                            
+                                            jQuery.each(reportData, function(key,index){ 
+                                                if(index.exhibitorsid == userid){
+
+                                                  
+                                                  companynameas = index.companyname;
+                                                  companylogourlnew = index.COL;
+                                                  profilelogourl = index.companylogourl;
+                                                  companywebsite = index.COW;
+                                                  companydescription  = index.COD;
+                                                  
+                                                  contactname  = index.CON;
+                                                  contactphonenumber  = index.COP;
+                                                  contactemail  = index.COE;
+                                                  
+                                                  console.log(contactname);
+                                                  console.log(contactphonenumber);
+                                                  console.log(contactemail);
+                                                  
+                                                  
+                                                 
+                                                    if (companywebsite == null || companywebsite == '') {
+                                                        
+                                                         websiteURLhtml = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         websiteURLhtml = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" ><a href="'+companywebsite+'" target="_blank">'+companywebsite+'</a></div></div>';	
+                                              
+                                                        
+                                                    }
+                                                    
+                                                    if (contactname == null || contactname == '') {
+                                                        
+                                                         contactnameHTML = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         contactnameHTML = '<div class="row" style="margin-bottom: 10px;margin-top: 15px;"><div class="col-sm-3" ><strong>Contact Name:</strong></div><div class="col-sm-5">'+contactname+'</div></div>';	
+                                              
+                                                        
+                                                    }
+                                                    
+                                                    if (contactphonenumber == null || contactphonenumber == '') {
+                                                        
+                                                         contactphonenumberHTML = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         contactphonenumberHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Phone:</strong></div><div class="col-sm-5">'+contactphonenumber+'</div></div>';	
+                                              
+                                                        
+                                                    }
+                                                    if (contactemail == null || contactemail == '') {
+                                                        
+                                                         contactemailHTML = '';//<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                              
+                                                        
+                                                    }else{
+                                                        
+                                                         contactemailHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Email:</strong></div><div class="col-sm-5">'+contactemail+'</div></div>';	
+                                              
+                                                        
+                                                    }
+                                                 
+                                                      if (companylogourlnew == null || companylogourlnew == '') {
+                                                          
+                                                          if (profilelogourl == null || profilelogourl == '') {
+                                                              
+                                                              companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
+                                                            
+                                                              
+                                                          }else{
+                                                              
+                                                              companylogourlnew = profilelogourl;
+                                                          }
+                                                        
+                                                          
+                                                        }
+                                                           
+                                                       imagesrc = "<p style='float: right;padding: 0px 20px 0px 20px;margin-top: 10px;'><img width='150' src='"+companylogourlnew+"' /></p>";
+                                                      
+                                                      if(companydescription != "" && typeof companydescription !== "undefined" && companydescription != null ){
+                                                
+                                                            htmlcompanydescription = '<div >'+unescape(companydescription)+'</div>';
+                                            
+                                                
+                                                        }else{
+                                                            
+                                                            htmlcompanydescription = "";
+                                                        }
+                                                      
+                                                      if (assignedboothname != "") {
+
+                                                      htmlforassignedbooth = "";//'<h5 ><strong>Assigned Booth(s):</strong>   ' + assignedboothname.replace(/,\s*$/, "") + '</h5>';
+                                                      
+                                                      } else{
+
+                                                      htmlforassignedbooth = '';
+                                                      }
+                                                      
+                                                      if (index.address_line_1 != "") {
+
+                                                        htmlforaddress = '<p>' + index.address_line_1 + ', ' + index.usercity + ', ' + index.usercountry + '</p>';
+
+                                                      }else{
+                                                            htmlforaddress = "";
+                                                            
+                                                        }
+                                                        if (companynameas == null || companynameas == '') {
+                                                            
+                                                            companynameas = "";
+                                                        }
+                                                    }
+                                                });
+                                              
+                                              
+                                               
+                                                var boothtitle = imagesrc+'<h5 ><strong>Booth Number: </strong>' + assignedboothname + '</h5>';     
+                                                //openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
+                                                var openhtml = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                                
+                                                
+												var contactinformation = contactnameHTML+contactphonenumberHTML+contactemailHTML;
+												
+												
+												if(contactname == undefined  && contactphonenumber == undefined && contactemail == undefined ){
+                                                                                                    
+													var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent" style="margin-bottom: 10px;">'+openhtml+websiteURLhtml+'</div>';
+												}
+												else {
+													var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent" style="margin-bottom: 10px;">'+openhtml+websiteURLhtml+'</div><div  id="contactdiv" class="tabcontent" style="display:none;min-height: 130px;margin-bottom: 10px;">'+contactinformation+'</div>';
+												}
+                                                
+                                                jQuery('body').css('cursor', 'default');
+                                                
+                                                if(popupstatus == 'off'){
+                                                            
+                                                            popupstatus = 'on';
+                                                            
+                                                    jQuery.confirm({
+                                                        title: '<i class="far fa-id-card"></i> '+companynameas,
+                                                        content: newopenhtml,
+                                                        confirmButton: false,
+                                                        confirmButtonClass: 'mycustomwidth',
+                                                        cancelButton: false,
+                                                     
+                                                        closeIcon: true,
+                                                        columnClass: 'jconfirm-box-container-viewerBOx',
+                                                        cancel: function () {
+                                                                    //close
+                                                                    popupstatus = 'off';
+                                                                    
+                                                                }
+
+                                                    });  
+                                                     jQuery( ".closeIcon" ).each(function() {
+                                                            
+                                                            console.log("google");
+                                                            jQuery( this ).children().removeClass("glyphicon glyphicon-remove");
+                                                            jQuery( this ).children().addClass( "customecloseicon btn btn-small btn-danger" );
+                                                            jQuery( this ).children().html( "Close" );
+                                                            
+                                                          });
+                                                      }
+                                           
+                                    }else{
+                                           
+                                           
+                                           if(boothproductid !="" && boothproductid !="undefined" && boothproductid !="none"){
+                                                
+                                                
+                                                var data = new FormData();
+                                                data.append('pro_id', boothproductid);
+                                                data.append('floorplanID', mxPostID);
+                                                console.log(boothproductid);
+                                                jQuery.ajax({
+                                                     url: baseCurrentSiteURl+'/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=getproductdetail',
+                                                    data: data,
+                                                    cache: false,
+                                                    contentType: false,
+                                                    processData: false,
+                                                    type: 'POST',
+                                                    success: function(data) {
+
+
+                                                        var finalresultProduct = jQuery.parseJSON(data);
+                                                        var floorplanstatus = finalresultProduct.floorplanstatus;
+                                                        var productstatus = finalresultProduct.status;
+                                                        var buttonsdiv = "";
+                                                        console.log(finalresultProduct.deposit_enable_type);
+                                                        
+                                                        
+                                                        var htmlforproductdetail = "";
+                                                        var postid = "'"+boothproductid+"'";
+                                                        var checkouturl = baseCurrentSiteURl+'/checkout/';
+                                                        if(userloggedinstatus == true){  
+                                                        
+                                                            var productprice = '<p><h5 ><strong>Price: </strong>' + finalresultProduct.currencysymbole+finalresultProduct.price + '</h5>';
+                                                            
+                                                        }else{
+                                                            
+                                                            if(flowstatus.indexOf("mood=wizard") != -1){  
+                                                                var productprice = '<p><h5 ><strong>Price: </strong>' + finalresultProduct.currencysymbole+finalresultProduct.price + '</h5>';
+                                                            }else{
+                                                                var productprice = "";
+                                                            } 
+                                                        }
+                                                        
+                                                        var boothtitle = '<h5 ><strong>Booth Number: </strong>' + assignedboothname + '</h5>';
+                                                         
+                                                         if(finalresultProduct.description == null){
+                                                            
+                                                            finalresultProduct.description="";
+                                                            
+                                                        } 
+                                                         
+                                                          var productDescription = '<h6 >' + unescape(finalresultProduct.description) + '</h6>';
+                                                         
+                                                        
+                                                       
+                                                        
+                                                        var productICon = "<p style='float:right;margin-top: 10px;'><img width='125' src='"+finalresultProduct.src+"'></p>";
+                                                         
+                                                         
+                                                        
+                                                            htmlforproductdetail += "<div class='row'><div class='col-sm-6'><h2>"+finalresultProduct.title+"</h2><p><strong>Price : "+finalresultProduct.price+"</strong></p></div><div class='col-sm-3'><p style='text-align:center;margin-top: 25px;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div>";
+                                                       
+                                                        //}else{
+                                                           // htmlforproductdetail += "<div class='row'><div class='col-sm-6'><h2>"+finalresultProduct.title+"</h2></div><div class='col-sm-3'><p style='text-align:center;margin-top: 25px;'><img width='100' src='"+finalresultProduct.src+"'></p></div></div>";
+                                                        
+                                                            
+                                                       // }
+                                                        htmlforproductdetail += "<p>"+unescape(finalresultProduct.description)+"</p><hr>";
+                                                         if(companydescription != "" && typeof companydescription !== "undefined" ){
+                                                
+                                                     htmlcompanydescription = '<h6 ><div >'+unescape(companydescription)+'</div></h6>';
+                                            
+                                                
+                                                        }
+                                                        if(finalresultProduct.stockstatus == 'instock'){
+                                                            
+                                                           if(userloggedinstatus == true){  
+                                                            if(productstatus == 'alreadyexistproduct'){
+                                                                
+                                                                 htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-success btn-small" >Added</a></p>';
+                                                        
+                                                                
+                                                            }else{
+                                                                
+                                                                
+                                                                if(finalresultProduct.deposit_enable_type == 'optional'){
+                                                                    
+                                                                    htmlforproductdetail = '<p  id="'+boothproductid+'"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></p>'
+                                                                    
+                                                                }else{
+                                                                    
+                                                                   htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a></p>';
+                                                           
+                                                                }
+                                                                    
+                                                                    
+                                                               
+                                                            }
+                                                        }else{
+                                                                    
+                                                                    
+                                                                    if(finalresultProduct.deposit_enable_type == 'optional'){
+                                                                    
+                                                                        //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
+                                                                        htmlforproductdetail = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div></div>'
+                                                                    
+                                                                    }else{
+                                                                    
+                                                                        //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
+                                                                        htmlforproductdetail = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a></div></div>'
+                                                                    
+                                                                    }
+                                                                
+                                                                
+                                                            }
+                                                          
+                                                        }else{
+
+                                                            htmlforproductdetail += "<p style='float:right;'><strong style='color:red'>Stock Out</strong></p>";
+                                                        }
+
+                                                      if(finalresultProduct.productstatus == "exist"){ 
+                                                          
+                                                          
+                                                        //if(userloggedinstatus == true){ 
+                                                        
+                                                            var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >'+productprice+''+boothtitle+productDescription+'</div><div class="col-sm-2">'+productICon+'</div></div>';	
+                                                        
+                                                        //}else{
+                                                            
+                                                          //  var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >'+boothtitle+productDescription+'</div><div class="col-sm-2">'+productICon+'</div></div>';	
+                                                        //}
+                                                         var popupstatustitle = "Available for Purchase"; 
+                                                        }else{
+                                                            
+                                                        var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';	
+                                                        var popupstatustitle = "Unavailable for Purchase"; 
+                                                        }
+
+                                                      //  var openhtml = '<div class="row" style="padding:30px;" ><div class="col-sm-5">'+imagesrc+''+htmlforaddress+''+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-5">'+htmlforproductdetail+'</div></div>';
+                                                       
+                                                      //if(userloggedinstatus == true){  
+                                                      if(finalresultProduct.productstatus == "exist"){ 
+                                                        
+                                                        if(floorplanstatus == 'unlock'){
+                                                            
+                                                            
+                                                            if(finalresultProduct.stockstatus == 'instock'){ 
+                                                                
+                                                                
+                                                                if(mxUserentryflow == "checked" && mxCurrentPackageBooths.length !== 0){
+                                                                
+                                                                if(jQuery.inArray(boothID, mxCurrentPackageBooths)!== -1) {
+                                                              
+                                                                        if(userloggedinstatus == true){
+
+                                                                                if (productstatus == 'alreadyexistproduct') {
+
+                                                                                    buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-success btn-small" >Added</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>'
+                                                                     
+
+                                                                                } else {
+
+
+                                                                                    //if (finalresultProduct.deposit_enable_type == 'optional') {
+
+                                                                                        //buttonsdiv = '<p  id="' + boothproductid + '"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' + postid + ',\'log\' ,\'deposit\',' + finalresultProduct.slug + ')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart(' + postid + ',\'log\' ,\'full\',' + finalresultProduct.slug + ')">Pay in Full</a></div></div><p style="font-size: 11px;margin-top: 10px;color: #005e00;">This Booth is included in current selected package.</p></p>'
+
+                                                                                    //} else {
+
+                                                                                       if(flowstatus.indexOf("mood=wizard") != -1){ 
+                                                                                            buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart(' + postid + ',\'log\',\'full\',' + finalresultProduct.slug + ')"  >Add To Cart</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>'
+                                                                                        }else{
+                                                                                            
+                                                                                            buttonsdiv ="";
+                                                                                        }
+                                                                                    //}
+
+
+
+                                                                                }
+
+
+                                                                        }else{
+                                                                            if(flowstatus.indexOf("mood=wizard") != -1){ 
+                                                                            
+                                                                            if (productstatus == 'alreadyexistproduct') {
+
+                                                                                    
+                                                                                    buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-success btn-small" >Added</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>'
+                                                                     
+
+                                                                            }else{
+                                                                                
+                                                                                buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>'
+                                                                     
+                                                                                
+                                                                            }}else{
+                                                                            
+                                                                                buttonsdiv = "";
+                                                                            
+                                                                            }
+                                                                            //if(finalresultProduct.deposit_enable_type == 'optional'){
+                                                                    
+                                                                                //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
+                                                                                //buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div><p style="font-size: 11px;margin-top: 10px;color: #005e00;">This Booth is included in current selected package.</p></div>'
+                                                                    
+                                                                                //}else{
+                                                                    
+                                                                                //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
+                                                                               
+                                                                            //}
+
+
+                                                                        }
+                                                                }else{
+                                                               
+                                                                            if(finalresultProduct.deposit_enable_type == 'optional'){
+                                                                    
+                                                                                //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
+                                                                                buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div></div>'
+                                                                    
+                                                                                }else{
+                                                                    
+                                                                                //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
+                                                                                buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a></div></div>'
+                                                                    
+                                                                            }
+                                                                        
+                                                                        
+                                                                }
+                                                               
+                                                                
+                                                               
+                                                                }else{
+                                                                
+                                                                   
+                                                                if(userloggedinstatus == true){       
+                                                                if(productstatus == 'alreadyexistproduct'){
+                                                                
+                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-success btn-small" >Added</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank"  >Check Out</a></div></div>'
+                                                                    
+                                                                
+                                                                        }else{
+                                                                
+                                                                            if(finalresultProduct.deposit_enable_type == 'optional'){
+                                                                    
+                                                                                buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
+                                                                    
+                                                                            }else{
+                                                                                
+                                                                                buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id='+postid+'><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="'+baseCurrentSiteURl+'/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="'+boothproductid+'_checkout" href="'+checkouturl+'" target="_blank" disabled="true" >Check Out</a></div></div>'
+                                                                      
+                                                                                
+                                                                            }
+                                                                    
+                                                                            
+                                                                            
+                                                                            
+                                                                        }
+                                                                 
+                                                                }else{
+                                                         
+                                                                    //buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></div></div>'
+                                                                   if(flowstatus.indexOf("mood=wizard") != -1){ 
+                                                                    if(finalresultProduct.deposit_enable_type == 'optional'){
+                                                                    
+                                                                        //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
+                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'deposit\','+finalresultProduct.slug+')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart('+postid+',\'log\' ,\'full\','+finalresultProduct.slug+')">Pay in Full</a></div></div></div></div>'
+                                                                    
+                                                                    }else{
+                                                                    
+                                                                        //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
+                                                                        buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'log\',\'full\','+finalresultProduct.slug+')"  >Add To Cart</a></div></div>'
+                                                                    
+                                                                    }
+                                                                }else{
+                                                                    
+                                                                    buttonsdiv ="";
+                                                                }
+                                                                    
+                                                                    
+                                                                }    
+                                                                }  
+                                                                    
+                                                                    
+                                                                }else{
+                                                                    
+                                                                     buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;"><strong style="color:red">No Longer Available </strong></p></div>'
+                                                       
+                                                                    
+                                                                }
+                                                        }else{
+                                                                    
+                                                            buttonsdiv ='<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;color:red;"><strong>Floorplan is currently being edited, please try again later.</strong></p><div>';
+                                                        }
+                                                     }else{
+                                                           buttonsdiv = '';
+                                                       }
+                                                     
+                                                        
+                                                        jQuery('body').css('cursor', 'default');
+                                                        
+                                                        
+                                                       
+                                                        
+                                                        var newopenhtml='<div class="tab"><button class="tablinks" >Product Info</button></div><div id="London" class="tabcontent">'+openhtml+'</div>'+buttonsdiv;
+                                                        if(popupstatus == 'off'){
+                                                            
+                                                         popupstatus = 'on';
+                                                         checkopenfunction  = jQuery.confirm({
+                                                             
+                                                            title: '<i class="far fa-id-card"></i> '+popupstatustitle,
+                                                            content: newopenhtml,
+                                                            confirmButton: false,
+                                                            confirmButtonClass: 'mycustomwidth',
+                                                            cancelButton: false,
+                                                          
+                                                            closeIcon: true,
+                                                            columnClass: 'jconfirm-box-container-viewerBOx viewerBOxwhenproducton',
+                                                            cancel: function () {
+                                                                    //close
+                                                                    popupstatus = 'off';
+                                                                    
+                                                                },
+                                                        });
+                                                        
+                                                        jQuery( ".closeIcon" ).each(function() {
+                                                            
+                                                            
+                                                            jQuery( this ).children().removeClass("glyphicon glyphicon-remove");
+                                                            jQuery( this ).children().addClass( "customecloseicon btn btn-small btn-danger" );
+                                                            jQuery( this ).children().html( "Close" );
+                                                            
+                                                          });
+                                                        }
+                                                        
+                                                    }
+                                                 });   
+                                                
+                                                
+                                              
+                                             
+                                                
+                                                
+                                            }else{
+                                                
+                                               var tablehtml = '';
+                                               var curr_dat = '';
+                                               var companylogourlnew = '';
+                                               var htmlforassignedbooth = '';
+                                               var htmlforaddress = '';
+                                               if(companydescription != "" && typeof companydescription !== "undefined" ){
+                                                
+                                                     htmlcompanydescription = '<div style="white-space: pre-wrap;">'+unescape(companydescription)+'</div>';
+                                                     
+                                                
+                                                
+                                                }
+                                                        
+                                               var productDescription = '<h6 >' + htmlcompanydescription + '</h6>';
+                                               htmlforassignedbooth = '<h5 >Booth Number:   <span style="font-size:14px;" >' + assignedboothname + '</span></h5>';
+                                               companylogourlnew = baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png';
+                                               var boothtitle = '<h5 ><strong>Booth Number: </strong>' + assignedboothname + '</h5>';
+                                               if(tagsnameslist == ""){
+                                                   
+                                                   var boothtagslist = "";    
+                                               }else{
+                                                 var boothtagslist = "<p><h5><strong>Tags:</strong></h5> "+tagsnameslist+"</p>";      
+                                               }                                               
+                                                     
+                                                         
+                                                         
+                                                          
+                                              // openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 ></h1>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
+                                              // openhtml = '<div class="row"><div class="col-sm-4" style="margin-top: 2%;">'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-6"></div></div>';	
+                                                
+                                                //  var openhtml = '<div class="row" style="padding:30px;" ><div class="col-sm-5">'+imagesrc+''+htmlforaddress+''+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-5">'+htmlforproductdetail+'</div></div>';
+                                                var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+''+productDescription+boothtagslist+'</div></div>';	
+                                                var newopenhtml='<div class="tab"><button class="tablinks" >Booth Info</button></div><div id="London" class="tabcontent">'+openhtml+'</div>';
+
+                                                
+                                                
+                                                jQuery('body').css('cursor', 'default');
+                                                 console.log(2)
+                                                    if(popupstatus == 'off'){
+                                                            
+                                                            popupstatus = 'on';
+                                                    jQuery.confirm({
+                                                        title: '<i class="far fa-id-card"></i> '+assignedboothname,
+                                                        content: newopenhtml,
+                                                        confirmButton: false,
+                                                        confirmButtonClass: 'mycustomwidth',
+                                                        cancelButton: false,
+                                                     
+                                                        closeIcon: true,
+                                                        columnClass: 'jconfirm-box-container-viewerBOx viewerBOxwhenproducton',
+                                                         cancel: function () {
+                                                                    //close
+                                                                    popupstatus = 'off';
+                                                                    
+                                                                }
+
+                                                    });   
+                                                
+                                                 jQuery( ".closeIcon" ).each(function() {
+                                                            
+                                                            console.log("google");
+                                                            jQuery( this ).children().removeClass("glyphicon glyphicon-remove");
+                                                            jQuery( this ).children().addClass( "customecloseicon btn btn-small btn-danger" );
+                                                            jQuery( this ).children().html( "Close" );
+                                                            
+                                                          });
+                                                      }
+                                            }
+                                               
+                                       }
+                                   
+                                    
+				}	
+				});
+                            
+                  
+                 
+                 
+                  
+>>>>>>> origin/master
 
   var ui = this;
 
