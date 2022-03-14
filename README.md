@@ -1,4 +1,4 @@
-Current Version:6.01~
+Current Version:6.02~
 
 
 
