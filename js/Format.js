@@ -3668,6 +3668,7 @@ TextFormatPanel.prototype.addFont = function (container) {
   this.listeners.push({
     destroy: function () {
       graph.getModel().removeListener(listener);
+      console.log("asa");
     },
   });
   listener();
@@ -4741,6 +4742,7 @@ StyleFormatPanel.prototype.addFill = function (container) {
   this.listeners.push({
     destroy: function () {
       graph.getModel().removeListener(listener);
+      console.log("asda");
     },
   });
   listener();
@@ -5928,14 +5930,14 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       levelAssigment +
       UserAssigment +
       depositedetail;
-      var overrideString="Override User's Existing Level";
+    var overrideString = "Override User's Existing Level";
 
     html +=
-      '<p id="messageerror"></p><script>jQuery("#depositsstatus").click(function(){if(jQuery("#depositsstatus option:selected").val() !="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">' +
+      '<p id="messageerror"></p><script>jQuery("#depositsstatus").change(function(){if(jQuery("#depositsstatus option:selected").val() !="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">' +
       selectedBoothtitles +
       '</div></div><div class="row" style="margin-bottom: 1%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">' +
       currencysymbole +
-      '</strong></span><input type="number" style="color:#333;height:32px;width: 99%;" id="boothprice" value="' +
+      '</strong></span><input type="number" style="color:#333;height:32px;width: 99%;" id="boothprice" min="0" value="' +
       boothprice +
       '" class="form-control currency"></div></div></div>' +
       htmlfordeposite +
@@ -5943,7 +5945,9 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       unescape(boothdescripition) +
       '</textarea></div></div><div class="row" style="margin-bottom: 1%; margin-left: 133px; color: gray"><h5 class="eg-sub-title"><strong>IF this booth is purchased, THEN</strong></h5></div><div style="margin-left: 6px;" ><div style="margin-left: 169px;margin-bottom: 11px;font-weight: bold;padding: 2px"><input type="checkbox" style="margin-right:4px;" ' +
       overRideCheck +
-      ' id="overRideCheckBox" onclick="cliker()" value="0"><span style="font-size:bold">'+overrideString+'</span></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="userLevelDiscriptionLabel" style="text-align:right;"><label>Assign User Level <i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" class="form-control">' +
+      ' id="overRideCheckBox" onclick="cliker()" value="0"><span style="font-size:bold">' +
+      overrideString +
+      '</span></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="userLevelDiscriptionLabel" style="text-align:right;"><label>Assign User Level <i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" class="form-control">' +
       boothlevelname +
       '</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';
 
@@ -6132,31 +6136,56 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         });
         console.log(allBoothsProductData);
 
-        if (depositestatus == "checked" && depositsamount == "") {
-          console.log(depositsamount);
-
+        if (
+          depositstype == "fixed" &&
+          parseInt(depositsamount) >= parseInt(boothprice)
+        ) {
           jQuery(".depositeerror").append(
-            "<label style='margin-top: 10px;color:red'>Deposit Amount is required field.</label>"
+            "<label style='margin-top: 10px;color:red'>Deposit Amount must be less than price.</label>"
+          );
+          setTimeout(function () {
+            // reset CSS
+            jQuery(".depositeerror").empty();
+          }, 5000);
+        } else if (
+          depositstype == "percent" &&
+          parseInt(depositsamount) >= 100
+        ) {
+          jQuery(".depositeerror").append(
+            "<label style='margin-top: 10px;color:red'>Deposit Amount must be less than price.</label>"
           );
           setTimeout(function () {
             // reset CSS
             jQuery(".depositeerror").empty();
           }, 5000);
         } else {
-          boothdetailpopup.close();
-          swal({
-            title: "Success",
-            text: "Booth Detail has been updated successfully.",
-            type: "success",
-            confirmButtonClass: "btn-success",
-            confirmButtonText: "Ok",
-          });
+          if (
+            depositestatus == "checked" &&
+            (depositsamount == "" || parseInt(depositsamount) <= 0)
+          ) {
+            jQuery(".depositeerror").append(
+              "<label style='margin-top: 10px;color:red'>Deposit Amount is required field.</label>"
+            );
+            setTimeout(function () {
+              // reset CSS
+              jQuery(".depositeerror").empty();
+            }, 5000);
+          } else {
+            boothdetailpopup.close();
+            swal({
+              title: "Success",
+              text: "Booth Detail has been updated successfully.",
+              type: "success",
+              confirmButtonClass: "btn-success",
+              confirmButtonText: "Ok",
+            });
+          }
         }
-      } else if(overRideCheck == 0 && boothlevel == ""){
+      } else if (overRideCheck == 0 && boothlevel == "") {
         jQuery(".successmessage").append(
           '<label style="color:red">Please select a Level to assign the user when this booth is purchased. If you don’t want a Level to be assigned upon purchase, uncheck “Override User’s Existing Level.</label>'
         );
-      }else {
+      } else {
         jQuery(".successmessage").append(
           '<label style="color:red">Please select a User Assignment Or Level Assignment.</label>'
         );
@@ -6283,11 +6312,11 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       // console.log("In Sell Edit");
       console.log(boothlevel);
       console.log(reservedStatus);
-     
+
       if (
         (userBoothsLevel != null || userBooths != null) &&
         (overRideCheck == undefined || (overRideCheck == 0 && boothlevel != ""))
-       ) {
+      ) {
         console.log(boothlevel);
 
         if (
@@ -6413,33 +6442,60 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
             expogenielogging.push(startfloorplanedtitng);
           }
         });
-        if (depositestatus == "checked" && depositsamount == "") {
+        if (
+          depositstype == "fixed" &&
+          parseInt(depositsamount) >= parseInt(boothprice)
+        ) {
           jQuery(".depositeerror").append(
-            "<label style='margin-top: 10px;color:red'>Deposit Amount is required field.</label>"
+            "<label style='margin-top: 10px;color:red'>Deposit Amount must be less than price.</label>"
+          );
+          setTimeout(function () {
+            // reset CSS
+            jQuery(".depositeerror").empty();
+          }, 5000);
+        } else if (
+          depositstype == "percent" &&
+          parseInt(depositsamount) >= 100
+        ) {
+          jQuery(".depositeerror").append(
+            "<label style='margin-top: 10px;color:red'>Deposit Amount must be less than price.</label>"
           );
           setTimeout(function () {
             // reset CSS
             jQuery(".depositeerror").empty();
           }, 5000);
         } else {
-          boothdetailpopup.close();
-          swal({
-            title: "Success",
-            text: "Booth detail has been successfully updated.",
-            type: "success",
-            confirmButtonClass: "btn-success",
-            confirmButtonText: "Ok",
-          });
+          if (
+            depositestatus == "checked" &&
+            (depositsamount == "" || parseInt(depositsamount) <= 0)
+          ) {
+            jQuery(".depositeerror").append(
+              "<label style='margin-top: 10px;color:red'>Deposit Amount is required field.</label>"
+            );
+            setTimeout(function () {
+              // reset CSS
+              jQuery(".depositeerror").empty();
+            }, 5000);
+          } else {
+            boothdetailpopup.close();
+            swal({
+              title: "Success",
+              text: "Booth detail has been successfully updated.",
+              type: "success",
+              confirmButtonClass: "btn-success",
+              confirmButtonText: "Ok",
+            });
 
-          jQuery("#manageboothtypes").hide();
-          jQuery("#updateboothdetail").show();
-          jQuery("#dontsellbutton").show();
+            jQuery("#manageboothtypes").hide();
+            jQuery("#updateboothdetail").show();
+            jQuery("#dontsellbutton").show();
+          }
         }
-      } else if(overRideCheck == 0 && boothlevel == ""){
+      } else if (overRideCheck == 0 && boothlevel == "") {
         jQuery(".successmessage").append(
           '<label style="color:red">Please select a Level to assign the user when this booth is purchased. If you don’t want a Level to be assigned upon purchase, uncheck “Override User’s Existing Level.</label>'
         );
-      }else {
+      } else {
         jQuery(".successmessage").append(
           '<label style="color:red">Please select a User Assignment Or Level Assignment.</label>'
         );
@@ -6468,17 +6524,19 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       html += multiboothsselectionErrorMsg;
     }
     //var overRideCheckBox = document.createElement("select");
-    var overrideString="Override User's Existing Level";
+    var overrideString = "Override User's Existing Level";
     html +=
-      '<script>jQuery("#depositsstatus").click(function(){if(jQuery("#depositsstatus option:selected").val()!="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">' +
+      '<script>jQuery("#depositsstatus").change(function(){if(jQuery("#depositsstatus option:selected").val()!="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">' +
       selectedBoothtitles +
       '</div></div><div class="row" style="margin-bottom: 1%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">' +
       currencysymbole +
-      '</strong></span><input type="number" style="color:#333;height:32px;width: 99%;" id="boothprice" value="0" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth"></i></label></div><div class="col-sm-3"><select class="form-control" id="depositsstatus"><option value="optional">Deposit OR Pay in Full</option><option value="forced">Deposit Only - No Option to Pay in Full</option><option value="no" selected="true">No</option></select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Option to Reserve? <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><input type="checkbox" style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Assignment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel" multiple="multiple"  placeholder="Select Booth Level"class="form-control js-example-basic-multiple">' +
+      '</strong></span><input type="number" style="color:#333;height:32px;width: 99%;" id="boothprice" value="0" min="0" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth"></i></label></div><div class="col-sm-3"><select class="form-control" id="depositsstatus"><option value="optional">Deposit OR Pay in Full</option><option value="forced">Deposit Only - No Option to Pay in Full</option><option value="no" selected="true">No</option></select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Option to Reserve? <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><input type="checkbox" style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Assignment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel" multiple="multiple"  placeholder="Select Booth Level"class="form-control js-example-basic-multiple">' +
       boothlevelnames +
       '</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="UserAssigment" style="text-align:right;"><label>User Assignment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="UserBooth"  multiple="multiple" placeholder="Select User For  Booth" class="form-control js-example-basic-multiple">' +
       companynames +
-      '</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" ><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="" min="0" type="number" ><p class="depositeerror"></p></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea rows="8" class="form-control" id="boothdescripition" ></textarea></div></div><div class="row" style="margin-bottom: 1%; margin-left: 133px; color: gray"><h5 class="eg-sub-title"><strong>IF this booth is purchased, THEN</strong></h5></div><div class="row" style="margin-bottom: 3%;"><div style="margin-left: 6px;" ><div style="margin-left: 169px;margin-bottom: 11px;font-weight: bold;padding: 2px"><input type="checkbox" style="margin-right:4px;" id="overRideCheckBox" onclick="cliker()" value="0"><span style="font-size:bold">'+overrideString+'</span></div></div> <div class="col-sm-2" id="userLevelDiscriptionLabel" style="text-align:right;"><label>Assign User Level<i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" class="form-control">' +
+      '</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" ><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="" min="0" type="number" ><p class="depositeerror"></p></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea rows="8" class="form-control" id="boothdescripition" ></textarea></div></div><div class="row" style="margin-bottom: 1%; margin-left: 133px; color: gray"><h5 class="eg-sub-title"><strong>IF this booth is purchased, THEN</strong></h5></div><div class="row" style="margin-bottom: 3%;"><div style="margin-left: 6px;" ><div style="margin-left: 169px;margin-bottom: 11px;font-weight: bold;padding: 2px"><input type="checkbox" style="margin-right:4px;" id="overRideCheckBox" onclick="cliker()" value="0"><span style="font-size:bold">' +
+      overrideString +
+      '</span></div></div> <div class="col-sm-2" id="userLevelDiscriptionLabel" style="text-align:right;"><label>Assign User Level<i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" class="form-control">' +
       boothlevelname +
       '</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-1" ></div><div class="col-sm-1" id="updateproductbutton"></div><div class="col-sm-2"></div></div>';
 
@@ -7009,6 +7067,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
   this.listeners.push({
     destroy: function () {
       graph.getModel().removeListener(listener);
+      console.log("asda");
     },
   });
   listener();
@@ -9264,6 +9323,7 @@ StyleFormatPanel.prototype.addStroke = function (container) {
   this.listeners.push({
     destroy: function () {
       graph.getModel().removeListener(listener);
+      console.log("asda");
     },
   });
   listener();
@@ -9540,6 +9600,7 @@ StyleFormatPanel.prototype.addGeometry = function (container) {
   this.listeners.push({
     destroy: function () {
       graph.getModel().removeListener(listener);
+      console.log("asda");
     },
   });
   listener();
@@ -9699,6 +9760,7 @@ StyleFormatPanel.prototype.addEffects = function (div) {
   this.listeners.push({
     destroy: function () {
       graph.getModel().removeListener(listener);
+      console.log("asda");
     },
   });
   listener();
@@ -9857,6 +9919,7 @@ DiagramFormatPanel.prototype.addView = function (div) {
         },
         destroy: function () {
           ui.removeListener(this.listener);
+          console.log("asda");
         },
       }
     );
@@ -10734,6 +10797,7 @@ DiagramFormatPanel.prototype.addOptions = function (div) {
           },
           destroy: function () {
             ui.removeListener(this.listener);
+            console.log("asda");
           },
         }
       )
@@ -10759,6 +10823,7 @@ DiagramFormatPanel.prototype.addOptions = function (div) {
           },
           destroy: function () {
             ui.removeListener(this.listener);
+            console.log("asda");
           },
         }
       )
@@ -10848,6 +10913,7 @@ DiagramFormatPanel.prototype.addGridOption = function (container) {
         },
         destroy: function () {
           ui.removeListener(this.listener);
+          console.log("asda");
         },
       }
     );
@@ -10892,6 +10958,7 @@ DiagramFormatPanel.prototype.addGridOption = function (container) {
           },
           destroy: function () {
             ui.removeListener(this.listener);
+            console.log("asda");
           },
         }
       )
@@ -10955,6 +11022,7 @@ DiagramFormatPanel.prototype.addPaperSize = function (div) {
   this.listeners.push({
     destroy: function () {
       ui.removeListener(listener);
+      console.log("asda");
     },
   });
 
@@ -10962,6 +11030,7 @@ DiagramFormatPanel.prototype.addPaperSize = function (div) {
   this.listeners.push({
     destroy: function () {
       graph.getModel().removeListener(listener);
+      console.log("asda");
     },
   });
 
@@ -11020,6 +11089,7 @@ DiagramFormatPanel.prototype.destroy = function () {
 
   if (this.gridEnabledListener) {
     this.editorUi.removeListener(this.gridEnabledListener);
+    console.log("asda");
     this.gridEnabledListener = null;
   }
 };

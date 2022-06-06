@@ -51,3 +51,11 @@ Release Items
 -------------------10-29-2021--- New Release 5.20 --------------
 
 Big Release included with Exhibitor Entry Wizard
+
+-------------------06-06-2022--- New Release 7.00 --------------
+
+Removed legend label icon from tool bar in Floor plan
+Include Bug fixes
+
+
+

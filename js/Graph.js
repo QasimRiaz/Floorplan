@@ -7216,11 +7216,13 @@ if (typeof mxVertexHandler != "undefined") {
 
       if (this.selectionHandler != null) {
         this.graph.getSelectionModel().removeListener(this.selectionHandler);
+        console.log("7161");
         this.selectionHandler = null;
       }
 
       if (this.changeHandler != null) {
         this.graph.getModel().removeListener(this.changeHandler);
+
         this.changeHandler = null;
       }
     };

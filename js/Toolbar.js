@@ -190,9 +190,9 @@ Toolbar.prototype.init = function()
              eltss[1].innerHTML= '<div class="fas fa-link" style="color:#000"></div>';
              
              
-             var eltss = this.addItems(['-', 'listofalllegendslabels']);
-             eltss[1].setAttribute('title', 'Manage Legend Labels');
-             eltss[1].innerHTML= '<div class="fas fa-map-signs" style="color:#000"></div>';
+            //  var eltss = this.addItems(['-', 'listofalllegendslabels']);
+            //  eltss[1].setAttribute('title', 'Manage Legend Labels');
+            //  eltss[1].innerHTML= '<div class="fas fa-map-signs" style="color:#000"></div>';
              
              
              var elts = this.addItems(['-', 'lockunlockstatus']);

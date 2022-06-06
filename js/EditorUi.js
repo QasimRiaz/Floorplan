@@ -12,12 +12,12 @@ EditorUi = function (editor, container, lightbox) {
   console.log(floorPlanSettings["tableSort"]);
   // var cartTotalCount=cartCount;
   // var cartTotalCounts=JSON.parse(cartCount);
- var logInUser = JSON.parse(loggedInUser);
+  var logInUser = JSON.parse(loggedInUser);
   // console.log("---");
   // console.log(cartTotalCount);
   // console.log(cartTotalCounts);
   // console.log(logInUser["priorityNum"][0]);
-  var activeNumber=TurnUsers;
+  var activeNumber = TurnUsers;
   console.log(logInUser);
   console.log(activeNumber);
   //  console.log(floorPlanSettings.Open_users);
@@ -920,13 +920,14 @@ EditorUi = function (editor, container, lightbox) {
       this.editor.graph.addListener(mxEvent.CLICK, function (sender, evt) {
         var cell = evt.getProperty("cell");
         console.log(cell);
-        if (logInUser["OverrideCheck"] == "checked" && logInUser["OverrideBoothLimit"]) {
-
-            userlimit = logInUser["OverrideBoothLimit"];
-          } else {
-            userlimit = floorPlanSettings["usersNum"];
-        
-        } 
+        if (
+          logInUser["OverrideCheck"] == "checked" &&
+          logInUser["OverrideBoothLimit"]
+        ) {
+          userlimit = logInUser["OverrideBoothLimit"];
+        } else {
+          userlimit = floorPlanSettings["usersNum"];
+        }
         console.log(logInUser["UserLevel"]);
         console.log(userlimit);
         var array = {};
@@ -1340,8 +1341,7 @@ EditorUi = function (editor, container, lightbox) {
                         ) {
                           if (
                             floorPlanSettings["tableSort"] == "checked" &&
-                            parseInt(logInUser["priorityNum"]) <= TurnUsers &&         
-                            
+                            parseInt(logInUser["priorityNum"]) <= TurnUsers &&
                             logInUser["status"] &&
                             logInUser["status"][0] == "checked" &&
                             (userlimit == undefined ||
@@ -1547,7 +1547,8 @@ EditorUi = function (editor, container, lightbox) {
                           } else {
                             if (
                               finalresultProduct.deposit_enable_type ==
-                              "optional" && reservedStatus == ""
+                                "optional" &&
+                              reservedStatus == ""
                             ) {
                               //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
                               buttonsdiv =
@@ -1568,8 +1569,8 @@ EditorUi = function (editor, container, lightbox) {
                               //---------------------------Code By Abdullah EXHIBITOR ENTRY FLOW------------------------------------//
                               if (
                                 floorPlanSettings["tableSort"] == "checked" &&
-                                parseInt(logInUser["priorityNum"]) <= TurnUsers &&         
-                                
+                                parseInt(logInUser["priorityNum"]) <=
+                                  TurnUsers &&
                                 logInUser["status"] &&
                                 logInUser["status"][0] == "checked" &&
                                 ((userlimit != undefined &&
@@ -1649,7 +1650,8 @@ EditorUi = function (editor, container, lightbox) {
 
                                   if (
                                     reservedCheck == "0" &&
-                                    reservedStatus == "" && userloggedinstatus == true
+                                    reservedStatus == "" &&
+                                    userloggedinstatus == true
                                   ) {
                                     console.log("In resereved");
                                     buttonsdiv +=
@@ -1690,8 +1692,8 @@ EditorUi = function (editor, container, lightbox) {
                               ) {
                                 if (
                                   floorPlanSettings["tableSort"] == "checked" &&
-                                  parseInt(logInUser["priorityNum"]) <= TurnUsers &&         
-                                 
+                                  parseInt(logInUser["priorityNum"]) <=
+                                    TurnUsers &&
                                   logInUser["status"] &&
                                   logInUser["status"][0] == "checked" &&
                                   ((userlimit != undefined &&
@@ -1813,8 +1815,8 @@ EditorUi = function (editor, container, lightbox) {
                                 //---------------------------Code By Abdullah------------------------------------//
                                 if (
                                   floorPlanSettings["tableSort"] == "checked" &&
-                                  parseInt(logInUser["priorityNum"]) <= TurnUsers &&             
-                       
+                                  parseInt(logInUser["priorityNum"]) <=
+                                    TurnUsers &&
                                   logInUser["status"] &&
                                   logInUser["status"][0] == "checked" &&
                                   (userlimit == undefined ||
@@ -2228,51 +2230,77 @@ function removeFromCart(p_id, request, price) {
 }
 
 function addToCart(p_id, request, price, slug) {
-  console.log("Remove From Cart");
-  jQuery("body").css("cursor", "progress");
-  var data = new FormData();
-  if (price == "full") {
-    data.append("wc_deposit_option", "no");
-  } else {
-    data.append("wc_deposit_option", "yes");
-  }
-
-  data.append("quantity", 1);
-  data.append("add-to-cart", p_id);
-  console.log(data);
+  var data1 = new FormData();
+  console.log(userlimit);
   jQuery.ajax({
-    url: baseCurrentSiteURl + "/?add-to-cart=199&quantity=1",
-    data: data,
+    url:
+      baseCurrentSiteURl +
+      "/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=cart_total",
+    data: data1,
     cache: false,
     contentType: false,
     processData: false,
     type: "POST",
 
     success: function (data) {
-      var checkouturl = baseCurrentSiteURl + "/checkout/";
-      var addONs = baseCurrentSiteURl + "/product-category/add-ons/";
-      jQuery("#" + p_id).empty();
-      jQuery("#" + p_id + "_checkout").attr("disabled", false);
-      if (request == "log") {
-        var enbutton =
-          "<a   class='btn btn-danger btn-small' onclick='removeFromCart(" +
-          p_id +
-          ")'>Remove</a>";
-        jQuery("#" + p_id).append(enbutton);
+      console.log(data);
+      data = data.trim();
+      if (userlimit > data || userlimit == "") {
+        jQuery("#cart_div").remove();
+        console.log("Remove From Cart");
+        jQuery("body").css("cursor", "progress");
+        var data = new FormData();
+        if (price == "full") {
+          data.append("wc_deposit_option", "no");
+        } else {
+          data.append("wc_deposit_option", "yes");
+        }
 
-        var productcount = parseInt(
-          window.parent.jQuery("#entryflowcartcounter").text()
-        );
-        console.log(productcount + "------------------");
-        productcount = productcount + 1;
-        window.parent.jQuery("#entryflowcartcounter").empty();
-        window.parent.jQuery("#entryflowcartcounter").text(productcount);
-        // checkopenfunction.close();
-        window.top.scrollTo({ top: 0, behavior: "smooth" });
+        data.append("quantity", 1);
+        data.append("add-to-cart", p_id);
+        console.log(data);
+        jQuery.ajax({
+          url: baseCurrentSiteURl + "/?add-to-cart=199&quantity=1",
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          type: "POST",
+
+          success: function (data) {
+            var checkouturl = baseCurrentSiteURl + "/checkout/";
+            var addONs = baseCurrentSiteURl + "/product-category/add-ons/";
+            jQuery("#" + p_id).empty();
+            jQuery("#" + p_id + "_checkout").attr("disabled", false);
+            if (request == "log") {
+              var enbutton =
+                "<a   class='btn btn-danger btn-small' onclick='removeFromCart(" +
+                p_id +
+                ")'>Remove</a>";
+              jQuery("#" + p_id).append(enbutton);
+
+              var productcount = parseInt(
+                window.parent.jQuery("#entryflowcartcounter").text()
+              );
+              console.log(productcount + "------------------");
+              productcount = productcount + 1;
+              window.parent.jQuery("#entryflowcartcounter").empty();
+              window.parent.jQuery("#entryflowcartcounter").text(productcount);
+              // checkopenfunction.close();
+              window.top.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+              top.window.location.href =
+                baseCurrentSiteURl + "/exhibitor-entry/";
+            }
+            jQuery("body").css("cursor", "default");
+          },
+        });
       } else {
-        top.window.location.href = baseCurrentSiteURl + "/exhibitor-entry/";
+        jQuery("#" + p_id).empty();
+        var div =
+          '<div id="cart_div"><p style="  text-align: center;font-size: 16px;vertical-align: c;margin-top: 10px;"><strong style="color:red">Limit Exceeded</strong></p></div>';
+        jQuery("#" + p_id).append(div);
       }
-      jQuery("body").css("cursor", "default");
     },
   });
 }

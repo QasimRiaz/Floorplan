@@ -107,6 +107,14 @@ if($_GET['floorplanRequest'] == "savedfloorplansettings") {
       
     die();
     
+}else if($_GET['floorplanRequest'] == "cart_total") { 
+    require_once('../../../wp-load.php');
+ 
+    //productremoverequest($_REQUEST)
+    getCartTotal();
+      
+    die();
+    
 }
 
 // function remove_item_cart()
@@ -117,7 +125,7 @@ if($_GET['floorplanRequest'] == "savedfloorplansettings") {
 function getCartTotal()
 {
     $cartcount = WC()->cart->get_cart_contents_count();
-    return $cartcount;
+    echo $cartcount;
     
 }
 
@@ -310,8 +318,8 @@ function createnewfloorplan($postData){
             // $cartCount= $cartCounts->instance()->cart->cart_contents_count();
             $loggedInUser = get_user_meta($user_ID);  
             $getroledata = unserialize($loggedInUser['wp_'.$blog_id.'_capabilities'][0]);
-            echo "<pre>";
-            print_r($getroledata);
+            // echo "<pre>";
+            // print_r($getroledata);
             reset($getroledata);
             $rolename = key($getroledata);
             $get_all_roles_array = 'wp_'.$blog_id.'_user_roles';
@@ -1483,7 +1491,11 @@ function floorplan_shortcode( $atts, $content = null ) {
                 }
               
             }  
-            $value = max($array_Pr);  
+
+            if(!empty($array_Pr)){
+
+                $value = max($array_Pr);  
+            }
             
             $exhibitorflowstatusKey = "exhibitorentryflowstatus";
             $exhibitorflowstatus = get_option($exhibitorflowstatusKey);
@@ -1492,10 +1504,11 @@ function floorplan_shortcode( $atts, $content = null ) {
             $userentryflow = $exhibitorflowstatus['status'];
             $user_ID = get_current_user_id();
             $user = wp_get_current_user();
-
+            
             $blog_id = get_current_blog_id();
             $loggedInUser = get_user_meta($user_ID); 
             $getroledata = unserialize($loggedInUser['wp_'.$blog_id.'_capabilities'][0]);
+            $getroledata = (array)$getroledata;
             reset($getroledata);
             $rolename = key($getroledata);
             $get_all_roles_array = 'wp_'.$blog_id.'_user_roles';
