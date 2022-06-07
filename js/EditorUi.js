@@ -2245,7 +2245,11 @@ function addToCart(p_id, request, price, slug) {
     success: function (data) {
       console.log(data);
       data = data.trim();
-      if (userlimit > data || userlimit == "") {
+      if (
+        parseInt(userlimit) > parseInt(data) ||
+        userlimit == "" ||
+        userlimit == undefined
+      ) {
         jQuery("#cart_div").remove();
         console.log("Remove From Cart");
         jQuery("body").css("cursor", "progress");
@@ -2255,7 +2259,7 @@ function addToCart(p_id, request, price, slug) {
         } else {
           data.append("wc_deposit_option", "yes");
         }
-
+        window.top.scrollTo({ top: 0, behavior: "smooth" });
         data.append("quantity", 1);
         data.append("add-to-cart", p_id);
         console.log(data);
@@ -2272,6 +2276,7 @@ function addToCart(p_id, request, price, slug) {
             var addONs = baseCurrentSiteURl + "/product-category/add-ons/";
             jQuery("#" + p_id).empty();
             jQuery("#" + p_id + "_checkout").attr("disabled", false);
+
             if (request == "log") {
               var enbutton =
                 "<a   class='btn btn-danger btn-small' onclick='removeFromCart(" +
