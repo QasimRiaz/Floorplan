@@ -4445,7 +4445,7 @@ EditorUi.prototype.createUi = function () {
     helpbutton.title = "Help";
     helpbutton.innerHTML =
       '<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Help ';
-    helpbuttondiv.appendChild(helpbutton);
+    //helpbuttondiv.appendChild(helpbutton);
 
     var divmaintopbar = this.createDiv("backtodashtop");
 

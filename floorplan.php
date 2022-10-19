@@ -5,7 +5,7 @@
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
 
- * Version: 7.13
+ * Version: 8.0
 
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
