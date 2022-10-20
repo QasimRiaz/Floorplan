@@ -5,7 +5,7 @@
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
 
- * Version: 8.0
+ * Version: 7.14
 
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
@@ -1555,7 +1555,7 @@ function floorplan_shortcode( $atts, $content = null ) {
             $all_roles = $wp_roles->roles;
             foreach ($all_roles as $key => $name) {
                 
-                if ($key != 'administrator' && $key != 'contentmanager' && $key != 'subscriber') {
+                if ($key != 'administrator' && $key != 'contentmanager' && $key != 'subscriber' && $key != 'master_admin') {
                     
                      $arrayoflevels[$key] = $name['name'];
                 }
@@ -1633,26 +1633,23 @@ function floorplan_contentmanagerlogging($acction_name,$action_type,$pre_action_
 
     
 // Create post object
-$activitylog = array(
-  'post_title'    => wp_strip_all_tags( $acction_name ),
-  'post_content'  => "",
-  'post_status'   => 'publish',
-  'post_author'   => $user_id,
-  'post_type'=>'expo_genie_log'
-);
- 
 
- $logID = wp_insert_post( $activitylog );
- $_SERVER['currentuseremail'] = $email;
- update_post_meta( $logID, 'action-type-name', $action_type );
- update_post_meta( $logID, 'pre-action-data', $pre_action_data );
- update_post_meta( $logID, 'current-user-info', $_SERVER );
- update_post_meta( $logID, 'currentuseremail', $email );
- update_post_meta( $logID, 'ip-address', $_SERVER['REMOTE_ADDR'] );
- update_post_meta( $logID, 'browser-agent', $_SERVER['HTTP_USER_AGENT'] );
- update_post_meta( $logID, 'final-result', $result );
- update_post_meta( $logID, 'request-data-and-time',  date("Y-m-d H:i:s") );
- return $logID;
+
+
+ $current_user = wp_get_current_user();
+ $dataArray['Action-type'] = $action_type;
+ $dataArray['Logged-in-user-id'] = $current_user;
+ $dataArray['Pre-action-data'] = $pre_action_data;
+ $dataArray['Current-user-info'] = $_SERVER;
+ $dataArray['Email'] = $email;
+ $dataArray['IP'] = $_SERVER['REMOTE_ADDR'];
+ $dataArray['Result'] = $result;
+ expomonolog($acction_name,$dataArray);
+ $data['title'] = $acction_name;
+ $data['email'] = $email;
+ return $data;
+
+
  
 
 }
