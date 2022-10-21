@@ -5,7 +5,7 @@
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
 
- * Version: 8.1
+ * Version: 8.2
 
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
@@ -1638,9 +1638,8 @@ function floorplan_contentmanagerlogging($acction_name,$action_type,$pre_action_
 
  $current_user = wp_get_current_user();
  $dataArray['Action-type'] = $action_type;
- $dataArray['Logged-in-user-id'] = $current_user;
+ $dataArray['Logged-in-user-id'] = $current_user->ID;
  $dataArray['Pre-action-data'] = $pre_action_data;
- $dataArray['Current-user-info'] = $_SERVER;
  $dataArray['Email'] = $email;
  $dataArray['IP'] = $_SERVER['REMOTE_ADDR'];
  $dataArray['Result'] = $result;
