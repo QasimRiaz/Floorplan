@@ -106,6 +106,29 @@
 	function fileChanged()
 	{
 		var form = window.openForm || document.getElementById('openForm');
+
+		var _validFileExtensions = [".jpg", ".jpeg", ".png"];    
+
+			if (form.upfile.type == "file") {
+				var sFileName = form.upfile.value;
+				if (sFileName.length > 0) {
+					var blnValid = false;
+					for (var j = 0; j < _validFileExtensions.length; j++) {
+						var sCurExtension = _validFileExtensions[j];
+						if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+							blnValid = true;
+							break;
+						}
+					}
+					
+					if (!blnValid) {
+						alert("File type is invalid, allowed extensions are: " + _validFileExtensions.join(", "));
+						form.upfile.value = "";
+						return false;
+					}
+				}
+			}
+
 		var openButton = document.getElementById('openButton');
 		
 		if (form.upfile.value.length > 0)
