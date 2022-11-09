@@ -5,7 +5,7 @@
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
 
- * Version: 8.3
+ * Version: 8.4
 
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
@@ -16,7 +16,7 @@
 
 */
 
-
+if(isset($_GET['floorplanRequest'])){
 
 if($_GET['floorplanRequest'] == "savedfloorplansettings") { 
     
@@ -117,6 +117,7 @@ if($_GET['floorplanRequest'] == "savedfloorplansettings") {
     
 }
 
+}
 // function remove_item_cart()
 // {
 //     # code...
@@ -150,36 +151,36 @@ function reservedBoothRequest()
     $blog_id = get_current_blog_id();
     $array=array();
     $reservedBoothsInMeta= get_user_meta($user_ID,'wp_'.$blog_id.'_userBoothReserved');
-    echo "Reserverd";
-    echo "<pre>";  
-    print_r($reservedBoothsInMeta);
-    echo "Reserverd";
+    // echo "Reserverd";
+    // echo "<pre>";  
+    // print_r($reservedBoothsInMeta);
+    // echo "Reserverd";
     if(empty($reservedBoothsInMeta))
     {   
-        echo "===EMPTY==";
+        //echo "===EMPTY==";
         array_push($reservedBoothsInMeta,$id);
-        echo "<pre>";
-        print_r($reservedBoothsInMeta);
+      //  echo "<pre>";
+       // print_r($reservedBoothsInMeta);
         update_post_meta($id,'Reserved',$user_ID);
         update_user_option($user_ID,'userBoothReserved',$reservedBoothsInMeta);
     }else{
         foreach ($reservedBoothsInMeta as $key => $value) {
-             echo "=====";
-             print_r($value);
-             echo "=====";
-             echo "==[0]==";
-             print_r($value[0]);
-             echo "==[0]==";
+            //  echo "=====";
+            //  print_r($value);
+            //  echo "=====";
+            //  echo "==[0]==";
+            //  print_r($value[0]);
+            //  echo "==[0]==";
             array_push($array,$value[$key]);
             // echo "=====";
         }
-        echo "<pre>";
-        echo "Before Push";
-            print_r($array);
+        // echo "<pre>";
+        // echo "Before Push";
+        //     print_r($array);
             array_push($array, $id);
-            echo "<pre>";
-            echo "After Push";
-            print_r($array);
+            // echo "<pre>";
+            // echo "After Push";
+            // print_r($array);
         update_post_meta($id,'Reserved',$user_ID);
         update_user_option($user_ID,'userBoothReserved',$array);
         // foreach ($array as $key => $value) {
@@ -259,9 +260,9 @@ function createnewfloorplan($postData){
             
             $boothTypes.='{"width":100,"height":100,"style":"DefaultStyle1;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=18;uno=#fff;occ=#fff;glass=0;comic=0;shadow=0;"},';
             
-            $boothTypes.='{"width":200,"height":200,"style":"DefaultStyle2;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=18;uno=#fff;occ=#fff;glass=0;comic=0;shadow=0;"},';
+            $boothTypes.='{"width":200,"height":200,"style":"DefaultStyle2;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=18;uno=#fff;occ=#fff;glass=0;comic=0;"},';
             
-            $boothTypes.='{"width":300,"height":200,"style":"DefaultStyle3;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=18;uno=#fff;occ=#fff;glass=0;comic=0;shadow=0;"}';
+            $boothTypes.='{"width":300,"height":200,"style":"DefaultStyle3;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=18;uno=#fff;occ=#fff;glass=0;comic=0;"}';
             
             $boothTypes.=']';
             
@@ -644,7 +645,7 @@ function post_love_add_love() {
 	
 	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) { 
 		update_post_meta( $_REQUEST['post_id'], 'booth_types', json_encode($boothTypes2) );
-		print_r($boothTypes2);
+		//print_r($boothTypes2);
 		die();
 	}
 	else {
@@ -992,8 +993,6 @@ function getAllusers_data(){
         }
        
         
-       
-        $site_prefixs = 'wp_'.$blog_id.'_';
         $blog_id = get_current_blog_id();
         foreach ($authors as $aid) {
          
@@ -1015,7 +1014,9 @@ function getAllusers_data(){
                       
                      if($mappedIndex == 'COL'){
                          
-                         $getLogoURL = unserialize($all_meta_for_user[$maapedObject][0]);
+                        if(isset($all_meta_for_user[$maapedObject])){
+                            $getLogoURL = unserialize($all_meta_for_user[$maapedObject][0]);
+                           }
                          
                          
                          $allUsersData[$index][$mappedIndex] = $getLogoURL['url'];
@@ -1038,7 +1039,9 @@ function getAllusers_data(){
               
               
                 $allUsersData[$index]['companyname'] = $all_meta_for_user[$site_prefix.'company_name'][0];
-                $allUsersData[$index]['companylogourl'] = $all_meta_for_user[$site_prefix.'user_profile_url'][0];
+                if(isset($all_meta_for_user[$site_prefix.'user_profile_url'])){
+                    $allUsersData[$index]['companylogourl'] = $all_meta_for_user[$site_prefix.'user_profile_url'][0];
+                    }
                 $allUsersData[$index]['exhibitorsid'] = $aid->ID;
                 
                
@@ -1305,6 +1308,17 @@ function floorplan_shortcode( $atts, $content = null ) {
             }
             
             $listoffloorplan = json_encode($listoffloorplan);
+
+
+            $boothTypes ="[";
+            
+            $boothTypes.='{"width":100,"height":100,"style":"DefaultStyle1;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=35;uno=#fff;occ=#fff;glass=0;comic=0;"},';
+            
+            $boothTypes.='{"width":200,"height":200,"style":"DefaultStyle2;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=35;uno=#fff;occ=#fff;glass=0;comic=0;"},';
+            
+            $boothTypes.='{"width":300,"height":200,"style":"DefaultStyle3;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=35;uno=#fff;occ=#fff;glass=0;comic=0;"}';
+            
+            $boothTypes.=']';
         
         if(empty($id) || $id == 'new'){
               
@@ -1328,15 +1342,7 @@ function floorplan_shortcode( $atts, $content = null ) {
                $id = wp_insert_post($my_post);
                $contentmanager_settings['ContentManager']['floorplanactiveid'] = $id;
            
-            $boothTypes ="[";
-            
-            $boothTypes.='{"width":100,"height":100,"style":"DefaultStyle1;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=18;uno=#fff;occ=#fff;glass=0;comic=0;shadow=0;"},';
-            
-            $boothTypes.='{"width":200,"height":200,"style":"DefaultStyle2;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=18;uno=#fff;occ=#fff;glass=0;comic=0;shadow=0;"},';
-            
-            $boothTypes.='{"width":300,"height":200,"style":"DefaultStyle3;whiteSpace=wrap;shape=rectangle;html=1;fillColor=#fff;fontSize=18;uno=#fff;occ=#fff;glass=0;comic=0;shadow=0;"}';
-            
-            $boothTypes.=']';
+           
             
             $FloorBackground = '';
             $arr = array();
@@ -1385,12 +1391,12 @@ function floorplan_shortcode( $atts, $content = null ) {
             // global $cartCounts;
             // $cartCount= $cartCounts->instance()->cart->cart_contents_count();
             $user_ID = get_current_user_id();
-            echo $user_ID ;
+           // echo $user_ID ;
            
             $loggedInUser = get_user_meta($user_ID);
             $getroledata = unserialize($loggedInUser['wp_'.$blog_id.'_capabilities'][0]);
-            echo "<pre>";
-            print_r($getroledata);
+            // echo "<pre>";
+            // print_r($getroledata);
             reset($getroledata);
             $rolename = key($getroledata);
             $get_all_roles_array = 'wp_'.$blog_id.'_user_roles';
@@ -1437,8 +1443,8 @@ function floorplan_shortcode( $atts, $content = null ) {
             if($atts['status'] != 'viewer'){
                update_post_meta( $id, 'updateboothpurchasestatus', 'lock' );
             }
-            $boothsproductsData;
-            $boothTypes        = get_post_meta( $id, 'booth_types', true );
+            $boothsproductsData = '' ;
+            //$boothTypes        = get_post_meta( $id, 'booth_types', true );
             $FloorBackground   = get_post_meta( $id, 'floor_background', true );
             $FloorplanXml[0]   = get_post_meta( $id, 'floorplan_xml', true );
             $FloorplanLegends  = get_post_meta( $id, 'legendlabels', true );
@@ -1643,7 +1649,7 @@ function floorplan_contentmanagerlogging($acction_name,$action_type,$pre_action_
  $dataArray['Email'] = $email;
  $dataArray['IP'] = $_SERVER['REMOTE_ADDR'];
  $dataArray['Result'] = $result;
- expomonolog($acction_name,$dataArray);
+
  $data['title'] = $acction_name;
  $data['email'] = $email;
  return $data;
