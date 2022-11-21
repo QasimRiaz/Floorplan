@@ -5,7 +5,7 @@
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
 
- * Version: 8.5
+ * Version: 8.6
 
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
@@ -1014,9 +1014,12 @@ function getAllusers_data(){
                       
                      if($mappedIndex == 'COL'){
                          
-                        if(isset($all_meta_for_user[$maapedObject])){
+                        if(!empty($all_meta_for_user[$maapedObject])){
                             $getLogoURL = unserialize($all_meta_for_user[$maapedObject][0]);
-                           }
+                        }else{
+
+                            $getLogoURL['url'] = "";
+                        }
                          
                          
                          $allUsersData[$index][$mappedIndex] = $getLogoURL['url'];
