@@ -313,8 +313,12 @@ function createnewfloorplan($postData){
                  
                 }
               
+            } 
+             
+             if(!empty($array_Pr)){
+
+                $value = max($array_Pr);  
             }  
-            $value = max($array_Pr);   
             // global $cartCounts;
             // $cartCount= $cartCounts->instance()->cart->cart_contents_count();
             $loggedInUser = get_user_meta($user_ID);  
@@ -1387,7 +1391,11 @@ function floorplan_shortcode( $atts, $content = null ) {
                 }
              
             } 
-            $value = max($array_Pr);  
+            
+            if(!empty($array_Pr)){
+
+                $value = max($array_Pr);  
+            }  
             // Getting floorplan settings from wp options
             $floorPlanSettingsString ='floorPlanSettings';
             $floorPlanSettings = get_option($floorPlanSettingsString);
