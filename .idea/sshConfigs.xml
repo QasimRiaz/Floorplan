@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="zaeemdev.sftp.wpengine.com" id="2641cac5-f4ba-4d25-a7bb-2fa590a7f1e8" port="2222" nameFormat="DESCRIPTIVE" username="zaeemdev-zaeem" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>
