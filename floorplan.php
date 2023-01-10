@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 8.8
- * @version : 8.8
+ * Version: 8.9
+ * @version : 8.9
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -1696,6 +1696,8 @@ function floorplan_contentmanagerlogging($acction_name, $action_type, $pre_actio
 
 
 }
+require 'plugin-update-checker/plugin-update-checker.php';
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 //include_once('updater.php');
 
