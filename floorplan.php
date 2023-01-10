@@ -556,7 +556,7 @@ function getproductdetail($productID)
         }
         // echo "<pre>";
         // print_r($get_product);
-//code by Zaeem
+// code by Zaeem
           $priority = getHighestPackagePriority();
         if ($priority != 0) {
             if (!is_user_logged_in()) {
@@ -1725,7 +1725,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
         __FILE__,
         'FloorPlan'
     );
-    $myUpdateChecker->setBranch('Zaeem-Dev');
+    $myUpdateChecker->setBranch('master');
     $myUpdateChecker->setAuthentication($gitAuthKey);
     $myUpdateChecker->getVcsApi()->enableReleaseAssets();
 }
