@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 8.9
- * @version : 8.9
+ * Version: 8.10
+ * @version : 8.10
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -116,7 +116,7 @@ if (isset($_GET['floorplanRequest'])) {
     }
 
 }
-
+// code by Zaeem
 function getHighestPackagePriority()
 {
     $productLevels = [];
@@ -556,7 +556,7 @@ function getproductdetail($productID)
         }
         // echo "<pre>";
         // print_r($get_product);
-
+//code by Zaeem
           $priority = getHighestPackagePriority();
         if ($priority != 0) {
             if (!is_user_logged_in()) {
@@ -1717,6 +1717,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
 //            'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
 //        );
 //        new WP_GitHub_floorplan_Updater($config);
+//    Code by Zaeem
     $oldvalues = get_option('ContenteManager_Settings');
     $gitAuthKey = $oldvalues['ContentManager']['gitAuthKey'];
     $myUpdateChecker = PucFactory::buildUpdateChecker(
