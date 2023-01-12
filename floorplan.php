@@ -1726,8 +1726,11 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
         'FloorPlan'
     );
     $myUpdateChecker->setBranch('master');
-    $myUpdateChecker->setAuthentication($gitAuthKey);
-    $myUpdateChecker->getVcsApi()->enableReleaseAssets();
+    if (!empty($gitAuthKey)) {
+        $myUpdateChecker->setAuthentication($gitAuthKey);
+    }else{
+        echo "Please add your git auth key in the content manager settings";
+    }$myUpdateChecker->getVcsApi()->enableReleaseAssets();
 }
 
 
