@@ -1,4 +1,4 @@
-Current Version:7.11~
+Current Version:8.20~
 
 
 
@@ -56,6 +56,3 @@ Big Release included with Exhibitor Entry Wizard
 
 Removed legend label icon from tool bar in Floor plan
 Include Bug fixes
-
-
-
