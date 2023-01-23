@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 9.0
- * @version : 9.0
+ * Version: 9.1
+ * @version : 9.1
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -1750,7 +1750,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
         'FloorPlan'
     );
 
-    $myUpdateChecker->setBranch('EGPL-Dev');
+    $myUpdateChecker->setBranch('master');
     $myUpdateChecker->setAuthentication($gitAuthKey);
     $myUpdateChecker->getVcsApi()->enableReleaseAssets();
 
