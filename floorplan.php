@@ -4,14 +4,14 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 8.23
- * @version : 8.23
+ * Version: 9.0
+ * @version : 9.0
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
  * License: ExpoGenie
  * Text Domain: ExpoGenie
- * Network: true
+ * Network:           true
  */
 
 if (isset($_GET['floorplanRequest'])) {
@@ -116,7 +116,8 @@ if (isset($_GET['floorplanRequest'])) {
     }
 
 }
-// code by Zaeem
+
+//zaeem
 function getHighestPackagePriority()
 {
     $productLevels = [];
@@ -142,11 +143,14 @@ function getHighestPackagePriority()
                 $priorityNums[$int] = $key;
             }
         }
-        return min($priorityNums);
+        
+        return $priorityNums;
+
     } else {
         return 0;
     }
 }
+
 
 // function remove_item_cart()
 // {
@@ -159,6 +163,7 @@ function getCartTotal()
     echo $cartcount;
 
 }
+
 
 function productremoverequest()
 {
@@ -344,11 +349,17 @@ function createnewfloorplan($postData)
             }
 
         }
-
+        
+        
         if (!empty($array_Pr)) {
 
             $value = max($array_Pr);
         }
+
+        $value = max($array_Pr);
+
+
+
         // global $cartCounts;
         // $cartCount= $cartCounts->instance()->cart->cart_contents_count();
         $loggedInUser = get_user_meta($user_ID);
@@ -495,7 +506,6 @@ function getproductdetail($productID)
 
             $productdetail['productstatus'] = 'removed';
         } else {
-
             $productdetail['productstatus'] = 'exist';
         }
 
@@ -554,24 +564,37 @@ function getproductdetail($productID)
 
             $productdetail['status'] = 'unassigned';
         }
-        // echo "<pre>";
-        // print_r($get_product);
-// code by Zaeem
-          $priority = getHighestPackagePriority();
-        if ($priority != 0) {
-            if (!is_user_logged_in()) {
+
+   
+
+        $priority = getHighestPackagePriority();
+        $productdetail['priority'] = 'false';
+        // echo 'zad';
+
+        $prior = [];
+
+        foreach($priority as $key=> $val){
+            
+            array_push($prior, $key);
+        }
+        
+        $priority = $priority[min($prior)];
+        $productdetail['TEMP'] = $priority;
+// code By Zaeem
+        if (!empty($priority) ) {
+            // if (!is_user_logged_in()) {
                 if (in_array($priority, $get_BoothLevel_amount) || $get_BoothLevel_amount[0] == "") {
                     $productdetail['priority'] = 'true';
                 } else {
                     $productdetail['priority'] = 'false';
                     $productdetail['productstatus'] = 'removed';
                 }
-            }
+            // }
         }
 
         echo json_encode($productdetail);
-        exit;
 
+        die();
 
     } catch (Exception $e) {
 
@@ -631,10 +654,12 @@ function savedallboothtags($Dataarray)
 
 function savedalllegendstypes($Dataarray)
 {
+
     try {
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
         $lastInsertId = contentmanagerlogging('Save All Legends Labels', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
+
         $id = $Dataarray['post_id'];
         update_post_meta($id, 'legendlabels', $Dataarray['legendstypesArray']);
         contentmanagerlogging_file_upload($lastInsertId, $Dataarray['pricetegsArray']);
@@ -1057,11 +1082,8 @@ function getAllusers_data()
 
                     if ($mappedIndex == 'COL') {
 
-                        if (!empty($all_meta_for_user[$maapedObject])) {
+                        if (isset($all_meta_for_user[$maapedObject])) {
                             $getLogoURL = unserialize($all_meta_for_user[$maapedObject][0]);
-                        } else {
-
-                            $getLogoURL['url'] = "";
                         }
 
 
@@ -1430,11 +1452,11 @@ function floorplan_shortcode($atts, $content = null)
                 }
 
             }
-
             if (!empty($array_Pr)) {
 
                 $value = max($array_Pr);
             }
+            $value = max($array_Pr);
             // Getting floorplan settings from wp options
             $floorPlanSettingsString = 'floorPlanSettings';
             $floorPlanSettings = get_option($floorPlanSettingsString);
@@ -1696,44 +1718,44 @@ function floorplan_contentmanagerlogging($acction_name, $action_type, $pre_actio
 
 
 }
+
 require 'plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
-include_once('updater.php');
-
 
 if (is_admin()) { // note the use of is_admin() to double check that this is happening in the admin
-       $config = array(
-           'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
-           'proper_folder_name' => 'floorplan', // this is the name of the folder your plugin lives in
-           'api_url' => 'https://api.github.com/repos/QasimRiaz/Floorplan', // the GitHub API url of your GitHub repo
-           'raw_url' => 'https://raw.github.com/QasimRiaz/Floorplan/master', // the GitHub raw url of your GitHub repo
-           'github_url' => 'https://github.com/QasimRiaz/Floorplan', // the GitHub url of your GitHub repo
-           'zip_url' => 'https://github.com/QasimRiaz/Floorplan/zipball/master', // the zip url of the GitHub repo
-           'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
-           'requires' => '3.0', // which version of WordPress does your plugin require?
-           'tested' => '3.3', // which version of WordPress is your plugin tested up to?
-           'readme' => 'README.md', // which file to use as the readme for the version number
-           'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
-       );
-       new WP_GitHub_floorplan_Updater($config);
-//    Code by Zaeem
+    // $config = array(
+    //     'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+    //     'proper_folder_name' => 'floorplan', // this is the name of the folder your plugin lives in
+    //     'api_url' => 'https://api.github.com/repos/QasimRiaz/Floorplan', // the GitHub API url of your GitHub repo
+    //     'raw_url' => 'https://raw.github.com/QasimRiaz/Floorplan/master', // the GitHub raw url of your GitHub repo
+    //     'github_url' => 'https://github.com/QasimRiaz/Floorplan', // the GitHub url of your GitHub repo
+    //     'zip_url' => 'https://github.com/QasimRiaz/Floorplan/zipball/master', // the zip url of the GitHub repo
+    //     'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+    //     'requires' => '3.0', // which version of WordPress does your plugin require?
+    //     'tested' => '3.3', // which version of WordPress is your plugin tested up to?
+    //     'readme' => 'README.md', // which file to use as the readme for the version number
+    //     'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+    // );
+    // new WP_GitHub_floorplan_Updater($config);
+
+
+    $tokennumber ="expo-2023-"."FJr4Fa1i9RBzK7hbPRvDpRNfcrWUBi0EJ6c2";
+    $gitAuthKey = 'ghp_'.str_replace("expo-2023-",'',$tokennumber);
+
     
-$oldvalues = get_option('ContenteManager_Settings');
-    $gitAuthKey = $oldvalues['ContentManager']['gitAuthKey'];
     $myUpdateChecker = PucFactory::buildUpdateChecker(
         'https://github.com/QasimRiaz/Floorplan',
         __FILE__,
         'FloorPlan'
     );
-    
-    $myUpdateChecker->setBranch('master');
-    
-    if (!empty($gitAuthKey)) {
-        $myUpdateChecker->setAuthentication($gitAuthKey);
-    }
-    
+
+    $myUpdateChecker->setBranch('EGPL-Dev');
+    $myUpdateChecker->setAuthentication($gitAuthKey);
     $myUpdateChecker->getVcsApi()->enableReleaseAssets();
+
+
+
 }
 
 

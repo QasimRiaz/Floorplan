@@ -1229,6 +1229,7 @@ EditorUi = function (editor, container, lightbox) {
                     finalresultProduct.NumberOfReservedBooths;
                   var buttonsdiv = "";
                   var totalCount = 0;
+                  var priority = finalresultProduct.priority;
                   var checkforPurchase = "false";
                   var cartLimit = finalresultProduct.CartTotal;
                   var reservedCheck = finalresultProduct.reservedStatus;
@@ -1477,21 +1478,29 @@ EditorUi = function (editor, container, lightbox) {
 
                   //if(userloggedinstatus == true){
                   if (finalresultProduct.productstatus == "exist") {
+                    console.log("Qsaim00001");
                     if (floorplanstatus == "unlock") {
+                      console.log("Qsaim0001");
                       if (finalresultProduct.stockstatus == "instock") {
+                        console.log("Qsaim001");
                         if (
                           mxUserentryflow == "checked" &&
                           mxCurrentPackageBooths.length !== 0
                         ) {
+
+                          console.log("Qsaim1");
                           if (
                             jQuery.inArray(boothID, mxCurrentPackageBooths) !==
                             -1
                           ) {
+                            console.log("Qsaim2");
                             if (userloggedinstatus == true) {
+                              console.log("Qsaim3");
                               if (
                                 productstatus == "alreadyexistproduct" &&
                                 reservedStatus == ""
                               ) {
+                                console.log("Qsaim4");
                                 buttonsdiv =
                                   '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                   postid +
@@ -1502,11 +1511,14 @@ EditorUi = function (editor, container, lightbox) {
                                 //buttonsdiv = '<p  id="' + boothproductid + '"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' + postid + ',\'log\' ,\'deposit\',' + finalresultProduct.slug + ')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart(' + postid + ',\'log\' ,\'full\',' + finalresultProduct.slug + ')">Pay in Full</a></div></div><p style="font-size: 11px;margin-top: 10px;color: #005e00;">This Booth is included in current selected package.</p></p>'
 
                                 //} else {
+                                  console.log("Qsaim5");
 
                                 if (
                                   flowstatus.indexOf("mood=wizard") != -1 &&
                                   reservedStatus == ""
                                 ) {
+
+                                  console.log("Qsaim6");
                                   buttonsdiv =
                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                     postid +
@@ -1516,21 +1528,27 @@ EditorUi = function (editor, container, lightbox) {
                                     finalresultProduct.slug +
                                     ')"  >Add To Cart</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>';
                                 } else {
+                                  console.log("Qsaim7");
                                   buttonsdiv = "";
                                 }
                                 //}
                               }
                             } else {
+                              console.log("Qsaim8");
                               if (flowstatus.indexOf("mood=wizard") != -1) {
+                                console.log("Qsaim9");
                                 if (
                                   productstatus == "alreadyexistproduct" &&
                                   reservedStatus == ""
                                 ) {
+
+                                  console.log("Qsaim10");
                                   buttonsdiv =
                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                     postid +
                                     ' style="text-align: center;"><a class="btn btn-success btn-small" >Added</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>';
                                 } else if (reservedStatus == "") {
+                                  console.log("Qsaim11");
                                   buttonsdiv =
                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                     postid +
@@ -1541,15 +1559,18 @@ EditorUi = function (editor, container, lightbox) {
                                     ')"  >Add To Cart</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This Booth is included in your current selected package.</b></p></div></div>';
                                 }
                               } else {
+                                console.log("Qsaim12");
                                 buttonsdiv = "";
                               }
                             }
                           } else {
+                            console.log("Qsaim13");
                             if (
                               finalresultProduct.deposit_enable_type ==
                                 "optional" &&
                               reservedStatus == ""
                             ) {
+                              console.log("Qsaim14");
                               //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
                               buttonsdiv =
                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
@@ -1564,6 +1585,8 @@ EditorUi = function (editor, container, lightbox) {
                                 finalresultProduct.slug +
                                 ')">Pay in Full</a></div></div></div></div>';
                             } else {
+
+                              console.log("Qsaim15");
                               //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
                               //---------------------------Add To cart of First Time---------------------------//
                               //---------------------------Code By Abdullah EXHIBITOR ENTRY FLOW------------------------------------//
@@ -1579,6 +1602,8 @@ EditorUi = function (editor, container, lightbox) {
                                   (reservedStatus &&
                                     reservedStatus == logInUser["ID"]))
                               ) {
+
+                                console.log("Qsaim16");
                                 if (
                                   (reservedStatus == "" ||
                                     reservedStatus == logInUser["ID"]) &&
@@ -1587,6 +1612,8 @@ EditorUi = function (editor, container, lightbox) {
                                   (LevelOfBooth == logInUser["UserLevel"] ||
                                     LevelOfBooth[0] == "")
                                 ) {
+
+                                  console.log("Qsaim17");
                                   buttonsdiv =
                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
                                     postid +
@@ -1600,6 +1627,8 @@ EditorUi = function (editor, container, lightbox) {
                                     reservedCheck == "0" &&
                                     reservedStatus == ""
                                   ) {
+
+                                    console.log("Qsaim17");
                                     console.log("In resereved");
                                     buttonsdiv +=
                                       "<div class='col-sm-12' id=" +
@@ -1611,11 +1640,14 @@ EditorUi = function (editor, container, lightbox) {
                                       ')"  >Reserve The Booth</a></div>';
                                   }
                                 } else {
+                                  console.log("Qsaim18");
                                   buttonsdiv = "";
                                 }
                               } else if (
                                 floorPlanSettings["tableSort"] != "checked"
                               ) {
+
+                                console.log("Qsaim19");
                                 if (
                                   (userlimit == undefined ||
                                     userlimit == "" ||
@@ -1639,6 +1671,8 @@ EditorUi = function (editor, container, lightbox) {
                                       LevelOfBooth
                                     ) == 0)
                                 ) {
+
+                                  console.log("Qsaim20");
                                   buttonsdiv =
                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display:flex;"><div class="col-sm-12" id=' +
                                     postid +
@@ -1653,6 +1687,7 @@ EditorUi = function (editor, container, lightbox) {
                                     reservedStatus == "" &&
                                     userloggedinstatus == true
                                   ) {
+                                    console.log("Qsaim21");
                                     console.log("In resereved");
                                     buttonsdiv +=
                                       "<div class='col-sm-4' id=" +
@@ -1663,7 +1698,21 @@ EditorUi = function (editor, container, lightbox) {
                                       finalresultProduct.slug +
                                       ')"  >Reserve The Booth</a></div>';
                                   }
-                                } else {
+                                } else if(priority == 'true'){
+
+
+                                  buttonsdiv =
+                                    '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display:flex;"><div class="col-sm-12" id=' +
+                                    postid +
+                                    ' style="text-align: center;display: flex;justify-content: space-evenly;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                    postid +
+                                    ",'log','full'," +
+                                    finalresultProduct.slug +
+                                    ')"  >Add To Cart</a></div>';
+
+
+
+                                }else {
                                   buttonsdiv = "";
                                 }
                               }
@@ -1671,8 +1720,11 @@ EditorUi = function (editor, container, lightbox) {
                           }
                           //---------------------------Code By Abdullah------------------------------------//
                         } else {
-                          if (userloggedinstatus == true) {
+                          console.log("Qsaim22");
+                          if (userloggedinstatus == true && priority == "false") {
+
                             if (productstatus == "alreadyexistproduct") {
+                              console.log("Qsaim23");
                               buttonsdiv =
                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id=' +
                                 postid +
@@ -1690,6 +1742,8 @@ EditorUi = function (editor, container, lightbox) {
                                 finalresultProduct.deposit_enable_type ==
                                 "optional"
                               ) {
+
+                                console.log("Qsaim24");
                                 if (
                                   floorPlanSettings["tableSort"] == "checked" &&
                                   parseInt(logInUser["priorityNum"]) <=
@@ -1702,6 +1756,7 @@ EditorUi = function (editor, container, lightbox) {
                                     (reservedStatus &&
                                       reservedStatus == logInUser["ID"]))
                                 ) {
+                                  console.log("Qsaim25");
                                   if (
                                     (reservedStatus == "" ||
                                       reservedStatus == logInUser["ID"]) &&
@@ -1710,6 +1765,7 @@ EditorUi = function (editor, container, lightbox) {
                                     (LevelOfBooth == logInUser["UserLevel"] ||
                                       LevelOfBooth[0] == "")
                                   ) {
+                                    console.log("Qsaim26");
                                     buttonsdiv =
                                       '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;    display: flex;"><div class="col-sm-4" id=' +
                                       postid +
@@ -1735,6 +1791,7 @@ EditorUi = function (editor, container, lightbox) {
                                     reservedStatus == ""
                                   ) {
                                     console.log("In resereved");
+                                    console.log("Qsaim27");
                                     buttonsdiv +=
                                       "<div class='col-sm-4 R' id=" +
                                       postid +
@@ -1772,6 +1829,7 @@ EditorUi = function (editor, container, lightbox) {
                                         LevelOfBooth
                                       ) != -1)
                                   ) {
+                                    console.log("Qsaim28");
                                     buttonsdiv =
                                       '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
                                       postid +
@@ -1797,6 +1855,7 @@ EditorUi = function (editor, container, lightbox) {
                                     reservedStatus == ""
                                   ) {
                                     console.log("In resereved");
+                                    console.log("Qsaim29");
                                     buttonsdiv +=
                                       "<div class='col-sm-4 R' id=" +
                                       postid +
@@ -1847,6 +1906,8 @@ EditorUi = function (editor, container, lightbox) {
                                         LevelOfBooth
                                       ) != -1)
                                   ) {
+
+                                    console.log("Qsaim29");
                                     buttonsdiv =
                                       '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
                                       postid +
@@ -1867,6 +1928,7 @@ EditorUi = function (editor, container, lightbox) {
                                       reservedStatus == ""
                                     ) {
                                       console.log("In resereved");
+                                      console.log("Qsaim30");
                                       buttonsdiv +=
                                         "<div class='col-sm-4 R' id=" +
                                         postid +
@@ -1907,6 +1969,7 @@ EditorUi = function (editor, container, lightbox) {
                                         LevelOfBooth
                                       ) != -1)
                                   ) {
+                                    console.log("Qsaim30");
                                     buttonsdiv =
                                       '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
                                       postid +
@@ -1951,6 +2014,7 @@ EditorUi = function (editor, container, lightbox) {
                                 "optional"
                               ) {
                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
+                                console.log("Qsaim100");
                                 buttonsdiv =
                                   '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                   postid +
@@ -1966,6 +2030,7 @@ EditorUi = function (editor, container, lightbox) {
                               } else if (
                                 productstatus == "alreadyexistproduct"
                               ) {
+                                console.log("Qsaim101");
                                 buttonsdiv =
                                   '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;text-align: center;"><div class="col-sm-12" id=' +
                                   postid +
@@ -1974,6 +2039,7 @@ EditorUi = function (editor, container, lightbox) {
                                   ')">Remove</a></div></div>';
                               } else {
                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
+                                console.log("Qsaim102");
                                 buttonsdiv =
                                   '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                   postid +
@@ -1984,19 +2050,23 @@ EditorUi = function (editor, container, lightbox) {
                                   ')"  >Add To Cart</a></div></div>';
                               }
                             } else {
+                              console.log("Qsaim103");
                               buttonsdiv = "";
                             }
                           }
                         }
                       } else {
+                        console.log("Qsaim105");
                         buttonsdiv =
                           '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;"><strong style="color:red">No Longer Available </strong></p></div>';
                       }
                     } else {
+                      console.log("Qsaim106");
                       buttonsdiv =
                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;color:red;"><strong>Floorplan is currently being edited, please try again later.</strong></p><div>';
                     }
                   } else {
+                    console.log("Qsaim107");
                     buttonsdiv = "";
                   }
 
