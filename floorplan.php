@@ -123,7 +123,9 @@ function getHighestPackagePriority()
     $productLevels = [];
     global $woocommerce;
     $item = $woocommerce->cart->get_cart();
-    if (count($item) > 0) {
+//    check if the user is in entryflow form URL
+
+    if (count($item) > 0 && strpos($_SERVER['REQUEST_URI'], 'order-pay') != 'entry-wizard') {
         foreach ($item as $key => $value) {
             $dat = $value['product_id'];
             $meta = get_post_meta($dat);
@@ -143,9 +145,16 @@ function getHighestPackagePriority()
                 $priorityNums[$int] = $key;
             }
         }
-        
-        return $priorityNums;
-
+        $prior = [];
+        foreach($priorityNums as $key=> $val){
+            array_push($prior, $key);
+        }
+        return  $priorityNums[min($prior)];
+    }elseif (is_user_logged_in() && !in_array('subscriber', (array)wp_get_current_user()->roles)) {
+        $user = wp_get_current_user();
+        $user_roles = $user->roles;
+        $user_role = array_shift($user_roles);
+        return $user_role;
     } else {
         return 0;
     }
@@ -569,16 +578,7 @@ function getproductdetail($productID)
 
         $priority = getHighestPackagePriority();
         $productdetail['priority'] = 'false';
-        // echo 'zad';
 
-        $prior = [];
-
-        foreach($priority as $key=> $val){
-            
-            array_push($prior, $key);
-        }
-        
-        $priority = $priority[min($prior)];
         $productdetail['TEMP'] = $priority;
 // code By Zaeem
         if (!empty($priority) ) {
