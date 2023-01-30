@@ -1082,8 +1082,11 @@ function getAllusers_data()
 
                     if ($mappedIndex == 'COL') {
 
-                        if (isset($all_meta_for_user[$maapedObject])) {
+                        if (!empty($all_meta_for_user[$maapedObject])) {
                             $getLogoURL = unserialize($all_meta_for_user[$maapedObject][0]);
+                        } else {
+
+                            $getLogoURL['url'] = "";
                         }
 
 
@@ -1515,7 +1518,7 @@ function floorplan_shortcode($atts, $content = null)
         if ($atts['status'] != 'viewer') {
             update_post_meta($id, 'updateboothpurchasestatus', 'lock');
         }
-        $boothsproductsData = '';
+        $boothsproductsData = array();
         //$boothTypes        = get_post_meta( $id, 'booth_types', true );
         $FloorBackground = get_post_meta($id, 'floor_background', true);
         $FloorplanXml[0] = get_post_meta($id, 'floorplan_xml', true);
