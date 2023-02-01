@@ -1518,7 +1518,7 @@ function floorplan_shortcode($atts, $content = null)
         if ($atts['status'] != 'viewer') {
             update_post_meta($id, 'updateboothpurchasestatus', 'lock');
         }
-        $boothsproductsData = [];
+        $boothsproductsData;
         //$boothTypes        = get_post_meta( $id, 'booth_types', true );
         $FloorBackground = get_post_meta($id, 'floor_background', true);
         $FloorplanXml[0] = get_post_meta($id, 'floorplan_xml', true);
@@ -1665,7 +1665,9 @@ function floorplan_shortcode($atts, $content = null)
             }
 
 
-            $boothsproductsData = json_encode($boothsproductsData);
+            if(!empty($boothsproductsData)){
+                $boothsproductsData = json_encode($boothsproductsData);
+            }
 
 
         }
