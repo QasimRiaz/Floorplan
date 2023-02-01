@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 9.3
- * @version : 9.3
+ * Version: 9.4
+ * @version : 9.4
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -1518,7 +1518,7 @@ function floorplan_shortcode($atts, $content = null)
         if ($atts['status'] != 'viewer') {
             update_post_meta($id, 'updateboothpurchasestatus', 'lock');
         }
-        $boothsproductsData = array();
+        $boothsproductsData = [];
         //$boothTypes        = get_post_meta( $id, 'booth_types', true );
         $FloorBackground = get_post_meta($id, 'floor_background', true);
         $FloorplanXml[0] = get_post_meta($id, 'floorplan_xml', true);
@@ -1651,6 +1651,7 @@ function floorplan_shortcode($atts, $content = null)
             $all_products = $woocommerce_object->products->get('', ['filter[limit]' => -1, 'filter[post_status]' => 'any']);
 
             $indexProduct = 0;
+           
             foreach ($all_products->products as $single_product) {
 
 
