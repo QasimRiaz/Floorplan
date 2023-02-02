@@ -1756,9 +1756,9 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
         'FloorPlan'
     );
 
-    $myUpdateChecker->setBranch('master');
+ 
     $myUpdateChecker->setAuthentication($gitAuthKey);
-    $myUpdateChecker->getVcsApi()->enableReleaseAssets();
+ $myUpdateChecker->setBranch('QA');
 
 
 
