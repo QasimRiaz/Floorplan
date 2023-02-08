@@ -574,13 +574,13 @@ function getproductdetail($productID)
             $productdetail['status'] = 'unassigned';
         }
 
-   
+        // code By Zaeem
 
         $priority = getHighestPackagePriority();
         $productdetail['priority'] = 'false';
 
         $productdetail['TEMP'] = $priority;
-// code By Zaeem
+
         if (!empty($priority) ) {
             // if (!is_user_logged_in()) {
                 if (in_array($priority, $get_BoothLevel_amount) || $get_BoothLevel_amount[0] == "") {
@@ -590,6 +590,23 @@ function getproductdetail($productID)
                     $productdetail['productstatus'] = 'removed';
                 }
             // }
+        }
+
+
+
+        if(is_user_logged_in()){
+
+            $user_ID = get_current_user_id();
+            $statusturn = get_user_option('myTurn',$user_ID);
+            $floor_Plan_Settings = 'floorPlanSettings';
+            $get= get_option($floor_Plan_Settings);
+            
+
+            if(empty($statusturn) && $get['tableSort'] == 'checked'){
+
+                $productdetail['priority'] = 'false';
+                $productdetail['productstatus'] = 'removed';
+            }
         }
 
         echo json_encode($productdetail);
