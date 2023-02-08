@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 8.23
- * @version : 8.23
+ * Version: 8.10
+ * @version : 8.10
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -263,7 +263,7 @@ function createnewfloorplan($postData)
 
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
-        $lastInsertId = contentmanagerlogging('Add New Floor Plan', "Admin Action", $postData, $user_ID, $user_info->user_email, "");
+        $lastInsertId = floorplan_contentmanagerlogging('Add New Floor Plan', "Admin Action", $postData, $user_ID, $user_info->user_email, "");
 
         $digits = 6;
         $floorplandefaultname = "Floor Plan - " . rand(pow(10, $digits - 1), pow(10, $digits) - 1);
@@ -401,7 +401,7 @@ function createnewfloorplan($postData)
         update_post_meta($id, 'updateboothpurchasestatus', "");
 
 
-        contentmanagerlogging_file_upload($lastInsertId, $post_request);
+        contentmanagerlogging_file_upload($lastInsertId, serialize($post_request));
 
         echo $id;
 
@@ -424,11 +424,11 @@ function savedlockunlockstatus($post_request)
 
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
-        $lastInsertId = contentmanagerlogging('Save All Price Tags', "Admin Action", $post_request, $user_ID, $user_info->user_email, "");
+        $lastInsertId = floorplan_contentmanagerlogging('Save All Price Tags', "Admin Action", $post_request, $user_ID, $user_info->user_email, "");
 
         update_post_meta($post_request['post_id'], 'updateboothpurchasestatus', $post_request['status']);
 
-        contentmanagerlogging_file_upload($lastInsertId, $post_request);
+        contentmanagerlogging_file_upload($lastInsertId, serialize($post_request));
 
         echo 'update';
 
@@ -592,10 +592,10 @@ function savedallpricetegs($Dataarray)
 
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
-        $lastInsertId = contentmanagerlogging('Save All Price Tags', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
+        $lastInsertId = floorplan_contentmanagerlogging('Save All Price Tags', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
 
         update_post_meta($id, 'pricetegs', $Dataarray['pricetegsArray']);
-        contentmanagerlogging_file_upload($lastInsertId, $Dataarray['pricetegsArray']);
+        contentmanagerlogging_file_upload($lastInsertId, serialize($Dataarray['pricetegsArray']));
         echo 'update';
 
     } catch (Exception $e) {
@@ -614,11 +614,11 @@ function savedallboothtags($Dataarray)
     try {
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
-        $lastInsertId = contentmanagerlogging('Save All Booth Tags', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
+        $lastInsertId = floorplan_contentmanagerlogging('Save All Booth Tags', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
 
         $id = $Dataarray['post_id'];
         update_post_meta($id, 'boothtags', $Dataarray['boothtagsArray']);
-        contentmanagerlogging_file_upload($lastInsertId, $Dataarray['boothtagsArray']);
+        contentmanagerlogging_file_upload($lastInsertId, serialize($Dataarray['boothtagsArray']));
         echo 'update';
     } catch (Exception $e) {
 
@@ -634,10 +634,10 @@ function savedalllegendstypes($Dataarray)
     try {
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
-        $lastInsertId = contentmanagerlogging('Save All Legends Labels', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
+        $lastInsertId = floorplan_contentmanagerlogging('Save All Legends Labels', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
         $id = $Dataarray['post_id'];
         update_post_meta($id, 'legendlabels', $Dataarray['legendstypesArray']);
-        contentmanagerlogging_file_upload($lastInsertId, $Dataarray['pricetegsArray']);
+        contentmanagerlogging_file_upload($lastInsertId, serialize($Dataarray['pricetegsArray']));
         echo 'update';
     } catch (Exception $e) {
 
@@ -788,8 +788,8 @@ function getBoothList($postdata)
         $user_info = get_userdata($user_ID);
 
 
-        $lastInsertId = contentmanagerlogging('Floor Plan Activity Log', "Admin Action", "", $user_ID, $user_info->user_email, $postdata['speciallog']);
-        $lastInsertId = contentmanagerlogging('Floor Plan Settings Saved', "Admin Action", "", $user_ID, $user_info->user_email, $postdata);
+        $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Activity Log', "Admin Action", "", $user_ID, $user_info->user_email, $postdata['speciallog']);
+        $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Settings Saved', "Admin Action", "", $user_ID, $user_info->user_email, $postdata);
 
         // $Flo_test= '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" ';
 
@@ -1579,7 +1579,7 @@ function floorplan_shortcode($atts, $content = null)
             'OverrideCheck' => ($loggedInUser['wp_' . $blog_id . '_Override_Check'][0]),
         );
         $user_info = get_userdata($user_ID);
-        $lastInsertId = contentmanagerlogging('Floor Plan Viewer Loading', "User view", $FloorplanXml[0], $user_ID, $user_info->user_email, "specialLoging");
+        $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Viewer Loading', "User view", $FloorplanXml[0], $user_ID, $user_info->user_email, "specialLoging");
 
 
         $args = array(
@@ -1718,21 +1718,15 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
 //        );
 //        new WP_GitHub_floorplan_Updater($config);
 //    Code by Zaeem
-
-$oldvalues = get_option('ContenteManager_Settings');
+    $oldvalues = get_option('ContenteManager_Settings');
     $gitAuthKey = $oldvalues['ContentManager']['gitAuthKey'];
     $myUpdateChecker = PucFactory::buildUpdateChecker(
         'https://github.com/QasimRiaz/Floorplan',
         __FILE__,
         'FloorPlan'
     );
-
     $myUpdateChecker->setBranch('master');
-
-    if (!empty($gitAuthKey)) {
-        $myUpdateChecker->setAuthentication($gitAuthKey);
-    }
-
+    $myUpdateChecker->setAuthentication($gitAuthKey);
     $myUpdateChecker->getVcsApi()->enableReleaseAssets();
 }
 
