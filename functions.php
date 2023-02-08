@@ -128,6 +128,7 @@ add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
                 
                 
                 boothsproducts ='<?php echo $boothsproductsData; ?>';
+               
                 boothpricetegs ='<?php echo $mxPriceTegsObject; ?>';
                 arrayoflevels ='<?php echo $arrayoflevels; ?>';
                 arrayoftasks ='<?php echo $arrayoftasks; ?>';
