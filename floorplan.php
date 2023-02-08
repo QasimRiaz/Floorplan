@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 9.6
- * @version : 9.6
+ * Version: 9.7
+ * @version : 9.7
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -1780,7 +1780,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
 
     $gitKey = get_option("eg_gitauth_key");
     
-    if (!empty($gitkey)) {
+    if (!empty($gitKey)) {
         $myUpdateChecker = PucFactory::buildUpdateChecker(
             'https://github.com/QasimRiaz/Floorplan',
             __FILE__,
