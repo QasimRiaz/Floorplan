@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 9.2
- * @version : 9.2
+ * Version: 9.4
+ * @version : 9.4
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -574,13 +574,13 @@ function getproductdetail($productID)
             $productdetail['status'] = 'unassigned';
         }
 
-   
+        // code By Zaeem
 
         $priority = getHighestPackagePriority();
         $productdetail['priority'] = 'false';
 
         $productdetail['TEMP'] = $priority;
-// code By Zaeem
+
         if (!empty($priority) ) {
             // if (!is_user_logged_in()) {
                 if (in_array($priority, $get_BoothLevel_amount) || $get_BoothLevel_amount[0] == "") {
@@ -590,6 +590,23 @@ function getproductdetail($productID)
                     $productdetail['productstatus'] = 'removed';
                 }
             // }
+        }
+
+
+
+        if(is_user_logged_in()){
+
+            $user_ID = get_current_user_id();
+            $statusturn = get_user_option('myTurn',$user_ID);
+            $floor_Plan_Settings = 'floorPlanSettings';
+            $get= get_option($floor_Plan_Settings);
+            
+
+            if(empty($statusturn) && $get['tableSort'] == 'checked'){
+
+                $productdetail['priority'] = 'false';
+                $productdetail['productstatus'] = 'removed';
+            }
         }
 
         echo json_encode($productdetail);
@@ -1518,7 +1535,7 @@ function floorplan_shortcode($atts, $content = null)
         if ($atts['status'] != 'viewer') {
             update_post_meta($id, 'updateboothpurchasestatus', 'lock');
         }
-        $boothsproductsData = array();
+        $boothsproductsData;
         //$boothTypes        = get_post_meta( $id, 'booth_types', true );
         $FloorBackground = get_post_meta($id, 'floor_background', true);
         $FloorplanXml[0] = get_post_meta($id, 'floorplan_xml', true);
@@ -1651,6 +1668,7 @@ function floorplan_shortcode($atts, $content = null)
             $all_products = $woocommerce_object->products->get('', ['filter[limit]' => -1, 'filter[post_status]' => 'any']);
 
             $indexProduct = 0;
+           
             foreach ($all_products->products as $single_product) {
 
 
@@ -1664,7 +1682,9 @@ function floorplan_shortcode($atts, $content = null)
             }
 
 
-            $boothsproductsData = json_encode($boothsproductsData);
+            if(!empty($boothsproductsData)){
+                $boothsproductsData = json_encode($boothsproductsData);
+            }
 
 
         }
