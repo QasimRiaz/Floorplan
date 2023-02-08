@@ -1740,19 +1740,17 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
     // new WP_GitHub_floorplan_Updater($config);
 
 
-    $tokennumber ="expo-2023-"."FJr4Fa1i9RBzK7hbPRvDpRNfcrWUBi0EJ6c2";
-    $gitAuthKey = 'ghp_'.str_replace("expo-2023-",'',$tokennumber);
-
-    
-    $myUpdateChecker = PucFactory::buildUpdateChecker(
+      $gitKey = get_option("eg_gitauth_key");
+    if (!empty($gitkey)) {
+        $myUpdateChecker = PucFactory::buildUpdateChecker(
         'https://github.com/QasimRiaz/Floorplan',
         __FILE__,
         'FloorPlan'
     );
-
     $myUpdateChecker->setBranch('master');
-    $myUpdateChecker->setAuthentication($gitAuthKey);
+    $myUpdateChecker->setAuthentication($gitKey);
     $myUpdateChecker->getVcsApi()->enableReleaseAssets();
+    }
 
 
 
