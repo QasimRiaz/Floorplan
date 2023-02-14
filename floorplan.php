@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 9.7
- * @version : 9.7
+ * Version: 9.8
+ * @version : 9.8
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -583,7 +583,7 @@ function getproductdetail($productID)
 
         if (!empty($priority) ) {
             // if (!is_user_logged_in()) {
-                if (in_array($priority, $get_BoothLevel_amount) || $get_BoothLevel_amount[0] == "") {
+                if (in_array($priority, (array)$get_BoothLevel_amount) || $get_BoothLevel_amount[0] == "") {
                     $productdetail['priority'] = 'true';
                 } else {
                     $productdetail['priority'] = 'false';
