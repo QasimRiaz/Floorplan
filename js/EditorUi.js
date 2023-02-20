@@ -2039,6 +2039,9 @@ EditorUi = function (editor, container, lightbox) {
                                   ')">Remove</a></div></div>';
                               } else {
                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
+                                if(userlimit == PurchaseCount){ // This is for booth purchasing limit when booth queue is turned on.
+
+                                }else{
                                 console.log("Qsaim102");
                                 buttonsdiv =
                                   '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
@@ -2049,6 +2052,7 @@ EditorUi = function (editor, container, lightbox) {
                                   finalresultProduct.slug +
                                   ')"  >Add To Cart</a></div></div>';
                               }
+                            }
                             } else {
                               console.log("Qsaim103");
                               buttonsdiv = "";
