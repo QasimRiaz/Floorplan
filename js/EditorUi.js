@@ -2039,7 +2039,7 @@ EditorUi = function (editor, container, lightbox) {
                                   ')">Remove</a></div></div>';
                               } else {
                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
-                                if(userlimit == PurchaseCount){ // This is for booth purchasing limit when booth queue is turned on.
+                                if(userlimit != '' && userlimit == PurchaseCount){
 
                                 }else{
                                 console.log("Qsaim102");
