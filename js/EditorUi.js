@@ -1471,7 +1471,12 @@ EditorUi = function (editor, container, lightbox) {
                       boothtitle +
                       htmlcompanydescription +
                       "</div></div>";
-                    var popupstatustitle = "Unavailable for Purchase";
+                      if(userlimit != PurchaseCount){
+                        popupstatustitle = "Available for Purchase";
+                      }else{
+                        
+                        popupstatustitle = "Unavailable for Purchase";
+                      }
                   }
 
                   //  var openhtml = '<div class="row" style="padding:30px;" ><div class="col-sm-5">'+imagesrc+''+htmlforaddress+''+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-5">'+htmlforproductdetail+'</div></div>';
@@ -2070,8 +2075,24 @@ EditorUi = function (editor, container, lightbox) {
                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;color:red;"><strong>Floorplan is currently being edited, please try again later.</strong></p><div>';
                     }
                   } else {
-                    console.log("Qsaim107");
-                    buttonsdiv = "";
+
+
+                     console.log("Qsaim107");
+                      if(userlimit != PurchaseCount){
+
+                        buttonsdiv =
+                        '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                        postid +
+                        ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                        postid +
+                        ",'log','full'," +
+                        finalresultProduct.slug +
+                        ')"  >Add To Cart</a></div></div>';
+
+                      }else{
+
+                        buttonsdiv = "";
+                      }
                   }
 
                   jQuery("body").css("cursor", "default");
