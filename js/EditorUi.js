@@ -2044,7 +2044,7 @@ EditorUi = function (editor, container, lightbox) {
                                   ')">Remove</a></div></div>';
                               } else {
                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
-                                if(userlimit != '' && userlimit == PurchaseCount){
+                                if(((userlimit <= PurchaseCount) && PurchaseCount != 0) && (userloggedinstatus == "1")){
 
                                 }else{
                                 console.log("Qsaim102");
@@ -2078,7 +2078,11 @@ EditorUi = function (editor, container, lightbox) {
 
 
                      console.log("Qsaim107");
-                      if(userlimit != PurchaseCount){
+                    //  console.log(LevelOfBooth);
+                    //  console.log(logInUser["UserLevel"]);
+                      console.log( parseInt(logInUser["priorityNum"]) +' <= '+ TurnUsers);
+
+                      if((userlimit != PurchaseCount) && (jQuery.inArray(logInUser["UserLevel"], LevelOfBooth) != -1 || jQuery.inArray("", LevelOfBooth) != -1) && (parseInt(logInUser["priorityNum"]) <= TurnUsers)){
 
                         buttonsdiv =
                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
