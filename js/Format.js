@@ -5863,7 +5863,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           reservedStatue +
           ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
         levelAssigment =
-          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Levels Assigment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
           boothlevelnames +
           "</select></div></div>";
         UserAssigment =
@@ -5878,7 +5878,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           reservedStatue +
           ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
         levelAssigment =
-          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Levels Assigment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select  multiple="multiple"  id="boothlevel"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select  multiple="multiple"  id="boothlevel"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
           boothlevelnames +
           "</select></div></div>";
         UserAssigment =
@@ -5909,7 +5909,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         reservedStatue +
         ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
       levelAssigment =
-        '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Levels Assigment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+        '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
         boothlevelnames +
         "</select></div></div>";
       UserAssigment =

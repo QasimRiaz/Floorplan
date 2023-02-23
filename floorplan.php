@@ -4,14 +4,14 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 8.10
- * @version : 8.10
+ * Version: 9.11
+ * @version : 9.11
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
  * License: ExpoGenie
  * Text Domain: ExpoGenie
- * Network: true
+ * Network:           true
  */
 
 if (isset($_GET['floorplanRequest'])) {
@@ -116,13 +116,16 @@ if (isset($_GET['floorplanRequest'])) {
     }
 
 }
-// code by Zaeem
+
+//zaeem
 function getHighestPackagePriority()
 {
     $productLevels = [];
     global $woocommerce;
     $item = $woocommerce->cart->get_cart();
-    if (count($item) > 0) {
+//    check if the user is in entryflow form URL
+
+    if (count($item) > 0 && strpos($_SERVER['REQUEST_URI'], 'order-pay') != 'entry-wizard') {
         foreach ($item as $key => $value) {
             $dat = $value['product_id'];
             $meta = get_post_meta($dat);
@@ -142,11 +145,21 @@ function getHighestPackagePriority()
                 $priorityNums[$int] = $key;
             }
         }
-        return min($priorityNums);
+        $prior = [];
+        foreach($priorityNums as $key=> $val){
+            array_push($prior, $key);
+        }
+        return  $priorityNums[min($prior)];
+    }elseif (is_user_logged_in() && !in_array('subscriber', (array)wp_get_current_user()->roles)) {
+        $user = wp_get_current_user();
+        $user_roles = $user->roles;
+        $user_role = array_shift($user_roles);
+        return $user_role;
     } else {
         return 0;
     }
 }
+
 
 // function remove_item_cart()
 // {
@@ -159,6 +172,7 @@ function getCartTotal()
     echo $cartcount;
 
 }
+
 
 function productremoverequest()
 {
@@ -263,7 +277,7 @@ function createnewfloorplan($postData)
 
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
-        $lastInsertId = floorplan_contentmanagerlogging('Add New Floor Plan', "Admin Action", $postData, $user_ID, $user_info->user_email, "");
+        $lastInsertId = contentmanagerlogging('Add New Floor Plan', "Admin Action", $postData, $user_ID, $user_info->user_email, "");
 
         $digits = 6;
         $floorplandefaultname = "Floor Plan - " . rand(pow(10, $digits - 1), pow(10, $digits) - 1);
@@ -344,11 +358,17 @@ function createnewfloorplan($postData)
             }
 
         }
-
+        
+        
         if (!empty($array_Pr)) {
 
             $value = max($array_Pr);
         }
+
+        $value = max($array_Pr);
+
+
+
         // global $cartCounts;
         // $cartCount= $cartCounts->instance()->cart->cart_contents_count();
         $loggedInUser = get_user_meta($user_ID);
@@ -401,7 +421,7 @@ function createnewfloorplan($postData)
         update_post_meta($id, 'updateboothpurchasestatus', "");
 
 
-        contentmanagerlogging_file_upload($lastInsertId, serialize($post_request));
+        contentmanagerlogging_file_upload($lastInsertId, $post_request);
 
         echo $id;
 
@@ -424,11 +444,11 @@ function savedlockunlockstatus($post_request)
 
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
-        $lastInsertId = floorplan_contentmanagerlogging('Save All Price Tags', "Admin Action", $post_request, $user_ID, $user_info->user_email, "");
+        $lastInsertId = contentmanagerlogging('Save All Price Tags', "Admin Action", $post_request, $user_ID, $user_info->user_email, "");
 
         update_post_meta($post_request['post_id'], 'updateboothpurchasestatus', $post_request['status']);
 
-        contentmanagerlogging_file_upload($lastInsertId, serialize($post_request));
+        contentmanagerlogging_file_upload($lastInsertId, $post_request);
 
         echo 'update';
 
@@ -495,7 +515,6 @@ function getproductdetail($productID)
 
             $productdetail['productstatus'] = 'removed';
         } else {
-
             $productdetail['productstatus'] = 'exist';
         }
 
@@ -554,24 +573,45 @@ function getproductdetail($productID)
 
             $productdetail['status'] = 'unassigned';
         }
-        // echo "<pre>";
-        // print_r($get_product);
-// code by Zaeem
-          $priority = getHighestPackagePriority();
-        if ($priority != 0) {
-            if (!is_user_logged_in()) {
-                if (in_array($priority, $get_BoothLevel_amount) || $get_BoothLevel_amount[0] == "") {
+
+        // code By Zaeem
+
+        $priority = getHighestPackagePriority();
+        $productdetail['priority'] = 'false';
+
+        $productdetail['TEMP'] = $priority;
+
+        if (!empty($priority) ) {
+            // if (!is_user_logged_in()) {
+                if (in_array($priority, (array)$get_BoothLevel_amount) || $get_BoothLevel_amount[0] == "") {
                     $productdetail['priority'] = 'true';
                 } else {
                     $productdetail['priority'] = 'false';
                     $productdetail['productstatus'] = 'removed';
                 }
+            // }
+        }
+
+
+
+        if(is_user_logged_in()){
+
+            $user_ID = get_current_user_id();
+            $statusturn = get_user_option('myTurn',$user_ID);
+            $floor_Plan_Settings = 'floorPlanSettings';
+            $get= get_option($floor_Plan_Settings);
+            
+
+            if(empty($statusturn) && $get['tableSort'] == 'checked'){
+
+                $productdetail['priority'] = 'false';
+                $productdetail['productstatus'] = 'removed';
             }
         }
 
         echo json_encode($productdetail);
-        exit;
 
+        die();
 
     } catch (Exception $e) {
 
@@ -592,10 +632,10 @@ function savedallpricetegs($Dataarray)
 
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
-        $lastInsertId = floorplan_contentmanagerlogging('Save All Price Tags', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
+        $lastInsertId = contentmanagerlogging('Save All Price Tags', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
 
         update_post_meta($id, 'pricetegs', $Dataarray['pricetegsArray']);
-        contentmanagerlogging_file_upload($lastInsertId, serialize($Dataarray['pricetegsArray']));
+        contentmanagerlogging_file_upload($lastInsertId, $Dataarray['pricetegsArray']);
         echo 'update';
 
     } catch (Exception $e) {
@@ -614,11 +654,11 @@ function savedallboothtags($Dataarray)
     try {
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
-        $lastInsertId = floorplan_contentmanagerlogging('Save All Booth Tags', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
+        $lastInsertId = contentmanagerlogging('Save All Booth Tags', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
 
         $id = $Dataarray['post_id'];
         update_post_meta($id, 'boothtags', $Dataarray['boothtagsArray']);
-        contentmanagerlogging_file_upload($lastInsertId, serialize($Dataarray['boothtagsArray']));
+        contentmanagerlogging_file_upload($lastInsertId, $Dataarray['boothtagsArray']);
         echo 'update';
     } catch (Exception $e) {
 
@@ -631,13 +671,15 @@ function savedallboothtags($Dataarray)
 
 function savedalllegendstypes($Dataarray)
 {
+
     try {
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
-        $lastInsertId = floorplan_contentmanagerlogging('Save All Legends Labels', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
+        $lastInsertId = contentmanagerlogging('Save All Legends Labels', "Admin Action", $Dataarray, $user_ID, $user_info->user_email, "");
+
         $id = $Dataarray['post_id'];
         update_post_meta($id, 'legendlabels', $Dataarray['legendstypesArray']);
-        contentmanagerlogging_file_upload($lastInsertId, serialize($Dataarray['pricetegsArray']));
+        contentmanagerlogging_file_upload($lastInsertId, $Dataarray['pricetegsArray']);
         echo 'update';
     } catch (Exception $e) {
 
@@ -788,8 +830,8 @@ function getBoothList($postdata)
         $user_info = get_userdata($user_ID);
 
 
-        $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Activity Log', "Admin Action", "", $user_ID, $user_info->user_email, $postdata['speciallog']);
-        $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Settings Saved', "Admin Action", "", $user_ID, $user_info->user_email, $postdata);
+        $lastInsertId = contentmanagerlogging('Floor Plan Activity Log', "Admin Action", "", $user_ID, $user_info->user_email, $postdata['speciallog']);
+        $lastInsertId = contentmanagerlogging('Floor Plan Settings Saved', "Admin Action", "", $user_ID, $user_info->user_email, $postdata);
 
         // $Flo_test= '<mxGraphModel dx="2487" dy="2370" grid="1" gridSize="10" guides="1" tooltips="1" connect="0" arrows="0" fold="1" page="1" pageScale="1" ';
 
@@ -1430,11 +1472,11 @@ function floorplan_shortcode($atts, $content = null)
                 }
 
             }
-
             if (!empty($array_Pr)) {
 
                 $value = max($array_Pr);
             }
+            $value = max($array_Pr);
             // Getting floorplan settings from wp options
             $floorPlanSettingsString = 'floorPlanSettings';
             $floorPlanSettings = get_option($floorPlanSettingsString);
@@ -1493,7 +1535,7 @@ function floorplan_shortcode($atts, $content = null)
         if ($atts['status'] != 'viewer') {
             update_post_meta($id, 'updateboothpurchasestatus', 'lock');
         }
-        $boothsproductsData = '';
+        $boothsproductsData;
         //$boothTypes        = get_post_meta( $id, 'booth_types', true );
         $FloorBackground = get_post_meta($id, 'floor_background', true);
         $FloorplanXml[0] = get_post_meta($id, 'floorplan_xml', true);
@@ -1579,7 +1621,7 @@ function floorplan_shortcode($atts, $content = null)
             'OverrideCheck' => ($loggedInUser['wp_' . $blog_id . '_Override_Check'][0]),
         );
         $user_info = get_userdata($user_ID);
-        $lastInsertId = floorplan_contentmanagerlogging('Floor Plan Viewer Loading', "User view", $FloorplanXml[0], $user_ID, $user_info->user_email, "specialLoging");
+        $lastInsertId = contentmanagerlogging('Floor Plan Viewer Loading', "User view", $FloorplanXml[0], $user_ID, $user_info->user_email, "specialLoging");
 
 
         $args = array(
@@ -1626,6 +1668,7 @@ function floorplan_shortcode($atts, $content = null)
             $all_products = $woocommerce_object->products->get('', ['filter[limit]' => -1, 'filter[post_status]' => 'any']);
 
             $indexProduct = 0;
+           
             foreach ($all_products->products as $single_product) {
 
 
@@ -1639,7 +1682,9 @@ function floorplan_shortcode($atts, $content = null)
             }
 
 
-            $boothsproductsData = json_encode($boothsproductsData);
+            if(!empty($boothsproductsData)){
+                $boothsproductsData = json_encode($boothsproductsData);
+            }
 
 
         }
@@ -1696,38 +1741,57 @@ function floorplan_contentmanagerlogging($acction_name, $action_type, $pre_actio
 
 
 }
+
 require 'plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
-//include_once('updater.php');
-
 
 if (is_admin()) { // note the use of is_admin() to double check that this is happening in the admin
-//        $config = array(
-//            'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
-//            'proper_folder_name' => 'floorplan', // this is the name of the folder your plugin lives in
-//            'api_url' => 'https://api.github.com/repos/QasimRiaz/Floorplan', // the GitHub API url of your GitHub repo
-//            'raw_url' => 'https://raw.github.com/QasimRiaz/Floorplan/master', // the GitHub raw url of your GitHub repo
-//            'github_url' => 'https://github.com/QasimRiaz/Floorplan', // the GitHub url of your GitHub repo
-//            'zip_url' => 'https://github.com/QasimRiaz/Floorplan/zipball/master', // the zip url of the GitHub repo
-//            'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
-//            'requires' => '3.0', // which version of WordPress does your plugin require?
-//            'tested' => '3.3', // which version of WordPress is your plugin tested up to?
-//            'readme' => 'README.md', // which file to use as the readme for the version number
-//            'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
-//        );
-//        new WP_GitHub_floorplan_Updater($config);
-//    Code by Zaeem
-    $oldvalues = get_option('ContenteManager_Settings');
-    $gitAuthKey = $oldvalues['ContentManager']['gitAuthKey'];
-    $myUpdateChecker = PucFactory::buildUpdateChecker(
-        'https://github.com/QasimRiaz/Floorplan',
-        __FILE__,
-        'FloorPlan'
+    // $config = array(
+    //     'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+    //     'proper_folder_name' => 'floorplan', // this is the name of the folder your plugin lives in
+    //     'api_url' => 'https://api.github.com/repos/QasimRiaz/Floorplan', // the GitHub API url of your GitHub repo
+    //     'raw_url' => 'https://raw.github.com/QasimRiaz/Floorplan/master', // the GitHub raw url of your GitHub repo
+    //     'github_url' => 'https://github.com/QasimRiaz/Floorplan', // the GitHub url of your GitHub repo
+    //     'zip_url' => 'https://github.com/QasimRiaz/Floorplan/zipball/master', // the zip url of the GitHub repo
+    //     'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+    //     'requires' => '3.0', // which version of WordPress does your plugin require?
+    //     'tested' => '3.3', // which version of WordPress is your plugin tested up to?
+    //     'readme' => 'README.md', // which file to use as the readme for the version number
+    //     'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+    // );
+    // new WP_GitHub_floorplan_Updater($config);
+
+
+    // $tokennumber ="expo-2023-"."FJr4Fa1i9RBzK7hbPRvDpRNfcrWUBi0EJ6c2";
+    // $gitAuthKey = 'ghp_'.str_replace("expo-2023-",'',$tokennumber);
+
+    
+    // $myUpdateChecker = PucFactory::buildUpdateChecker(
+    //     'https://github.com/QasimRiaz/Floorplan',
+    //     __FILE__,
+    //     'FloorPlan'
+    // );
+
+    // $myUpdateChecker->setBranch('master');
+    // $myUpdateChecker->setAuthentication($gitAuthKey);
+    // $myUpdateChecker->getVcsApi()->enableReleaseAssets();
+
+
+    $gitKey = get_option("eg_gitauth_key");
+    
+    if (!empty($gitKey)) {
+        $myUpdateChecker = PucFactory::buildUpdateChecker(
+            'https://github.com/QasimRiaz/Floorplan',
+            __FILE__,
+            'FloorPlan'
     );
     $myUpdateChecker->setBranch('master');
-    $myUpdateChecker->setAuthentication($gitAuthKey);
+    $myUpdateChecker->setAuthentication($gitKey);
     $myUpdateChecker->getVcsApi()->enableReleaseAssets();
+    }
+
+
 }
 
 
