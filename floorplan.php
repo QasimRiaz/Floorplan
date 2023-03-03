@@ -168,8 +168,30 @@ function getHighestPackagePriority()
 // }
 function getCartTotal()
 {
-    $cartcount = WC()->cart->get_cart_contents_count();
-    echo $cartcount;
+
+    $items = [];
+
+    foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+
+	$terms = get_the_terms($cart_item['product_id'], 'product_cat');
+
+    if($terms[0]->name == 'Uncategorized'){
+
+        $cartcount = WC()->cart->get_cart_contents_count();
+        array_push($items,$cartcount);
+    }
+ 
+}
+
+        if(!empty($items)){
+
+            $cartcount = count($items);
+        }else{
+
+            $cartcount = 0;
+        }
+
+        echo $cartcount;
 
 }
 
