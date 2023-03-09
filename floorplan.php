@@ -177,7 +177,7 @@ function getCartTotal()
 
     if($terms[0]->name == 'Uncategorized'){
 
-    $cartcount = WC()->cart->get_cart_contents_count();
+        $cartcount = WC()->cart->get_cart_contents_count();
         array_push($items,$cartcount);
     }
 
@@ -191,7 +191,7 @@ function getCartTotal()
             $cartcount = 0;
         }
 
-    echo $cartcount;
+        echo $cartcount;
 
 }
 
