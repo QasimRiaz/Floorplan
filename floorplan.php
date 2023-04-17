@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 9.13
- * @version : 9.13
+ * Version: 10.0
+ * @version : 10.0
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -146,11 +146,11 @@ function getHighestPackagePriority()
             }
         }
         $prior = [];
-        foreach($priorityNums as $key=> $val){
+        foreach ($priorityNums as $key => $val) {
             array_push($prior, $key);
         }
-        return  $priorityNums[min($prior)];
-    }elseif (is_user_logged_in() && !in_array('subscriber', (array)wp_get_current_user()->roles)) {
+        return $priorityNums[min($prior)];
+    } elseif (is_user_logged_in() && !in_array('subscriber', (array)wp_get_current_user()->roles)) {
         $user = wp_get_current_user();
         $user_roles = $user->roles;
         $user_role = array_shift($user_roles);
@@ -173,25 +173,25 @@ function getCartTotal()
 
     foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
 
-	$terms = get_the_terms($cart_item['product_id'], 'product_cat');
+        $terms = get_the_terms($cart_item['product_id'], 'product_cat');
 
-    if($terms[0]->name == 'Uncategorized'){
+        if ($terms[0]->name == 'Uncategorized') {
 
-        $cartcount = WC()->cart->get_cart_contents_count();
-        array_push($items,$cartcount);
-    }
-
-}
-
-        if(!empty($items)){
-
-            $cartcount = count($items);
-        }else{
-
-            $cartcount = 0;
+            $cartcount = WC()->cart->get_cart_contents_count();
+            array_push($items, $cartcount);
         }
 
-        echo $cartcount;
+    }
+
+    if (!empty($items)) {
+
+        $cartcount = count($items);
+    } else {
+
+        $cartcount = 0;
+    }
+
+    echo $cartcount;
 
 }
 
@@ -380,15 +380,14 @@ function createnewfloorplan($postData)
             }
 
         }
-        
-        
+
+
         if (!empty($array_Pr)) {
 
             $value = max($array_Pr);
         }
 
         $value = max($array_Pr);
-
 
 
         // global $cartCounts;
@@ -603,28 +602,27 @@ function getproductdetail($productID)
 
         $productdetail['TEMP'] = $priority;
 
-        if (!empty($priority) ) {
+        if (!empty($priority)) {
             // if (!is_user_logged_in()) {
-                if (in_array($priority, (array)$get_BoothLevel_amount) || $get_BoothLevel_amount[0] == "") {
-                    $productdetail['priority'] = 'true';
-                } else {
-                    $productdetail['priority'] = 'false';
-                    $productdetail['productstatus'] = 'removed';
-                }
+            if (in_array($priority, (array)$get_BoothLevel_amount) || $get_BoothLevel_amount[0] == "") {
+                $productdetail['priority'] = 'true';
+            } else {
+                $productdetail['priority'] = 'false';
+                $productdetail['productstatus'] = 'removed';
+            }
             // }
         }
 
 
-
-        if(is_user_logged_in()){
+        if (is_user_logged_in()) {
 
             $user_ID = get_current_user_id();
-            $statusturn = get_user_option('myTurn',$user_ID);
+            $statusturn = get_user_option('myTurn', $user_ID);
             $floor_Plan_Settings = 'floorPlanSettings';
-            $get= get_option($floor_Plan_Settings);
-            
+            $get = get_option($floor_Plan_Settings);
 
-            if(empty($statusturn) && $get['tableSort'] == 'checked'){
+
+            if (empty($statusturn) && $get['tableSort'] == 'checked') {
 
                 $productdetail['priority'] = 'false';
                 $productdetail['productstatus'] = 'removed';
@@ -1643,7 +1641,15 @@ function floorplan_shortcode($atts, $content = null)
             'OverrideCheck' => ($loggedInUser['wp_' . $blog_id . '_Override_Check'][0]),
         );
         $user_info = get_userdata($user_ID);
-        $lastInsertId = contentmanagerlogging('Floor Plan Viewer Loading', "User view", $FloorplanXml[0], $user_ID, $user_info->user_email, "specialLoging");
+        $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        if (strpos($actual_link, '/floor-plan-editor/') != false) {
+
+            $lastInsertId = contentmanagerlogging('Floor Plan Editor Opening', "Admin view", $FloorplanXml[0], $user_ID, $user_info->user_email, "specialLoging");
+
+        } else {
+
+            $lastInsertId = contentmanagerlogging('Floor Plan Viewer Loading', "User view", $FloorplanXml[0], $user_ID, $user_info->user_email, "specialLoging");
+        }
 
 
         $args = array(
@@ -1690,7 +1696,7 @@ function floorplan_shortcode($atts, $content = null)
             $all_products = $woocommerce_object->products->get('', ['filter[limit]' => -1, 'filter[post_status]' => 'any']);
 
             $indexProduct = 0;
-           
+
             foreach ($all_products->products as $single_product) {
 
 
@@ -1704,7 +1710,7 @@ function floorplan_shortcode($atts, $content = null)
             }
 
 
-            if(!empty($boothsproductsData)){
+            if (!empty($boothsproductsData)) {
                 $boothsproductsData = json_encode($boothsproductsData);
             }
 
@@ -1765,6 +1771,7 @@ function floorplan_contentmanagerlogging($acction_name, $action_type, $pre_actio
 }
 
 require 'plugin-update-checker/plugin-update-checker.php';
+
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 
@@ -1788,7 +1795,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
     // $tokennumber ="expo-2023-"."FJr4Fa1i9RBzK7hbPRvDpRNfcrWUBi0EJ6c2";
     // $gitAuthKey = 'ghp_'.str_replace("expo-2023-",'',$tokennumber);
 
-    
+
     // $myUpdateChecker = PucFactory::buildUpdateChecker(
     //     'https://github.com/QasimRiaz/Floorplan',
     //     __FILE__,
@@ -1801,16 +1808,16 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
 
 
     $gitKey = get_option("eg_gitauth_key");
-    
+
     if (!empty($gitKey)) {
         $myUpdateChecker = PucFactory::buildUpdateChecker(
             'https://github.com/QasimRiaz/Floorplan',
             __FILE__,
             'FloorPlan'
-    );
-    $myUpdateChecker->setBranch('master');
-    $myUpdateChecker->setAuthentication($gitKey);
-    $myUpdateChecker->getVcsApi()->enableReleaseAssets();
+        );
+        $myUpdateChecker->setBranch('master');
+        $myUpdateChecker->setAuthentication($gitKey);
+        $myUpdateChecker->getVcsApi()->enableReleaseAssets();
     }
 
 
