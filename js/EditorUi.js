@@ -1475,7 +1475,13 @@ EditorUi = function (editor, container, lightbox) {
                                             popupstatustitle = "Available for Purchase";
                                         } else {
 
-                                            popupstatustitle = "Unavailable for Purchase";
+                                            if (boothOwner.includes(logInUser["ID"].toString())) {
+
+                                                var popupstatustitle = "Available for Purchase";
+                                            }else{
+
+                                                popupstatustitle = "Unavailable for Purchase";
+                                            }
                                         }
                                     }
 
@@ -2092,6 +2098,17 @@ EditorUi = function (editor, container, lightbox) {
                                                 finalresultProduct.slug +
                                                 ')"  >Add To Cart</a></div></div>';
 
+                                        }else if (boothOwner.includes(logInUser["ID"].toString())) {
+
+                                            buttonsdiv =
+                                              '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                              postid +
+                                              ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                              postid +
+                                              ",'log','full'," +
+                                              finalresultProduct.slug +
+                                              ')"  >Add To Cart</a></div></div>';
+                      
                                         } else {
 
                                             buttonsdiv = "";
