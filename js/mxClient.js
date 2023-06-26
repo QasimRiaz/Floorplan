@@ -39614,8 +39614,8 @@ mxGraphModel.prototype.cloneCellImpl = function (
 
   var OldId = cell.id;
   var cloneID = clone.id;
-  console.log(OldId);
-  console.log(cloneID);
+  // console.log(OldId);
+  // console.log(cloneID);
 
   var startfloorplanedtitng = {};
 
@@ -63124,7 +63124,7 @@ mxGraph.prototype.selectChildCell = function () {
  * isChild - Boolean indicating if the first child cell should be selected.
  */
 mxGraph.prototype.selectCell = function (isNext, isParent, isChild) {
-  console.log("TestHere");
+  // console.log("TestHere");
   var sel = this.selectionModel;
   var cell = sel.cells.length > 0 ? sel.cells[0] : null;
 
@@ -63274,7 +63274,7 @@ mxGraph.prototype.selectCellForEvent = function (cell, evt) {
   } else if (!isSelected || this.getSelectionCount() != 1) {
     this.setSelectionCell(cell);
   }
-  console.log("select2");
+  // console.log("select2");
   jQuery(".select2").select2();
 };
 

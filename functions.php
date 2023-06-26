@@ -20,6 +20,24 @@ return false;
 
 add_action('wp_ajax_remove_item_from_cart', 'remove_item_from_cart');
 add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
+
+
+
+$getAllusers_data2 = json_decode(stripslashes($getAllusers_data), true);
+$getAllusers_data3 = [];
+
+foreach ($getAllusers_data2 as $item) {
+
+  unset($item['nickname']);
+    array_push($getAllusers_data3, $item);
+
+}
+
+
+$getAllusers_data3 = addslashes(json_encode($getAllusers_data3));
+
+// echo '<pre>';
+// print_r($getAllusers_data2);
 ?>
 
 
@@ -30,16 +48,16 @@ add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
             var loggedInUser = '<?php echo   json_encode($loggedInUsers)  ; ?>';
             var TurnUsers = '<?php echo   ($value) ; ?>';
             var pro = '<?php echo   json_encode($get_product)  ; ?>';
-            console.log(pro);
+            // console.log(pro);
             var cartCount='<?php
                     $cartcount = WC()->cart->get_cart_contents_count();
                     if ($cartcount > 0) { echo $cartcount; }
                 ?>';
-            console.log("---------start------------");
-            console.log(loggedInUser);
-            console.log("-----------middle----------");
-            console.log(cartCount);
-            console.log("--------end-------------");
+            // console.log("---------start------------");
+            // console.log(loggedInUser);
+            // console.log("-----------middle----------");
+            // console.log(cartCount);
+            // console.log("--------end-------------");
             var flowstatus = "";
             var hex=new Array('0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f');
             var popupstatus = 'off';
@@ -60,7 +78,7 @@ add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
                 mxCurrentPackageBooths = '<?php echo $_SESSION['listofselectedbooths']; ?>';
                 mxUserentryflow = '<?php echo $userentryflow; ?>';
                 flowstatus = location.href;
-                console.log(flowstatus)
+                // console.log(flowstatus)
                 if(mxCurrentPackageBooths!=""){
                     
                     mxCurrentPackageBooths = JSON.parse(mxCurrentPackageBooths);
@@ -69,7 +87,7 @@ add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
 		mxCurrentSiteLogo = '<?php echo $current_site_logo; ?>';
 		mxCurrentSiteTitle = '<?php echo $current_site_name; ?>';
 		mxCurrentSiteUrl = '<?php echo $current_site_url; ?>';
-                mxgetAllusersData = '<?php echo $getAllusers_data; ?>';
+                mxgetAllusersData = '<?php echo $getAllusers_data3; ?>';
                 mxgetallfloorplanlist = '<?php echo $listoffloorplan; ?>';
                 mxpackageboothflowstatus = '<?php echo $packageboothflow; ?>';
                 
@@ -109,9 +127,9 @@ add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
                     
                 });
                 
-                console.log('Package Booths List');
-                console.log(mxCurrentPackageBooths);
-		console.log(mxpackageboothflowstatus);		  
+        //         console.log('Package Booths List');
+        //         console.log(mxCurrentPackageBooths);
+		// console.log(mxpackageboothflowstatus);		  
 				  
 				  
                 //danyal case senstive
@@ -235,7 +253,7 @@ add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
                 
                 
                 if(arrayoftasks !=""){
-                    console.log(arrayoftasks);
+                    // console.log(arrayoftasks);
                     arrayoftasks = JSON.parse(arrayoftasks);
                     
                     jQuery.each(arrayoftasks, function(index1, value1) {
@@ -252,7 +270,7 @@ add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
                 if(boothpricetegs !=""){
                 
                 var priceTegsObjectsArray = JSON.parse(boothpricetegs);
-                console.log(boothpricetegs)
+                // console.log(boothpricetegs)
                
                 jQuery.each(priceTegsObjectsArray, function(index1, value1) {
 			json1 = {};
@@ -344,13 +362,13 @@ add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Init.js?v=2.22"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>jscolor/jscolor.js?v=2.22"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>sanitizer/sanitizer.min.js?v=2.22"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=3.01"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=3.02"></script>
 
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=9.39"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=9.41"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.64"></script>
 
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.80"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=3.46"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.81"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=3.47"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.75"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.90"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.77"></script>
@@ -461,10 +479,10 @@ jQuery(window).load(function() {
                           var Ecurrenttime = jQuery.now() - 120000;
                           var lastEl = expogenielogging[expogenielogging.length-1];
                           var lastdattime = new Date(lastEl.datetime).getTime()
-                          console.log(lastdattime +" >="+ Scurrenttime);
+                        //   console.log(lastdattime +" >="+ Scurrenttime);
                           if(lastdattime  >= Ecurrenttime && lastdattime  <= Scurrenttime){
                               
-                               console.log('Save----floorplan');
+                            //    console.log('Save----floorplan');
                           }else{
                               
                 

@@ -9,7 +9,7 @@ var checkinitalstatus;
 EditorUi = function (editor, container, lightbox) {
     var floorPlanSettings = JSON.parse(floorPlanSetting);
     //console.log(floorPlanSettings["Open_users"]);
-    console.log(floorPlanSettings["tableSort"]);
+    // console.log(floorPlanSettings["tableSort"]);
     // var cartTotalCount=cartCount;
     // var cartTotalCounts=JSON.parse(cartCount);
     var logInUser = JSON.parse(loggedInUser);
@@ -18,8 +18,8 @@ EditorUi = function (editor, container, lightbox) {
     // console.log(cartTotalCounts);
     // console.log(logInUser["priorityNum"][0]);
     var activeNumber = TurnUsers;
-    console.log(logInUser);
-    console.log(activeNumber);
+    // console.log(logInUser);
+    // console.log(activeNumber);
     //  console.log(floorPlanSettings.Open_users);
 
     //  jQuery.each(floorPlanSettings,function (index,value) {
@@ -28,7 +28,7 @@ EditorUi = function (editor, container, lightbox) {
     //    console.log(value);
     //  })OverrideBoothLimit
     //console.log(floorPlanSettings.get('Open_users'));
-    console.log(floorPlanSettings);
+    // console.log(floorPlanSettings);
     mxEventSource.call(this);
     this.destroyFunctions = [];
 
@@ -255,7 +255,7 @@ EditorUi = function (editor, container, lightbox) {
     // Overrides cell editor to update toolbar
     var cellEditorStartEditing = graph.cellEditor.startEditing;
     graph.cellEditor.startEditing = function () {
-        console.log("Testtooltip");
+        // console.log("Testtooltip");
         cellEditorStartEditing.apply(this, arguments);
         updateToolbar();
 
@@ -919,7 +919,7 @@ EditorUi = function (editor, container, lightbox) {
             //var highlight = new mxCellTracker(graph, '#00FF00');
             this.editor.graph.addListener(mxEvent.CLICK, function (sender, evt) {
                 var cell = evt.getProperty("cell");
-                console.log(cell);
+                // console.log(cell);
                 if (
                     logInUser["OverrideCheck"] == "checked" &&
                     logInUser["OverrideBoothLimit"]
@@ -928,8 +928,8 @@ EditorUi = function (editor, container, lightbox) {
                 } else {
                     userlimit = floorPlanSettings["usersNum"];
                 }
-                console.log(logInUser["UserLevel"]);
-                console.log(userlimit);
+                // console.log(logInUser["UserLevel"]);
+                // console.log(userlimit);
                 var array = {};
                 var flag = true;
                 for (
@@ -937,7 +937,7 @@ EditorUi = function (editor, container, lightbox) {
                     index < logInUser["ReservedBooth"].length;
                     index++
                 ) {
-                    console.log(logInUser["ReservedBooth"][index]);
+                    // console.log(logInUser["ReservedBooth"][index]);
                     if (logInUser["ReservedBooth"][0].length > 1 && flag == true) {
                         for (let y = 0; y < logInUser["ReservedBooth"][index].length; y++) {
                             console.log(logInUser["ReservedBooth"][index][y]);
@@ -948,7 +948,7 @@ EditorUi = function (editor, container, lightbox) {
                         array[index] = logInUser["ReservedBooth"][index];
                     }
                 }
-                console.log(array);
+                // console.log(array);
 
                 if (typeof cell != "undefined") {
                     var assignedboothname = "";
@@ -957,7 +957,7 @@ EditorUi = function (editor, container, lightbox) {
                     var valuessrting = cell.style;
                     var companydescription = "";
                     var htmlcompanydescription = "";
-                    console.log("cell-------Detail");
+                    // console.log("cell-------Detail");
                     var userid = cell.getAttribute("boothOwner", "");
                     var boothdetail = cell.getAttribute("boothDetail", "");
                     var companydescription = cell.getAttribute("companydescripiton", "");
@@ -975,7 +975,7 @@ EditorUi = function (editor, container, lightbox) {
                             }
                         });
                         tagsnameslist = tagsnameslist.replace(/,\s*$/, "");
-                        console.log(tagsnameslist);
+                        // console.log(tagsnameslist);
                     }
 
                     var reportData = jQuery.parseJSON(mxgetAllusersData);
@@ -1000,10 +1000,10 @@ EditorUi = function (editor, container, lightbox) {
                     var contactemailHTML = "";
 
                     if (userid != "" && userid != "none" && reportData) {
-                        console.log(reportData);
+                        // console.log(reportData);
                         jQuery.each(reportData, function (key, index) {
                             if (index.exhibitorsid == userid) {
-                                console.log("User=" + JSON.stringify(index));
+                                // console.log("User=" + JSON.stringify(index));
                                 companynameas = index.companyname;
                                 companylogourlnew = index.COL;
                                 profilelogourl = index.companylogourl;
@@ -1017,15 +1017,15 @@ EditorUi = function (editor, container, lightbox) {
                                 // contactname = index.contactName;
                                 // contactphonenumber = index.contactNumber;
                                 // contactemail = index.contactemail;
-                                contactemail = index.nickname;
+                                // contactemail = index.nickname;
                                 contactname = index.CON;
                                 contactphonenumber = index.COP;
                                 contactemail = index.COE;
                                 // contactemail = index.nickname;
 
-                                console.log(contactname);
-                                console.log(contactphonenumber);
-                                console.log(contactemail);
+                                // console.log(contactname);
+                                // console.log(contactphonenumber);
+                                // console.log(contactemail);
 
                                 if (companywebsite == null || companywebsite == "") {
                                     websiteURLhtml = ""; //<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';
@@ -1138,7 +1138,7 @@ EditorUi = function (editor, container, lightbox) {
                         var contactinformation =
                             contactnameHTML + contactphonenumberHTML + contactemailHTML;
 
-                        console.log(floorPlanSettings["Hide_exhibitor_Details"]);
+                        // console.log(floorPlanSettings["Hide_exhibitor_Details"]);
 
                         if (
                             contactname == undefined &&
@@ -1187,7 +1187,7 @@ EditorUi = function (editor, container, lightbox) {
                             });
 
                             jQuery(".closeIcon").each(function () {
-                                console.log("google");
+                                // console.log("google");
                                 jQuery(this)
                                     .children()
                                     .removeClass("glyphicon glyphicon-remove");
@@ -1206,7 +1206,7 @@ EditorUi = function (editor, container, lightbox) {
                             var data = new FormData();
                             data.append("pro_id", boothproductid);
                             data.append("floorplanID", mxPostID);
-                            console.log(boothproductid);
+                            // console.log(boothproductid);
 
                             jQuery.ajax({
                                 url:
@@ -1218,7 +1218,7 @@ EditorUi = function (editor, container, lightbox) {
                                 processData: false,
                                 type: "POST",
                                 success: function (data) {
-                                    console.log(data);
+                                    // console.log(data);
                                     var finalresultProduct = jQuery.parseJSON(data);
                                     var floorplanstatus = finalresultProduct.floorplanstatus;
                                     var productstatus = finalresultProduct.status;
@@ -1234,10 +1234,10 @@ EditorUi = function (editor, container, lightbox) {
                                     var cartLimit = finalresultProduct.CartTotal;
                                     var reservedCheck = finalresultProduct.reservedStatus;
                                     var reservedStatus = finalresultProduct.Reserved;
-                                    console.log(finalresultProduct.deposit_enable_type);
-                                    console.log(logInUser["UserLevel"]);
-                                    console.log(NumberOfReservedBooths);
-                                    console.log(PurchaseCount);
+                                    // console.log(finalresultProduct.deposit_enable_type);
+                                    // console.log(logInUser["UserLevel"]);
+                                    // console.log(NumberOfReservedBooths);
+                                    // console.log(PurchaseCount);
                                     if (NumberOfReservedBooths != false) {
                                         totalCount =
                                             NumberOfReservedBooths.length + cartLimit + PurchaseCount;
@@ -1251,7 +1251,7 @@ EditorUi = function (editor, container, lightbox) {
                                     if (reservedCheck == "0") {
                                         if (array != "") {
                                             if (jQuery.inArray(boothproductid, array) !== -1) {
-                                                console.log("Availabel");
+                                                // console.log("Availabel");
                                                 checkforPurchase = "true";
                                             }
                                         }
@@ -1387,7 +1387,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 ')">Pay in Full</a></div></div></p>';
                                                         }
                                                         if (reservedCheck == "0" && reservedStatus == "") {
-                                                            console.log("In resereved");
+                                                            // console.log("In resereved");
                                                             buttonsdiv +=
                                                                 "<div class='col-sm-4 R' id=" +
                                                                 postid +
@@ -1489,29 +1489,29 @@ EditorUi = function (editor, container, lightbox) {
 
                                     //if(userloggedinstatus == true){
                                     if (finalresultProduct.productstatus == "exist") {
-                                        console.log("Qsaim00001");
+                                        // console.log("Qsaim00001");
                                         if (floorplanstatus == "unlock") {
-                                            console.log("Qsaim0001");
+                                            // console.log("Qsaim0001");
                                             if (finalresultProduct.stockstatus == "instock") {
-                                                console.log("Qsaim001");
+                                                // console.log("Qsaim001");
                                                 if (
                                                     mxUserentryflow == "checked" &&
                                                     mxCurrentPackageBooths.length !== 0
                                                 ) {
 
-                                                    console.log("Qsaim1");
+                                                    // console.log("Qsaim1");
                                                     if (
                                                         jQuery.inArray(boothID, mxCurrentPackageBooths) !==
                                                         -1
                                                     ) {
-                                                        console.log("Qsaim2");
+                                                        // console.log("Qsaim2");
                                                         if (userloggedinstatus == true) {
-                                                            console.log("Qsaim3");
+                                                            // console.log("Qsaim3");
                                                             if (
                                                                 productstatus == "alreadyexistproduct" &&
                                                                 reservedStatus == ""
                                                             ) {
-                                                                console.log("Qsaim4");
+                                                                // console.log("Qsaim4");
                                                                 buttonsdiv =
                                                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                     postid +
@@ -1522,14 +1522,14 @@ EditorUi = function (editor, container, lightbox) {
                                                                 //buttonsdiv = '<p  id="' + boothproductid + '"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' + postid + ',\'log\' ,\'deposit\',' + finalresultProduct.slug + ')">Pay Deposit</a><a class="dropdown-item" onclick="addToCart(' + postid + ',\'log\' ,\'full\',' + finalresultProduct.slug + ')">Pay in Full</a></div></div><p style="font-size: 11px;margin-top: 10px;color: #005e00;">This Booth is included in current selected package.</p></p>'
 
                                                                 //} else {
-                                                                console.log("Qsaim5");
+                                                                // console.log("Qsaim5");
 
                                                                 if (
                                                                     flowstatus.indexOf("mood=wizard") != -1 &&
                                                                     reservedStatus == ""
                                                                 ) {
 
-                                                                    console.log("Qsaim6");
+                                                                    // console.log("Qsaim6");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -1539,27 +1539,27 @@ EditorUi = function (editor, container, lightbox) {
                                                                         finalresultProduct.slug +
                                                                         ')"  >Add To Cart</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This booth is included in your package. The price of this booth will be updated to $0 during checkout.</b></p></div></div>';
                                                                 } else {
-                                                                    console.log("Qsaim7");
+                                                                    // console.log("Qsaim7");
                                                                     buttonsdiv = "";
                                                                 }
                                                                 //}
                                                             }
                                                         } else {
-                                                            console.log("Qsaim8");
+                                                            // console.log("Qsaim8");
                                                             if (flowstatus.indexOf("mood=wizard") != -1) {
-                                                                console.log("Qsaim9");
+                                                                // console.log("Qsaim9");
                                                                 if (
                                                                     productstatus == "alreadyexistproduct" &&
                                                                     reservedStatus == ""
                                                                 ) {
 
-                                                                    console.log("Qsaim10");
+                                                                    // console.log("Qsaim10");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                         postid +
                                                                         ' style="text-align: center;"><a class="btn btn-success btn-small" >Added</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This booth is included in your package. The price of this booth will be updated to $0 during checkout.</b></p></div></div>';
                                                                 } else if (reservedStatus == "") {
-                                                                    console.log("Qsaim11");
+                                                                    // console.log("Qsaim11");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -1570,18 +1570,18 @@ EditorUi = function (editor, container, lightbox) {
                                                                         ')"  >Add To Cart</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This booth is included in your package. The price of this booth will be updated to $0 during checkout.</b></p></div></div>';
                                                                 }
                                                             } else {
-                                                                console.log("Qsaim12");
+                                                                // console.log("Qsaim12");
                                                                 buttonsdiv = "";
                                                             }
                                                         }
                                                     } else {
-                                                        console.log("Qsaim13");
+                                                        // console.log("Qsaim13");
                                                         if (
                                                             finalresultProduct.deposit_enable_type ==
                                                             "optional" &&
                                                             reservedStatus == ""
                                                         ) {
-                                                            console.log("Qsaim14");
+                                                            // console.log("Qsaim14");
                                                             //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
                                                             buttonsdiv =
                                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
@@ -1597,7 +1597,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 ')">Pay in Full</a></div></div></div></div>';
                                                         } else {
 
-                                                            console.log("Qsaim15");
+                                                            // console.log("Qsaim15");
                                                             //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
                                                             //---------------------------Add To cart of First Time---------------------------//
                                                             //---------------------------Code By Abdullah EXHIBITOR ENTRY FLOW------------------------------------//
@@ -1614,7 +1614,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                         reservedStatus == logInUser["ID"]))
                                                             ) {
 
-                                                                console.log("Qsaim16");
+                                                                // console.log("Qsaim16");
                                                                 if (
                                                                     (reservedStatus == "" ||
                                                                         reservedStatus == logInUser["ID"]) &&
@@ -1624,7 +1624,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                         LevelOfBooth[0] == "")
                                                                 ) {
 
-                                                                    console.log("Qsaim17");
+                                                                    // console.log("Qsaim17");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -1639,8 +1639,8 @@ EditorUi = function (editor, container, lightbox) {
                                                                         reservedStatus == ""
                                                                     ) {
 
-                                                                        console.log("Qsaim17");
-                                                                        console.log("In resereved");
+                                                                        // console.log("Qsaim17");
+                                                                        // console.log("In resereved");
                                                                         buttonsdiv +=
                                                                             "<div class='col-sm-12' id=" +
                                                                             postid +
@@ -1651,14 +1651,14 @@ EditorUi = function (editor, container, lightbox) {
                                                                             ')"  >Reserve The Booth</a></div>';
                                                                     }
                                                                 } else {
-                                                                    console.log("Qsaim18");
+                                                                    // console.log("Qsaim18");
                                                                     buttonsdiv = "";
                                                                 }
                                                             } else if (
                                                                 floorPlanSettings["tableSort"] != "checked"
                                                             ) {
 
-                                                                console.log("Qsaim19");
+                                                                // console.log("Qsaim19");
                                                                 if (
                                                                     (userlimit == undefined ||
                                                                         userlimit == "" ||
@@ -1683,7 +1683,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                         ) == 0)
                                                                 ) {
 
-                                                                    console.log("Qsaim20");
+                                                                    // console.log("Qsaim20");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display:flex;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -1698,8 +1698,8 @@ EditorUi = function (editor, container, lightbox) {
                                                                         reservedStatus == "" &&
                                                                         userloggedinstatus == true
                                                                     ) {
-                                                                        console.log("Qsaim21");
-                                                                        console.log("In resereved");
+                                                                        // console.log("Qsaim21");
+                                                                        // console.log("In resereved");
                                                                         buttonsdiv +=
                                                                             "<div class='col-sm-4' id=" +
                                                                             postid +
@@ -1730,11 +1730,11 @@ EditorUi = function (editor, container, lightbox) {
                                                     }
                                                     //---------------------------Code By Abdullah------------------------------------//
                                                 } else {
-                                                    console.log("Qsaim22");
+                                                    // console.log("Qsaim22");
                                                     if (userloggedinstatus == true && priority == "false") {
 
                                                         if (productstatus == "alreadyexistproduct") {
-                                                            console.log("Qsaim23");
+                                                            // console.log("Qsaim23");
                                                             buttonsdiv =
                                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id=' +
                                                                 postid +
@@ -1753,7 +1753,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 "optional"
                                                             ) {
 
-                                                                console.log("Qsaim24");
+                                                                // console.log("Qsaim24");
                                                                 if (
                                                                     floorPlanSettings["tableSort"] == "checked" &&
                                                                     parseInt(logInUser["priorityNum"]) <=
@@ -1766,7 +1766,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                         (reservedStatus &&
                                                                             reservedStatus == logInUser["ID"]))
                                                                 ) {
-                                                                    console.log("Qsaim25");
+                                                                    // console.log("Qsaim25");
                                                                     if (
                                                                         (reservedStatus == "" ||
                                                                             reservedStatus == logInUser["ID"]) &&
@@ -1775,7 +1775,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                         (LevelOfBooth == logInUser["UserLevel"] ||
                                                                             LevelOfBooth[0] == "")
                                                                     ) {
-                                                                        console.log("Qsaim26");
+                                                                        // console.log("Qsaim26");
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;    display: flex;"><div class="col-sm-4" id=' +
                                                                             postid +
@@ -1800,8 +1800,8 @@ EditorUi = function (editor, container, lightbox) {
                                                                         reservedCheck == "0" &&
                                                                         reservedStatus == ""
                                                                     ) {
-                                                                        console.log("In resereved");
-                                                                        console.log("Qsaim27");
+                                                                        // console.log("In resereved");
+                                                                        // console.log("Qsaim27");
                                                                         buttonsdiv +=
                                                                             "<div class='col-sm-4 R' id=" +
                                                                             postid +
@@ -1839,7 +1839,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                                 LevelOfBooth
                                                                             ) != -1)
                                                                     ) {
-                                                                        console.log("Qsaim28");
+                                                                        // console.log("Qsaim28");
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
                                                                             postid +
@@ -1864,8 +1864,8 @@ EditorUi = function (editor, container, lightbox) {
                                                                         reservedCheck == "0" &&
                                                                         reservedStatus == ""
                                                                     ) {
-                                                                        console.log("In resereved");
-                                                                        console.log("Qsaim29");
+                                                                        // console.log("In resereved");
+                                                                        // console.log("Qsaim29");
                                                                         buttonsdiv +=
                                                                             "<div class='col-sm-4 R' id=" +
                                                                             postid +
@@ -1917,7 +1917,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                             ) != -1)
                                                                     ) {
 
-                                                                        console.log("Qsaim29");
+                                                                        // console.log("Qsaim29");
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
                                                                             postid +
@@ -1937,8 +1937,8 @@ EditorUi = function (editor, container, lightbox) {
                                                                             reservedCheck == "0" &&
                                                                             reservedStatus == ""
                                                                         ) {
-                                                                            console.log("In resereved");
-                                                                            console.log("Qsaim30");
+                                                                            // console.log("In resereved");
+                                                                            // console.log("Qsaim30");
                                                                             buttonsdiv +=
                                                                                 "<div class='col-sm-4 R' id=" +
                                                                                 postid +
@@ -1979,7 +1979,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                                 LevelOfBooth
                                                                             ) != -1)
                                                                     ) {
-                                                                        console.log("Qsaim30");
+                                                                        // console.log("Qsaim30");
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
                                                                             postid +
@@ -1999,7 +1999,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                             reservedCheck == "0" &&
                                                                             reservedStatus == ""
                                                                         ) {
-                                                                            console.log("In resereved");
+                                                                            // console.log("In resereved");
                                                                             buttonsdiv +=
                                                                                 "<div class='col-sm-4 R' id=" +
                                                                                 postid +
@@ -2024,7 +2024,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 "optional"
                                                             ) {
                                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
-                                                                console.log("Qsaim100");
+                                                                // console.log("Qsaim100");
                                                                 buttonsdiv =
                                                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                     postid +
@@ -2040,7 +2040,7 @@ EditorUi = function (editor, container, lightbox) {
                                                             } else if (
                                                                 productstatus == "alreadyexistproduct"
                                                             ) {
-                                                                console.log("Qsaim101");
+                                                                // console.log("Qsaim101");
                                                                 buttonsdiv =
                                                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;text-align: center;"><div class="col-sm-12" id=' +
                                                                     postid +
@@ -2052,7 +2052,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 if (((userlimit <= PurchaseCount) && PurchaseCount != 0) && (userloggedinstatus == "1")) {
 
                                                                 } else {
-                                                                    console.log("Qsaim102");
+                                                                    // console.log("Qsaim102");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -2064,28 +2064,28 @@ EditorUi = function (editor, container, lightbox) {
                                                                 }
                                                             }
                                                         } else {
-                                                            console.log("Qsaim103");
+                                                            // console.log("Qsaim103");
                                                             buttonsdiv = "";
                                                         }
                                                     }
                                                 }
                                             } else {
-                                                console.log("Qsaim105");
+                                                // console.log("Qsaim105");
                                                 buttonsdiv =
                                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;"><strong style="color:red">No Longer Available </strong></p></div>';
                                             }
                                         } else {
-                                            console.log("Qsaim106");
+                                            // console.log("Qsaim106");
                                             buttonsdiv =
                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;color:red;"><strong>Floorplan is currently being edited, please try again later.</strong></p><div>';
                                         }
                                     } else {
 
 
-                                        console.log("Qsaim107");
+                                        // console.log("Qsaim107");
                                         //  console.log(LevelOfBooth);
                                         //  console.log(logInUser["UserLevel"]);
-                                        console.log(parseInt(logInUser["priorityNum"]) + ' <= ' + TurnUsers);
+                                        // console.log(parseInt(logInUser["priorityNum"]) + ' <= ' + TurnUsers);
 
                                         if ((userlimit != PurchaseCount) && (jQuery.inArray(logInUser["UserLevel"], LevelOfBooth) != -1 || jQuery.inArray("", LevelOfBooth) != -1) && (parseInt(logInUser["priorityNum"]) <= TurnUsers)) {
 
@@ -2208,7 +2208,7 @@ EditorUi = function (editor, container, lightbox) {
                                 "</div>";
 
                             jQuery("body").css("cursor", "default");
-                            console.log(2);
+                            // console.log(2);
                             if (popupstatus == "off") {
                                 popupstatus = "on";
                                 jQuery.confirm({
@@ -2228,7 +2228,7 @@ EditorUi = function (editor, container, lightbox) {
                                 });
 
                                 jQuery(".closeIcon").each(function () {
-                                    console.log("google");
+                                    // console.log("google");
                                     jQuery(this)
                                         .children()
                                         .removeClass("glyphicon glyphicon-remove");
@@ -2287,7 +2287,7 @@ EditorUi = function (editor, container, lightbox) {
 
 function toggletabs(tabID) {
     var getID = jQuery(tabID).attr("id");
-    console.log(getID);
+    // console.log(getID);
     if (getID == "mainprofile") {
         jQuery("#mainprofile").removeClass("unactive");
         jQuery("#contactus").addClass("unactive");
@@ -2302,7 +2302,7 @@ function toggletabs(tabID) {
 }
 
 function removeFromCart(p_id, request, price) {
-    console.log("Remove From Cart");
+    // console.log("Remove From Cart");
     jQuery("body").css("cursor", "progress");
     var data = new FormData();
     // data.append("wc_deposit_option", "no");
@@ -2321,7 +2321,7 @@ function removeFromCart(p_id, request, price) {
             var checkouturl = baseCurrentSiteURl + "/checkout/";
             var addONs = baseCurrentSiteURl + "/product-category/add-ons/";
             var numberslug = 2;
-            console.log(data);
+            // console.log(data);
             jQuery("#" + p_id).empty();
             jQuery("#" + p_id + "_checkout").attr("disabled", false);
 
@@ -2337,7 +2337,7 @@ function removeFromCart(p_id, request, price) {
             var productcount = parseInt(
                 window.parent.jQuery("#entryflowcartcounter").text()
             );
-            console.log(productcount + "------------------");
+            // console.log(productcount + "------------------");
             window.parent.jQuery("#entryflowcartcounter").empty();
             window.parent.jQuery("#entryflowcartcounter").text(productcount);
             jQuery("body").css("cursor", "default");
@@ -2347,7 +2347,7 @@ function removeFromCart(p_id, request, price) {
 
 function addToCart(p_id, request, price, slug) {
     var data1 = new FormData();
-    console.log(userlimit);
+    // console.log(userlimit);
     jQuery.ajax({
         url:
             baseCurrentSiteURl +
@@ -2359,7 +2359,7 @@ function addToCart(p_id, request, price, slug) {
         type: "POST",
 
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             data = data.trim();
             if (
                 parseInt(userlimit) > parseInt(data) ||
@@ -2367,7 +2367,7 @@ function addToCart(p_id, request, price, slug) {
                 userlimit == undefined
             ) {
                 jQuery("#cart_div").remove();
-                console.log("Remove From Cart");
+                // console.log("Remove From Cart");
                 jQuery("body").css("cursor", "progress");
                 var data = new FormData();
                 if (price == "full") {
@@ -2378,7 +2378,7 @@ function addToCart(p_id, request, price, slug) {
                 window.top.scrollTo({top: 0, behavior: "smooth"});
                 data.append("quantity", 1);
                 data.append("add-to-cart", p_id);
-                console.log(data);
+                // console.log(data);
                 jQuery.ajax({
                     url: baseCurrentSiteURl + "/?add-to-cart=199&quantity=1",
                     data: data,
@@ -2403,7 +2403,7 @@ function addToCart(p_id, request, price, slug) {
                             var productcount = parseInt(
                                 window.parent.jQuery("#entryflowcartcounter").text()
                             );
-                            console.log(productcount + "------------------");
+                            // console.log(productcount + "------------------");
                             productcount = productcount + 1;
                             window.parent.jQuery("#entryflowcartcounter").empty();
                             window.parent.jQuery("#entryflowcartcounter").text(productcount);
@@ -2427,9 +2427,9 @@ function addToCart(p_id, request, price, slug) {
 }
 
 function ReservedTheBooth(p_id, request, price, slug) {
-    console.log("Remove From Cart");
-    console.log(p_id);
-    console.log(price);
+    // console.log("Remove From Cart");
+    // console.log(p_id);
+    // console.log(price);
     jQuery("body").css("cursor", "progress");
     var data = new FormData();
     if (price == "full") {
@@ -2440,7 +2440,7 @@ function ReservedTheBooth(p_id, request, price, slug) {
 
     data.append("quantity", 1);
     data.append("p_id", p_id);
-    console.log(data);
+    // console.log(data);
     jQuery.ajax({
         url:
             baseCurrentSiteURl +
@@ -2455,7 +2455,7 @@ function ReservedTheBooth(p_id, request, price, slug) {
             jQuery(".R").empty();
             jQuery("#" + p_id + "_checkout").attr("disabled", false);
             if (request == "log") {
-                console.log("Reserved");
+                // console.log("Reserved");
             } else {
                 top.window.location.href = baseCurrentSiteURl + "/exhibitor-entry/";
             }
@@ -4668,7 +4668,7 @@ EditorUi.prototype.createUi = function () {
     if (this.sidebar != null) {
         this.container.appendChild(this.hsplit);
         var widthscreensize = jQuery(window).width();
-        console.log(widthscreensize);
+        // console.log(widthscreensize);
         if (md.phone() != null) {
             if (checkinitalstatus != true) {
                 this.hsplitPosition = 0;
@@ -5019,7 +5019,7 @@ EditorUi.prototype.extractGraphModelFromEvent = function (evt) {
     if (evt != null) {
         var provider =
             evt.dataTransfer != null ? evt.dataTransfer : evt.clipboardData;
-        console.log(evt);
+        // console.log(evt);
         if (provider != null) {
             if (document.documentMode == 10 || document.documentMode == 11) {
                 data = provider.getData("Text");
@@ -5253,8 +5253,8 @@ EditorUi.prototype.showBackgroundImageDialog = function (apply) {
             });
 
     var newValue = this.newBackgroundImage.replace(/\s+/g, ""); //mxUtils.prompt(mxResources.get('backgroundImage'), '');
-    console.log("New Upload Image");
-    console.log(newValue);
+    // console.log("New Upload Image");
+    // console.log(newValue);
     if (newValue != null && newValue.length > 0) {
         mxFloorBackground = newValue;
         jQuery("#currentImage").attr("href", mxFloorBackground);
@@ -5293,7 +5293,7 @@ EditorUi.prototype.SetbackgroundImageOnload = function (apply) {
                         )
                     );
             });
-    console.log("onload");
+    // console.log("onload");
     var newValue = mxFloorBackground;
 
     if (newValue != null && newValue.length > 0) {
