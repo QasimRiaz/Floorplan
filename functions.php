@@ -23,18 +23,18 @@ add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
 
 
 
-//$getAllusers_data2 = json_decode(stripslashes($getAllusers_data), true);
-//$getAllusers_data3 = [];
+$getAllusers_data2 = json_decode(stripslashes($getAllusers_data), true);
+$getAllusers_data3 = [];
 
-// foreach ($getAllusers_data2 as $item) {
+foreach ($getAllusers_data2 as $key => $item) {
 
-//   unset($item['nickname']);
-//     array_push($getAllusers_data3, $item);
+    unset($item['nickname']);
+    $getAllusers_data3[$key] = $item;
 
-// }
+}
 
 
-// $getAllusers_data3 = addslashes(json_encode($getAllusers_data3));
+$getAllusers_data3 = addslashes(json_encode($getAllusers_data3));
 
 // echo '<pre>';
 // print_r($getAllusers_data2);
@@ -87,7 +87,7 @@ add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
 		mxCurrentSiteLogo = '<?php echo $current_site_logo; ?>';
 		mxCurrentSiteTitle = '<?php echo $current_site_name; ?>';
 		mxCurrentSiteUrl = '<?php echo $current_site_url; ?>';
-                mxgetAllusersData = '<?php echo $getAllusers_data; ?>';
+                mxgetAllusersData = '<?php echo $getAllusers_data3; ?>';
                 mxgetallfloorplanlist = '<?php echo $listoffloorplan; ?>';
                 mxpackageboothflowstatus = '<?php echo $packageboothflow; ?>';
                 
