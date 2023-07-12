@@ -2049,8 +2049,8 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ')">Remove</a></div></div>';
                                                             } else {
                                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
-                                                                if (((userlimit <= PurchaseCount) && PurchaseCount != 0) && (userloggedinstatus == "1")) {
-
+                                                                if (((userlimit <= PurchaseCount && userlimit != '') && PurchaseCount != 0) && (userloggedinstatus == "1")) {
+                                          
                                                                 } else {
                                                                     // console.log("Qsaim102");
                                                                     buttonsdiv =
