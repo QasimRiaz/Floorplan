@@ -5704,6 +5704,9 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var depositeamount = "";
     var overRideCheck = "";
     var despositeenablestatus = "no";
+    var discountType= "";
+    var priceBasedLevels = "";
+
     console.log(allBoothsProductData);
     jQuery.each(allBoothsProductData, function (boothIndex, boothObject) {
       if (boothObject.cellID == firstBoothiD) {
@@ -5720,9 +5723,16 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         depositetype = boothObject.depositstype;
         despositeenablestatus = boothObject.despositeenablestatus;
         depositeamount = boothObject.depositsamount;
+
+    
+        priceBasedLevels = boothObject.levelbaseddiscountdata;
+
+
+
       }
     });
-
+   
+  
     jQuery.each(cell, function (cellindex, cellvalue) {
       var CurentBoothID = cellvalue.id;
       var mylabel = cellvalue.getAttribute("mylabel", "");
@@ -5752,7 +5762,85 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var boothlevelname = "";
     var boothlevelnames = "";
     var alltaskesHtml = "";
+    var levelBasedDiscountHtml = '';
+    var levelHtml = '';
+    var typeHtml = '';
+    var levelsz = '';
+    var currencySymbol = '';
     var flag = true;
+
+    if(priceBasedLevels != '' || priceBasedLevels != null){
+      
+      jQuery.each(priceBasedLevels, function (key, value) {
+        
+        levelBasedDiscountHtml += '<div id="'+value.discountid+'" class="html-content row">';
+        levelBasedDiscountHtml +='<div class = "col-md-3">';
+
+        levelBasedDiscountHtml += '<h6><strong>Levels</strong></h6>';
+        levelBasedDiscountHtml += '<select class="form-control js-example-basic-multiple" id="levels-'+value.discountid+'" multiple="multiple" data-allow-clear="true" >';
+        jQuery.each(arrayoflevelsObjects, function (rolekey, rolevalue) {
+          if (rolevalue.key != 'administrator' && rolevalue.key != 'contentmanager') {
+
+            if (jQuery.inArray(rolevalue.key, value.levels) !== -1) {
+
+              levelBasedDiscountHtml += '<option selected="true" value="'+rolevalue.key+'">' +rolevalue.name+"</option>";
+            }else{
+
+              levelBasedDiscountHtml +='<option value="'+rolevalue.key+'" >' +rolevalue.name +"</option>";
+            }
+        }
+        });
+        levelBasedDiscountHtml += '</select>';
+        levelBasedDiscountHtml += '</div>';
+        
+
+
+        levelBasedDiscountHtml += '<div class = "col-md-3">';
+
+        levelBasedDiscountHtml += '<h6><strong>Discount Type</strong></h6>';
+        levelBasedDiscountHtml += '<select  id="discount_type-'+value.discountid+'"opid="'+value.discountid+'" class="form-control" onchange="symbol(this)" >';
+
+          if(value.discounttype == 'percent'){
+            levelBasedDiscountHtml += '<option value="fixed">Fixed</option>';
+            levelBasedDiscountHtml +='<option value="percent" selected="true">Percent</option>';
+            currencySymbol = '%';
+
+            }else if(value.discounttype == 'fixed'){
+
+            levelBasedDiscountHtml += '<option value="fixed" selected="true" >Fixed</option>';
+            levelBasedDiscountHtml += '<option value="percent">Percent</option>';
+            currencySymbol = '$';
+            }else{
+
+            levelBasedDiscountHtml += '<option value="fixed">Fixed</option>';
+            levelBasedDiscountHtml += '<option value="percent">Percent</option>';
+            }
+        levelBasedDiscountHtml += '</select>';
+        levelBasedDiscountHtml += '</div>';
+
+        levelBasedDiscountHtml +='<div class = "col-md-3">';
+        levelBasedDiscountHtml +='<h6><strong>Discount</strong></h6>';
+        levelBasedDiscountHtml +='<div class="input-group">';
+        levelBasedDiscountHtml +='<div id="input-group-'+value.discountid+'" class="input-group-addon">'+currencySymbol+'</div>';
+        levelBasedDiscountHtml +='<input type="number" min="1" class="form-control"id="amount-price-'+value.discountid+'" name="amount-price" value="'+value.discountamount+'"placeholder="Price" >';
+        levelBasedDiscountHtml +='</div>';
+        levelBasedDiscountHtml +='</div>';
+
+
+        levelBasedDiscountHtml +='<div class = "col-md-1" style="padding-left: 53px;">';
+        levelBasedDiscountHtml +='<h6><strong>Remove</strong></h6>';
+        levelBasedDiscountHtml +='<span><i style="color:crimson;" onclick="removeDiscount(this)"; id="'+value.discountid+'" class="fa fa-trash fa-2x delfee" aria-hidden="true"></i></span>';
+        levelBasedDiscountHtml +='</div>';
+
+        levelBasedDiscountHtml +='</div><hr id = "hr-'+value.discountid+'">';
+
+        levelBasedDiscountHtml += '</div>'; //ending div
+    
+      });
+    }
+
+    var levels = "";
+    levels += '<option value="all" >All</option>';
     boothlevelname += '<option value="" >None</option>';
 
     jQuery.each(arrayoflevelsObjects, function (rolekey, rolevalue) {
@@ -5774,10 +5862,13 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           "</option>";
       }
     });
+
+
     if (flag == true) {
       boothlevelnames += '<option value="" selected>All</option>';
     } else {
       boothlevelnames += '<option value="" >All</option>';
+      
     }
 
     jQuery.each(arrayoflevelsObjects, function (rolekey, rolevalue) {
@@ -5850,6 +5941,16 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     });
     var selectedoptions =
       '<option value="percent" >Percentage</option><option value="fixed">Fixed Amount</option>';
+
+      var discountTypeHtml = '';
+
+      if(discountType == 'fixed'){
+        discountTypeHtml +='<select style="" id="discount_type" name="discount_type" class="form-control"><option value="fixed" selected="selected">Fixed</option><option value="percent">Percentage</option></select>'
+      }else{
+
+        discountTypeHtml +='<select style="" id="discount_type" name="discount_type" class="form-control"><option value="fixed" >Fixed</option><option selected="selected" value="percent">Percentage</option></select>'
+
+      }
     if (
       despositeenablestatus == "forced" ||
       despositeenablestatus == "optional" ||
@@ -5863,7 +5964,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           reservedStatue +
           ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
         levelAssigment =
-          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Levels Assigment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
           boothlevelnames +
           "</select></div></div>";
         UserAssigment =
@@ -5878,7 +5979,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           reservedStatue +
           ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
         levelAssigment =
-          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Levels Assigment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select  multiple="multiple"  id="boothlevel"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select  multiple="multiple"  id="boothlevel"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
           boothlevelnames +
           "</select></div></div>";
         UserAssigment =
@@ -5909,7 +6010,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         reservedStatue +
         ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
       levelAssigment =
-        '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Levels Assigment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+        '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
         boothlevelnames +
         "</select></div></div>";
       UserAssigment =
@@ -5931,6 +6032,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       UserAssigment +
       depositedetail;
     var overrideString = "Override User's Existing Level";
+    var inputValidity = 'validity.valid||(value="")';
 
     html +=
       '<p id="messageerror"></p><script>jQuery("#depositsstatus").change(function(){if(jQuery("#depositsstatus option:selected").val() !="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">' +
@@ -5943,7 +6045,23 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       htmlfordeposite +
       '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea id="boothdescripition" class="form-control" rows="8">' +
       unescape(boothdescripition) +
-      '</textarea></div></div><div class="row" style="margin-bottom: 1%; margin-left: 133px; color: gray"><h5 class="eg-sub-title"><strong>IF this booth is purchased, THEN</strong></h5></div><div style="margin-left: 6px;" ><div style="margin-left: 169px;margin-bottom: 11px;font-weight: bold;padding: 2px"><input type="checkbox" style="margin-right:4px;" ' +
+      '</textarea></div></div>'+
+      '<hr>'+
+
+      '<div id="level-based-discount">'+
+
+      '<div><h3>Level Based Discount S</h3>'+
+        levelBasedDiscountHtml+
+      '</div>'+
+      '<div id="add-new-discount">'+
+      '<a class="addnewdiscount btn btn-md myCustomeButton" style="margin-left: 89%;" onclick="addNewDiscount();" egid="addnewdiscount">Add</a>'+
+      '</div>'+
+ 
+
+      '</div>'+
+
+      '<hr>'+
+      '<div class="row" style="margin-bottom: 1%; margin-left: 133px; color: gray"><h5 class="eg-sub-title"><strong>IF this booth is purchased, THEN</strong></h5></div><div style="margin-left: 6px;" ><div style="margin-left: 169px;margin-bottom: 11px;font-weight: bold;padding: 2px"><input type="checkbox" style="margin-right:4px;" ' +
       overRideCheck +
       ' id="overRideCheckBox" onclick="cliker()" value="0"><span style="font-size:bold">' +
       overrideString +
@@ -6000,6 +6118,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     }
 
     mxEvent.addListener(updateproductlist, "click", function () {
+      var allDataArray = [];
       var cell = graph.getSelectionCells();
       var boothprice = jQuery("#boothprice").val();
       var boothlevel = jQuery("#boothlevelvalue option:selected").val();
@@ -6011,6 +6130,25 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       var overRideCheck = jQuery("#overRideCheckBox:checked").val();
       var boothtasks = jQuery("#boothtasksvalues ").val();
       var boothdescripition = escape(jQuery("#boothdescripition").val());
+
+
+      jQuery( ".html-content" ).each(function(index) {
+        var dataArray={};
+
+        var discountID = jQuery( this ).attr('id');
+       
+   
+        dataArray['discountid'] = discountID;
+        dataArray['levels'] = jQuery('#levels-'+discountID).val();
+        dataArray['discounttype'] = jQuery('#discount_type-'+discountID).val();
+        dataArray['discountamount'] = jQuery('#amount-price-'+discountID).val();
+
+        allDataArray[index] = dataArray;
+    });
+    
+    console.log('1---------'+allDataArray);
+   
+
       console.log("!");
       console.log(reservedStatus);
       console.log(boothdescripition);
@@ -6070,6 +6208,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
             boothstatus = "updated";
           }
 
+          console.log('shakeel');
+          console.log(allDataArray);
           console.log(boothdescripition);
           boothdescripition = boothdescripition.replace(/(["'])+/g, "");
           console.log(boothdescripition);
@@ -6088,6 +6228,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           boothproductdata.depositsamount = depositsamount;
           boothproductdata.depositestatus = depositestatus;
           boothproductdata.despositeenablestatus = despositeenablestatus;
+
+          boothproductdata.levelbaseddiscountdata = allDataArray;
 
           boothproductdata.cellID = CurentBoothID;
           console.log(boothproductdata);
@@ -6120,6 +6262,12 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
                   allBoothsProductData[boothIndex].despositeenablestatus =
                     despositeenablestatus;
 
+
+                  allBoothsProductData[boothIndex].levelbaseddiscountdata = allDataArray;
+
+
+                    allBoothsProductData[boothIndex].userBoothsLevel =
+                    userBoothsLevel;
                   startfloorplanedtitng.postboothdetail = JSON.stringify(
                     allBoothsProductData[boothIndex]
                   );
@@ -6244,8 +6392,10 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var companynames = "";
     var alltaskesHtml = "";
     var classstatusshow = "";
+    var discountAmount = "";
     boothlevelname += '<option value="unassigned" >Unassigned</option>';
     boothlevelnames += '<option value="unassigned" >Unassigned</option>';
+
     jQuery.each(arrayoflevelsObjects, function (rolekey, rolevalue) {
       console.log(rolevalue);
       boothlevelname +=
@@ -6264,6 +6414,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         rolevalue.name +
         "</option>";
     });
+
+   
     boothlevelnames += '<option value=""selected >All</option>';
     boothlevelname += '<option value=""selected >None</option>';
     jQuery.each(arrayoftasksObjects, function (taskskey, taskname) {
@@ -6292,6 +6444,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     updateproductlist.innerHTML = "Update";
 
     mxEvent.addListener(updateproductlist, "click", function () {
+      var allDataArray = [];
       var cell = graph.getSelectionCells();
       var boothprice = jQuery("#boothprice").val();
       var boothlevel = jQuery("#boothlevelvalue option:selected").val();
@@ -6302,10 +6455,28 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       var userBoothsLevel = jQuery("#boothlevel").select2("val");
       var overRideCheck = jQuery("#overRideCheckBox:checked").val();
       var boothdescripition = jQuery("#boothdescripition").val();
+
+            jQuery( ".html-content" ).each(function(index) {
+        var dataArray={};
+
+        var discountID = jQuery( this ).attr('id');
+       
+   
+        dataArray['discountid'] = discountID;
+        dataArray['levels'] = jQuery('#levels-'+discountID).val();
+        dataArray['discounttype'] = jQuery('#discount_type-'+discountID).val();
+        dataArray['discountamount'] = jQuery('#amount-price-'+discountID).val();
+
+        allDataArray[index] = dataArray;
+    });
+    console.log('2---------'+allDataArray);
       var selectedBoothtitles = "";
       var depositstype = "";
       var depositsamount = "";
       var depositestatus = "unchecked";
+
+
+
       var despositeenablestatus = jQuery(
         "#depositsstatus option:selected"
       ).val();
@@ -6374,6 +6545,10 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           boothproductdata.overRideCheck = overRideCheck;
           boothproductdata.boothdescripition = boothdescripition;
           boothproductdata.boothstatus = boothstatus;
+
+          boothproductdata.levelbaseddiscountdata = allDataArray;
+
+
           if (
             laststatusID == "" ||
             laststatusID == "none" ||
@@ -6428,6 +6603,9 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
                     depositsamount;
                   allBoothsProductData[boothIndex].depositestatus =
                     depositestatus;
+
+                  allBoothsProductData[boothIndex].levelbaseddiscountdata = allDataArray;
+
                   startfloorplanedtitng.postboothdetail = JSON.stringify(
                     allBoothsProductData[boothIndex]
                   );
@@ -6525,6 +6703,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     }
     //var overRideCheckBox = document.createElement("select");
     var overrideString = "Override User's Existing Level";
+    var inputValidity = 'validity.valid||(value="")';
     html +=
       '<script>jQuery("#depositsstatus").change(function(){if(jQuery("#depositsstatus option:selected").val()!="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">' +
       selectedBoothtitles +
@@ -6534,7 +6713,20 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       boothlevelnames +
       '</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="UserAssigment" style="text-align:right;"><label>User Assignment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="UserBooth"  multiple="multiple" placeholder="Select User For  Booth" class="form-control js-example-basic-multiple">' +
       companynames +
-      '</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" ><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="" min="1" type="number" ><p class="depositeerror"></p></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea rows="8" class="form-control" id="boothdescripition" ></textarea></div></div><div class="row" style="margin-bottom: 1%; margin-left: 133px; color: gray"><h5 class="eg-sub-title"><strong>IF this booth is purchased, THEN</strong></h5></div><div class="row" style="margin-bottom: 3%;"><div style="margin-left: 6px;" ><div style="margin-left: 169px;margin-bottom: 11px;font-weight: bold;padding: 2px"><input type="checkbox" style="margin-right:4px;" id="overRideCheckBox" onclick="cliker()" value="0"><span style="font-size:bold">' +
+      '</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" ><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="" min="1" type="number" ><p class="depositeerror"></p></div></div>'
+      +'<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea rows="8" class="form-control" id="boothdescripition" ></textarea></div></div>'+
+      '<hr>'+
+
+      '<div><h3>Level Based Discount</h3></div>'+
+
+      '<div id="level-based-discount">'+
+      '</div>'+
+      '<div id="add-new-discount">'+
+      '<a class="addnewdiscount btn btn-md myCustomeButton" style="margin-left: 89%;" onclick="addNewDiscount();" egid="addnewdiscount">Add</a>'+
+      '</div>'+
+
+      '<hr>'+
+      '<div class="row" style="margin-bottom: 1%; margin-left: 133px; color: gray"><h5 class="eg-sub-title"><strong>IF this booth is purchased, THEN</strong></h5></div><div class="row" style="margin-bottom: 3%;"><div style="margin-left: 6px;" ><div style="margin-left: 169px;margin-bottom: 11px;font-weight: bold;padding: 2px"><input type="checkbox" style="margin-right:4px;" id="overRideCheckBox" onclick="cliker()" value="0"><span style="font-size:bold">' +
       overrideString +
       '</span></div></div> <div class="col-sm-2" id="userLevelDiscriptionLabel" style="text-align:right;"><label>Assign User Level<i class="far fa-question-circle" title="Select the Level the user will be automatically assigned to upon purchasing this booth. "></i></label></div><div class="col-sm-3"><select id="boothlevelvalue" class="form-control">' +
       boothlevelname +
@@ -12239,6 +12431,108 @@ StyleFormatPanel.prototype.createDragPreview = function (width, height) {
 
   return elt;
 };
+
+// if(jQuery('#level-based-discount').text().trim() == ""){
+
+//   jQuery('#level-based-discount').append('<p class="emptytext"><strong>No level based discounts are created , Click Add to start.</strong></p>');
+// }
+
+function addNewDiscount(){
+
+  // jQuery(".emptytext").remove();
+  var html = '';
+  var num = Math.random().toFixed(2)*100;
+  num = Math.trunc(num);
+  var discountRowId = 'discount-'+num;
+
+  var levels = '';
+  var allLevels = arrayoflevelsObjects;
+
+  jQuery.each(allLevels, function (key, rolevalue) {
+
+      if (rolevalue.key != 'administrator' && rolevalue.key != 'contentmanager') {
+
+          levels += '<option value="'+rolevalue.key +'" >' +rolevalue.name +'</option>';
+      }
+  });
+  var levelHtml = '';
+  levelHtml += '<h6><strong>Levels</strong></h6>';
+  levelHtml += '<select class="form-control js-example-basic-multiple" id="levels-'+discountRowId+'" multiple="multiple" data-allow-clear="true" >';
+  levelHtml += levels;
+  levelHtml += '</select>';
+
+  html = '<div id="'+discountRowId+'" class="html-content row">' +
+
+  '<div class = "col-md-3">'+
+      levelHtml+
+  '</div>'+
+
+  '<div class = "col-md-3">'+
+  '<h6><strong>Discount Type</strong></h6>'+
+  '<select  id="discount_type-'+discountRowId+'"opid="'+discountRowId+'" class="form-control" onchange="symbol(this)" >'+
+      '<option value="fixed">Fixed</option>'+
+      '<option value="percent">Percent</option>'+
+  '</select>'+
+  '</div>'+
+
+  '<div class = "col-md-3">'+
+  '<h6><strong>Discount</strong></h6>'+
+  '<div class="input-group">'+
+  '<div id="input-group-'+discountRowId+'" class="input-group-addon">'+symbol()+'</div>'+
+  '<input type="number" min="1" class="form-control"id="amount-price-'+discountRowId+'" name="amount-price" value=""placeholder="Price" >'+
+  '</div>'+
+  '</div>'+
+
+  '<div class = "col-md-1" style="padding-left: 53px;">'+
+  '<h6><strong>Remove</strong></h6>'+
+  '<span><i style="color:crimson;" onclick="removeDiscount(this)"; id="'+discountRowId+'" class="fa fa-trash fa-2x delfee" aria-hidden="true"></i></span>'+
+  '</div>'+
+
+  '</div><hr id = "hr-'+discountRowId+'">';
+
+  jQuery('#level-based-discount').append(html);
+  jQuery('.js-example-basic-multiple').select2();
+  
+}
+
+function removeDiscount(e){
+
+
+  var id = jQuery(e).attr('id');
+  // var postid = jQuery(e).attr('postid');
+  
+  // delFeeArray.push(postid);
+  jQuery('#'+ id).remove();
+  jQuery('#hr-'+ id).remove();
+  // console.log(delFeeArray);
+  // return delFeeArray;
+
+}
+
+function symbol(e){
+
+  var id = jQuery(e).attr('id');
+  var opid = jQuery(e).attr('opid');
+  var value = jQuery('#'+id).val();
+  
+  console.log('input-group-'+opid);
+  jQuery('#input-group-'+opid).html('');
+  if(value == 'fixed'){
+
+      jQuery('#input-group-'+opid).html('$');
+   
+  }else if(value == 'percent'){ 
+
+      jQuery('#input-group-'+opid).html('%');
+      
+    
+  }else{
+
+      return '$';
+  }
+
+}
+
 
 document.addEventListener("wheel", function (event) {
   if (document.activeElement.type === "number") {

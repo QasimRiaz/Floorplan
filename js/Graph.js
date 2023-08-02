@@ -834,7 +834,7 @@ Graph = function (container, model, renderHint, stylesheet, themes) {
 
     // On connect the target is selected and we clone the cell of the preview edge for insert
     this.connectionHandler.selectCells = function (edge, target) {
-      console.log("TestHere");
+      //console.log("TestHere");
       this.graph.setSelectionCell(target || edge);
     };
 
@@ -2147,7 +2147,7 @@ Graph.prototype.isCellConnectable = function (cell) {
  */
 Graph.prototype.selectAll = function (parent) {
   parent = parent || this.getDefaultParent();
-  console.log("SelectAll");
+  //console.log("SelectAll");
   if (!this.isCellLocked(parent)) {
     mxGraph.prototype.selectAll.apply(this, arguments);
   }
@@ -2239,7 +2239,7 @@ Graph.prototype.zoom = function (factor, center) {
   var floorPlanSettingsZoom = floorPlanSettings["zoom"];
 
   var length = factor.toString().length;
-  console.log(factor);
+  //console.log(factor);
 
   if (
     floorPlanSettings["zoom"] != undefined &&
@@ -3482,7 +3482,7 @@ HoverIcons.prototype.setCurrentState = function (state) {
           return new mxShape(new mxStencil(doc.documentElement));
         } catch (e) {
           if (window.console != null) {
-            console.log("Error in shape: " + e);
+           // console.log("Error in shape: " + e);
           }
         }
       }
@@ -3558,7 +3558,7 @@ mxStencilRegistry.getStencil = function (name) {
                 }
               } catch (e) {
                 if (window.console != null) {
-                  console.log("error in getStencil:", fname, e);
+                 // console.log("error in getStencil:", fname, e);
                 }
               }
             } else {
@@ -3651,7 +3651,7 @@ mxStencilRegistry.loadStencilSet = function (
         }
       } catch (e) {
         if (window.console != null) {
-          console.log("error in loadStencilSet:", stencilFile, e);
+          //console.log("error in loadStencilSet:", stencilFile, e);
         }
       }
     }
@@ -5195,12 +5195,12 @@ if (typeof mxVertexHandler != "undefined") {
           bgImg.width * s2,
           bgImg.height * s2
         );
-        console.log(s2);
-        console.log(tr);
+        // console.log(s2);
+        // console.log(tr);
 
         // Checks if visible
         if (mxUtils.intersects(bounds, tmp)) {
-          console.log(tr.x + "------------" + tr.y);
+          // console.log(tr.x + "------------" + tr.y);
           svgCanvas.image(
             tr.x,
             tr.y,
@@ -5211,7 +5211,7 @@ if (typeof mxVertexHandler != "undefined") {
           );
         }
       }
-      console.log(svgCanvas);
+      // console.log(svgCanvas);
       svgCanvas.scale(s);
       svgCanvas.textEnabled = showText;
 
@@ -7216,7 +7216,7 @@ if (typeof mxVertexHandler != "undefined") {
 
       if (this.selectionHandler != null) {
         this.graph.getSelectionModel().removeListener(this.selectionHandler);
-        console.log("7161");
+        // console.log("7161");
         this.selectionHandler = null;
       }
 

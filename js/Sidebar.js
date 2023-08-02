@@ -923,11 +923,11 @@ Sidebar.prototype.addGeneralPalette = function(expand)
             this.addLegendsFunctions(graph, 'generalLegends', "Legend", true, LegendsOfObjects); 
          }
          if(BoothTagsObjects.length === 0) {
-              console.log(LegendsOfObjects+'empty');
+            //   console.log(LegendsOfObjects+'empty');
            this.addBoothtagsFunctions(graph, 'generalboothtags', "Booth Tags", false, BoothTagsObjects); 
          
          }else{
-             console.log(LegendsOfObjects);
+            //  console.log(LegendsOfObjects);
            this.addBoothtagsFunctions(graph, 'generalboothtags', "Booth Tags", true, BoothTagsObjects); 
          
          }
@@ -1890,7 +1890,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	
 	// Blocks default click action
 	mxEvent.addListener(elt, 'click', function(evt)
-	{       console.log('Helloo');
+	{       //console.log('Helloo');
 		mxEvent.consume(evt);
 	});
 
@@ -3745,7 +3745,7 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                         
                                              jQuery( ".closeIcon" ).each(function() {
                                                             
-                                                            console.log("google");
+                                                           // console.log("google");
                                                             jQuery( this ).children().removeClass("glyphicon glyphicon-remove");
                                                             jQuery( this ).children().addClass( "customecloseicon btn btn-small btn-danger" );
                                                             jQuery( this ).children().html( "Close" );
@@ -3861,7 +3861,7 @@ function toggletabs(tabID){
      
     
      var getID = jQuery(tabID).attr("id");
-     console.log(getID);
+     //console.log(getID);
      if(getID == 'mainprofile'){
          
     
