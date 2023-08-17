@@ -6,7 +6,7 @@
  */
 var checkinitalstatus;
 var disableStyle;
-
+var purchCount = 0;
 EditorUi = function (editor, container, lightbox) {
     var floorPlanSettings = JSON.parse(floorPlanSetting);
 
@@ -949,7 +949,7 @@ EditorUi = function (editor, container, lightbox) {
                     // console.log(logInUser["ReservedBooth"][index]);
                     if (logInUser["ReservedBooth"][0].length > 1 && flag == true) {
                         for (let y = 0; y < logInUser["ReservedBooth"][index].length; y++) {
-                            console.log(logInUser["ReservedBooth"][index][y]);
+                            // console.log(logInUser["ReservedBooth"][index][y]);
                             array[index] = logInUser["ReservedBooth"][index][y];
                         }
                         flag = false;
@@ -1234,6 +1234,7 @@ EditorUi = function (editor, container, lightbox) {
                                     var boothOwner = finalresultProduct.Booth_Purchaser;
                                     var LevelOfBooth = finalresultProduct.LevelOfBooth;
                                     var PurchaseCount = finalresultProduct.PurchaseCount;
+                                    purchCount = PurchaseCount;
                                     var NumberOfReservedBooths =
                                         finalresultProduct.NumberOfReservedBooths;
                                     var buttonsdiv = "";
@@ -2409,20 +2410,20 @@ function addToCart(p_id, request, price, slug) {
                     success: function (data) {
 
 
-                        jQuery.ajax({
-                            url:
-                                baseCurrentSiteURl +
-                                "/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=boothdiscount_price",
-                            data: data3,
-                            cache: false,
-                            contentType: false,
-                            processData: false,
-                            type: "POST",
+                        // jQuery.ajax({
+                        //     url:
+                        //         baseCurrentSiteURl +
+                        //         "/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=boothdiscount_price",
+                        //     data: data3,
+                        //     cache: false,
+                        //     contentType: false,
+                        //     processData: false,
+                        //     type: "POST",
                     
-                            success: function (data) {
+                        //     success: function (data) {
 
-                            }
-                        });
+                        //     }
+                        // });
                         var checkouturl = baseCurrentSiteURl + "/checkout/";
                         var addONs = baseCurrentSiteURl + "/product-category/add-ons/";
                         jQuery("#" + p_id).empty();
@@ -2467,16 +2468,21 @@ function addToCart(p_id, request, price, slug) {
         // console.log('boothName--------'+boothName);
         var newData = new FormData();
         newData.append('booth_productid',p_id);
+        newData.append('userlimit',userlimit);
+        newData.append('purchCount',purchCount);
+        newData.append('userloggedinstatus',userloggedinstatus);
         var content = 'After clicking "Confirm" you will be immediatelly assigned to this booth and cannot be undone. To be removed from this booth you will need to contact show management.'
         jQuery('.customecloseicon').trigger('click');
 
-        Swal.fire(
+
+        Swal.fire( 
             {
                 title: "Are you sure?",
                 text: content,
                 icon: "info",
                 showCancelButton: true,
-                confirmButtonClass: "btn-success",
+                confirmButtonClass: " btn",
+                confirmButtonColor: '#8cd4f5',
                 cancelButtonClass: "btn-danger",
                 confirmButtonText: "Confirm",
                 cancelButtonText: "Cancel",
@@ -2487,38 +2493,60 @@ function addToCart(p_id, request, price, slug) {
         ).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                jQuery.ajax({
-                    url:
-                        baseCurrentSiteURl +
-                        "/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=boothselfassignment",
-                    data: newData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    type: "POST",
+
+
+                
+        jQuery.ajax({
+            url:
+                baseCurrentSiteURl +
+                "/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=boothselfassignment",
+            data: newData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: "POST",
+    
+            success: function (data) {
+
+                data = data.trim();
+                if(data == 'limitreached'){
+                    Swal.fire({
+                        icon: "info",
+                        title: "Limit Reached",
+                        text: "Booth purchase limit reached.",
+                        confirmButtonClass: " btn",
+                        confirmButtonColor: '#8cd4f5',
+                        showConfirmButton: true,
+                    }).then(function (isConfirm) {
             
-                    success: function (data) {
-                        
-                        Swal.fire({
-                            icon: "info",
-                            title: "Booth Assigned!",
-                            text: 'Once you refresh you should see your company assigned to this booth.',
-                            showConfirmButton: true,
-                            confirmButtonText: "Close",
-                            confirmButtonClass: " btn btn-primary",
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload();
-                                
-                            }
-                        });
-                 
-                    }
-                });
+                       
+                    })
+                }else{
+
+                    Swal.fire({
+                        icon: "info",
+                        title: "Booth Assigned!",
+                        text: 'Now you should see your company assigned to this booth.',
+                        showConfirmButton: true,
+                        confirmButtonText: "Close",
+                        confirmButtonClass: " btn",
+                        confirmButtonColor: '#8cd4f5',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                            
+                        }
+                    });
+                }
+                
+         
+            }
+        });
+    
                 
             } 
         })
-
+   
        
     }
 }

@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 11.0
- * @version : 11.0
+ * Version: 10.5
+ * @version : 10.5
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -129,7 +129,7 @@ if (isset($_GET['floorplanRequest'])) {
     }  else if ($_GET['floorplanRequest'] == "boothselfassignment") {
         require_once('../../../wp-load.php');
 
-       
+     
         boothSelfAssignment();
 
         die();
@@ -218,14 +218,47 @@ function getCartTotal()
 }
 function boothDiscountPrice($boothProductID){
 
+    require_once plugin_dir_path( __DIR__ ) . 'EGPL/includes/floorplan-manager.php';
+    $demo = new FloorPlanManager();
+
     $pkgLvl = trigger2();
 
-
+   // $isPartial = get_post_meta($boothProductID, '_wc_deposit_enabled', true);
+  //  if(empty($isPartial)){
+      
 
     $boothPriceBasedLevels = get_post_meta($boothProductID, 'levelbaseddiscountdata', true);
+    $boothPriceBasedLevels = json_decode(json_encode($boothPriceBasedLevels),true);
 
- 
+        global $woocommerce;
+    $item = $woocommerce->cart->get_cart();
+    $flag = true;
+    foreach ($item as $key => $value) {
+        $dat = $value['product_id'];
+        // echo $dat;
+        $meta = get_post_meta($dat , '_list_of_selected_booth' , true);
+  
 
+        if(!empty($meta)){
+            foreach($meta as $boothKey=>$boothID){
+
+                $getthisboothproductID = $demo->getproductID($boothID);
+                foreach ($item as $key => $value) {
+
+                if($getthisboothproductID == $value['product_id']){
+
+                        $flag = false;
+                }
+            }
+            }
+        }
+
+
+    }
+
+        if($flag == true){
+
+        
             if(!empty($boothPriceBasedLevels)){
 
                 if (is_user_logged_in()) {
@@ -236,7 +269,7 @@ function boothDiscountPrice($boothProductID){
                     $user_role = $pkgLvl;
                 }
                     foreach($boothPriceBasedLevels as $key => $value){
-
+                 
                         if(in_array($user_role[0], $value['levels'])){
 
                             if(!empty($value['discounttype']) && !empty($value['discountamount'])){
@@ -268,44 +301,11 @@ function boothDiscountPrice($boothProductID){
                         // apply_discount_code_to_booth($boothProductID, $codeName);
                         WC()->cart->add_discount($codeName);
                     }
-            
-                // if (is_user_logged_in()) {
-                //     $user = wp_get_current_user();
-                //     $user_role = $user->roles;
-
-                //     if(in_array($user_role[0], $boothPriceBasedLevels)){
-
-                //         $codeid =  create_booth_discount_code($boothProductID,$boothPriceBasedLevels);
-
-                //         if($codeid){
-                
-                //             $codeName = get_the_title($codeid); 
-                     
-                //             // apply_discount_code_to_booth($boothProductID, $codeName);
-                //             WC()->cart->add_discount($codeName);
-                //          }
-                //     }
-                // }else{
-
-                //     if(in_array($pkgLvl, $boothPriceBasedLevels)){
-                        
-                //     $codeid =  create_booth_discount_code($boothProductID,$boothPriceBasedLevels);
-                      
-                //     if($codeid){
-            
-                //         $codeName = get_the_title($codeid);
-
-                  
-                //         // apply_discount_code_to_booth($boothProductID, $codeName);
-                //         WC()->cart->add_discount($codeName); 
-            
-                //     }
-            
-            
-                        
-                //     }
-                // }
+ 
             }
+        }
+
+   // }
 }
 
 function trigger2()
@@ -862,6 +862,8 @@ function getproductdetail($productID)
 }
 
 
+
+
 function savedallpricetegs($Dataarray)
 {
 
@@ -1079,6 +1081,7 @@ function getBoothList($postdata)
 
         // echo '<pre>';
         // print_r($postdata['sellboothsjson']);
+        // exit;
 
         if ($CurrentXML !== FALSE) {
 
@@ -2122,101 +2125,141 @@ function floorplanBoothImage($url)
 
 function boothSelfAssignment(){
 
+    require_once plugin_dir_path(__DIR__) . 'EGPL/includes/floorplan-manager.php';
     $productID = $_POST['booth_productid'];
+    $userloggedinstatus = $_POST['userloggedinstatus'];
+   
+    $userlimit = $_POST['userlimit']; 
 
-    $woocommerce_rest_api_keys = get_option('ContenteManager_Settings');
-    $boothpurchaseenablestatus = $woocommerce_rest_api_keys['ContentManager']['boothpurchasestatus'];
-    $current_user = get_current_user_id();
-    if ($current_user != 0 && !empty($current_user) && !empty($boothpurchaseenablestatus) && $boothpurchaseenablestatus == "enabled") {
-        // echo '8897';
+    $demo = new FloorPlanManager();
+    $AllBoothsList = $demo->getAllbooths();
+    $id = $product_ID;
+    $user_ID = get_current_user_id();
+    $blog_id = get_current_blog_id();
+    $loggedInUser = get_user_meta($user_ID);
+    require_once('lib/woocommerce-api.php');
+    $url = get_site_url();
 
-        $OrderUserID = $current_user;
-        $foolrplanID = $woocommerce_rest_api_keys['ContentManager']['floorplanactiveid'];
-        $boothTypesLegend = json_decode(get_post_meta($foolrplanID, 'legendlabels', true));
-        $FloorplanXml = get_post_meta($foolrplanID, 'floorplan_xml', true);
-        $FloorplanXml = str_replace('"n<', '<', $FloorplanXml);
-        $FloorplanXml = str_replace('>n"', '>', $FloorplanXml);
-        $xml = simplexml_load_string($FloorplanXml) or die("Error: Cannot create object");
-        $currentIndex = 0;
-
-        foreach ($xml->root->MyNode as $cellIndex => $CellValue) {
-            $cellboothlabelvalue = $CellValue->attributes();
-            $getCellStylevalue = $xml->root->MyNode[$currentIndex]->mxCell->attributes();
-
-            if (!empty($cellboothlabelvalue['boothproductid']) && $cellboothlabelvalue['boothproductid'] == $productID) {
-                $att = "boothOwner";
-                $styleatt = 'style';
-                $xml->root->MyNode[$currentIndex]->attributes()->$att = $OrderUserID;
-                $loggin_data['boothnumberindex'][] = '' . $cellboothlabelvalue['mylabel'];
-                $loggin_data['ownerID'][] = $OrderUserID;
-                $getCellStyle = $getCellStylevalue['style'];
-                $getCellStyle = str_replace($oldfillcolortext, 'fillColor=' . $NewfillColor, $getCellStyle);
-                $xml->root->MyNode[$currentIndex]->mxCell->attributes()->$styleatt = $getCellStyle;
-
-                if (isset($cellboothlabelvalue['legendlabels']) && !empty($cellboothlabelvalue['legendlabels'])) {
-                    $orderlogginsData['legendlabels'][] = 'enabled';
-                    $getlabelID = '' . $cellboothlabelvalue['legendlabels'];
-                    foreach ($boothTypesLegend as $boothlabelIndex => $boothlabelValue) {
-                        if ($boothlabelValue->ID == $getlabelID) {
-                            $createdproductPrice = $boothlabelValue->colorcodeOcc;
-                            if ($createdproductPrice != "none") {
-                                $NewfillColor = $createdproductPrice;
-                                $getCellStyleArray = explode(';', $getCellStyle);
-                                foreach ($getCellStyleArray as $styleIndex => $styleValue) {
-                                    if ($styleValue != 'DefaultStyle1') {
-                                        $styledeepCheck = explode('=', $styleValue);
-                                        if ($styledeepCheck[0] == 'fillColor') {
-                                            $oldfillcolortext = $styleValue;
-                                        }
-                                    }
-                                }
-                            } else {
-                                $getCellStyleArray = explode(';', $getCellStyle);
-                                foreach ($getCellStyleArray as $styleIndex => $styleValue) {
-                                    if ($styleValue != 'DefaultStyle1') {
-                                        $styledeepCheck = explode('=', $styleValue);
-
-                                        if ($styledeepCheck[0] == 'occ') {
-                                            $NewfillColor = $styledeepCheck[1];
-                                        } elseif ($styledeepCheck[0] == 'fillColor') {
-                                            $oldfillcolortext = $styleValue;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    $orderlogginsData['legendlabels'][] = 'disabled';
-                    $getCellStyleArray = explode(';', $getCellStyle);
-                    foreach ($getCellStyleArray as $styleIndex => $styleValue) {
-                        if ($styleValue != 'DefaultStyle1') {
-                            $styledeepCheck = explode('=', $styleValue);
-                            if ($styledeepCheck[0] == 'occ') {
-                                $NewfillColor = $styledeepCheck[1];
-                            } elseif ($styledeepCheck[0] == 'fillColor') {
-                                $oldfillcolortext = $styleValue;
-                            }
-                        }
-                    }
-                }
-
-                $orderlogginsData['assigendcolor'][] = $NewfillColor;
-                $orderlogginsData['assigendoldcolor'][] = $oldfillcolortext;
-                $getCellStyle = str_replace($oldfillcolortext, 'fillColor=' . $NewfillColor, $getCellStyle);
-                $xml->root->MyNode[$currentIndex]->mxCell->attributes()->$styleatt = $getCellStyle;
+    $get_product = wc_get_product($id);
+ 
+    $number = 0;
+    if ($user_ID) {
+        foreach ($AllBoothsList as $boothIndex => $boothValue) {
+            if ($boothValue['bootheOwnerID'] == $user_ID) {
+                $number++;
             }
-            $currentIndex++;
         }
-
-        $getresultforupdat = str_replace('<?xml version="1.0"?>', "", $xml->asXML());
-        update_post_meta($foolrplanID, 'floorplan_xml', json_encode($getresultforupdat));
-        update_post_meta($id, 'boothStatus', 'Completed');
-        $loggin_data['boothstatus'][] = 'Completed';
-    } else {
-        update_post_meta($id, 'boothStatus', 'Pending');
-        $loggin_data['boothstatus'][] = 'Pending';
     }
+    $purchCount = $number;
+
+//    echo $productID.'===='.$userloggedinstatus.'===='.$purchCount.'===='.$userlimit;
+//    exit;
     
+    $result = 'limitnotreached';
+    if ((($userlimit <= $purchCount && $userlimit != '') && $purchCount != 0) && ($userloggedinstatus == "1")) {
+
+        $result = 'limitreached';
+    }
+
+
+    if($result != 'limitreached'){
+
+      
+        $woocommerce_rest_api_keys = get_option('ContenteManager_Settings');
+        $boothpurchaseenablestatus = $woocommerce_rest_api_keys['ContentManager']['boothpurchasestatus'];
+        $current_user = get_current_user_id();
+        if ($current_user != 0 && !empty($current_user) && !empty($boothpurchaseenablestatus) && $boothpurchaseenablestatus == "enabled") {
+            // echo '8897';
+    
+            $OrderUserID = $current_user;
+            $foolrplanID = $woocommerce_rest_api_keys['ContentManager']['floorplanactiveid'];
+            $boothTypesLegend = json_decode(get_post_meta($foolrplanID, 'legendlabels', true));
+            $FloorplanXml = get_post_meta($foolrplanID, 'floorplan_xml', true);
+            $FloorplanXml = str_replace('"n<', '<', $FloorplanXml);
+            $FloorplanXml = str_replace('>n"', '>', $FloorplanXml);
+            $xml = simplexml_load_string($FloorplanXml) or die("Error: Cannot create object");
+            $currentIndex = 0;
+    
+            foreach ($xml->root->MyNode as $cellIndex => $CellValue) {
+                $cellboothlabelvalue = $CellValue->attributes();
+                $getCellStylevalue = $xml->root->MyNode[$currentIndex]->mxCell->attributes();
+    
+                if (!empty($cellboothlabelvalue['boothproductid']) && $cellboothlabelvalue['boothproductid'] == $productID) {
+                    $att = "boothOwner";
+                    $styleatt = 'style';
+                    $xml->root->MyNode[$currentIndex]->attributes()->$att = $OrderUserID;
+                    $loggin_data['boothnumberindex'][] = '' . $cellboothlabelvalue['mylabel'];
+                    $loggin_data['ownerID'][] = $OrderUserID;
+                    $getCellStyle = $getCellStylevalue['style'];
+                    $getCellStyle = str_replace($oldfillcolortext, 'fillColor=' . $NewfillColor, $getCellStyle);
+                    $xml->root->MyNode[$currentIndex]->mxCell->attributes()->$styleatt = $getCellStyle;
+    
+                    if (isset($cellboothlabelvalue['legendlabels']) && !empty($cellboothlabelvalue['legendlabels'])) {
+                        $orderlogginsData['legendlabels'][] = 'enabled';
+                        $getlabelID = '' . $cellboothlabelvalue['legendlabels'];
+                        foreach ($boothTypesLegend as $boothlabelIndex => $boothlabelValue) {
+                            if ($boothlabelValue->ID == $getlabelID) {
+                                $createdproductPrice = $boothlabelValue->colorcodeOcc;
+                                if ($createdproductPrice != "none") {
+                                    $NewfillColor = $createdproductPrice;
+                                    $getCellStyleArray = explode(';', $getCellStyle);
+                                    foreach ($getCellStyleArray as $styleIndex => $styleValue) {
+                                        if ($styleValue != 'DefaultStyle1') {
+                                            $styledeepCheck = explode('=', $styleValue);
+                                            if ($styledeepCheck[0] == 'fillColor') {
+                                                $oldfillcolortext = $styleValue;
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    $getCellStyleArray = explode(';', $getCellStyle);
+                                    foreach ($getCellStyleArray as $styleIndex => $styleValue) {
+                                        if ($styleValue != 'DefaultStyle1') {
+                                            $styledeepCheck = explode('=', $styleValue);
+    
+                                            if ($styledeepCheck[0] == 'occ') {
+                                                $NewfillColor = $styledeepCheck[1];
+                                            } elseif ($styledeepCheck[0] == 'fillColor') {
+                                                $oldfillcolortext = $styleValue;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        $orderlogginsData['legendlabels'][] = 'disabled';
+                        $getCellStyleArray = explode(';', $getCellStyle);
+                        foreach ($getCellStyleArray as $styleIndex => $styleValue) {
+                            if ($styleValue != 'DefaultStyle1') {
+                                $styledeepCheck = explode('=', $styleValue);
+                                if ($styledeepCheck[0] == 'occ') {
+                                    $NewfillColor = $styledeepCheck[1];
+                                } elseif ($styledeepCheck[0] == 'fillColor') {
+                                    $oldfillcolortext = $styleValue;
+                                }
+                            }
+                        }
+                    }
+    
+                    $orderlogginsData['assigendcolor'][] = $NewfillColor;
+                    $orderlogginsData['assigendoldcolor'][] = $oldfillcolortext;
+                    $getCellStyle = str_replace($oldfillcolortext, 'fillColor=' . $NewfillColor, $getCellStyle);
+                    $xml->root->MyNode[$currentIndex]->mxCell->attributes()->$styleatt = $getCellStyle;
+                }
+                $currentIndex++;
+            }
+    
+            $getresultforupdat = str_replace('<?xml version="1.0"?>', "", $xml->asXML());
+            update_post_meta($foolrplanID, 'floorplan_xml', json_encode($getresultforupdat));
+            update_post_meta($id, 'boothStatus', 'Completed');
+            $loggin_data['boothstatus'][] = 'Completed';
+        } else {
+            update_post_meta($id, 'boothStatus', 'Pending');
+            $loggin_data['boothstatus'][] = 'Pending';
+        }
+    }
+
+     echo $result;
 }   
 ?>
