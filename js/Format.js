@@ -12604,7 +12604,7 @@ function addNewDiscount(){
   '<span><i style="color:crimson;" onclick="removeDiscount(this)"; id="'+discountRowId+'" class="fa fa-times-circle fa-2x" aria-hidden="true"></i></span>'+
   '</div>'+
 
-  '</div><hr id = "hr-'+discountRowId+'">';
+  '</div>';
 
   jQuery('#level-based-discount').append(html);
   jQuery('.js-example-basic-multiple').select2();

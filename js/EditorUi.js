@@ -931,7 +931,14 @@ EditorUi = function (editor, container, lightbox) {
                     userlimit = floorPlanSettings["usersNum"];
                 }
 
-                prePaid = floorPlanSettings["PrePaidChk"];
+
+                if(logInUser["OverrideCheck"] == "checked" &&
+                logInUser["Overrideprepaid"] == "checked"){
+                    prePaid = logInUser["Overrideprepaid"];
+                }else{
+                    prePaid = floorPlanSettings["PrePaidChk"];
+                }
+         
 
                 if(prePaid == "checked"){
 

@@ -638,6 +638,7 @@ function createnewfloorplan($postData)
             'OverrideBoothLimit' => $loggedInUser['wp_' . $blog_id . '_OverrideNumberOfBooths'][0],
             'ReservedBooth' => unserialize($loggedInUser['wp_' . $blog_id . '_userBoothReserved'][0]),
             'OverrideCheck' => ($loggedInUser['wp_' . $blog_id . '_Override_Check'][0]),
+            'Overrideprepaid' => $loggedInUser['wp_' . $blog_id . '_prePaid_checkbox'][0],
         );
         $legendlabel = "[";
         $legendlabel .= '{"ID":1,"colorstatus":true,"name":"Gold","colorcode":#00000},';
@@ -1863,6 +1864,7 @@ function floorplan_shortcode($atts, $content = null)
             'OverrideBoothLimit' => $loggedInUser['wp_' . $blog_id . '_OverrideNumberOfBooths'][0],
             'ReservedBooth' => unserialize($loggedInUser['wp_' . $blog_id . '_userBoothReserved'][0]),
             'OverrideCheck' => ($loggedInUser['wp_' . $blog_id . '_Override_Check'][0]),
+            'Overrideprepaid' => $loggedInUser['wp_' . $blog_id . '_prePaid_checkbox'][0],
         );
         $user_info = get_userdata($user_ID);
         $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
