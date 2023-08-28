@@ -5769,7 +5769,10 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var currencySymbol = '';
     var flag = true;
 
-    if(priceBasedLevels != '' || priceBasedLevels != null){
+    if (priceBasedLevels == null || priceBasedLevels == undefined || priceBasedLevels == 'undefined') { 
+      // Generate HTML when priceBasedLevels is null
+      levelBasedDiscountHtml =  priceBasedLevelHtml(arrayoflevelsObjects);
+  } else if (priceBasedLevels.length > 0) {
       var bflag = '';
       jQuery.each(priceBasedLevels, function (key, value) {
 
@@ -5842,7 +5845,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
 
             levelBasedDiscountHtml +='<div class = "col-md-1" style="padding-left: 36px;">';
             levelBasedDiscountHtml +='<h6 style="margin-top: 70px;"><strong></strong></h6>';
-            levelBasedDiscountHtml +='<span><i style="color:crimson;" onclick="removeDiscount(this)"; id="'+value.discountid+'" class="fa fa-times-circle fa-2x delfee" aria-hidden="true"></i></span>';
+            levelBasedDiscountHtml +='<span><i style="color:crimson; margin-left: 15px;" onclick="removeDiscount(this)"; id="'+value.discountid+'" class="fa fa-times-circle fa-2x delfee" aria-hidden="true"></i></span>';
             levelBasedDiscountHtml +='</div>';
     
             levelBasedDiscountHtml +='</div><hr id = "hr-'+value.discountid+'">';
@@ -12552,6 +12555,48 @@ StyleFormatPanel.prototype.createDragPreview = function (width, height) {
 //   jQuery('#level-based-discount').append('<p class="emptytext"><strong>No level based discounts are created , Click Add to start.</strong></p>');
 // }
 
+function priceBasedLevelHtml(allLevels) {
+
+
+  const numx = Math.trunc(Math.random() * 100);
+  const discountId = 'discount-' + numx;
+
+  return `
+          <div id="${discountId}" class="html-content row">
+              <div class="col-md-3">
+                  <h6><strong>Levels</strong></h6>
+                  <select class="form-control js-example-basic-multiple" id="levels-${discountId}" multiple="multiple" data-allow-clear="true">
+                      ${Object.entries(allLevels)
+          .filter(([key]) => key !== 'administrator' && key !== 'contentmanager')
+          .map(([key, rolevalue]) => `<option value="${key}">${rolevalue.name}</option>`)
+          .join('')}
+                  </select>
+              </div>
+              
+              <div class="col-md-3">
+                  <h6><strong>Discount Type</strong></h6>
+                  <select style="height:28px;" id="discount_type-${discountId}" opid="${discountId}" class="form-control" onchange="symbol(this)">
+                      <option value="fixed">Fixed</option>
+                      <option value="percent">Percent</option>
+                  </select>
+              </div>
+              
+              <div class="col-md-3">
+                  <h6><strong>Discount</strong></h6>
+                  <div class="input-group">
+                      <div id="input-group-${discountId}" class="input-group-addon">$</div>
+                      <input style="height:28px;" type="number" min="1" class="form-control" id="amount-price-${discountId}" name="amount-price" value="" placeholder="Price">
+                  </div>
+              </div>
+              
+              <div class="col-md-1" id="add-new-discount">
+                  <i style="color:#004598 !important; margin-top: 70px; margin-left: 35px;" class="addnewdiscount adddscountbuttonsty font-icon fa fa-plus-circle fa-2x" onclick="addNewDiscount();" egid="addnewdiscount"></i>
+              </div>
+          </div>`;
+
+
+}
+
 function addNewDiscount(){
 
   // jQuery(".emptytext").remove();
@@ -12601,7 +12646,7 @@ function addNewDiscount(){
 
   '<div class = "col-md-1" style="padding-left: 36px;">'+
   '<h6 style="margin-top: 70px;"><strong></strong></h6>'+
-  '<span><i style="color:crimson;" onclick="removeDiscount(this)"; id="'+discountRowId+'" class="fa fa-times-circle fa-2x" aria-hidden="true"></i></span>'+
+  '<span><i style="color:crimson; margin-left: 15px;" onclick="removeDiscount(this)"; id="'+discountRowId+'" class="fa fa-times-circle fa-2x" aria-hidden="true"></i></span>'+
   '</div>'+
 
   '</div>';
