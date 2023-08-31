@@ -5836,7 +5836,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         levelBasedDiscountHtml +='</div>';
           if(bflag == 'true'){
 
-            levelBasedDiscountHtml +=  '<div id="add-new-discount">';
+            levelBasedDiscountHtml +=  '<div class="col-md-1" id="add-new-discount">';
             levelBasedDiscountHtml += '<i style="color:#004598 !important; margin-top: 70px; margin-left: 35px;" class="addnewdiscount adddscountbuttonsty font-icon fa fa-plus-circle fa-2x" onclick="addNewDiscount();" egid="addnewdiscount"></i>';
             levelBasedDiscountHtml +='</div>';
           }
