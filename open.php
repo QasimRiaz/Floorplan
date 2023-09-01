@@ -31,7 +31,7 @@
 					type: 'POST',
 					success : function( response ) {
 						// Small hack to support import
-                                                console.log(response);
+                                                // console.log(response);
 						if (window.parent.openNew)
 						{
 							window.parent.open(window.parent.location.href);
@@ -44,7 +44,7 @@
 						};
 						reader.onerror = function(e)
 						{
-							console.log(e);
+							// console.log(e);
 						};
 						reader.readAsText(file);
 					}
@@ -120,9 +120,9 @@
 							break;
 						}
 					}
-					
 					if (!blnValid) {
-						alert("File type is invalid, allowed extensions are: " + _validFileExtensions.join(", "));
+
+						alert("The floor plan editor can only accept " + _validFileExtensions.join(", ") + "  file types - please upload another file.");
 						form.upfile.value = "";
 						return false;
 					}
@@ -274,3 +274,4 @@
 </form>
 </body>
 </html>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

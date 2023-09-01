@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 10.5
- * @version : 10.5
+ * Version: 11.0
+ * @version : 11.0
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -101,6 +101,7 @@ if (isset($_GET['floorplanRequest'])) {
         require_once('../../../wp-load.php');
 
         //productremoverequest($_REQUEST)
+
         getCartTotal();
 
         die();
@@ -109,7 +110,27 @@ if (isset($_GET['floorplanRequest'])) {
         require_once('../../../wp-load.php');
 
         //productremoverequest($_REQUEST)
+
+   
         getCartTotal();
+
+        die();
+
+    }else if ($_GET['floorplanRequest'] == "boothdiscount_price") {
+        require_once('../../../wp-load.php');
+
+        //productremoverequest($_REQUEST)
+        $boothProductID = $_POST['boothproductid'];
+   
+        boothDiscountPrice($boothProductID);
+
+        die();
+
+    }  else if ($_GET['floorplanRequest'] == "boothselfassignment") {
+        require_once('../../../wp-load.php');
+
+     
+        boothSelfAssignment();
 
         die();
 
@@ -193,8 +214,206 @@ function getCartTotal()
 
     echo $cartcount;
 
+    
+}
+function boothDiscountPrice($boothProductID){
+
+    require_once plugin_dir_path( __DIR__ ) . 'EGPL/includes/floorplan-manager.php';
+    $demo = new FloorPlanManager();
+
+    $pkgLvl = trigger2();
+
+   // $isPartial = get_post_meta($boothProductID, '_wc_deposit_enabled', true);
+  //  if(empty($isPartial)){
+      
+
+    $boothPriceBasedLevels = get_post_meta($boothProductID, 'levelbaseddiscountdata', true);
+    $boothPriceBasedLevels = json_decode(json_encode($boothPriceBasedLevels),true);
+
+        global $woocommerce;
+    $item = $woocommerce->cart->get_cart();
+    $flag = true;
+    foreach ($item as $key => $value) {
+        $dat = $value['product_id'];
+        // echo $dat;
+        $meta = get_post_meta($dat , '_list_of_selected_booth' , true);
+  
+
+        if(!empty($meta)){
+            foreach($meta as $boothKey=>$boothID){
+
+                $getthisboothproductID = $demo->getproductID($boothID);
+                foreach ($item as $key => $value) {
+
+                if($getthisboothproductID == $value['product_id']){
+
+                        $flag = false;
+                }
+            }
+            }
+        }
+
+
+    }
+
+        if($flag == true){
+
+        
+            if(!empty($boothPriceBasedLevels)){
+
+                if (is_user_logged_in()) {
+                    $user = wp_get_current_user();
+                    $user_role = $user->roles;
+                }else{
+
+                    $user_role = $pkgLvl;
+                }
+                    foreach($boothPriceBasedLevels as $key => $value){
+                 
+                        if(in_array($user_role[0], $value['levels'])){
+
+                            if(!empty($value['discounttype']) && !empty($value['discountamount'])){
+
+                                $codeid =  create_booth_discount_code($boothProductID,$value['discounttype'],$value['discountamount']);
+                                break;
+                            }
+                       
+                            
+                        }else{
+
+                          
+                            if(in_array($user_role, $value['levels'])){
+
+                                if(!empty($value['discounttype']) && !empty($value['discountamount'])){
+                                    
+                                    $codeid =  create_booth_discount_code($boothProductID,$value['discounttype'],$value['discountamount']);
+                                    break;
+                                }
+                           
+                            }
+                        }
+                    }   
+
+                    if($codeid){
+                    
+                        $codeName = get_the_title($codeid); 
+                
+                        // apply_discount_code_to_booth($boothProductID, $codeName);
+                        WC()->cart->add_discount($codeName);
+                    }
+ 
+            }
+        }
+
+   // }
 }
 
+function trigger2()
+{
+    $productLevels = [];
+    global $woocommerce;
+    $item = $woocommerce->cart->get_cart();
+    foreach ($item as $key => $value) {
+        $dat = $value['product_id'];
+        $meta = get_post_meta($dat);
+        $productLevels[] = $meta['productlevel'][0];
+    }
+    if (is_multisite()) {
+        $blog_id = get_current_blog_id();
+        $get_all_roles_array = 'wp_' . $blog_id . '_user_roles';
+    } else {
+        $get_all_roles_array = 'wp_user_roles';
+    }
+    $get_all_roles = get_option($get_all_roles_array);
+    $priorityNums = [];
+    foreach ($get_all_roles as $key => $name) {
+        if (in_array($key, $productLevels)) {
+            $int = (int)$get_all_roles[$key]['priorityNum'];
+            $priorityNums[$int] = $key;
+        }
+
+    }
+    $prior = [];
+    foreach ($priorityNums as $key => $val) {
+        array_push($prior, $key);
+    }
+
+    if(!empty($prior)){
+
+        return $priorityNums[min($prior)];
+
+    }else{
+
+        return '';
+    }
+}
+
+function create_booth_discount_code($boothProductID,$boothDiscountType,$boothDiscountAmount) {
+    $coupon_code = 'booth-'.$boothProductID.'-'.rand(10,100); 
+    $discount_amount = $boothDiscountAmount; 
+
+    if($boothDiscountType == 'percent'){
+        $type = 'percent';
+    }else{
+        $type = 'fixed_cart';
+    }
+
+    $coupon = new WC_Coupon($coupon_code);
+    if ($coupon->get_id()) {
+        return; 
+    }
+
+    $coupon = array(
+                'post_title' => $coupon_code,
+                'post_content' => '',
+                'post_excerpt' => '',
+                'post_status' => 'publish', 
+                'post_author' => 1,
+                'post_type' => 'shop_coupon'
+            );
+
+
+            $new_code_id = wp_insert_post($coupon);
+
+         
+            if ($new_code_id) {
+
+                update_post_meta($new_code_id, 'coupon_amount', $discount_amount);
+                // update_post_meta($new_code_id, 'customer_email', serialize($allowedemails));
+                //update_post_meta($new_code_id, 'date_expires', $codeexpirydate);
+                update_post_meta($new_code_id, 'discount_type', $type);
+                //update_post_meta($new_code_id, 'exclude_product_categories', $excludeproductcategories);
+                // update_post_meta($new_code_id, 'exclude_product_ids', $excludeproducts);
+                // update_post_meta($new_code_id, 'exclude_sale_items', $excludeitems);
+                // update_post_meta($new_code_id, 'individual_use', true);
+                 update_post_meta($new_code_id, 'product_ids', $boothProductID); 
+                update_post_meta($new_code_id, 'usage_limit', 1);
+
+            }
+    
+            return $new_code_id;
+}
+
+// function apply_discount_code_to_booth($product_id, $coupon_code) {
+//     // Check if the product exists
+//     $product = wc_get_product($product_id);
+//     if (!$product) {
+        
+//         return;
+//     }
+
+//     // Check if the coupon exists
+//     $coupon = new WC_Coupon($coupon_code);
+//     if (!$coupon->get_id()) {
+      
+//         return;
+//     }
+
+//     // Add the coupon to the cart
+//     WC()->cart->add_discount($coupon_code);
+
+
+// }
 
 function productremoverequest()
 {
@@ -419,6 +638,7 @@ function createnewfloorplan($postData)
             'OverrideBoothLimit' => $loggedInUser['wp_' . $blog_id . '_OverrideNumberOfBooths'][0],
             'ReservedBooth' => unserialize($loggedInUser['wp_' . $blog_id . '_userBoothReserved'][0]),
             'OverrideCheck' => ($loggedInUser['wp_' . $blog_id . '_Override_Check'][0]),
+            'Overrideprepaid' => $loggedInUser['wp_' . $blog_id . '_prePaid_checkbox'][0],
         );
         $legendlabel = "[";
         $legendlabel .= '{"ID":1,"colorstatus":true,"name":"Gold","colorcode":#00000},';
@@ -643,6 +863,8 @@ function getproductdetail($productID)
 }
 
 
+
+
 function savedallpricetegs($Dataarray)
 {
 
@@ -858,6 +1080,9 @@ function getBoothList($postdata)
 
         $CurrentXML = simplexml_load_string(stripslashes($postdata['floorXml']));
 
+        // echo '<pre>';
+        // print_r($postdata['sellboothsjson']);
+        // exit;
 
         if ($CurrentXML !== FALSE) {
 
@@ -1639,6 +1864,7 @@ function floorplan_shortcode($atts, $content = null)
             'OverrideBoothLimit' => $loggedInUser['wp_' . $blog_id . '_OverrideNumberOfBooths'][0],
             'ReservedBooth' => unserialize($loggedInUser['wp_' . $blog_id . '_userBoothReserved'][0]),
             'OverrideCheck' => ($loggedInUser['wp_' . $blog_id . '_Override_Check'][0]),
+            'Overrideprepaid' => $loggedInUser['wp_' . $blog_id . '_prePaid_checkbox'][0],
         );
         $user_info = get_userdata($user_ID);
         $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -1899,5 +2125,144 @@ function floorplanBoothImage($url)
     }
 }
 
+function boothSelfAssignment(){
+
+    require_once plugin_dir_path(__DIR__) . 'EGPL/includes/floorplan-manager.php';
+    $productID = $_POST['booth_productid'];
+    $userloggedinstatus = $_POST['userloggedinstatus'];
+   
+    $userlimit = $_POST['userlimit']; 
+
+    $demo = new FloorPlanManager();
+    $AllBoothsList = $demo->getAllbooths();
+    $id = $product_ID;
+    $user_ID = get_current_user_id();
+    $blog_id = get_current_blog_id();
+    $loggedInUser = get_user_meta($user_ID);
+    require_once('lib/woocommerce-api.php');
+    $url = get_site_url();
+
+    $get_product = wc_get_product($id);
+ 
+    $number = 0;
+    if ($user_ID) {
+        foreach ($AllBoothsList as $boothIndex => $boothValue) {
+            if ($boothValue['bootheOwnerID'] == $user_ID) {
+                $number++;
+            }
+        }
+    }
+    $purchCount = $number;
+
+//    echo $productID.'===='.$userloggedinstatus.'===='.$purchCount.'===='.$userlimit;
+//    exit;
+    
+    $result = 'limitnotreached';
+    if ((($userlimit <= $purchCount && $userlimit != '') && $purchCount != 0) && ($userloggedinstatus == "1")) {
+
+        $result = 'limitreached';
+    }
+
+
+    if($result != 'limitreached'){
+
+      
+        $woocommerce_rest_api_keys = get_option('ContenteManager_Settings');
+        $boothpurchaseenablestatus = $woocommerce_rest_api_keys['ContentManager']['boothpurchasestatus'];
+        $current_user = get_current_user_id();
+        if ($current_user != 0 && !empty($current_user) && !empty($boothpurchaseenablestatus) && $boothpurchaseenablestatus == "enabled") {
+            // echo '8897';
+    
+            $OrderUserID = $current_user;
+            $foolrplanID = $woocommerce_rest_api_keys['ContentManager']['floorplanactiveid'];
+            $boothTypesLegend = json_decode(get_post_meta($foolrplanID, 'legendlabels', true));
+            $FloorplanXml = get_post_meta($foolrplanID, 'floorplan_xml', true);
+            $FloorplanXml = str_replace('"n<', '<', $FloorplanXml);
+            $FloorplanXml = str_replace('>n"', '>', $FloorplanXml);
+            $xml = simplexml_load_string($FloorplanXml) or die("Error: Cannot create object");
+            $currentIndex = 0;
+    
+            foreach ($xml->root->MyNode as $cellIndex => $CellValue) {
+                $cellboothlabelvalue = $CellValue->attributes();
+                $getCellStylevalue = $xml->root->MyNode[$currentIndex]->mxCell->attributes();
+    
+                if (!empty($cellboothlabelvalue['boothproductid']) && $cellboothlabelvalue['boothproductid'] == $productID) {
+                    $att = "boothOwner";
+                    $styleatt = 'style';
+                    $xml->root->MyNode[$currentIndex]->attributes()->$att = $OrderUserID;
+                    $loggin_data['boothnumberindex'][] = '' . $cellboothlabelvalue['mylabel'];
+                    $loggin_data['ownerID'][] = $OrderUserID;
+                    $getCellStyle = $getCellStylevalue['style'];
+                    $getCellStyle = str_replace($oldfillcolortext, 'fillColor=' . $NewfillColor, $getCellStyle);
+                    $xml->root->MyNode[$currentIndex]->mxCell->attributes()->$styleatt = $getCellStyle;
+    
+                    if (isset($cellboothlabelvalue['legendlabels']) && !empty($cellboothlabelvalue['legendlabels'])) {
+                        $orderlogginsData['legendlabels'][] = 'enabled';
+                        $getlabelID = '' . $cellboothlabelvalue['legendlabels'];
+                        foreach ($boothTypesLegend as $boothlabelIndex => $boothlabelValue) {
+                            if ($boothlabelValue->ID == $getlabelID) {
+                                $createdproductPrice = $boothlabelValue->colorcodeOcc;
+                                if ($createdproductPrice != "none") {
+                                    $NewfillColor = $createdproductPrice;
+                                    $getCellStyleArray = explode(';', $getCellStyle);
+                                    foreach ($getCellStyleArray as $styleIndex => $styleValue) {
+                                        if ($styleValue != 'DefaultStyle1') {
+                                            $styledeepCheck = explode('=', $styleValue);
+                                            if ($styledeepCheck[0] == 'fillColor') {
+                                                $oldfillcolortext = $styleValue;
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    $getCellStyleArray = explode(';', $getCellStyle);
+                                    foreach ($getCellStyleArray as $styleIndex => $styleValue) {
+                                        if ($styleValue != 'DefaultStyle1') {
+                                            $styledeepCheck = explode('=', $styleValue);
+    
+                                            if ($styledeepCheck[0] == 'occ') {
+                                                $NewfillColor = $styledeepCheck[1];
+                                            } elseif ($styledeepCheck[0] == 'fillColor') {
+                                                $oldfillcolortext = $styleValue;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        $orderlogginsData['legendlabels'][] = 'disabled';
+                        $getCellStyleArray = explode(';', $getCellStyle);
+                        foreach ($getCellStyleArray as $styleIndex => $styleValue) {
+                            if ($styleValue != 'DefaultStyle1') {
+                                $styledeepCheck = explode('=', $styleValue);
+                                if ($styledeepCheck[0] == 'occ') {
+                                    $NewfillColor = $styledeepCheck[1];
+                                } elseif ($styledeepCheck[0] == 'fillColor') {
+                                    $oldfillcolortext = $styleValue;
+                                }
+                            }
+                        }
+                    }
+    
+                    $orderlogginsData['assigendcolor'][] = $NewfillColor;
+                    $orderlogginsData['assigendoldcolor'][] = $oldfillcolortext;
+                    $getCellStyle = str_replace($oldfillcolortext, 'fillColor=' . $NewfillColor, $getCellStyle);
+                    $xml->root->MyNode[$currentIndex]->mxCell->attributes()->$styleatt = $getCellStyle;
+                }
+                $currentIndex++;
+            }
+    
+            $getresultforupdat = str_replace('<?xml version="1.0"?>', "", $xml->asXML());
+            update_post_meta($foolrplanID, 'floorplan_xml', json_encode($getresultforupdat));
+            update_post_meta($id, 'boothStatus', 'Completed');
+            $loggin_data['boothstatus'][] = 'Completed';
+        } else {
+            update_post_meta($id, 'boothStatus', 'Pending');
+            $loggin_data['boothstatus'][] = 'Pending';
+        }
+    }
+
+     echo $result;
+}   
 
 ?>

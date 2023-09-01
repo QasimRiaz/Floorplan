@@ -310,7 +310,12 @@ $getAllusers_data3 = addslashes(json_encode($getAllusers_data3));
       <link rel="stylesheet" type="text/css" href="<?php echo plugin_dir_url( __FILE__ ); ?>styles/spectrum.css?v=2.15">
       <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" /> 
       
-     
+     <style>
+
+            div:where(.swal2-icon) .swal2-icon-content{
+                font-size: 0.75em !important;
+            }
+     </style>
       
       <script type="text/javascript">
 		// Parses URL parameters. Supported parameters are:
@@ -356,7 +361,7 @@ $getAllusers_data3 = addslashes(json_encode($getAllusers_data3));
         
         
        
-        
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
        
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery-confirm.js?v=2.21"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Init.js?v=2.22"></script>
@@ -364,7 +369,8 @@ $getAllusers_data3 = addslashes(json_encode($getAllusers_data3));
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>sanitizer/sanitizer.min.js?v=2.22"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=3.02"></script>
 
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=9.42"></script>
+
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=10.17"></script> 
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.64"></script>
 
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=3.81"></script>
@@ -372,7 +378,7 @@ $getAllusers_data3 = addslashes(json_encode($getAllusers_data3));
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.75"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=3.90"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.77"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=7.44"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=8.82"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=3.02"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=3.78"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.78"></script>
@@ -502,7 +508,7 @@ jQuery(window).load(function() {
                       }else{
                           window.onbeforeunload = null;
                           updatelockstatus('unlock');
-                          window.location.replace(mxCurrentSiteUrl+"/floor-plan-warning/");
+                        //   window.location.replace(mxCurrentSiteUrl+"/floor-plan-warning/");
                           
                       }
                       
@@ -575,6 +581,10 @@ jQuery(window).load(function() {
     
      color: #333 !important;
 }
+
+</style>
+
+
             
         </style>
           

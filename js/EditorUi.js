@@ -5,9 +5,11 @@
  * Constructs a new graph editor
  */
 var checkinitalstatus;
-
+var disableStyle;
+var purchCount = 0;
 EditorUi = function (editor, container, lightbox) {
     var floorPlanSettings = JSON.parse(floorPlanSetting);
+
     //console.log(floorPlanSettings["Open_users"]);
     // console.log(floorPlanSettings["tableSort"]);
     // var cartTotalCount=cartCount;
@@ -928,6 +930,20 @@ EditorUi = function (editor, container, lightbox) {
                 } else {
                     userlimit = floorPlanSettings["usersNum"];
                 }
+
+
+                if(logInUser["OverrideCheck"] == "checked" &&
+                logInUser["Overrideprepaid"] == "checked"){
+                    prePaid = logInUser["Overrideprepaid"];
+                }else{
+                    prePaid = floorPlanSettings["PrePaidChk"];
+                }
+         
+
+                if(prePaid == "checked"){
+
+                    disableStyle = 'disabled';
+                }
                 // console.log(logInUser["UserLevel"]);
                 // console.log(userlimit);
                 var array = {};
@@ -940,7 +956,7 @@ EditorUi = function (editor, container, lightbox) {
                     // console.log(logInUser["ReservedBooth"][index]);
                     if (logInUser["ReservedBooth"][0].length > 1 && flag == true) {
                         for (let y = 0; y < logInUser["ReservedBooth"][index].length; y++) {
-                            console.log(logInUser["ReservedBooth"][index][y]);
+                            // console.log(logInUser["ReservedBooth"][index][y]);
                             array[index] = logInUser["ReservedBooth"][index][y];
                         }
                         flag = false;
@@ -1125,7 +1141,7 @@ EditorUi = function (editor, container, lightbox) {
 
                         var boothtitle =
                             imagesrc +
-                            "<h5 ><strong>Booth Number: </strong>" +
+                            "<h5 id='boothName' ><strong>Booth Number: </strong>" +
                             assignedboothname +
                             "</h5>";
                         //openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >' + companynameas + '</h1>' + htmlforaddress + '<hr>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
@@ -1225,6 +1241,7 @@ EditorUi = function (editor, container, lightbox) {
                                     var boothOwner = finalresultProduct.Booth_Purchaser;
                                     var LevelOfBooth = finalresultProduct.LevelOfBooth;
                                     var PurchaseCount = finalresultProduct.PurchaseCount;
+                                    purchCount = PurchaseCount;
                                     var NumberOfReservedBooths =
                                         finalresultProduct.NumberOfReservedBooths;
                                     var buttonsdiv = "";
@@ -1285,7 +1302,7 @@ EditorUi = function (editor, container, lightbox) {
                                     }
 
                                     var boothtitle =
-                                        "<h5 ><strong>Booth Number: </strong>" +
+                                        "<h5 id='boothName'><strong>Booth Number: </strong>" +
                                         assignedboothname +
                                         "</h5>";
 
@@ -1742,7 +1759,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 postid +
                                                                 ')">Remove</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
                                                                 baseCurrentSiteURl +
-                                                                '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="' +
+                                                                '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                 boothproductid +
                                                                 '_checkout" href="' +
                                                                 checkouturl +
@@ -1789,7 +1806,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                             finalresultProduct.slug +
                                                                             ')">Pay in Full</a></div></div></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -1853,7 +1870,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                             finalresultProduct.slug +
                                                                             ')">Pay in Full</a></div></div></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -1927,7 +1944,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                             finalresultProduct.slug +
                                                                             ')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -1989,7 +2006,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                             finalresultProduct.slug +
                                                                             ')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -2133,6 +2150,7 @@ EditorUi = function (editor, container, lightbox) {
                                             cancelButton: false,
 
                                             closeIcon: true,
+                                            
                                             columnClass:
                                                 "jconfirm-box-container-viewerBOx viewerBOxwhenproducton",
                                             cancel: function () {
@@ -2172,14 +2190,14 @@ EditorUi = function (editor, container, lightbox) {
                             var productDescription =
                                 "<h6 >" + htmlcompanydescription + "</h6>";
                             htmlforassignedbooth =
-                                '<h5 >Booth Number:   <span style="font-size:14px;" >' +
+                                '<h5 id="boothName" >Booth Number:  <span style="font-size:14px;" >' +
                                 assignedboothname +
                                 "</span></h5>";
                             companylogourlnew =
                                 baseCurrentSiteURl +
                                 "/wp-content/plugins/floorplan/styles/default-placeholder-300x300.png";
                             var boothtitle =
-                                "<h5 ><strong>Booth Number: </strong>" +
+                                "<h5 id='boothName'><strong>Booth Number: </strong>" +
                                 assignedboothname +
                                 "</h5>";
                             if (tagsnameslist == "") {
@@ -2346,8 +2364,16 @@ function removeFromCart(p_id, request, price) {
 }
 
 function addToCart(p_id, request, price, slug) {
+
+
     var data1 = new FormData();
-    // console.log(userlimit);
+    var data3 = new FormData();
+    data3.append("boothproductid", p_id);
+    if(prePaid != "checked" || (prePaid == "checked" && userloggedinstatus != 1) || (prePaid != "checked" && userloggedinstatus == 1)){
+        
+        // console.log('boothid------------'+p_id);
+    
+        
     jQuery.ajax({
         url:
             baseCurrentSiteURl +
@@ -2361,6 +2387,7 @@ function addToCart(p_id, request, price, slug) {
         success: function (data) {
             // console.log(data);
             data = data.trim();
+
             if (
                 parseInt(userlimit) > parseInt(data) ||
                 userlimit == "" ||
@@ -2388,6 +2415,22 @@ function addToCart(p_id, request, price, slug) {
                     type: "POST",
 
                     success: function (data) {
+
+
+                        // jQuery.ajax({
+                        //     url:
+                        //         baseCurrentSiteURl +
+                        //         "/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=boothdiscount_price",
+                        //     data: data3,
+                        //     cache: false,
+                        //     contentType: false,
+                        //     processData: false,
+                        //     type: "POST",
+                    
+                        //     success: function (data) {
+
+                        //     }
+                        // });
                         var checkouturl = baseCurrentSiteURl + "/checkout/";
                         var addONs = baseCurrentSiteURl + "/product-category/add-ons/";
                         jQuery("#" + p_id).empty();
@@ -2424,6 +2467,95 @@ function addToCart(p_id, request, price, slug) {
             }
         },
     });
+
+    }else{
+
+        var originalString = jQuery('#boothName').text();
+        var boothName = originalString.replace(/booth number:\s*[A-Z]\s*/gi, '');
+        // console.log('boothName--------'+boothName);
+        var newData = new FormData();
+        newData.append('booth_productid',p_id);
+        newData.append('userlimit',userlimit);
+        newData.append('purchCount',purchCount);
+        newData.append('userloggedinstatus',userloggedinstatus);
+        var content = 'After clicking "Confirm" you will be immediatelly assigned to this booth and cannot be undone. To be removed from this booth you will need to contact show management.'
+        jQuery('.customecloseicon').trigger('click');
+
+
+        Swal.fire( 
+            {
+                title: "Are you sure?",
+                text: content,
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonClass: " btn",
+                confirmButtonColor: '#8cd4f5',
+                cancelButtonClass: "btn-danger",
+                confirmButtonText: "Confirm",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: true,
+                closeOnCancel: true,
+            },
+
+        ).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+
+                
+        jQuery.ajax({
+            url:
+                baseCurrentSiteURl +
+                "/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=boothselfassignment",
+            data: newData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: "POST",
+    
+            success: function (data) {
+
+                data = data.trim();
+                if(data == 'limitreached'){
+                    Swal.fire({
+                        icon: "info",
+                        title: "Limit Reached",
+                        text: "Booth purchase limit reached.",
+                        confirmButtonClass: " btn",
+                        confirmButtonColor: '#8cd4f5',
+                        showConfirmButton: true,
+                    }).then(function (isConfirm) {
+            
+                       
+                    })
+                }else{
+
+                    Swal.fire({
+                        icon: "info",
+                        title: "Booth Assigned!",
+                        text: 'Now you should see your company assigned to this booth.',
+                        showConfirmButton: true,
+                        confirmButtonText: "Close",
+                        confirmButtonClass: " btn",
+                        confirmButtonColor: '#8cd4f5',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                            
+                        }
+                    });
+                }
+                
+         
+            }
+        });
+    
+                
+            } 
+        })
+   
+       
+    }
 }
 
 function ReservedTheBooth(p_id, request, price, slug) {
