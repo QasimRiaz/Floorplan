@@ -2264,4 +2264,5 @@ function boothSelfAssignment(){
 
      echo $result;
 }   
+
 ?>
