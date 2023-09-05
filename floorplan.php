@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 11.0
- * @version : 11.0
+ * Version: 11.1
+ * @version : 11.1
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -2128,6 +2128,8 @@ function floorplanBoothImage($url)
 function boothSelfAssignment(){
 
     require_once plugin_dir_path(__DIR__) . 'EGPL/includes/floorplan-manager.php';
+    include_once(plugin_dir_path(__DIR__) . 'EGPL/egpl_core_functions_nine.php');
+    
     $productID = $_POST['booth_productid'];
     $userloggedinstatus = $_POST['userloggedinstatus'];
    
@@ -2262,7 +2264,16 @@ function boothSelfAssignment(){
         }
     }
 
+        //Getting Settings for Booth//
+    $floor_Plan_Settings = 'floorPlanSettings';
+    $Booth_Queue_Settings = 'boothQueueSettings';
+    $get = get_option($floor_Plan_Settings);
+    
+    
+    if ($get['tableSort'] == "checked") {
+            $get_booth_settings = get_option($Booth_Queue_Settings);
+             user_pirority_Updates($get_booth_settings);
+        }
      echo $result;
 }   
-
 ?>
