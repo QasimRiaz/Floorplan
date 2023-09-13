@@ -7709,6 +7709,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
       node.setAttribute("companydescripiton", currentcompanydescripiton);
 
       if (cell.length == 1) {
+
         legendlabels = cell[0].getAttribute("legendlabels", "");
         legendlabelscolorUn = cell[0].getAttribute("legendlabelscolorUn", "");
         legendlabelscolorOcc = cell[0].getAttribute("legendlabelscolorOcc", "");
@@ -7716,64 +7717,133 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
         var seletedpricetegkeyvalue = cell[0].getAttribute("pricetegid", "");
         var boothproductvaluecheck = cell[0].getAttribute("boothproductid", "");
 
-        node.setAttribute("legendlabels", legendlabels);
-        node.setAttribute("legendlabelscolorUn", legendlabelscolorUn);
-        node.setAttribute("legendlabelscolorOcc", legendlabelscolorOcc);
-
-        node.setAttribute("pricetegid", seletedpricetegkeyvalue);
-        node.setAttribute("boothtags", boothtagsvalue);
-
         var e = document.getElementById("exhibitorID");
-
-        if (e.options[e.selectedIndex].value != "") {
+        var oldboothowner = cell[0].getAttribute("boothOwner", "");
+        if (e.options[e.selectedIndex].value != "none") {
           getexhibortervalue = e.options[e.selectedIndex].value;
         } else {
           getexhibortervalue = "";
         }
+        if(jQuery('#exhibitorID :selected').val() != 'none'){
 
-        var oldboothowner = cell[0].getAttribute("boothOwner", "");
-        var cellID = cell[0].id;
-        if (boothproductvaluecheck != "") {
-          boothproductvalue = boothproductvaluecheck;
-
-          // console.log(boothproductvalue);
-        } else {
-          boothproductvalue = "";
-        }
-        if (oldboothowner != "" && oldboothowner != "none") {
-          jQuery.each(allBoothsProductData, function (boothIndex, boothObject) {
-            if (boothObject.cellID == cellID) {
-              allBoothsProductData[boothIndex].boothstatus = "deleterequest";
-              boothproductvalue = "";
-            }
-          });
-        }
-
-        node.setAttribute("boothOwner", getexhibortervalue);
-        //document.getElementById("boothproduct");
-
-        node.setAttribute("boothproductid", boothproductvalue);
-
-        if (getexhibortervalue != "none") {
-          if (legendlabels != "none" && legendlabels != "") {
-        
-            if (legendlabelscolorOcc == "none") {
-              graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
-            } else {
-              graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
-            }
-          } else {
-            graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+          if((boothproductvaluecheck != "" || boothproductvaluecheck != null)){
+  
+            node.setAttribute("boothproductid", boothproductvalue);
+          }else{
+            node.setAttribute("boothproductid", "");
           }
-        } else {
-          if (legendlabels != "none" && legendlabels != "") {
-            if (legendlabelscolorUn == "none") {
-              graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+          if(legendlabels != "none"){
+
+            node.setAttribute("legendlabels", legendlabels);
+          }else{
+            node.setAttribute("legendlabels", "");
+          }
+
+          if(legendlabelscolorUn != "none"){
+
+            node.setAttribute("legendlabelscolorUn", legendlabelscolorUn);
+          
+          }else{
+            node.setAttribute("legendlabelscolorUn", "");
+          }
+
+          if(legendlabelscolorOcc != "none"){
+
+            node.setAttribute("legendlabelscolorOcc", legendlabelscolorOcc);
+          
+          }else{
+            node.setAttribute("legendlabelscolorOcc", "");
+          }
+
+          if(boothtagsvalue != "none"){
+
+            node.setAttribute("boothtags", boothtagsvalue);
+          
+          }else{
+            node.setAttribute("boothtags", "");
+          }
+
+          if (getexhibortervalue != "none") {
+            if (legendlabels != "none" && legendlabels != "") {
+          
+              if (legendlabelscolorOcc == "none") {
+                graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+              } else {
+                graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
+              }
             } else {
-              graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
+              graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
             }
           } else {
-            graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+            if (legendlabels != "none" && legendlabels != "") {
+              if (legendlabelscolorUn == "none") {
+                graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+              } else {
+                graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
+              }
+            } else {
+              graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+            }
+          }
+
+          
+          
+        }
+        node.setAttribute("boothOwner", getexhibortervalue);
+
+        if(jQuery('#exhibitorID :selected').val() == 'none'){
+          node.setAttribute("legendlabels", legendlabels);
+          node.setAttribute("legendlabelscolorUn", legendlabelscolorUn);
+          node.setAttribute("legendlabelscolorOcc", legendlabelscolorOcc);
+  
+          node.setAttribute("pricetegid", seletedpricetegkeyvalue);
+          node.setAttribute("boothtags", boothtagsvalue);
+  
+  
+          
+          var cellID = cell[0].id;
+          if (boothproductvaluecheck != "") {
+            boothproductvalue = boothproductvaluecheck;
+  
+            // console.log(boothproductvalue);
+          } else {
+            boothproductvalue = "";
+          }
+          if (oldboothowner != "" && oldboothowner != "none") { 
+            jQuery.each(allBoothsProductData, function (boothIndex, boothObject) {
+              if (boothObject.cellID == cellID) {
+                allBoothsProductData[boothIndex].boothstatus = "deleterequest";
+                boothproductvalue = "";
+              }
+            });
+          }
+  
+          
+          //document.getElementById("boothproduct");
+  
+          node.setAttribute("boothproductid", boothproductvalue);
+  
+          if (getexhibortervalue != "none") {
+            if (legendlabels != "none" && legendlabels != "") {
+          
+              if (legendlabelscolorOcc == "none") {
+                graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+              } else {
+                graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
+              }
+            } else {
+              graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+            }
+          } else {
+            if (legendlabels != "none" && legendlabels != "") {
+              if (legendlabelscolorUn == "none") {
+                graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+              } else {
+                graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
+              }
+            } else {
+              graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+            }
           }
         }
       } else {
@@ -7828,12 +7898,14 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
         node.setAttribute("pricetegid", boothvaluetag);
       }
 
+   
       cellvalue.value = node;
       graph.cellLabelChanged(cellvalue, "");
 
       var mylabel = cellvalue.getAttribute("mylabel", "");
       var boothproductid = cellvalue.getAttribute("boothproductid", "");
       var boothowner = cellvalue.getAttribute("boothOwner", "");
+
       var legendlabels = cellvalue.getAttribute("legendlabels", "");
       var legendlabelscolorUn = cellvalue.getAttribute(
         "legendlabelscolorUn",
