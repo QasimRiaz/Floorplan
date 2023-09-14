@@ -508,7 +508,7 @@ jQuery(window).load(function() {
                       }else{
                           window.onbeforeunload = null;
                           updatelockstatus('unlock');
-                        //   window.location.replace(mxCurrentSiteUrl+"/floor-plan-warning/");
+                          window.location.replace(mxCurrentSiteUrl+"/floor-plan-warning/");
                           
                       }
                       
