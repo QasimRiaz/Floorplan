@@ -7664,7 +7664,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
   mxEvent.addListener(detailsubmit, "click", function () {
     var cell = graph.getSelectionCells();
     document.getElementById("applybutton").focus();
-    jQuery.each(cell, function (cellindex, cellvalue) {
+    jQuery.each(cell, function (cellindex, cellvalue) { 
       var startfloorplanedtitng = {};
       var valuexmlstring = "";
       startfloorplanedtitng.action = "Update Booth";
@@ -7709,7 +7709,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
       node.setAttribute("companydescripiton", currentcompanydescripiton);
 
       if (cell.length == 1) {
-
+      
         legendlabels = cell[0].getAttribute("legendlabels", "");
         legendlabelscolorUn = cell[0].getAttribute("legendlabelscolorUn", "");
         legendlabelscolorOcc = cell[0].getAttribute("legendlabelscolorOcc", "");
@@ -7722,10 +7722,10 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
         if (e.options[e.selectedIndex].value != "none") {
           getexhibortervalue = e.options[e.selectedIndex].value;
         } else {
-          getexhibortervalue = "";
+          getexhibortervalue = "none";
         }
         if(jQuery('#exhibitorID :selected').val() != 'none'){
-
+      
           if((boothproductvaluecheck != "" || boothproductvaluecheck != null)){
   
             node.setAttribute("boothproductid", boothproductvalue);
@@ -7772,7 +7772,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
                 graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
               }
             } else {
-              graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+               graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
             }
           } else {
             if (legendlabels != "none" && legendlabels != "") {
@@ -7792,6 +7792,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
         node.setAttribute("boothOwner", getexhibortervalue);
 
         if(jQuery('#exhibitorID :selected').val() == 'none'){
+      
           node.setAttribute("legendlabels", legendlabels);
           node.setAttribute("legendlabelscolorUn", legendlabelscolorUn);
           node.setAttribute("legendlabelscolorOcc", legendlabelscolorOcc);
@@ -7824,29 +7825,45 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
           node.setAttribute("boothproductid", boothproductvalue);
   
           if (getexhibortervalue != "none") {
-            if (legendlabels != "none" && legendlabels != "") {
           
+            if (legendlabels != "none" && legendlabels != "") {
+
               if (legendlabelscolorOcc == "none") {
+
                 graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
               } else {
+            
                 graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
               }
             } else {
-              graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+
+              if(legendlabelscolorUn != "none" || legendlabelscolorUn != ""){
+
+                graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+              }
+              // graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
             }
           } else {
+       
             if (legendlabels != "none" && legendlabels != "") {
+
+            
               if (legendlabelscolorUn == "none") {
+    
                 graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
               } else {
+           
                 graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
               }
             } else {
-              graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+     
+               graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
             }
           }
         }
       } else {
+
+ 
         var boothownerlastvalue = "";
         var boothproductlastvalue = "";
         var seletedpricetegkeyvalue = "none";
@@ -7866,7 +7883,8 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
           boothvaluetag = cellvalue.getAttribute("boothtags", "");
         }
 
-        if (boothownerlastvalue != "none") {
+
+        if (boothownerlastvalue != "none" && boothownerlastvalue != "") {
           if (legendlabels != "none" && legendlabels != "") {
             if (legendlabelscolorOcc == "none") {
               graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
@@ -7885,12 +7903,14 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
               graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
             }
           } else {
+     
             graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
           }
         }
 
         node.setAttribute("boothOwner", boothownerlastvalue);
         node.setAttribute("legendlabels", legendlabels);
+       
         node.setAttribute("legendlabelscolorUn", legendlabelscolorUn);
         node.setAttribute("legendlabelscolorOcc", legendlabelscolorOcc);
         node.setAttribute("boothproductid", boothproductlastvalue);
