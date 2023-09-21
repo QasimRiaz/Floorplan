@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 11.4
- * @version : 11.4
+ * Version: 11.5
+ * @version : 11.5
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -170,7 +170,10 @@ function getHighestPackagePriority()
         foreach ($priorityNums as $key => $val) {
             array_push($prior, $key);
         }
-        return $priorityNums[min($prior)];
+        if(!empty($prior)){
+
+            return $priorityNums[min($prior)];
+        }
     } elseif (is_user_logged_in() && !in_array('subscriber', (array)wp_get_current_user()->roles)) {
         $user = wp_get_current_user();
         $user_roles = $user->roles;
