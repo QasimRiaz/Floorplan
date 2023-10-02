@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 11.5
- * @version : 11.5
+ * Version: 11.4
+ * @version : 11.4
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -13,12 +13,16 @@
  * Text Domain: ExpoGenie
  * Network:           true
  */
+require_once('XML_parser.php');
 
 if (isset($_GET['floorplanRequest'])) {
 
-    if ($_GET['floorplanRequest'] == "savedfloorplansettings") {
+    if ($_GET['floorplanRequest'] == "savedfloorplansettings") { // save here
 
         require_once('../../../wp-load.php');
+        
+        require_once('XML_parser.php');
+        fp_create_db($_POST);
 
         getBoothList($_POST);
         die();
@@ -36,6 +40,9 @@ if (isset($_GET['floorplanRequest'])) {
 
 
         require_once('../../../wp-load.php');
+        
+        require_once('XML_parser.php');
+        update_legendlabels($_POST);
 
         savedalllegendstypes($_POST);
         die();
@@ -44,6 +51,9 @@ if (isset($_GET['floorplanRequest'])) {
 
 
         require_once('../../../wp-load.php');
+
+        require_once('XML_parser.php');
+        update_boothtags($_POST);
 
         savedallboothtags($_POST);
         die();
@@ -72,10 +82,13 @@ if (isset($_GET['floorplanRequest'])) {
         savedlockunlockstatus($_REQUEST);
         die();
 
-    } else if ($_GET['floorplanRequest'] == "createnewfloorplan") {
+    } else if ($_GET['floorplanRequest'] == "createnewfloorplan") { //save here
 
 
         require_once('../../../wp-load.php');
+
+        require_once('XML_parser.php');
+        fp_new_db();
 
         createnewfloorplan($_REQUEST);
         die();
@@ -128,7 +141,7 @@ if (isset($_GET['floorplanRequest'])) {
 
     }  else if ($_GET['floorplanRequest'] == "boothselfassignment") {
         require_once('../../../wp-load.php');
-
+        require('XML_parser.xml');
      
         boothSelfAssignment();
 
@@ -137,6 +150,91 @@ if (isset($_GET['floorplanRequest'])) {
     }
 
 }
+require_once('XML_parser.php');
+function init_post_type()
+{
+    register_post_type('EGPL_floorplan',
+    array(
+        'labels' => array(
+            'name' => __('EGPL floorplan', 'textdomain'),
+            'singular_name' => __('EGPL floorplan', 'textdomain'),
+        ),
+        'public' => true,
+        'has_archive' => true,
+    )
+    );
+    register_post_type('EGPL_object',
+    array(
+        'labels' => array(
+            'name' => __('EGPL floorplan objects', 'textdomain'),
+            'singular_name' => __('EGPL floorplan object', 'textdomain'),
+        ),
+        'public' => true,
+        'has_archive' => true,
+    )
+    );
+    register_post_type('EGPL_boothtag',
+    array(
+        'labels' => array(
+            'name' => __('EGPL floorplan boothtags', 'textdomain'),
+            'singular_name' => __('EGPL floorplan boothtag', 'textdomain'),
+        ),
+        'public' => true,
+        'has_archive' => true,
+    )
+    );
+    register_post_type('EGPL_legendlabel',
+    array(
+        'labels' => array(
+            'name' => __('EGPL floorplan legendlabels', 'textdomain'),
+            'singular_name' => __('EGPL floorplan legendlabel', 'textdomain'),
+        ),
+        'public' => true,
+        'has_archive' => true,
+    )
+    );
+    register_post_type('EGPL_customstyle',
+    array(
+        'labels' => array(
+            'name' => __('EGPL floorplan customstyles', 'textdomain'),
+            'singular_name' => __('EGPL floorplan customstyle', 'textdomain'),
+        ),
+        'public' => true,
+        'has_archive' => true,
+    )
+    );
+}
+
+
+add_action('init','init_post_type');
+
+function init_rest_routes()
+{
+    register_rest_route('xml/v1','create_db',
+    array(
+        'methods' => 'POST',
+        'callback' => 'fp_create_db'
+    ));
+    register_rest_route('xml/v1','create_xml',
+    array(
+        'methods' => 'POST',
+        'callback' => 'fp_create_xml'
+    ));
+    //test route
+    register_rest_route('test/v1','test',
+    array(
+        'methods' => 'GET',
+        'callback' => 'fp_test'
+    ));
+    register_rest_route('xml/v1','flush',
+    array(
+        'methods' => 'GET',
+        'callback' => 'clear_posts'
+    ));
+}
+
+add_action('rest_api_init','init_rest_routes');
+
 
 //zaeem
 function getHighestPackagePriority()
@@ -170,10 +268,7 @@ function getHighestPackagePriority()
         foreach ($priorityNums as $key => $val) {
             array_push($prior, $key);
         }
-        if(!empty($prior)){
-
-            return $priorityNums[min($prior)];
-        }
+        return $priorityNums[min($prior)];
     } elseif (is_user_logged_in() && !in_array('subscriber', (array)wp_get_current_user()->roles)) {
         $user = wp_get_current_user();
         $user_roles = $user->roles;
@@ -233,7 +328,7 @@ function boothDiscountPrice($boothProductID){
     $boothPriceBasedLevels = get_post_meta($boothProductID, 'levelbaseddiscountdata', true);
     $boothPriceBasedLevels = json_decode(json_encode($boothPriceBasedLevels),true);
 
-        global $woocommerce;
+    global $woocommerce;
     $item = $woocommerce->cart->get_cart();
     $flag = true;
     foreach ($item as $key => $value) {
@@ -664,7 +759,6 @@ function createnewfloorplan($postData)
         update_post_meta($id, 'sellboothsjson', "");
         update_post_meta($id, 'updateboothpurchasestatus', "");
 
-
         contentmanagerlogging_file_upload($lastInsertId, $post_request);
 
         echo $id;
@@ -996,7 +1090,7 @@ function getPresetList()
     update_post_meta($_REQUEST['post_id'], 'booth_types', trim($boothTypes));
     update_post_meta($_REQUEST['post_id'], 'floor_background', $_REQUEST['floorBG']);
     update_post_meta($_REQUEST['post_id'], 'floorplan_xml', $_REQUEST['floorXml']);
-
+    
     $presetarray = get_post_meta($floorplan_id, 'booth_types', true);
     $preset_dataarray = json_decode($presetarray);
     $responce_message['status'] = 'clear';
@@ -1021,7 +1115,6 @@ function getPresetList()
 
         }
     }
-
     echo json_encode($responce_message);
 
     die();
@@ -1037,8 +1130,8 @@ function getBoothtypesList($postdata)
         $id = $postdata['post_id'];
 
 
-        $boothTypesLegend = get_post_meta($id, 'legendlabels', true);
-
+        //$boothTypesLegend = get_post_meta($id, 'legendlabels', true);
+        $boothTypesLegend = stripslashes(get_legendlabels());
         if (empty($boothTypesLegend)) {
             $singleuserdata = 'empty';
         } else {
@@ -1095,7 +1188,6 @@ function getBoothList($postdata)
             update_post_meta($postdata['post_id'], 'floorplan_xml', $postdata['floorXml']);
             update_post_meta($postdata['post_id'], 'sellboothsjson', $postdata['sellboothsjson']);
             update_post_meta($postdata['post_id'], 'updateboothpurchasestatus', "unlock");
-
             $my_post = array(
                 'ID' => $postdata['post_id'],
                 'post_title' => $postdata['loadedfloorplantitle']
@@ -1114,7 +1206,7 @@ function getBoothList($postdata)
                 $defaultImage = get_site_url() . "/wp-content/plugins/floorplan/icon01.png";
                 $productpicID = floorplanBoothImage($defaultImage);
 
-
+                
                 $responce = $demo->createAllBoothPorducts($postdata['post_id'], $postdata['sellboothsjson'], $postdata['floorXml'], $productpicID);
 
 
@@ -1132,6 +1224,7 @@ function getBoothList($postdata)
         return $e;
 
     }
+
     die();
 }
 
@@ -1777,7 +1870,6 @@ function floorplan_shortcode($atts, $content = null)
             update_post_meta($id, 'pricetegs', "");
             update_post_meta($id, 'sellboothsjson', "");
             update_post_meta($id, 'updateboothpurchasestatus', "");
-
         }
 
         if ($atts['status'] != 'viewer') {
@@ -1785,10 +1877,17 @@ function floorplan_shortcode($atts, $content = null)
         }
         $boothsproductsData;
         //$boothTypes        = get_post_meta( $id, 'booth_types', true );
-        $FloorBackground = get_post_meta($id, 'floor_background', true);
-        $FloorplanXml[0] = get_post_meta($id, 'floorplan_xml', true);
-        $FloorplanLegends = get_post_meta($id, 'legendlabels', true);
-        $FloorplanTags = get_post_meta($id, 'boothtags', true);
+        //$FloorBackground = get_post_meta($id, 'floor_background', true);
+        $FloorBackground = fp_get_bg();
+
+        //$FloorplanXml[0] = get_post_meta($id, 'floorplan_xml', true);
+        $FloorplanXml[0] = fp_create_xml();
+        //$FloorplanLegends = get_post_meta($id, 'legendlabels', true);
+        $FloorplanLegends =stripslashes(get_legendlabels());
+
+        //$FloorplanTags = get_post_meta($id, 'boothtags', true);
+        $FloorplanTags = stripslashes(get_boothtags());
+
         $mxPriceTegsObject = get_post_meta($id, 'pricetegs', true);
         $sellboothsjson = get_post_meta($id, 'sellboothsjson', true);
         $floorplanstatuslockunlock = get_post_meta($id, 'updateboothpurchasestatus', true);
@@ -2180,8 +2279,10 @@ function boothSelfAssignment(){
     
             $OrderUserID = $current_user;
             $foolrplanID = $woocommerce_rest_api_keys['ContentManager']['floorplanactiveid'];
-            $boothTypesLegend = json_decode(get_post_meta($foolrplanID, 'legendlabels', true));
-            $FloorplanXml = get_post_meta($foolrplanID, 'floorplan_xml', true);
+            //$boothTypesLegend = json_decode(get_post_meta($foolrplanID, 'legendlabels', true));
+            $legendlabels = json_decode(stripslashes(get_legendlabels()));
+            //$FloorplanXml = get_post_meta($foolrplanID, 'floorplan_xml', true);
+            $FloorPlanXml = fp_create_xml();
             $FloorplanXml = str_replace('"n<', '<', $FloorplanXml);
             $FloorplanXml = str_replace('>n"', '>', $FloorplanXml);
             $xml = simplexml_load_string($FloorplanXml) or die("Error: Cannot create object");
@@ -2261,6 +2362,7 @@ function boothSelfAssignment(){
             update_post_meta($foolrplanID, 'floorplan_xml', json_encode($getresultforupdat));
             update_post_meta($id, 'boothStatus', 'Completed');
             $loggin_data['boothstatus'][] = 'Completed';
+            
         } else {
             update_post_meta($id, 'boothStatus', 'Pending');
             $loggin_data['boothstatus'][] = 'Pending';
