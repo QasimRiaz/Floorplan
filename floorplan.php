@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 11.4
- * @version : 11.4
+ * Version: 11.5
+ * @version : 11.5
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -170,7 +170,10 @@ function getHighestPackagePriority()
         foreach ($priorityNums as $key => $val) {
             array_push($prior, $key);
         }
-        return $priorityNums[min($prior)];
+        if(!empty($prior)){
+
+            return $priorityNums[min($prior)];
+        }
     } elseif (is_user_logged_in() && !in_array('subscriber', (array)wp_get_current_user()->roles)) {
         $user = wp_get_current_user();
         $user_roles = $user->roles;
@@ -752,6 +755,40 @@ function getproductdetail($productID)
         $get_depositenable_type = get_post_meta($id, "_wc_deposit_enabled", true);
         $get_role_type = get_post_meta($id, "_wc_deposit_enabled", true);
 
+        $boothPriceBasedLevels = get_post_meta($id, 'levelbaseddiscountdata', true);
+        $boothPriceBasedLevels = json_decode(json_encode($boothPriceBasedLevels),true);
+        $pkgLvl = trigger2();
+        if(!empty($boothPriceBasedLevels)){
+               
+            if (is_user_logged_in()) {
+
+                $user = wp_get_current_user();
+                $user_role = $user->roles;
+                $user_role = $user_role[0];
+            }else{
+
+                $user_role = $pkgLvl;
+            }
+                foreach($boothPriceBasedLevels as $key => $value){
+             
+                    if(in_array($user_role, (array)$value['levels'])){
+
+                        if(!empty($value['discounttype']) && !empty($value['discountamount'])){
+
+                            if($value['discounttype'] == 'percent'){
+                                $boothProductPrice = ($value['discountamount'] / 100) * (int)$get_product->regular_price;
+                                $boothProductPrice =  (int)$get_product->regular_price - $boothProductPrice;
+                            }else{
+
+                                $boothProductPrice = (int)$get_product->regular_price - $value['discountamount'];
+                            }
+                        }
+                   
+                        
+                    }
+                }    
+        }
+
         if (empty($get_product)) {
 
             $productdetail['productstatus'] = 'removed';
@@ -769,6 +806,7 @@ function getproductdetail($productID)
         $productdetail['PurchaseCount'] = $number;
 
         $productdetail['price'] = (int)$get_product->regular_price;
+        $productdetail['levelbaseddiscountedprice'] = (int)$boothProductPrice;
         $productdetail['stockstatus'] = $get_product->stock_status;
         $productdetail['deposit_type'] = $get_deposit_type;
         $productdetail['deposit_amount'] = $get_deposit_amount;

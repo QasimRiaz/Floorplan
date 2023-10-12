@@ -1281,21 +1281,45 @@ EditorUi = function (editor, container, lightbox) {
                                         userloggedinstatus == true &&
                                         floorPlanSettings["Hide_Price"] != "Hide_Booth_price"
                                     ) {
-                                        var productprice =
+
+                                        console.log('discprice---------'+finalresultProduct.levelbaseddiscountedprice);
+                                        if(finalresultProduct.levelbaseddiscountedprice !== 0){
+
+                                            var productprice =
                                             "<p><h5 ><strong>Price: </strong>" +
                                             finalresultProduct.currencysymbole +
                                             finalresultProduct.price +
-                                            "</h5>";
-                                    } else {
-                                        if (
-                                            flowstatus.indexOf("mood=wizard") != -1 &&
-                                            floorPlanSettings["Hide_Price"] != "Hide_Booth_price"
-                                        ) {
+                                            "  (<small><strong>Discounted Price: </strong>"+finalresultProduct.currencysymbole +
+                                            finalresultProduct.levelbaseddiscountedprice +"</small>)</h5>";
+                                        }else{
+
                                             var productprice =
                                                 "<p><h5 ><strong>Price: </strong>" +
                                                 finalresultProduct.currencysymbole +
                                                 finalresultProduct.price +
                                                 "</h5>";
+                                        }
+                                    } else {
+                                        if (
+                                            flowstatus.indexOf("mood=wizard") != -1 &&
+                                            floorPlanSettings["Hide_Price"] != "Hide_Booth_price"
+                                        ) {
+                                            if(finalresultProduct.levelbaseddiscountedprice !== 0){
+
+                                                var productprice =
+                                                "<p><h5 ><strong>Price: </strong>" +
+                                                finalresultProduct.currencysymbole +
+                                                finalresultProduct.price +
+                                                "  (<small><strong>Discounted Price: </strong>"+finalresultProduct.currencysymbole +
+                                                finalresultProduct.levelbaseddiscountedprice +"</small>)</h5>";
+                                            }else{
+    
+                                                var productprice =
+                                                    "<p><h5 ><strong>Price: </strong>" +
+                                                    finalresultProduct.currencysymbole +
+                                                    finalresultProduct.price +
+                                                    "</h5>";
+                                            }
                                         } else {
                                             var productprice = "";
                                         }
@@ -2069,15 +2093,63 @@ EditorUi = function (editor, container, lightbox) {
                                                                 if (((userlimit <= PurchaseCount && userlimit != '') && PurchaseCount != 0) && (userloggedinstatus == "1")) {
                                           
                                                                 } else {
-                                                                    // console.log("Qsaim102");
-                                                                    buttonsdiv =
+
+                                                                    if (
+                                                                        reservedCheck == "0" &&
+                                                                        reservedStatus == ""
+                                                                    ) {
+                                                                        console.log("In resereved");
+                                                                        // console.log("Qsaim30");
+
+                                                                        buttonsdiv =
+                                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                                postid +
+                                                                                ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                                                                postid +
+                                                                                ",'log','full'," +
+                                                                                finalresultProduct.slug +
+                                                                                ')"  >Add To Cart</a></div></div>';
+
+                                                                        buttonsdiv +=
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                         postid +
-                                                                        ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                                                        ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="ReservedTheBooth(' +
                                                                         postid +
                                                                         ",'log','full'," +
                                                                         finalresultProduct.slug +
-                                                                        ')"  >Add To Cart</a></div></div>';
+                                                                        ')"  >Reserve The Booth</a></div></div>';
+
+                                                                    }else if(NumberOfReservedBooths != false){
+
+                                                                        buttonsdiv =
+                                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                                postid +
+                                                                                ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                                                                postid +
+                                                                                ",'log','full'," +
+                                                                                finalresultProduct.slug +
+                                                                                ')"  >Add To Cart</a></div></div>';
+                                                                    }else{
+
+                                                                        if(reservedStatus != ""){
+
+                                                                        }else{
+
+                                                                            buttonsdiv =
+                                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                                postid +
+                                                                                ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                                                                postid +
+                                                                                ",'log','full'," +
+                                                                                finalresultProduct.slug +
+                                                                                ')"  >Add To Cart</a></div></div>';
+                                                                        }
+
+                                                                       
+                                                                        // console.log("Qsaim102");
+                                                                    }
+
+                                                               
                                                                 }
                                                             }
                                                         } else {

@@ -3292,8 +3292,7 @@ Sidebar.prototype.addBoothtagsFunctions = function(graph, id, title, expanded, f
         
 	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
 	{           
-                   
-                    
+
                     var div = document.createElement('ul');
                     div.className ="legendslist";
                     var boothdetailleft = "";
@@ -3408,20 +3407,44 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
         
 	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
 	{           
-                   
-                    
-                    var div = document.createElement('ul');
-                    div.className ="legendslist";
+
+
+		
+		
+					var div = document.createElement('ul');
+					div.className ="legendslist";
+					div.id = "leglist"
+
+					var existingElement = document.getElementById("leglist");
+					console.log(existingElement);
                     var boothdetailleft = "";
                     jQuery.each(LegendsOfObjects, function (key, value) {
                         
-                        var li = document.createElement('li');
-                        li.className = 'legendslistLi';
-                        li.style.backgroundColor = value.colorcode;
-                        var anchor = document.createElement('a');
-                        anchor.innerHTML = value.name;
-                        anchor.id = value.ID;
-                        
+                    var li = document.createElement('li');
+                    li.className = 'legendslistLi';
+					var gradient = "linear-gradient(to top, " + value.colorcode + " 60%, " + value.colorcodeOcc + " 50%)";
+					li.style.background = gradient;
+
+					// Set the tooltips for hover
+				    li.setAttribute('title', 'Unoccupied'); // Tooltip for top color
+				    li.style.cursor = 'help'; // Change cursor to a pointer to indicate hover
+
+				    // Add an event listener for mouseover to change the tooltip text
+				    li.addEventListener('mouseover', function (event) {
+				    	var mouseY = event.clientY - li.getBoundingClientRect().top;
+				    	var totalHeight = li.clientHeight;
+
+				    	if (mouseY < totalHeight * 0.5) {
+				    		li.setAttribute('title', value.name+'-OCCUPIED');
+				    	} else {
+				    		li.setAttribute('title', value.name+'-UNOCCUPIED');
+				    	}
+				    });
+                        // li.style.backgroundColor = value.colorcode;
+                    var anchor = document.createElement('a');
+                    anchor.innerHTML = value.name;
+                    anchor.id = value.ID;				
+                 
                       mxEvent.addListener(anchor, 'mouseenter', function(sender, evt)
                             {
                                     var cells = graph.getChildVertices(graph.getDefaultParent());
@@ -3519,22 +3542,43 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
          if(condition){
         
          }
+
+
         
 	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
 	{           
                    
-                    
+		
                     var div = document.createElement('ul');
                     div.className ="exbitorlist";
                     var boothdetailleft = "";
+
+				  // Create an input element for the search bar
+					var searchInput = document.createElement('input');
+					searchInput.type = 'text';
+					searchInput.className ="search-exhi";
+					searchInput.name ="search-exhibitor";
+					searchInput.placeholder = 'Search Exhibitor';
+
+				searchInput.addEventListener('input', function() {
+					var searchText = searchInput.value.toLowerCase();
+					// Filter and display matching users
+					filterAndDisplayUsers(searchText);
+				});
+				
+				
+				// Append the search input to the sidebar
+				addcontent.appendChild(searchInput);
+
                     jQuery.each(newcompanynamesArray, function (key, value) {
                         
                         if (value.companyname != "") {
                             
-                            
                                 var xmlDoc = jQuery.parseXML(mxFloorPlanXml);
                                 var  pointclassname = "";
                                 var currentuseriD ="";
+								var assignedBooths = [];
+							
                                 $xml = jQuery(xmlDoc);
                                 var i = 0;
                                
@@ -3550,7 +3594,8 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
 
                                                             currentuseriD = usercurrentid;
                                                             pointclassname = 'occupied';
-                                                            return false;
+															assignedBooths.push(jQuery(this).attr('mylabel'));
+                                                            // return false;
 
                                                     } else {
 
@@ -3563,10 +3608,10 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                             
                             var li = document.createElement('li');
                             li.className = pointclassname;
-                           
-                           
+
                             var anchor = document.createElement('a');
-                            anchor.innerHTML = value.companyname;
+							
+                            anchor.innerHTML = value.companyname+'            '+'(Booth: '+assignedBooths.join(', ')+' )';
                             
                             mxEvent.addListener(anchor, 'click', function()
                             {
@@ -3901,12 +3946,14 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
 	// Disables built-in pan and zoom in IE10 and later
 	if (mxClient.IS_POINTER)
 	{
-		div.style.touchAction = 'none';
+		// div.style.touchAction = 'none';
 	}
 	
 	// Shows tooltip if mouse over background
 	mxEvent.addListener(div, 'mousemove', mxUtils.bind(this, function(evt)
 	{
+
+		jQuery('.search-exhi').focus();
 		if (mxEvent.getSource(evt) == div)
 		{
 			div.setAttribute('title', mxResources.get('sidebarTooltip'));
@@ -4192,3 +4239,21 @@ Sidebar.prototype.destroy = function()
 		this.pointerOutHandler = null;
 	}
 };
+
+
+ // Function to filter and display users based on search text
+ function filterAndDisplayUsers(searchText) {
+	var userList = document.querySelectorAll('.exbitorlist li');
+	for (var i = 0; i < userList.length; i++) {
+		var userItem = userList[i];
+		var userName = userItem.querySelector('a').innerHTML.toLowerCase();
+		
+		// Check if the user's name contains the search text
+		if (userName.includes(searchText)) {
+			userItem.style.display = 'block'; // Show matching user
+		} else {
+			userItem.style.display = 'none'; // Hide non-matching user
+		}
+	}
+} 
+
