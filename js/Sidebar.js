@@ -3611,7 +3611,7 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
 
                             var anchor = document.createElement('a');
 							
-                            anchor.innerHTML = value.companyname+'            '+'(Booth: '+assignedBooths.join(', ')+' )';
+                            anchor.innerHTML = value.companyname+'            '+'('+assignedBooths.join(', ')+' )';
                             
                             mxEvent.addListener(anchor, 'click', function()
                             {
