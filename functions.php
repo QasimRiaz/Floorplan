@@ -589,7 +589,7 @@ jQuery(window).load(function() {
 .search-exhi{
 
     border: 1px solid #8f8f8f;
-    color: #333;
+    color: #333 !important;
     padding: 2px;
     margin-bottom: 10px;
 }

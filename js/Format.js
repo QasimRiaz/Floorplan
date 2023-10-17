@@ -78,6 +78,14 @@ Format.prototype.createSelectionState = function () {
   return result;
 };
 
+    // Create a new object for "Unassigned"
+    const unassignedLevel = {
+      "key": "unassigned",
+      "name": "Unassigned"
+    };
+
+    // Add the "Unassigned" object to the array
+    arrayoflevelsObjects.push(unassignedLevel);
 /**
  * Returns information about the current selection.
  */
@@ -5768,6 +5776,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var levelsz = '';
     var currencySymbol = '';
     var flag = true;
+   
+
 
     if (priceBasedLevels == null || priceBasedLevels == undefined || priceBasedLevels == 'undefined') { 
       // Generate HTML when priceBasedLevels is null
@@ -6434,7 +6444,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var classstatusshow = "";
     var discountAmount = "";
     boothlevelname += '<option value="unassigned" >Unassigned</option>';
-    boothlevelnames += '<option value="unassigned" >Unassigned</option>';
+    // boothlevelnames += '<option value="unassigned" >Unassigned</option>';
 
     jQuery.each(arrayoflevelsObjects, function (rolekey, rolevalue) {
       //console.log(rolevalue);
