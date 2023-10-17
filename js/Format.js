@@ -78,6 +78,14 @@ Format.prototype.createSelectionState = function () {
   return result;
 };
 
+    // Create a new object for "Unassigned"
+    const unassignedLevel = {
+      "key": "subscriber",
+      "name": "Unassigned"
+    };
+
+    // Add the "Unassigned" object to the array
+    arrayoflevelsObjects.push(unassignedLevel);
 /**
  * Returns information about the current selection.
  */
@@ -6434,7 +6442,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var classstatusshow = "";
     var discountAmount = "";
     boothlevelname += '<option value="unassigned" >Unassigned</option>';
-    boothlevelnames += '<option value="unassigned" >Unassigned</option>';
+    // boothlevelnames += '<option value="unassigned" >Unassigned</option>';
 
     jQuery.each(arrayoflevelsObjects, function (rolekey, rolevalue) {
       //console.log(rolevalue);
