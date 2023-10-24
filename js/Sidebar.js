@@ -3422,28 +3422,38 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
                         
                     var li = document.createElement('li');
                     li.className = 'legendslistLi';
-					var gradient = "linear-gradient(to top, " + value.colorcode + " 60%, " + value.colorcodeOcc + " 50%)";
+					var gradient = "linear-gradient(to right, " + value.colorcode + " 50%, " + value.colorcodeOcc + " 50%)";
+
 					li.style.background = gradient;
 
 					// Set the tooltips for hover
-				    li.setAttribute('title', 'Unoccupied'); // Tooltip for top color
+				    li.setAttribute('title', ''); // Tooltip for top color
 				    li.style.cursor = 'help'; // Change cursor to a pointer to indicate hover
 
 				    // Add an event listener for mouseover to change the tooltip text
-				    li.addEventListener('mouseover', function (event) {
-				    	var mouseY = event.clientY - li.getBoundingClientRect().top;
-				    	var totalHeight = li.clientHeight;
+					li.addEventListener('mouseover', function (event) {
+						var mouseX = event.clientX - li.getBoundingClientRect().left;
+						// console.log('mouseX-----'+mouseX);
+						var totalWidth = li.clientWidth;
+						// console.log('totalWidth-------'+totalWidth);
+						
+						if (mouseX < totalWidth / 2) {
+							li.setAttribute('title', 'Unoccupied');
+						} else {
+							li.setAttribute('title', 'Occupied');
+						}
+					});
 
-				    	if (mouseY < totalHeight * 0.5) {
-				    		li.setAttribute('title', value.name+'-OCCUPIED');
-				    	} else {
-				    		li.setAttribute('title', value.name+'-UNOCCUPIED');
-				    	}
-				    });
+					li.addEventListener('mouseleave', function (event) {
+                            console.log('mouseleft');
+							li.setAttribute('title', '');
+
+							});
                         // li.style.backgroundColor = value.colorcode;
                     var anchor = document.createElement('a');
                     anchor.innerHTML = value.name;
-                    anchor.id = value.ID;				
+                    anchor.id = value.ID;		
+							
                  
                       mxEvent.addListener(anchor, 'mouseenter', function(sender, evt)
                             {
@@ -3610,8 +3620,9 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                             li.className = pointclassname;
 
                             var anchor = document.createElement('a');
+							anchor.style.textAlign = "left";
 							
-                            anchor.innerHTML = value.companyname+'            '+'('+assignedBooths.join(', ')+' )';
+                            anchor.innerHTML = value.companyname+'  '+'<small style="font-size: 69%; color: #8e9faf !important;">('+assignedBooths.join(', ')+')</small>';
                             
                             mxEvent.addListener(anchor, 'click', function()
                             {
