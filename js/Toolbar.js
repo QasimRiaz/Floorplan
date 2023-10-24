@@ -237,7 +237,8 @@ Toolbar.prototype.init = function()
             
             //  elts[1].innerHTML= '<div id="pwel" class="fas fa-print" ></div>';
 
-			
+			// var drophtml = '<div class="fas fa-print"><select id="tst" class="fas fa-print" style= "width: 110%;"><option></option><option id="pwel" value="pwel"> Print Floorplan Without Exhibitors List</option><option id="pwl" value="pwl">Print Floorplan With Exhibitors List</option></select><div>';
+
 			var abcde = this.addItems(['', 'printfp']);
 			abcde[1].setAttribute('title', 'Print');
 			abcde[1].setAttribute('type', 'button');
@@ -250,7 +251,6 @@ Toolbar.prototype.init = function()
              elts[1].setAttribute('title', 'Fullscreen');
              elts[1].setAttribute('type', 'button');
 			 
-            
             
              elts[1].innerHTML= '<div class="fas fa-window-maximize" ></div>';
 

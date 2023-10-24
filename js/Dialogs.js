@@ -1176,20 +1176,20 @@ PrintDialog.prototype.create = function(graph)
 		}
                 
 
-
 		var preview = PrintDialog.createPrintPreview(graph, scale, pf, border, x0, y0, autoOrigin);
          
-		var element = jQuery('#pwel').hasClass('printWithOutExhibitorList');
+		var element1 = jQuery('#pwel').hasClass('printWithOutExhibitorList');
+		var element2 = jQuery('#pwl').hasClass('printExhibitorList');
 
-		if(element){
+		if(element1){
 
-		}else{	
+		}else if(element2){	
 
 				preview.getCoverPages = function(w, h) {
 			return [this.renderPage(w, h, 0, 0, mxUtils.bind(this, function(div) {
 			  // Create a table for the layout
 			  var table = document.createElement('table');
-			  table.style.width = '100%';
+			  table.style.width = '50%';
 			  table.style.borderCollapse = 'collapse'; // Remove table border
 		  
 			  // Create table headers
@@ -1197,9 +1197,10 @@ PrintDialog.prototype.create = function(graph)
 		  
 			  var companyHeader = document.createElement('th');
 			  companyHeader.textContent = 'Company';
-		  
+			  companyHeader.style.textAlign = 'left';
 			  var boothHeader = document.createElement('th');
 			  boothHeader.textContent = 'Booth';
+			  boothHeader.style.textAlign = 'left';
 		  
 			  headerRow.appendChild(companyHeader);
 			  headerRow.appendChild(boothHeader);
@@ -1233,7 +1234,7 @@ PrintDialog.prototype.create = function(graph)
 				  if (value.userID == currentuseriD && assignedBooths.length > 0) {
 					// Create a new row for each company and booth
 					var row = document.createElement('tr');
-					row.style.textAlign = 'center';
+					// row.style.textAlign = 'center';
 					var companyCell = document.createElement('td');
 					companyCell.textContent = value.companyname;
 		  
@@ -1254,7 +1255,7 @@ PrintDialog.prototype.create = function(graph)
 			  // Center-align the table heading
 			  var heading = document.createElement('h1');
 			  heading.textContent = 'Exhibitors List';
-			  heading.style.textAlign = 'center';
+			//   heading.style.textAlign = 'center';
 			  var hr = document.createElement('hr');
 			  div.insertBefore(heading, table);
 			  div.insertBefore(hr, table);
@@ -1330,10 +1331,14 @@ PrintDialog.createPrintPreview = function(graph, scale, pf, border, x0, y0, auto
 	var preview = new mxPrintPreview(graph, scale, pf, border, x0, y0);
         
         console.log(preview);
+		// console.log('*******');
+		// console.log(preview.pageFormat.height);
         
 	preview.title = mxResources.get('preview');
 	preview.printBackgroundImage = true;
 	preview.autoOrigin = autoOrigin;
+	preview.pageFormat.height = 800;
+	
 	var bg = graph.background;
 	
 	if (bg == null || bg == '' || bg == mxConstants.NONE)

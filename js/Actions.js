@@ -87,10 +87,32 @@ Actions.prototype.init = function()
                 PrintDialog.prototype.create(graph);
         
         });
+
 		
+
 		this.addAction('printfp', function()
 		{
 
+			// jQuery("#tst").change(function(){
+
+			// 	if(jQuery('#tst option:selected').val() == 'pwel'){
+	
+			// 		jQuery('#pwel').addClass('printWithOutExhibitorList');
+			// 		jQuery('#pwl').removeClass('printExhibitorList');
+			// 		var graph = editor.graph;
+			// 		PrintDialog.prototype.create(graph);
+
+					
+			// 	}
+	
+			// 	if(jQuery('#tst option:selected').val() == 'pwl'){
+	
+			// 		jQuery('#pwl').addClass('printExhibitorList');
+			// 		jQuery('#pwel').removeClass('printWithOutExhibitorList');
+			// 		var graph = editor.graph;
+			// 		PrintDialog.prototype.create(graph);
+			// 	}
+			//   });
 				Swal.fire({
 
 					icon: "info",
@@ -105,7 +127,7 @@ Actions.prototype.init = function()
 					<div>
 		
 						<div>
-							<div id="pwel" class="row printWithOutExhibitorList">
+							<div id="pwel" class="row">
 								<a href="javascript:void(0);" >
 									<div class="col-sm-12" style="display:flex;">
 										<img src="" class="fas fa-print fa-2x">
@@ -114,7 +136,7 @@ Actions.prototype.init = function()
 								</a>
 							</div>
 							
-							<div id="pwl" class="row printExhibitorList">
+							<div id="pwl" class="row">
 								<a href="javascript:void(0);" >
 									<div class="col-sm-12" style="display:flex;">
 										<img src="" class="fas fa-print fa-2x">
@@ -134,6 +156,7 @@ Actions.prototype.init = function()
 				jQuery('.swal2-html-container').css('overflow', 'hidden');
 				jQuery('#pwel').click(function(){
 
+					jQuery('#pwel').addClass('printWithOutExhibitorList');
 					jQuery('#pwl').removeClass('printExhibitorList');
 					var graph = editor.graph;
 					PrintDialog.prototype.create(graph);
@@ -141,6 +164,7 @@ Actions.prototype.init = function()
 
 				jQuery('#pwl').click(function(){
 
+					jQuery('#pwl').addClass('printExhibitorList');
 					jQuery('#pwel').removeClass('printWithOutExhibitorList');
 					var graph = editor.graph;
 					PrintDialog.prototype.create(graph);

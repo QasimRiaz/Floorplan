@@ -4,6 +4,7 @@
 Format = function (editorUi, container) {
   this.editorUi = editorUi;
   this.container = container;
+ 
 };
 
 /**
@@ -1174,7 +1175,7 @@ BaseFormatPanel.prototype.createCellColorOption = function (
             "legendlabelscolorUn",
             ""
           );
-
+          
           var occcolor = celldata.getAttribute("occ", "");
           var unoccolor = celldata.getAttribute("uno", "");
 
@@ -1191,23 +1192,29 @@ BaseFormatPanel.prototype.createCellColorOption = function (
 
           if (boothOwner != "none" && boothOwner != "") {
             if (legendlabels != "none" && legendlabels != "") {
-              graph.setCellStyles("fillColor", legendlabelscolorOcc, celldata);
+              // graph.setCellStyles("fillColor", legendlabelscolorOcc, celldata);
             } else {
-              if (colorKey == "uno") {
-                // graph.setCellStyles("fillColor", occcolor, celldata);
-              } else {
+              if (colorKey == "occ") {
                 graph.setCellStyles("fillColor", color, celldata);
+              } else {
+                // graph.setCellStyles("fillColor", color, celldata);
               }
             }
           } else {
+  
             if (legendlabels != "none" && legendlabels != "") {
               graph.setCellStyles("fillColor", legendlabelscolorUn, celldata);
             } else {
               // graph.setCellStyles("fillColor", color, celldata);
-              if (colorKey == "occ") {
-                //graph.setCellStyles("fillColor", unoccolor, celldata);
-              } else {
+              if (colorKey == "occ" && (boothOwner != "none" && boothOwner != "")) {
+               
+                 graph.setCellStyles("fillColor", color, celldata);
+              }else if (colorKey == "uno") {
+   
                 graph.setCellStyles("fillColor", color, celldata);
+              } else {
+            
+                // graph.setCellStyles("fillColor", color, celldata);
               }
             }
           }
@@ -5776,8 +5783,6 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var levelsz = '';
     var currencySymbol = '';
     var flag = true;
-   
-
 
     if (priceBasedLevels == null || priceBasedLevels == undefined || priceBasedLevels == 'undefined') { 
       // Generate HTML when priceBasedLevels is null
@@ -7797,7 +7802,6 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
           }
 
           
-          
         }
         node.setAttribute("boothOwner", getexhibortervalue);
 
@@ -7851,7 +7855,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
 
                 graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
               }
-              // graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+               graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
             }
           } else {
        
