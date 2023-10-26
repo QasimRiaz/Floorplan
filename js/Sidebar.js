@@ -3408,15 +3408,30 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
 	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
 	{           
 
-
-		
-		
 					var div = document.createElement('ul');
+					// Create a container div with a "row" class
+						var containerDiv = document.createElement('div');
+						containerDiv.className = 'row';
+						containerDiv.style.marginLeft = '-10px';
+						// Create the "Unoccupied" label
+						var unoccupiedLabel = document.createElement('label');
+						unoccupiedLabel.className = 'col-md-4';
+						unoccupiedLabel.textContent = 'Unoccupied';
+
+						// Create the "Occupied" label
+						var occupiedLabel = document.createElement('label');
+						occupiedLabel.className = 'col-md-4';
+						occupiedLabel.textContent = 'Occupied';
+
+						// Append the labels to the container div
+						containerDiv.appendChild(unoccupiedLabel);
+						containerDiv.appendChild(occupiedLabel);
+					
 					div.className ="legendslist";
 					div.id = "leglist"
 
 					var existingElement = document.getElementById("leglist");
-					console.log(existingElement);
+					// console.log(existingElement);
                     var boothdetailleft = "";
                     jQuery.each(LegendsOfObjects, function (key, value) {
                         
@@ -3539,7 +3554,7 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
 
                 });
                     
-        
+				addcontent.appendChild(containerDiv);
               addcontent.appendChild(div);         
             //  jQuery('.geSidebarContainer').append(div);         	
 		
