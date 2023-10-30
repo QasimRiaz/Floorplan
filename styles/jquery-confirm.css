@@ -446,9 +446,21 @@ input.currency {
         width: 70% !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    
-    
 }
+
+@media (max-width: 865px)  {
+  .jconfirm-box-container-viewerBOx{
+      width: 100% !important;
+  } 
+}
+
+@media (max-width: 1100px) and (min-width: 865px)  {
+  .jconfirm-box-container-viewerBOx{
+      width: 85% !important;
+  } 
+}
+
+
 .content{
     
     padding: 10px 3% 10px 3% !important;

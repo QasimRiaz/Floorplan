@@ -1432,7 +1432,7 @@ EditorUi = function (editor, container, lightbox) {
                                             ) {
                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
                                                 htmlforproductdetail =
-                                                    '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                    '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                     postid +
                                                     ' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
                                                     postid +
@@ -1446,7 +1446,7 @@ EditorUi = function (editor, container, lightbox) {
                                             } else {
                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
                                                 htmlforproductdetail =
-                                                    '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                    '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                     postid +
                                                     ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                     postid +
@@ -1469,13 +1469,13 @@ EditorUi = function (editor, container, lightbox) {
                                             "" +
                                             boothtitle +
                                             productDescription +
-                                            '</div><div class="col-sm-2">' +
+                                            '</div><div class="col-sm-2 floorplanboothdialogboxbuttonlayotDiv">' +
                                             productICon +
                                             "</div></div>";
 
                                         //}else{
 
-                                        //  var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >'+boothtitle+productDescription+'</div><div class="col-sm-2">'+productICon+'</div></div>';
+                                        //  var openhtml = '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >'+boothtitle+productDescription+'</div><div class="col-sm-2 floorplanboothdialogboxbuttonlayotDiv">'+productICon+'</div></div>';
                                         //}
 
                                         var popupstatustitle = "Available for Purchase";
@@ -1530,7 +1530,7 @@ EditorUi = function (editor, container, lightbox) {
                                                             ) {
                                                                 // console.log("Qsaim4");
                                                                 buttonsdiv =
-                                                                    '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                    '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                                     postid +
                                                                     ' style="text-align: center;"><a class="btn btn-success btn-small" >Added</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This booth is included in your package. The price of this booth will be updated to $0 during checkout</b></p></div></div>';
                                                             } else {
@@ -1548,7 +1548,7 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                     // console.log("Qsaim6");
                                                                     buttonsdiv =
-                                                                        '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                        '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                                         postid +
                                                                         ' style="text-align: center;"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart(' +
                                                                         postid +
@@ -1572,13 +1572,13 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                     // console.log("Qsaim10");
                                                                     buttonsdiv =
-                                                                        '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                        '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                                         postid +
                                                                         ' style="text-align: center;"><a class="btn btn-success btn-small" >Added</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This booth is included in your package. The price of this booth will be updated to $0 during checkout.</b></p></div></div>';
                                                                 } else if (reservedStatus == "") {
                                                                     // console.log("Qsaim11");
                                                                     buttonsdiv =
-                                                                        '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                        '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                                         postid +
                                                                         ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                                         postid +
@@ -1601,7 +1601,7 @@ EditorUi = function (editor, container, lightbox) {
                                                             // console.log("Qsaim14");
                                                             //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
                                                             buttonsdiv =
-                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                                 postid +
                                                                 ' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
                                                                 postid +
@@ -1643,9 +1643,9 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                     // console.log("Qsaim17");
                                                                     buttonsdiv =
-                                                                        '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
+                                                                        '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                                         postid +
-                                                                        ' style="text-align: center;display: flex;justify-content: space-evenly;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                                                        ' ><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                                         postid +
                                                                         ",'log','full'," +
                                                                         finalresultProduct.slug +
@@ -1702,9 +1702,9 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                     // console.log("Qsaim20");
                                                                     buttonsdiv =
-                                                                        '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display:flex;"><div class="col-sm-12" id=' +
+                                                                        '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                                         postid +
-                                                                        ' style="text-align: center;display: flex;justify-content: space-evenly;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                                                        ' ><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                                         postid +
                                                                         ",'log','full'," +
                                                                         finalresultProduct.slug +
@@ -1730,9 +1730,9 @@ EditorUi = function (editor, container, lightbox) {
 
 
                                                                     buttonsdiv =
-                                                                        '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display:flex;"><div class="col-sm-12" id=' +
+                                                                        '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                                         postid +
-                                                                        ' style="text-align: center;display: flex;justify-content: space-evenly;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                                                        ' ><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                                         postid +
                                                                         ",'log','full'," +
                                                                         finalresultProduct.slug +
@@ -1753,13 +1753,13 @@ EditorUi = function (editor, container, lightbox) {
                                                         if (productstatus == "alreadyexistproduct") {
                                                             // console.log("Qsaim23");
                                                             buttonsdiv =
-                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id=' +
+                                                                '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" id=' +
                                                                 postid +
                                                                 '><a class="btn btn-danger btn-small" onclick="removeFromCart(' +
                                                                 postid +
-                                                                ')">Remove</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
+                                                                ')">Remove</a></div><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" ><a class="btn btn-small btn-info "   href="' +
                                                                 baseCurrentSiteURl +
-                                                                '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                 boothproductid +
                                                                 '_checkout" href="' +
                                                                 checkouturl +
@@ -1794,9 +1794,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
                                                                         // console.log("Qsaim26");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;    display: flex;"><div class="col-sm-4" id=' +
+                                                                            '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot"><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" id=' +
                                                                             postid +
-                                                                            '><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
+                                                                            '><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
                                                                             postid +
                                                                             ",'log' ,'deposit'," +
                                                                             finalresultProduct.slug +
@@ -1804,9 +1804,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                             postid +
                                                                             ",'log' ,'full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')">Pay in Full</a></div></div></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="' +
+                                                                            ')">Pay in Full</a></div></div><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" ><a class="btn btn-small btn-info "  href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -1858,9 +1858,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
                                                                         // console.log("Qsaim28");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
+                                                                            '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" id=' +
                                                                             postid +
-                                                                            '><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
+                                                                            '><a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</a><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
                                                                             postid +
                                                                             ",'log' ,'deposit'," +
                                                                             finalresultProduct.slug +
@@ -1868,9 +1868,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                             postid +
                                                                             ",'log' ,'full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')">Pay in Full</a></div></div></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="' +
+                                                                            ')">Pay in Full</a></div></div><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" ><a class="btn btn-small btn-info "  href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -1936,15 +1936,15 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                         // console.log("Qsaim29");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
+                                                                            '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" id=' +
                                                                             postid +
-                                                                            ' style="text-align: center;display: flex;justify-content: space-evenly;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                                                            ' ><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                                             postid +
                                                                             ",'log','full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
+                                                                            ')"  >Add To Cart</a></div><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" ><a class="btn btn-small btn-info "   href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -1998,15 +1998,15 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
                                                                         // console.log("Qsaim30");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
+                                                                            '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot"><div class="col-md-4 floorplanboothdialogboxbuttonlayotDiv" id=' +
                                                                             postid +
-                                                                            ' style="text-align: center;display: flex;justify-content: space-evenly;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                                                            ' ><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                                             postid +
                                                                             ",'log','full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
+                                                                            ')"  >Add To Cart</a></div><div class="col-md-4 floorplanboothdialogboxbuttonlayotDiv" ><a class="btn btn-small btn-info "   href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-md-4 floorplanboothdialogboxbuttonlayotDiv" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -2034,7 +2034,7 @@ EditorUi = function (editor, container, lightbox) {
                                                         }
                                                         //---------------------------Code By Abdullah------------------------------------//
                                                     } else {
-                                                        //buttonsdiv = '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></div></div>'
+                                                        //buttonsdiv = '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id='+postid+' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></div></div>'
                                                         if (flowstatus.indexOf("mood=wizard") != -1) {
                                                             if (
                                                                 finalresultProduct.deposit_enable_type ==
@@ -2043,9 +2043,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
                                                                 // console.log("Qsaim100");
                                                                 buttonsdiv =
-                                                                    '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                    '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                                     postid +
-                                                                    ' style="text-align: center;"><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
+                                                                    ' style="text-align: center;"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
                                                                     postid +
                                                                     ",'log' ,'deposit'," +
                                                                     finalresultProduct.slug +
@@ -2053,13 +2053,13 @@ EditorUi = function (editor, container, lightbox) {
                                                                     postid +
                                                                     ",'log' ,'full'," +
                                                                     finalresultProduct.slug +
-                                                                    ')">Pay in Full</a></div></div></div></div>';
+                                                                    ')">Pay in Full</a></div></div></div>';
                                                             } else if (
                                                                 productstatus == "alreadyexistproduct"
                                                             ) {
                                                                 // console.log("Qsaim101");
                                                                 buttonsdiv =
-                                                                    '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;text-align: center;"><div class="col-sm-12" id=' +
+                                                                    '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" style="margin-bottom: 25px;background: #fff;text-align: center;"><div class="col-sm-12" id=' +
                                                                     postid +
                                                                     '><a class="btn btn-danger btn-small"  onclick="removeFromCart(' +
                                                                     postid +
@@ -2071,7 +2071,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 } else {
                                                                     // console.log("Qsaim102");
                                                                     buttonsdiv =
-                                                                        '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                        '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                                         postid +
                                                                         ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                                         postid +
@@ -2089,12 +2089,12 @@ EditorUi = function (editor, container, lightbox) {
                                             } else {
                                                 // console.log("Qsaim105");
                                                 buttonsdiv =
-                                                    '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;"><strong style="color:red">No Longer Available </strong></p></div>';
+                                                    '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><p style="text-align:center;"><strong style="color:red">No Longer Available </strong></p></div>';
                                             }
                                         } else {
                                             // console.log("Qsaim106");
                                             buttonsdiv =
-                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><p style="text-align:center;color:red;"><strong>Floorplan is currently being edited, please try again later.</strong></p><div>';
+                                                '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><p style="text-align:center;color:red;"><strong>Floorplan is currently being edited, please try again later.</strong></p><div>';
                                         }
                                     } else {
 
@@ -2107,7 +2107,7 @@ EditorUi = function (editor, container, lightbox) {
                                         if ((userlimit != PurchaseCount) && (jQuery.inArray(logInUser["UserLevel"], LevelOfBooth) != -1 || jQuery.inArray("", LevelOfBooth) != -1) && (parseInt(logInUser["priorityNum"]) <= TurnUsers)) {
 
                                             buttonsdiv =
-                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                                 postid +
                                                 ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                 postid +
@@ -2118,7 +2118,7 @@ EditorUi = function (editor, container, lightbox) {
                                         }else if (boothOwner.includes(logInUser["ID"].toString())) {
 
                                             buttonsdiv =
-                                              '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                              '<div class="row footerdivfloorplan floorplanboothdialogboxbuttonlayot" ><div class="col-sm-12" id=' +
                                               postid +
                                               ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                               postid +
@@ -2210,7 +2210,7 @@ EditorUi = function (editor, container, lightbox) {
                             }
 
                             // openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top:6%;float:left;text-align:center"><img width="200" src="' + companylogourlnew + '" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 ></h1>' + htmlforassignedbooth + '<hr>'+htmlcompanydescription+'</div></div>';
-                            // openhtml = '<div class="row"><div class="col-sm-4" style="margin-top: 2%;">'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-6"></div></div>';
+                            // openhtml = '<div class="row"><div class="col-sm-4 floorplanboothdialogboxbuttonlayotDiv" style="margin-top: 2%;">'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-6"></div></div>';
 
                             //  var openhtml = '<div class="row" style="padding:30px;" ><div class="col-sm-5">'+imagesrc+''+htmlforaddress+''+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-5">'+htmlforproductdetail+'</div></div>';
                             var openhtml =

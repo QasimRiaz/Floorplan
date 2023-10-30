@@ -1227,3 +1227,37 @@ input:checked + .slider:before {
 }
 
 
+
+
+
+
+
+.floorplanboothdialogboxbuttonlayot {
+	margin-bottom: 25px;
+	background: #fff;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 10px;
+  }
+  
+
+  .floorplanboothdialogboxbuttonlayotDiv {
+	text-align: center;display: flex; flex-direction: column; justify-content: space-between;
+}
+
+
+  .floorplanboothdialogboxbuttonlayot .floorplanboothdialogboxbuttonlayotDiv {
+	margin: 10px; 
+  }
+  
+  @media (max-width: 768px) {
+	.floorplanboothdialogboxbuttonlayot {
+	  display: flex;
+	  flex-direction: column;
+	  padding: 0; 
+	}
+  
+
+  }
+  
