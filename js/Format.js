@@ -5982,7 +5982,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           reservedStatue +
           ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
         levelAssigment =
-          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Purchasability<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
           boothlevelnames +
           "</select></div></div>";
         UserAssigment =
@@ -5997,7 +5997,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           reservedStatue +
           ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
         levelAssigment =
-          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select  multiple="multiple"  id="boothlevel"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Purchasability<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select  multiple="multiple"  id="boothlevel"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
           boothlevelnames +
           "</select></div></div>";
         UserAssigment =
@@ -6028,7 +6028,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         reservedStatue +
         ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
       levelAssigment =
-        '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+        '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Purchasability<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
         boothlevelnames +
         "</select></div></div>";
       UserAssigment =
@@ -7301,19 +7301,22 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
 
   //console.log(mxFloorPlanXml);
 
-  jQuery.each(newcompanynamesArray, function (key, value) {
+  jQuery.each(newcompanynamesArray, function (key, value) 
+  {
     var gradientOption = document.createElement("option");
     gradientOption.setAttribute("value", value.userID);
     mxUtils.write(gradientOption, value.companyname);
     jQuery($xml)
       .find("MyNode")
-      .each(function () {
+      .each(function () 
+      {
         var usercurrentid = jQuery(this).attr("boothOwner");
-        if (value.userID == usercurrentid) {
-          gradientOption.setAttribute("class", "assignedcolor");
+        if (value.userID == usercurrentid) 
+        {
+                    gradientOption.setAttribute("class", "assignedcolor");
         }
-      });
-
+      }
+    );
     gradientSelect.appendChild(gradientOption);
   });
 
@@ -7482,7 +7485,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
           node.setAttribute("mylabel", getboothnumber);
           node.setAttribute("boothDetail", getdetailvalue);
           node.setAttribute("companydescripiton", currentcompanydescripiton);
-
+          console.log(cell.length);
           if (cell.length == 1) {
             legendlabels = cell[0].getAttribute("legendlabels", "");
             legendlabelscolorUn = cell[0].getAttribute(
@@ -7685,6 +7688,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
         jQuery("#currentcompanydescripiton").val()
       );
 
+
       var getexhibortervalue = "";
       var boothproductvalue = "";
 
@@ -7707,9 +7711,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
       node.setAttribute("mylabel", getboothnumber);
       node.setAttribute("boothDetail", getdetailvalue);
       node.setAttribute("companydescripiton", currentcompanydescripiton);
-
       if (cell.length == 1) {
-      
         legendlabels = cell[0].getAttribute("legendlabels", "");
         legendlabelscolorUn = cell[0].getAttribute("legendlabelscolorUn", "");
         legendlabelscolorOcc = cell[0].getAttribute("legendlabelscolorOcc", "");
@@ -7763,25 +7765,40 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
             node.setAttribute("boothtags", "");
           }
 
-          if (getexhibortervalue != "none") {
-            if (legendlabels != "none" && legendlabels != "") {
-          
-              if (legendlabelscolorOcc == "none") {
+          if (getexhibortervalue != "none") 
+          {
+            if (legendlabels != "none" && legendlabels != "") 
+            {
+              if (legendlabelscolorOcc == "none") 
+              {
                 graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
-              } else {
+              } 
+              else 
+              {
                 graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
               }
-            } else {
-               graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+            } 
+            else 
+            {
+              graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
             }
-          } else {
-            if (legendlabels != "none" && legendlabels != "") {
-              if (legendlabelscolorUn == "none") {
+          } 
+          else 
+          {
+            if (legendlabels != "none" && legendlabels != "") 
+            {
+              if (legendlabelscolorUn == "none") 
+              {
                 graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
-              } else {
+              } 
+              else 
+              {
                 graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
               }
-            } else {
+            } 
+            else 
+            {
+              console.log(ss.style.occ);
               graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
             }
           }
@@ -7838,8 +7855,8 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
             } else {
 
               if(legendlabelscolorUn != "none" || legendlabelscolorUn != ""){
-
-                graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
+                //Arham : fix here, changed uno to occ.
+                graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
               }
               // graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
             }
