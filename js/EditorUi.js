@@ -1757,9 +1757,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                 postid +
                                                                 '><a class="btn btn-danger btn-small" onclick="removeFromCart(' +
                                                                 postid +
-                                                                ')">Remove</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
+                                                                ')">Remove</a></div><div class="col-sm-4 hideElem" ><a class="btn btn-small btn-info "   href="' +
                                                                 baseCurrentSiteURl +
-                                                                '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2 hideElem" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                 boothproductid +
                                                                 '_checkout" href="' +
                                                                 checkouturl +
@@ -1804,9 +1804,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                             postid +
                                                                             ",'log' ,'full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')">Pay in Full</a></div></div></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="' +
+                                                                            ')">Pay in Full</a></div></div></div><div class="col-sm-4 hideElem" ><a class="btn btn-small btn-info "  href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2 hideElem" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -1868,9 +1868,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                             postid +
                                                                             ",'log' ,'full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')">Pay in Full</a></div></div></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="' +
+                                                                            ')">Pay in Full</a></div></div></div><div class="col-sm-4 hideElem" ><a class="btn btn-small btn-info "  href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2 hideElem" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -1942,9 +1942,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                             postid +
                                                                             ",'log','full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
+                                                                            ')"  >Add To Cart</a></div><div class="col-sm-4 hideElem" ><a class="btn btn-small btn-info "   href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2 hideElem" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -2004,9 +2004,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                             postid +
                                                                             ",'log','full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
+                                                                            ')"  >Add To Cart</a></div><div class="col-sm-4 hideElem" ><a class="btn btn-small btn-info "   href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2 hideElem" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +

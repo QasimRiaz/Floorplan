@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 11.7
- * @version : 11.7
+ * Version: 11.8
+ * @version : 11.8
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -2148,6 +2148,7 @@ function boothSelfAssignment(){
     $url = get_site_url();
 
     $get_product = wc_get_product($id);
+    $boFlag = false;
  
     $number = 0;
     if ($user_ID) {
@@ -2198,6 +2199,34 @@ function boothSelfAssignment(){
                     $loggin_data['boothnumberindex'][] = '' . $cellboothlabelvalue['mylabel'];
                     $loggin_data['ownerID'][] = $OrderUserID;
                     $getCellStyle = $getCellStylevalue['style'];
+
+                    $attributes = explode(';', $getCellStyle);
+                    $modifiedAttributes = [];
+
+                     foreach ($attributes as $attribute) {
+           
+                        list($name, $value) = explode('=', $attribute, 2);
+
+           
+                        if ($name == 'uno' && $value == 'none') {
+                            $boFlag = true;
+                    
+                            $modifiedAttributes[] = 'fillColor=#fff';
+                    
+                            $modifiedAttributes[] = 'uno=#fff';
+                        } else {
+                         
+                            $modifiedAttributes[] = $attribute;
+                        }
+                    }
+
+                    if($boFlag == true){
+
+                        // Combine the modified attributes back into a string
+                        $updatedXmlData = implode(';', $modifiedAttributes);
+                        $getCellStyle = $updatedXmlData;
+                    } 
+
                     $getCellStyle = str_replace($oldfillcolortext, 'fillColor=' . $NewfillColor, $getCellStyle);
                     $xml->root->MyNode[$currentIndex]->mxCell->attributes()->$styleatt = $getCellStyle;
     
