@@ -78,6 +78,14 @@ Format.prototype.createSelectionState = function () {
   return result;
 };
 
+    // Create a new object for "Unassigned"
+    const unassignedLevel = {
+      "key": "subscriber",
+      "name": "Unassigned"
+    };
+
+    // Add the "Unassigned" object to the array
+    arrayoflevelsObjects.push(unassignedLevel);
 /**
  * Returns information about the current selection.
  */
@@ -1166,7 +1174,7 @@ BaseFormatPanel.prototype.createCellColorOption = function (
             "legendlabelscolorUn",
             ""
           );
-
+          
           var occcolor = celldata.getAttribute("occ", "");
           var unoccolor = celldata.getAttribute("uno", "");
 
@@ -1183,23 +1191,29 @@ BaseFormatPanel.prototype.createCellColorOption = function (
 
           if (boothOwner != "none" && boothOwner != "") {
             if (legendlabels != "none" && legendlabels != "") {
-              graph.setCellStyles("fillColor", legendlabelscolorOcc, celldata);
+              // graph.setCellStyles("fillColor", legendlabelscolorOcc, celldata);
             } else {
-              if (colorKey == "uno") {
-                // graph.setCellStyles("fillColor", occcolor, celldata);
-              } else {
+              if (colorKey == "occ") {
                 graph.setCellStyles("fillColor", color, celldata);
+              } else {
+                // graph.setCellStyles("fillColor", color, celldata);
               }
             }
           } else {
+  
             if (legendlabels != "none" && legendlabels != "") {
               graph.setCellStyles("fillColor", legendlabelscolorUn, celldata);
             } else {
               // graph.setCellStyles("fillColor", color, celldata);
-              if (colorKey == "occ") {
-                //graph.setCellStyles("fillColor", unoccolor, celldata);
-              } else {
+              if (colorKey == "occ" && (boothOwner != "none" && boothOwner != "")) {
+               
+                 graph.setCellStyles("fillColor", color, celldata);
+              }else if (colorKey == "uno") {
+   
                 graph.setCellStyles("fillColor", color, celldata);
+              } else {
+            
+                // graph.setCellStyles("fillColor", color, celldata);
               }
             }
           }
@@ -6434,7 +6448,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var classstatusshow = "";
     var discountAmount = "";
     boothlevelname += '<option value="unassigned" >Unassigned</option>';
-    boothlevelnames += '<option value="unassigned" >Unassigned</option>';
+    // boothlevelnames += '<option value="unassigned" >Unassigned</option>';
 
     jQuery.each(arrayoflevelsObjects, function (rolekey, rolevalue) {
       //console.log(rolevalue);
@@ -7858,7 +7872,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
                 //Arham : fix here, changed uno to occ.
                 graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
               }
-              // graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
+               graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
             }
           } else {
        
