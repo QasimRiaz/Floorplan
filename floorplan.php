@@ -2044,7 +2044,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
             __FILE__,
             'FloorPlan'
         );
-        $myUpdateChecker->setBranch('master');
+        $myUpdateChecker->setBranch('Arham');
         $myUpdateChecker->setAuthentication($gitKey);
         $myUpdateChecker->getVcsApi()->enableReleaseAssets();
     }
