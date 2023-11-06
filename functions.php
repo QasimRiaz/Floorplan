@@ -596,6 +596,10 @@ jQuery(window).load(function() {
     margin-bottom: 10px;
 }
 
+.hideElem{
+    display: none;
+}
+
 </style>
 
 

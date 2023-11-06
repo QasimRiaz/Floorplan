@@ -1777,13 +1777,13 @@ EditorUi = function (editor, container, lightbox) {
                                                         if (productstatus == "alreadyexistproduct") {
                                                             // console.log("Qsaim23");
                                                             buttonsdiv =
-                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-4" id=' +
+                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                 postid +
                                                                 '><a class="btn btn-danger btn-small" onclick="removeFromCart(' +
                                                                 postid +
-                                                                ')">Remove</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
+                                                                ')">Remove</a></div><div class="col-sm-4 hideElem" ><a class="btn btn-small btn-info "   href="' +
                                                                 baseCurrentSiteURl +
-                                                                '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2 hideElem" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                 boothproductid +
                                                                 '_checkout" href="' +
                                                                 checkouturl +
@@ -1818,7 +1818,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
                                                                         // console.log("Qsaim26");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;    display: flex;"><div class="col-sm-4" id=' +
+                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;    display: flex;"><div class="col-sm-12" id=' +
                                                                             postid +
                                                                             '><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
                                                                             postid +
@@ -1828,9 +1828,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                             postid +
                                                                             ",'log' ,'full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')">Pay in Full</a></div></div></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="' +
+                                                                            ')">Pay in Full</a></div></div></div><div class="col-sm-4 hideElem" ><a class="btn btn-small btn-info "  href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2 hideElem" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -1882,7 +1882,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
                                                                         // console.log("Qsaim28");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
+                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
                                                                             postid +
                                                                             '><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
                                                                             postid +
@@ -1892,9 +1892,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                             postid +
                                                                             ",'log' ,'full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')">Pay in Full</a></div></div></div><div class="col-sm-4" ><a class="btn btn-small btn-info "  href="' +
+                                                                            ')">Pay in Full</a></div></div></div><div class="col-sm-4 hideElem" ><a class="btn btn-small btn-info "  href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2 hideElem" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -1960,15 +1960,15 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                         // console.log("Qsaim29");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
+                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
                                                                             postid +
                                                                             ' style="text-align: center;display: flex;justify-content: space-evenly;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                                             postid +
                                                                             ",'log','full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
+                                                                            ')"  >Add To Cart</a></div><div class="col-sm-4 hideElem" ><a class="btn btn-small btn-info "   href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2 hideElem" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -2022,15 +2022,15 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
                                                                         // console.log("Qsaim30");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-4" id=' +
+                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
                                                                             postid +
                                                                             ' style="text-align: center;display: flex;justify-content: space-evenly;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                                             postid +
                                                                             ",'log','full'," +
                                                                             finalresultProduct.slug +
-                                                                            ')"  >Add To Cart</a></div><div class="col-sm-4" ><a class="btn btn-small btn-info "   href="' +
+                                                                            ')"  >Add To Cart</a></div><div class="col-sm-4 hideElem" ><a class="btn btn-small btn-info "   href="' +
                                                                             baseCurrentSiteURl +
-                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
+                                                                            '/product-category/add-ons/" target="_blank" >View Add-Ons</a></div><div class="col-sm-2 hideElem" ><a '+disableStyle+' class="btn btn-small btn-info " id="' +
                                                                             boothproductid +
                                                                             '_checkout" href="' +
                                                                             checkouturl +
@@ -2102,24 +2102,26 @@ EditorUi = function (editor, container, lightbox) {
                                                                         // console.log("Qsaim30");
 
                                                                         buttonsdiv =
-                                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-6" id=' +
                                                                                 postid +
                                                                                 ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
                                                                                 postid +
                                                                                 ",'log','full'," +
                                                                                 finalresultProduct.slug +
-                                                                                ')"  >Add To Cart</a></div></div>';
+                                                                                ')"  >Add To Cart</a></div>'+
+                                                                            
+                                                                                '<div class="col-sm-4" id=' +
+                                                                                postid +
+                                                                                ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="ReservedTheBooth(' +
+                                                                                postid +
+                                                                                ",'log','full'," +
+                                                                                finalresultProduct.slug +
+                                                                                ')"  >Reserve The Booth</a></div>'+
+                                                                                '</div>';
 
-                                                                        buttonsdiv +=
-                                                                        '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
-                                                                        postid +
-                                                                        ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="ReservedTheBooth(' +
-                                                                        postid +
-                                                                        ",'log','full'," +
-                                                                        finalresultProduct.slug +
-                                                                        ')"  >Reserve The Booth</a></div></div>';
+                                                                       
 
-                                                                    }else if(NumberOfReservedBooths != false){
+                                                                    }else if(NumberOfReservedBooths != false && reservedStatus == logInUser["ID"]){
 
                                                                         buttonsdiv =
                                                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
@@ -2664,6 +2666,7 @@ function ReservedTheBooth(p_id, request, price, slug) {
                 top.window.location.href = baseCurrentSiteURl + "/exhibitor-entry/";
             }
             jQuery("body").css("cursor", "default");
+            location.reload();
         },
     });
 }
