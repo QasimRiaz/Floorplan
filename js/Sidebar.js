@@ -3442,28 +3442,28 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
 					li.style.background = gradient;
 
 					// Set the tooltips for hover
-				    li.setAttribute('title', ''); // Tooltip for top color
-				    li.style.cursor = 'help'; // Change cursor to a pointer to indicate hover
+				    // li.setAttribute('title', ''); // Tooltip for top color
+				    // li.style.cursor = 'help'; // Change cursor to a pointer to indicate hover
 
-				    // Add an event listener for mouseover to change the tooltip text
-					li.addEventListener('mouseover', function (event) {
-						var mouseX = event.clientX - li.getBoundingClientRect().left;
-						// console.log('mouseX-----'+mouseX);
-						var totalWidth = li.clientWidth;
-						// console.log('totalWidth-------'+totalWidth);
+				    // // Add an event listener for mouseover to change the tooltip text
+					// li.addEventListener('mouseover', function (event) {
+					// 	var mouseX = event.clientX - li.getBoundingClientRect().left;
+					// 	// console.log('mouseX-----'+mouseX);
+					// 	var totalWidth = li.clientWidth;
+					// 	// console.log('totalWidth-------'+totalWidth);
 						
-						if (mouseX < totalWidth / 2) {
-							li.setAttribute('title', 'Unoccupied');
-						} else {
-							li.setAttribute('title', 'Occupied');
-						}
-					});
+					// 	if (mouseX < totalWidth / 2) {
+					// 		li.setAttribute('title', 'Unoccupied');
+					// 	} else {
+					// 		li.setAttribute('title', 'Occupied');
+					// 	}
+					// });
 
-					li.addEventListener('mouseleave', function (event) {
-                            console.log('mouseleft');
-							li.setAttribute('title', '');
+					// li.addEventListener('mouseleave', function (event) {
+                    //         console.log('mouseleft');
+					// 		li.setAttribute('title', '');
 
-							});
+					// 		});
                         // li.style.backgroundColor = value.colorcode;
                     var anchor = document.createElement('a');
                     anchor.innerHTML = value.name;

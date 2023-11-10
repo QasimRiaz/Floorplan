@@ -1177,16 +1177,18 @@ PrintDialog.prototype.create = function(graph)
                 
 
 		var preview = PrintDialog.createPrintPreview(graph, scale, pf, border, x0, y0, autoOrigin);
+		
          
 		var element1 = jQuery('#pwel').hasClass('printWithOutExhibitorList');
 		var element2 = jQuery('#pwl').hasClass('printExhibitorList');
 
 		if(element1){
-
+			
 		}else if(element2){	
 
-				preview.getCoverPages = function(w, h) {
-			return [this.renderPage(w, h, 0, 0, mxUtils.bind(this, function(div) {
+			preview.getCoverPages = function(w, h) {
+			
+			return [this.renderPage(w, 1200, 0, 0, mxUtils.bind(this, function(div) { 
 			  // Create a table for the layout
 			  var table = document.createElement('table');
 			  table.style.width = '50%';
@@ -1235,6 +1237,8 @@ PrintDialog.prototype.create = function(graph)
 					// Create a new row for each company and booth
 					var row = document.createElement('tr');
 					// row.style.textAlign = 'center';
+					row.style.fontSize = 'small';
+
 					var companyCell = document.createElement('td');
 					companyCell.textContent = value.companyname;
 		  
@@ -1259,6 +1263,8 @@ PrintDialog.prototype.create = function(graph)
 			  var hr = document.createElement('hr');
 			  div.insertBefore(heading, table);
 			  div.insertBefore(hr, table);
+
+			 
 		  
 			}))];
 		  };
@@ -1337,7 +1343,7 @@ PrintDialog.createPrintPreview = function(graph, scale, pf, border, x0, y0, auto
 	preview.title = mxResources.get('preview');
 	preview.printBackgroundImage = true;
 	preview.autoOrigin = autoOrigin;
-	preview.pageFormat.height = 800;
+	
 	
 	var bg = graph.background;
 	

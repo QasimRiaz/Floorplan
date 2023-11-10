@@ -279,6 +279,21 @@ body { font-family: Arial !important;}
 .geToolbarContainer .geButton:active {
 	border:1px solid black;
 }
+
+.geToolbarContainer .geButton[type= "dropdown"]:hover {
+	border: none !important;
+}
+
+.geToolbarContainer .geButton[type= "dropdown"]:active {
+	border: none !important;
+}
+
+.geToolbarContainer .geButton[type= "dropdown"] {
+	border: none !important;
+}
+
+
+
 div.mxWindow .geButton {
 	margin: -1px 2px 2px 2px;
 	padding: 1px 2px 2px 1px;
