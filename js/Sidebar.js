@@ -3415,11 +3415,13 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
 						containerDiv.style.marginLeft = '-10px';
 						// Create the "Unoccupied" label
 						var unoccupiedLabel = document.createElement('label');
+						unoccupiedLabel.style.fontWeight = '200';
 						unoccupiedLabel.className = 'col-md-4';
 						unoccupiedLabel.textContent = 'Unoccupied';
 
 						// Create the "Occupied" label
 						var occupiedLabel = document.createElement('label');
+						occupiedLabel.style.fontWeight = '200';
 						occupiedLabel.className = 'col-md-4';
 						occupiedLabel.textContent = 'Occupied';
 

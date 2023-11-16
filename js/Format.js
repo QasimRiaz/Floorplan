@@ -5997,7 +5997,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           reservedStatue +
           ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
         levelAssigment =
-          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Purchasability<i class="far fa-question-circle" title="The level of a user that can purchase this booth." ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
           boothlevelnames +
           "</select></div></div>";
         UserAssigment =
@@ -6012,7 +6012,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           reservedStatue +
           ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
         levelAssigment =
-          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select  multiple="multiple"  id="boothlevel"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+          '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Purchasability<i class="far fa-question-circle" title="The level of a user that can purchase this booth." ></i></label></div><div class="col-sm-3"><select  multiple="multiple"  id="boothlevel"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
           boothlevelnames +
           "</select></div></div>";
         UserAssigment =
@@ -6043,7 +6043,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         reservedStatue +
         ' style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div>';
       levelAssigment =
-        '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Visibility<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
+        '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Purchasability<i class="far fa-question-circle" title="The level of a user that can purchase this booth." ></i></label></div><div class="col-sm-3"><select id="boothlevel"  multiple="multiple"  placeholder="Select Level Of Booth" class="form-control js-example-basic-multiple">' +
         boothlevelnames +
         "</select></div></div>";
       UserAssigment =
@@ -6842,7 +6842,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       selectedBoothtitles +
       '</div></div><div class="row" style="margin-bottom: 1%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">' +
       currencysymbole +
-      '</strong></span><input type="number" style="color:#333;height:32px;width: 99%;" id="boothprice" value="0" min="0" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth"></i></label></div><div class="col-sm-3"><select class="form-control" id="depositsstatus"><option value="optional">Deposit OR Pay in Full</option><option value="forced">Deposit Only - No Option to Pay in Full</option><option value="no" selected="true">No</option></select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Option to Reserve? <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><input type="checkbox" style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Assignment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="boothlevel" multiple="multiple"  placeholder="Select Booth Level"class="form-control js-example-basic-multiple">' +
+      '</strong></span><input type="number" style="color:#333;height:32px;width: 99%;" id="boothprice" value="0" min="0" class="form-control currency"></div></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Enable Deposits <i class="far fa-question-circle" title="Select if you want to enable split payments for this booth"></i></label></div><div class="col-sm-3"><select class="form-control" id="depositsstatus"><option value="optional">Deposit OR Pay in Full</option><option value="forced">Deposit Only - No Option to Pay in Full</option><option value="no" selected="true">No</option></select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Option to Reserve? <i class="far fa-question-circle" title=""></i></label></div><div class="col-sm-3"><input type="checkbox" style="margin-right:4px;"  id="reservedCheck"  value="0"></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="levelAssigment" style="text-align:right;"><label>Level Purchasability<i class="far fa-question-circle" title="The level of a user that can purchase this booth." ></i></label></div><div class="col-sm-3"><select id="boothlevel" multiple="multiple"  placeholder="Select Booth Level"class="form-control js-example-basic-multiple">' +
       boothlevelnames +
       '</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="UserAssigment" style="text-align:right;"><label>User Assignment<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="UserBooth"  multiple="multiple" placeholder="Select User For  Booth" class="form-control js-example-basic-multiple">' +
       companynames +
