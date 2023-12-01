@@ -3444,7 +3444,7 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
                         
                     var li = document.createElement('li');
                     li.className = 'legendslistLi';
-					var gradient = "linear-gradient(to right, " + value.colorcode + " 50%, " + value.colorcodeOcc + " 50%)";
+					var gradient = "linear-gradient(to right, " + value.colorcode + " 100%, " + value.colorcodeOcc + " 0%)";
 
 					li.style.background = gradient;
 
@@ -3476,6 +3476,81 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
                     anchor.innerHTML = value.name;
                     anchor.id = value.ID;		
 							
+					mxEvent.addListener(anchor, 'mouseenter', function(sender, evt)
+					{
+							var cells = graph.getChildVertices(graph.getDefaultParent());
+							
+							 jQuery(cells).each(function () {
+								   
+									var cell = this; //abdd[i];
+									
+									if (cell != null)
+										{
+											
+										   var usercurrentid = cell.getAttribute('legendlabels', ''); 
+										   
+
+															if (value.ID == usercurrentid) {
+
+																var overlays = graph.getCellOverlays(cell);
+																	if (overlays == null)
+																	{
+																		// Creates a new overlay with an image and a tooltip
+																		var overlay = new mxCellOverlay(
+																				new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
+																				'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
+
+																		// Installs a handler for clicks on the overlay							
+																		overlay.addListener(mxEvent.CLICK, function (sender, evt2)
+																		{
+																			mxUtils.alert('Overlay clicked');
+																		});
+
+																		// Sets the overlay for the cell in the graph
+																		graph.addCellOverlay(cell, overlay);
+																	}
+
+
+															}
+
+													 
+												
+										   
+											
+										}
+									
+								   
+								});
+					  
+						
+					});
+					
+					mxEvent.addListener(anchor, 'mouseleave', function()
+					{
+						var cells = graph.getChildVertices(graph.getDefaultParent());
+							
+							 jQuery(cells).each(function () {
+								   
+									var cell = this; //abdd[i];
+									
+									if (cell != null)
+										{
+											
+										   var usercurrentid = cell.getAttribute('legendlabels', ''); 
+										   if (value.ID == usercurrentid) {
+
+													graph.removeCellOverlays(cell);
+
+
+											}
+									   }
+									
+								   
+								});    
+						
+						
+					   
+					});
                  
                       mxEvent.addListener(occupiedListItem, 'mouseenter', function(sender, evt)
                             {
@@ -3626,14 +3701,14 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
         
                             //div.innerHTML+='<li  class="pointedonmap '+pointclassname+'"><a onmouseover="bigImg('+mxgetjosnusersData[key].exhibitorsid+','+graph+')" onclick="getallDetialuser('+mxgetjosnusersData[key].exhibitorsid+')" >'+mxgetjosnusersData[key].companyname+'</a></li>';
                             li.appendChild(anchor);
-                            // div.appendChild(li);
+                         div.appendChild(li);
                         
                     
 
                 });
                     
 				addcontent.appendChild(containerDiv);
-            //   addcontent.appendChild(div);         
+            	addcontent.appendChild(div);         
             //  jQuery('.geSidebarContainer').append(div);         	
 		
 	}));
