@@ -242,12 +242,12 @@ Toolbar.prototype.init = function()
                 
         }else{
 
-            //  var elts = this.addItems(['', 'preview']);
-            //  elts[1].setAttribute('title', 'Print');
-            //  elts[1].setAttribute('type', 'button');
+             var elts = this.addItems(['', 'preview']);
+             elts[1].setAttribute('title', 'Print');
+             elts[1].setAttribute('type', 'button');
             
             
-            //  elts[1].innerHTML= '<div id="pwel" class="fas fa-print" ></div>';
+             elts[1].innerHTML= '<div id="pwel" class="fas fa-print" ></div>';
 
 			            
 			var elts = this.addItems(['', 'fullscreencustome']);
