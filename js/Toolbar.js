@@ -103,6 +103,7 @@ Toolbar.prototype.init = function()
 	var drophtml = '<select id="tst" style= "width: 230%; "><option selected disabled>Print</option><option class="" id="pwel" value="pwel">📃 Without Exhibitors</option><option class="" id="pwl" value="pwl">📃 With Exhibitors</option></select>';
 
 	if(mxCurrentfloorplanstatus !='viewer'){
+		
 		var abcde = this.addItems(['', 'printfp']);
 		abcde[1].setAttribute('title', 'Print');
 		abcde[1].setAttribute('type', 'dropdown');
