@@ -3410,24 +3410,29 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
 
 					var div = document.createElement('ul');
 					// Create a container div with a "row" class
-						var containerDiv = document.createElement('div');
-						containerDiv.className = 'row';
-						containerDiv.style.marginLeft = '-10px';
-						// Create the "Unoccupied" label
-						var unoccupiedLabel = document.createElement('label');
-						unoccupiedLabel.style.fontWeight = '200';
-						unoccupiedLabel.className = 'col-md-4';
-						unoccupiedLabel.textContent = 'Unoccupied';
+					// Create the unordered list
+							var unorderedList = document.createElement('ul');
+							unorderedList.className = 'legendslist';
+							// Create the first list item for "Unoccupied"
+							var unoccupiedListItem = document.createElement('li');
+							var unoccupiedAnchor = document.createElement('a');
+							unoccupiedAnchor.innerHTML = 'Unoccupied';
+							unoccupiedListItem.appendChild(unoccupiedAnchor);
 
-						// Create the "Occupied" label
-						var occupiedLabel = document.createElement('label');
-						occupiedLabel.style.fontWeight = '200';
-						occupiedLabel.className = 'col-md-4';
-						occupiedLabel.textContent = 'Occupied';
+							// Create the second list item for "Occupied"
+							var occupiedListItem = document.createElement('li');
+							var occupiedAnchor = document.createElement('a');
+							occupiedAnchor.innerHTML = 'Occupied';
+							occupiedListItem.appendChild(occupiedAnchor);
 
-						// Append the labels to the container div
-						containerDiv.appendChild(unoccupiedLabel);
-						containerDiv.appendChild(occupiedLabel);
+							// Append list items to the unordered list
+							unorderedList.appendChild(unoccupiedListItem);
+							unorderedList.appendChild(occupiedListItem);
+
+							// Now, you can append the unordered list wherever you need it in your document
+							// For example, assuming you have a container div:
+							var containerDiv = document.createElement('div');
+							containerDiv.appendChild(unorderedList);
 					
 					div.className ="legendslist";
 					div.id = "leglist"
@@ -3472,7 +3477,7 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
                     anchor.id = value.ID;		
 							
                  
-                      mxEvent.addListener(anchor, 'mouseenter', function(sender, evt)
+                      mxEvent.addListener(occupiedListItem, 'mouseenter', function(sender, evt)
                             {
                                     var cells = graph.getChildVertices(graph.getDefaultParent());
                                     
@@ -3483,10 +3488,63 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
                                             if (cell != null)
                                                 {
                                                     
-                                                   var usercurrentid = cell.getAttribute('legendlabels', ''); 
+                                                //    var usercurrentid = cell.getAttribute('legendlabels', ''); 
+												   var usercurrentid = cell.getAttribute('boothOwner', ''); 
+												//    console.log('on------'+usercurrentid);
                                                    
 
-                                                                    if (value.ID == usercurrentid) {
+                                                                    if (usercurrentid != '' && usercurrentid != 'none') {
+
+                                                                        var overlays = graph.getCellOverlays(cell);
+                                                                            if (overlays == null)
+                                                                            {
+                                                                                // Creates a new overlay with an image and a tooltip
+                                                                                var overlay = new mxCellOverlay(
+                                                                                        new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
+                                                                                        'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
+
+                                                                                // Installs a handler for clicks on the overlay							
+                                                                                overlay.addListener(mxEvent.CLICK, function (sender, evt2)
+                                                                                {
+                                                                                    mxUtils.alert('Overlay clicked');
+                                                                                });
+
+                                                                                // Sets the overlay for the cell in the graph
+                                                                                graph.addCellOverlay(cell, overlay);
+                                                                            }
+
+
+                                                                    }
+
+                                                             
+                                                        
+                                                   
+                                                    
+                                                }
+                                            
+                                           
+                                        });
+                              
+                                
+                            });
+
+							mxEvent.addListener(unoccupiedListItem, 'mouseenter', function(sender, evt)
+                            {
+                                    var cells = graph.getChildVertices(graph.getDefaultParent());
+								
+                                     jQuery(cells).each(function () {
+                                           
+                                            var cell = this; //abdd[i];
+                                            
+                                            if (cell != null)
+                                                {
+                                                    
+                                                //    var usercurrentid = cell.getAttribute('legendlabels', ''); 
+												   var usercurrentid = cell.getAttribute('boothOwner', ''); 
+												//    console.log('un------'+usercurrentid);
+                                                   
+
+                                                                    if (usercurrentid == '' || usercurrentid == 'none') {
 
                                                                         var overlays = graph.getCellOverlays(cell);
                                                                             if (overlays == null)
@@ -3521,7 +3579,7 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
                                 
                             });
                             
-                            mxEvent.addListener(anchor, 'mouseleave', function()
+                            mxEvent.addListener(occupiedListItem, 'mouseleave', function()
                             {
                                 var cells = graph.getChildVertices(graph.getDefaultParent());
                                     
@@ -3531,14 +3589,32 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
                                             
                                             if (cell != null)
                                                 {
-                                                    
-                                                   var usercurrentid = cell.getAttribute('legendlabels', ''); 
-                                                   if (value.ID == usercurrentid) {
 
-                                                            graph.removeCellOverlays(cell);
+                                                 graph.removeCellOverlays(cell);
 
 
-                                                    }
+                                               }
+                                            
+                                           
+                                        });    
+                                
+                                
+                               
+                            });
+
+							mxEvent.addListener(unoccupiedListItem, 'mouseleave', function()
+                            {
+                                var cells = graph.getChildVertices(graph.getDefaultParent());
+                                    
+                                     jQuery(cells).each(function () {
+                                           
+                                            var cell = this; //abdd[i];
+                                            
+                                            if (cell != null)
+                                                {
+                                   
+                                                     graph.removeCellOverlays(cell);
+                                                   
                                                }
                                             
                                            
@@ -3550,14 +3626,14 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
         
                             //div.innerHTML+='<li  class="pointedonmap '+pointclassname+'"><a onmouseover="bigImg('+mxgetjosnusersData[key].exhibitorsid+','+graph+')" onclick="getallDetialuser('+mxgetjosnusersData[key].exhibitorsid+')" >'+mxgetjosnusersData[key].companyname+'</a></li>';
                             li.appendChild(anchor);
-                            div.appendChild(li);
+                            // div.appendChild(li);
                         
                     
 
                 });
                     
 				addcontent.appendChild(containerDiv);
-              addcontent.appendChild(div);         
+            //   addcontent.appendChild(div);         
             //  jQuery('.geSidebarContainer').append(div);         	
 		
 	}));

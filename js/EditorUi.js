@@ -1777,7 +1777,7 @@ EditorUi = function (editor, container, lightbox) {
                                                         if (productstatus == "alreadyexistproduct") {
                                                             // console.log("Qsaim23");
                                                             buttonsdiv =
-                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div style="text-align: center;display: flex;justify-content: space-evenly;" class="col-sm-12" id=' +
                                                                 postid +
                                                                 '><a class="btn btn-danger btn-small" onclick="removeFromCart(' +
                                                                 postid +
@@ -1818,7 +1818,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
                                                                         // console.log("Qsaim26");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;    display: flex;"><div class="col-sm-12" id=' +
+                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;    display: flex;"><div style="text-align: center;display: flex;justify-content: space-evenly;" class="col-sm-12" id=' +
                                                                             postid +
                                                                             '><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
                                                                             postid +
@@ -1882,7 +1882,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
                                                                         // console.log("Qsaim28");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
+                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div style="text-align: center;display: flex;justify-content: space-evenly;" class="col-sm-12" id=' +
                                                                             postid +
                                                                             '><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
                                                                             postid +

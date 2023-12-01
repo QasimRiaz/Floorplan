@@ -100,6 +100,15 @@ Toolbar.prototype.init = function()
 	this.editorUi.editor.graph.view.addListener(mxEvent.EVENT_SCALE, this.updateZoom);
 	this.editorUi.editor.addListener('resetGraphView', this.updateZoom);
         
+	var drophtml = '<select id="tst" style= "width: 230%; "><option selected disabled>Print</option><option class="" id="pwel" value="pwel">📃 Without Exhibitors</option><option class="" id="pwl" value="pwl">📃 With Exhibitors</option></select>';
+
+	if(mxCurrentfloorplanstatus !='viewer'){
+		var abcde = this.addItems(['', 'printfp']);
+		abcde[1].setAttribute('title', 'Print');
+		abcde[1].setAttribute('type', 'dropdown');
+		abcde[1].innerHTML= '<div>'+drophtml+'</div>';
+	}
+
         var eltss = this.addItems(['', 'outline']);
         eltss[1].setAttribute('title', 'Outline');
         eltss[1].innerHTML = '<div class="fas fa-map" ></div>';
@@ -113,6 +122,8 @@ Toolbar.prototype.init = function()
         elts[1].setAttribute('title', mxResources.get('zoomIn'));// + ' (' + this.editorUi.actions.get('zoomIn').shortcut + ')');
         elts[1].innerHTML = '<div class="fas fa-search-plus" style="color:#000"></div>';//'Save';//('title', 'Save');
         
+	
+
         var elts = this.addItems(['', 'resetView']);
         elts[1].setAttribute('title', 'ResetView');
         elts[1].setAttribute('type', 'button');
@@ -179,11 +190,11 @@ Toolbar.prototype.init = function()
              eltss[1].setAttribute('title', 'Embed');
              eltss[1].innerHTML= '<div class="fas fa-code" style="color:#000"></div>';
              
-             var elts = this.addItems(['-', 'preview']);
+            //  var elts = this.addItems(['-', 'preview']);
              
-             elts[1].setAttribute('title', 'Print');
-             elts[1].setAttribute('type', 'button');
-             elts[1].innerHTML= '<div class="fas fa-print test" ></div>';
+            //  elts[1].setAttribute('title', 'Print');
+            //  elts[1].setAttribute('type', 'button');
+            //  elts[1].innerHTML= '<div class="fas fa-print test" ></div>';
              
              var eltss = this.addItems(['-', 'publiclink']);
              eltss[1].setAttribute('title', 'Get Public Link');
@@ -244,13 +255,13 @@ Toolbar.prototype.init = function()
 			elts[1].innerHTML= '<div class="fas fa-window-maximize" ></div>';
 
 
-			var drophtml = '<select id="tst" style= "width: 230%; "><option selected disabled>Print</option><option class="" id="pwel" value="pwel">📃 Without Exhibitors</option><option class="" id="pwl" value="pwl">📃 With Exhibitors</option></select>';
+			// var drophtml = '<select id="tst" style= "width: 230%; "><option selected disabled>Print</option><option class="" id="pwel" value="pwel">📃 Without Exhibitors</option><option class="" id="pwl" value="pwl">📃 With Exhibitors</option></select>';
 
 			
-			var abcde = this.addItems(['', 'printfp']);
-			abcde[1].setAttribute('title', 'Print');
-			abcde[1].setAttribute('type', 'dropdown');
-			abcde[1].innerHTML= drophtml;
+			// var abcde = this.addItems(['', 'printfp']);
+			// abcde[1].setAttribute('title', 'Print');
+			// abcde[1].setAttribute('type', 'dropdown');
+			// abcde[1].innerHTML= drophtml;
 
 
             

@@ -374,16 +374,16 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/mxClient.js?v=3.02"></script>
 
 
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=10.17"></script> 
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=10.18"></script> 
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.64"></script>
 
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=5.07"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=5.08"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=3.47"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.75"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=4.49"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.77"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=8.87"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=3.54"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=3.55"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=4.58"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.78"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/jquery.printPage.js?v=2.78"></script>
@@ -598,15 +598,25 @@ jQuery(window).load(function() {
     margin-bottom: 10px;
 }
 
+.hideElem{
+    display: none;
+}
+
+<?php if($current_floor_plan_status != 'viewer' ){?>
+a.geButton[title="Outline"] {
+  margin-left: 35px;
+}
+<?php } ?>
 /* Hide the default dropdown arrow */
 #tst {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  padding: 4px; /* Adjust the padding to make room for the custom arrow */
+  padding: 3px; /* Adjust the padding to make room for the custom arrow */
   background-image: url(<?php echo $dropicon; ?> ); /* Replace with the path to your custom arrow icon */
   background-repeat: no-repeat;
-  background-position: right center; /* Adjust the position of the arrow */
+  background-position: right center;
+  border-color: black; /* Adjust the position of the arrow */
 }
 
 /* Add some styles to make it visually appealing (optional) */
