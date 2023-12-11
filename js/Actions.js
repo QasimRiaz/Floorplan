@@ -87,6 +87,92 @@ Actions.prototype.init = function()
                 PrintDialog.prototype.create(graph);
         
         });
+		
+		this.addAction('printfp', function()
+		{
+
+				jQuery("#tst").change(function(){
+
+				if(jQuery('#tst option:selected').val() == 'pwel'){
+					
+					jQuery("#tst").val("Print");
+					jQuery('#pwel').addClass('printWithOutExhibitorList');
+					jQuery('#pwl').removeClass('printExhibitorList');
+					var graph = editor.graph;
+					PrintDialog.prototype.create(graph);
+
+					
+				}
+	
+				if(jQuery('#tst option:selected').val() == 'pwl'){
+					
+					jQuery("#tst").val("Print");
+					jQuery('#pwl').addClass('printExhibitorList');
+					jQuery('#pwel').removeClass('printWithOutExhibitorList');
+					var graph = editor.graph;
+					PrintDialog.prototype.create(graph);
+				}
+			  });
+
+			// 	Swal.fire({
+
+			// 		icon: "info",
+			// 		title: 'Print',
+			// 		showCancelButton: true,
+			// 		showConfirmButton: false,
+			// 		cancelButtonText: 'Cancel',
+			// 		allowOutsideClick: true,
+	
+			// 		html: `
+			// 		<div>
+			// 		<div>
+		
+			// 			<div>
+			// 				<div id="pwel" class="row printWithOutExhibitorList">
+			// 					<a href="javascript:void(0);" >
+			// 						<div class="col-sm-12" style="display:flex;">
+			// 							<img src="" class="fas fa-print fa-2x">
+			// 							<h4 style="margin-left: 16px; margin-top: 7px;">Print Floorplan Without Exhibitors List</h4>
+			// 						</div>
+			// 					</a>
+			// 				</div>
+							
+			// 				<div id="pwl" class="row printExhibitorList">
+			// 					<a href="javascript:void(0);" >
+			// 						<div class="col-sm-12" style="display:flex;">
+			// 							<img src="" class="fas fa-print fa-2x">
+			// 							<h4 style="margin-left: 16px; margin-top: 7px;">Print Floorplan With Exhibitors List</h4>                                
+										
+			// 						</div>
+			// 					</a>
+			// 				</div>
+			// 			</div>
+			// 		</div>
+					
+			// 	</div>
+			// `,
+
+			// didOpen: () => {
+
+			// 	jQuery('.swal2-html-container').css('overflow', 'hidden');
+			// 	jQuery('#pwel').click(function(){
+
+			// 		jQuery('#pwl').removeClass('printExhibitorList');
+			// 		var graph = editor.graph;
+			// 		PrintDialog.prototype.create(graph);
+			// 	});
+
+			// 	jQuery('#pwl').click(function(){
+
+			// 		jQuery('#pwel').removeClass('printWithOutExhibitorList');
+			// 		var graph = editor.graph;
+			// 		PrintDialog.prototype.create(graph);
+			// 	});
+			// },
+			
+			// 	})
+				
+		});
                 
             
             
@@ -551,9 +637,7 @@ Actions.prototype.init = function()
         
         this.addAction('floorplanexit', function(evt)
 	{
-            
-           
-          
+
           
            var data = new FormData();
            data.append('status', 'unlock');

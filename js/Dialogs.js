@@ -4,6 +4,9 @@
 /**
  * Constructs a new dialog.
  */
+
+
+
 function Dialog(editorUi, elt, w, h, modal, closable, onClose)
 {
 	var dx = 0;
@@ -1172,11 +1175,103 @@ PrintDialog.prototype.create = function(graph)
 			autoOrigin = true;
 		}
                 
-                
-		
-               
+
 		var preview = PrintDialog.createPrintPreview(graph, scale, pf, border, x0, y0, autoOrigin);
-              
+		
+         
+		var element1 = jQuery('#pwel').hasClass('printWithOutExhibitorList');
+		var element2 = jQuery('#pwl').hasClass('printExhibitorList');
+
+		if(element1){
+			
+		}else if(element2){	
+
+			preview.getCoverPages = function(w, h) {
+			
+			return [this.renderPage(w, 1200, 0, 0, mxUtils.bind(this, function(div) { 
+			  // Create a table for the layout
+			  var table = document.createElement('table');
+			  table.style.width = '50%';
+			  table.style.borderCollapse = 'collapse'; // Remove table border
+		  
+			  // Create table headers
+			  var headerRow = document.createElement('tr');
+		  
+			  var companyHeader = document.createElement('th');
+			  companyHeader.textContent = 'Company';
+			  companyHeader.style.textAlign = 'left';
+			  var boothHeader = document.createElement('th');
+			  boothHeader.textContent = 'Booth';
+			  boothHeader.style.textAlign = 'left';
+		  
+			  headerRow.appendChild(companyHeader);
+			  headerRow.appendChild(boothHeader);
+		  
+			  table.appendChild(headerRow);
+		  
+			  // Iterate through the newcompanynamesArray and add rows for each company and booth
+			  jQuery.each(newcompanynamesArray, function(key, value) {
+				if (value.companyname != "") {
+				  var xmlDoc = jQuery.parseXML(mxFloorPlanXml);
+				  var pointclassname = "";
+				  var currentuseriD = "";
+				  var assignedBooths = [];
+		  
+				  $xml = jQuery(xmlDoc);
+		  
+				  jQuery($xml).find("MyNode").each(function() {
+					var usercurrentid = jQuery(this).attr('boothOwner');
+		  
+					if (value.userID == usercurrentid) {
+					  currentuseriD = usercurrentid;
+					  pointclassname = 'occupied';
+		  
+					  // Collect assigned booths
+					  assignedBooths.push(jQuery(this).attr('mylabel'));
+					} else {
+					  pointclassname = 'unoccupied';
+					}
+				  });
+		  
+				  if (value.userID == currentuseriD && assignedBooths.length > 0) {
+					// Create a new row for each company and booth
+					var row = document.createElement('tr');
+					// row.style.textAlign = 'center';
+					row.style.fontSize = 'small';
+
+					var companyCell = document.createElement('td');
+					companyCell.textContent = value.companyname;
+		  
+					var boothCell = document.createElement('td');
+					boothCell.textContent = assignedBooths.join(', ');
+		  
+					row.appendChild(companyCell);
+					row.appendChild(boothCell);
+		  
+					table.appendChild(row);
+				  }
+				}
+			  });
+		  
+			  // Append the table to the cover page
+			  div.appendChild(table);
+		  
+			  // Center-align the table heading
+			  var heading = document.createElement('h1');
+			  heading.textContent = 'Exhibitors List';
+			//   heading.style.textAlign = 'center';
+			  var hr = document.createElement('hr');
+			  div.insertBefore(heading, table);
+			  div.insertBefore(hr, table);
+
+			 
+		  
+			}))];
+		  };
+		}
+		  
+		  
+		  
                 
 		var output = preview.open();
                  
@@ -1238,13 +1333,18 @@ PrintDialog.printPreview = function(preview)
  */
 PrintDialog.createPrintPreview = function(graph, scale, pf, border, x0, y0, autoOrigin)
 {
+
 	var preview = new mxPrintPreview(graph, scale, pf, border, x0, y0);
         
         console.log(preview);
+		// console.log('*******');
+		// console.log(preview.pageFormat.height);
         
 	preview.title = mxResources.get('preview');
 	preview.printBackgroundImage = true;
 	preview.autoOrigin = autoOrigin;
+	
+	
 	var bg = graph.background;
 	
 	if (bg == null || bg == '' || bg == mxConstants.NONE)
@@ -3403,3 +3503,5 @@ var LayersWindow = function(editorUi, x, y, w, h)
 		}
 	}));
 };
+
+

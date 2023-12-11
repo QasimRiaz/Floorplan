@@ -1281,21 +1281,45 @@ EditorUi = function (editor, container, lightbox) {
                                         userloggedinstatus == true &&
                                         floorPlanSettings["Hide_Price"] != "Hide_Booth_price"
                                     ) {
-                                        var productprice =
+
+                                        console.log('discprice---------'+finalresultProduct.levelbaseddiscountedprice);
+                                        if(finalresultProduct.levelbaseddiscountedprice !== 0){
+
+                                            var productprice =
                                             "<p><h5 ><strong>Price: </strong>" +
                                             finalresultProduct.currencysymbole +
                                             finalresultProduct.price +
-                                            "</h5>";
-                                    } else {
-                                        if (
-                                            flowstatus.indexOf("mood=wizard") != -1 &&
-                                            floorPlanSettings["Hide_Price"] != "Hide_Booth_price"
-                                        ) {
+                                            "  (<small><strong>Discounted Price: </strong>"+finalresultProduct.currencysymbole +
+                                            finalresultProduct.levelbaseddiscountedprice +"</small>)</h5>";
+                                        }else{
+
                                             var productprice =
                                                 "<p><h5 ><strong>Price: </strong>" +
                                                 finalresultProduct.currencysymbole +
                                                 finalresultProduct.price +
                                                 "</h5>";
+                                        }
+                                    } else {
+                                        if (
+                                            flowstatus.indexOf("mood=wizard") != -1 &&
+                                            floorPlanSettings["Hide_Price"] != "Hide_Booth_price"
+                                        ) {
+                                            if(finalresultProduct.levelbaseddiscountedprice !== 0){
+
+                                                var productprice =
+                                                "<p><h5 ><strong>Price: </strong>" +
+                                                finalresultProduct.currencysymbole +
+                                                finalresultProduct.price +
+                                                "  (<small><strong>Discounted Price: </strong>"+finalresultProduct.currencysymbole +
+                                                finalresultProduct.levelbaseddiscountedprice +"</small>)</h5>";
+                                            }else{
+    
+                                                var productprice =
+                                                    "<p><h5 ><strong>Price: </strong>" +
+                                                    finalresultProduct.currencysymbole +
+                                                    finalresultProduct.price +
+                                                    "</h5>";
+                                            }
                                         } else {
                                             var productprice = "";
                                         }
@@ -1753,7 +1777,7 @@ EditorUi = function (editor, container, lightbox) {
                                                         if (productstatus == "alreadyexistproduct") {
                                                             // console.log("Qsaim23");
                                                             buttonsdiv =
-                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div style="text-align: center;display: flex;justify-content: space-evenly;" class="col-sm-12" id=' +
                                                                 postid +
                                                                 '><a class="btn btn-danger btn-small" onclick="removeFromCart(' +
                                                                 postid +
@@ -1794,7 +1818,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
                                                                         // console.log("Qsaim26");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;    display: flex;"><div class="col-sm-12" id=' +
+                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;    display: flex;"><div style="text-align: center;display: flex;justify-content: space-evenly;" class="col-sm-12" id=' +
                                                                             postid +
                                                                             '><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
                                                                             postid +
@@ -1858,7 +1882,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
                                                                         // console.log("Qsaim28");
                                                                         buttonsdiv =
-                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
+                                                                            '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div style="text-align: center;display: flex;justify-content: space-evenly;" class="col-sm-12" id=' +
                                                                             postid +
                                                                             '><div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add To Cart</button><div class="dropdown-menu" ><a class="dropdown-item" onclick="addToCart(' +
                                                                             postid +

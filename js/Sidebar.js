@@ -3292,8 +3292,7 @@ Sidebar.prototype.addBoothtagsFunctions = function(graph, id, title, expanded, f
         
 	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
 	{           
-                   
-                    
+
                     var div = document.createElement('ul');
                     div.className ="legendslist";
                     var boothdetailleft = "";
@@ -3408,21 +3407,152 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
         
 	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
 	{           
-                   
-                    
-                    var div = document.createElement('ul');
-                    div.className ="legendslist";
+
+					var div = document.createElement('ul');
+					// Create a container div with a "row" class
+					// Create the unordered list
+							var unorderedList = document.createElement('ul');
+							unorderedList.className = 'legendslist';
+							// Create the first list item for "Unoccupied"
+							var unoccupiedListItem = document.createElement('li');
+							var unoccupiedAnchor = document.createElement('a');
+							unoccupiedAnchor.innerHTML = 'Unoccupied';
+							unoccupiedListItem.appendChild(unoccupiedAnchor);
+
+							// Create the second list item for "Occupied"
+							var occupiedListItem = document.createElement('li');
+							var occupiedAnchor = document.createElement('a');
+							occupiedAnchor.innerHTML = 'Occupied';
+							occupiedListItem.appendChild(occupiedAnchor);
+
+							// Append list items to the unordered list
+							unorderedList.appendChild(unoccupiedListItem);
+							unorderedList.appendChild(occupiedListItem);
+
+							// Now, you can append the unordered list wherever you need it in your document
+							// For example, assuming you have a container div:
+							var containerDiv = document.createElement('div');
+							containerDiv.appendChild(unorderedList);
+					
+					div.className ="legendslist";
+					div.id = "leglist"
+
+					var existingElement = document.getElementById("leglist");
+					// console.log(existingElement);
                     var boothdetailleft = "";
                     jQuery.each(LegendsOfObjects, function (key, value) {
                         
-                        var li = document.createElement('li');
-                        li.className = 'legendslistLi';
-                        li.style.backgroundColor = value.colorcode;
-                        var anchor = document.createElement('a');
-                        anchor.innerHTML = value.name;
-                        anchor.id = value.ID;
-                        
-                      mxEvent.addListener(anchor, 'mouseenter', function(sender, evt)
+                    var li = document.createElement('li');
+                    li.className = 'legendslistLi';
+					var gradient = "linear-gradient(to right, " + value.colorcode + " 100%, " + value.colorcodeOcc + " 0%)";
+
+					li.style.background = gradient;
+
+					// Set the tooltips for hover
+				    // li.setAttribute('title', ''); // Tooltip for top color
+				    // li.style.cursor = 'help'; // Change cursor to a pointer to indicate hover
+
+				    // // Add an event listener for mouseover to change the tooltip text
+					// li.addEventListener('mouseover', function (event) {
+					// 	var mouseX = event.clientX - li.getBoundingClientRect().left;
+					// 	// console.log('mouseX-----'+mouseX);
+					// 	var totalWidth = li.clientWidth;
+					// 	// console.log('totalWidth-------'+totalWidth);
+						
+					// 	if (mouseX < totalWidth / 2) {
+					// 		li.setAttribute('title', 'Unoccupied');
+					// 	} else {
+					// 		li.setAttribute('title', 'Occupied');
+					// 	}
+					// });
+
+					// li.addEventListener('mouseleave', function (event) {
+                    //         console.log('mouseleft');
+					// 		li.setAttribute('title', '');
+
+					// 		});
+                        // li.style.backgroundColor = value.colorcode;
+                    var anchor = document.createElement('a');
+                    anchor.innerHTML = value.name;
+                    anchor.id = value.ID;		
+							
+					mxEvent.addListener(anchor, 'mouseenter', function(sender, evt)
+					{
+							var cells = graph.getChildVertices(graph.getDefaultParent());
+							
+							 jQuery(cells).each(function () {
+								   
+									var cell = this; //abdd[i];
+									
+									if (cell != null)
+										{
+											
+										   var usercurrentid = cell.getAttribute('legendlabels', ''); 
+										   
+
+															if (value.ID == usercurrentid) {
+
+																var overlays = graph.getCellOverlays(cell);
+																	if (overlays == null)
+																	{
+																		// Creates a new overlay with an image and a tooltip
+																		var overlay = new mxCellOverlay(
+																				new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
+																				'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
+
+																		// Installs a handler for clicks on the overlay							
+																		overlay.addListener(mxEvent.CLICK, function (sender, evt2)
+																		{
+																			mxUtils.alert('Overlay clicked');
+																		});
+
+																		// Sets the overlay for the cell in the graph
+																		graph.addCellOverlay(cell, overlay);
+																	}
+
+
+															}
+
+													 
+												
+										   
+											
+										}
+									
+								   
+								});
+					  
+						
+					});
+					
+					mxEvent.addListener(anchor, 'mouseleave', function()
+					{
+						var cells = graph.getChildVertices(graph.getDefaultParent());
+							
+							 jQuery(cells).each(function () {
+								   
+									var cell = this; //abdd[i];
+									
+									if (cell != null)
+										{
+											
+										   var usercurrentid = cell.getAttribute('legendlabels', ''); 
+										   if (value.ID == usercurrentid) {
+
+													graph.removeCellOverlays(cell);
+
+
+											}
+									   }
+									
+								   
+								});    
+						
+						
+					   
+					});
+                 
+                      mxEvent.addListener(occupiedListItem, 'mouseenter', function(sender, evt)
                             {
                                     var cells = graph.getChildVertices(graph.getDefaultParent());
                                     
@@ -3433,10 +3563,63 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
                                             if (cell != null)
                                                 {
                                                     
-                                                   var usercurrentid = cell.getAttribute('legendlabels', ''); 
+                                                //    var usercurrentid = cell.getAttribute('legendlabels', ''); 
+												   var usercurrentid = cell.getAttribute('boothOwner', ''); 
+												//    console.log('on------'+usercurrentid);
                                                    
 
-                                                                    if (value.ID == usercurrentid) {
+                                                                    if (usercurrentid != '' && usercurrentid != 'none') {
+
+                                                                        var overlays = graph.getCellOverlays(cell);
+                                                                            if (overlays == null)
+                                                                            {
+                                                                                // Creates a new overlay with an image and a tooltip
+                                                                                var overlay = new mxCellOverlay(
+                                                                                        new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
+                                                                                        'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
+
+                                                                                // Installs a handler for clicks on the overlay							
+                                                                                overlay.addListener(mxEvent.CLICK, function (sender, evt2)
+                                                                                {
+                                                                                    mxUtils.alert('Overlay clicked');
+                                                                                });
+
+                                                                                // Sets the overlay for the cell in the graph
+                                                                                graph.addCellOverlay(cell, overlay);
+                                                                            }
+
+
+                                                                    }
+
+                                                             
+                                                        
+                                                   
+                                                    
+                                                }
+                                            
+                                           
+                                        });
+                              
+                                
+                            });
+
+							mxEvent.addListener(unoccupiedListItem, 'mouseenter', function(sender, evt)
+                            {
+                                    var cells = graph.getChildVertices(graph.getDefaultParent());
+								
+                                     jQuery(cells).each(function () {
+                                           
+                                            var cell = this; //abdd[i];
+                                            
+                                            if (cell != null)
+                                                {
+                                                    
+                                                //    var usercurrentid = cell.getAttribute('legendlabels', ''); 
+												   var usercurrentid = cell.getAttribute('boothOwner', ''); 
+												//    console.log('un------'+usercurrentid);
+                                                   
+
+                                                                    if (usercurrentid == '' || usercurrentid == 'none') {
 
                                                                         var overlays = graph.getCellOverlays(cell);
                                                                             if (overlays == null)
@@ -3471,7 +3654,7 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
                                 
                             });
                             
-                            mxEvent.addListener(anchor, 'mouseleave', function()
+                            mxEvent.addListener(occupiedListItem, 'mouseleave', function()
                             {
                                 var cells = graph.getChildVertices(graph.getDefaultParent());
                                     
@@ -3481,14 +3664,32 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
                                             
                                             if (cell != null)
                                                 {
-                                                    
-                                                   var usercurrentid = cell.getAttribute('legendlabels', ''); 
-                                                   if (value.ID == usercurrentid) {
 
-                                                            graph.removeCellOverlays(cell);
+                                                 graph.removeCellOverlays(cell);
 
 
-                                                    }
+                                               }
+                                            
+                                           
+                                        });    
+                                
+                                
+                               
+                            });
+
+							mxEvent.addListener(unoccupiedListItem, 'mouseleave', function()
+                            {
+                                var cells = graph.getChildVertices(graph.getDefaultParent());
+                                    
+                                     jQuery(cells).each(function () {
+                                           
+                                            var cell = this; //abdd[i];
+                                            
+                                            if (cell != null)
+                                                {
+                                   
+                                                     graph.removeCellOverlays(cell);
+                                                   
                                                }
                                             
                                            
@@ -3500,14 +3701,14 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
         
                             //div.innerHTML+='<li  class="pointedonmap '+pointclassname+'"><a onmouseover="bigImg('+mxgetjosnusersData[key].exhibitorsid+','+graph+')" onclick="getallDetialuser('+mxgetjosnusersData[key].exhibitorsid+')" >'+mxgetjosnusersData[key].companyname+'</a></li>';
                             li.appendChild(anchor);
-                            div.appendChild(li);
+                         div.appendChild(li);
                         
                     
 
                 });
                     
-        
-              addcontent.appendChild(div);         
+				addcontent.appendChild(containerDiv);
+            	addcontent.appendChild(div);         
             //  jQuery('.geSidebarContainer').append(div);         	
 		
 	}));
@@ -3519,22 +3720,43 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
          if(condition){
         
          }
+
+
         
 	this.addPalette(id, title, expanded, mxUtils.bind(this, function(addcontent)
 	{           
                    
-                    
+		
                     var div = document.createElement('ul');
                     div.className ="exbitorlist";
                     var boothdetailleft = "";
+
+				  // Create an input element for the search bar
+					var searchInput = document.createElement('input');
+					searchInput.type = 'text';
+					searchInput.className ="search-exhi";
+					searchInput.name ="search-exhibitor";
+					searchInput.placeholder = 'Search Exhibitor';
+
+				searchInput.addEventListener('input', function() {
+					var searchText = searchInput.value.toLowerCase();
+					// Filter and display matching users
+					filterAndDisplayUsers(searchText);
+				});
+				
+				
+				// Append the search input to the sidebar
+				addcontent.appendChild(searchInput);
+
                     jQuery.each(newcompanynamesArray, function (key, value) {
                         
                         if (value.companyname != "") {
                             
-                            
                                 var xmlDoc = jQuery.parseXML(mxFloorPlanXml);
                                 var  pointclassname = "";
                                 var currentuseriD ="";
+								var assignedBooths = [];
+							
                                 $xml = jQuery(xmlDoc);
                                 var i = 0;
                                
@@ -3550,7 +3772,8 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
 
                                                             currentuseriD = usercurrentid;
                                                             pointclassname = 'occupied';
-                                                            return false;
+															assignedBooths.push(jQuery(this).attr('mylabel'));
+                                                            // return false;
 
                                                     } else {
 
@@ -3563,10 +3786,11 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                             
                             var li = document.createElement('li');
                             li.className = pointclassname;
-                           
-                           
+
                             var anchor = document.createElement('a');
-                            anchor.innerHTML = value.companyname;
+							anchor.style.textAlign = "left";
+							
+                            anchor.innerHTML = value.companyname+'  '+'<small style="font-size: 69%; color: #8e9faf !important;">('+assignedBooths.join(', ')+')</small>';
                             
                             mxEvent.addListener(anchor, 'click', function()
                             {
@@ -3901,12 +4125,14 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
 	// Disables built-in pan and zoom in IE10 and later
 	if (mxClient.IS_POINTER)
 	{
-		div.style.touchAction = 'none';
+		// div.style.touchAction = 'none';
 	}
 	
 	// Shows tooltip if mouse over background
 	mxEvent.addListener(div, 'mousemove', mxUtils.bind(this, function(evt)
 	{
+
+		jQuery('.search-exhi').focus();
 		if (mxEvent.getSource(evt) == div)
 		{
 			div.setAttribute('title', mxResources.get('sidebarTooltip'));
@@ -4192,3 +4418,21 @@ Sidebar.prototype.destroy = function()
 		this.pointerOutHandler = null;
 	}
 };
+
+
+ // Function to filter and display users based on search text
+ function filterAndDisplayUsers(searchText) {
+	var userList = document.querySelectorAll('.exbitorlist li');
+	for (var i = 0; i < userList.length; i++) {
+		var userItem = userList[i];
+		var userName = userItem.querySelector('a').innerHTML.toLowerCase();
+		
+		// Check if the user's name contains the search text
+		if (userName.includes(searchText)) {
+			userItem.style.display = 'block'; // Show matching user
+		} else {
+			userItem.style.display = 'none'; // Hide non-matching user
+		}
+	}
+} 
+

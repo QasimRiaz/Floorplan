@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 11.9
- * @version : 11.9
+ * Version: 12.00
+ * @version : 12.00
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -755,6 +755,40 @@ function getproductdetail($productID)
         $get_depositenable_type = get_post_meta($id, "_wc_deposit_enabled", true);
         $get_role_type = get_post_meta($id, "_wc_deposit_enabled", true);
 
+        $boothPriceBasedLevels = get_post_meta($id, 'levelbaseddiscountdata', true);
+        $boothPriceBasedLevels = json_decode(json_encode($boothPriceBasedLevels),true);
+        $pkgLvl = trigger2();
+        if(!empty($boothPriceBasedLevels)){
+               
+            if (is_user_logged_in()) {
+
+                $user = wp_get_current_user();
+                $user_role = $user->roles;
+                $user_role = $user_role[0];
+            }else{
+
+                $user_role = $pkgLvl;
+            }
+                foreach($boothPriceBasedLevels as $key => $value){
+             
+                    if(in_array($user_role, (array)$value['levels'])){
+
+                        if(!empty($value['discounttype']) && !empty($value['discountamount'])){
+
+                            if($value['discounttype'] == 'percent'){
+                                $boothProductPrice = ($value['discountamount'] / 100) * (int)$get_product->regular_price;
+                                $boothProductPrice =  (int)$get_product->regular_price - $boothProductPrice;
+                            }else{
+
+                                $boothProductPrice = (int)$get_product->regular_price - $value['discountamount'];
+                            }
+                        }
+                   
+                        
+                    }
+                }    
+        }
+
         if (empty($get_product)) {
 
             $productdetail['productstatus'] = 'removed';
@@ -772,6 +806,7 @@ function getproductdetail($productID)
         $productdetail['PurchaseCount'] = $number;
 
         $productdetail['price'] = (int)$get_product->regular_price;
+        $productdetail['levelbaseddiscountedprice'] = (int)$boothProductPrice;
         $productdetail['stockstatus'] = $get_product->stock_status;
         $productdetail['deposit_type'] = $get_deposit_type;
         $productdetail['deposit_amount'] = $get_deposit_amount;
@@ -1921,27 +1956,27 @@ function floorplan_shortcode($atts, $content = null)
                 'timeout' => 30,
                 'ssl_verify' => false,
             );
-            $woocommerce_object = new WC_API_Client($url, $wooconsumerkey, $wooseceretkey, $options);
-            $all_products = $woocommerce_object->products->get('', ['filter[limit]' => -1, 'filter[post_status]' => 'any']);
+            // $woocommerce_object = new WC_API_Client($url, $wooconsumerkey, $wooseceretkey, $options);
+            // $all_products = $woocommerce_object->products->get('', ['filter[limit]' => -1, 'filter[post_status]' => 'any']);
 
-            $indexProduct = 0;
+            // $indexProduct = 0;
 
-            foreach ($all_products->products as $single_product) {
-
-
-                if ($single_product->categories[0] == 'Booths') {
-                    $boothsproductsData[$indexProduct]['title'] = $single_product->title;
-                    $boothsproductsData[$indexProduct]['id'] = $single_product->id;
-                    $boothsproductsData[$indexProduct]['price'] = (int)$single_product->price;
-                    $indexProduct++;
-                }
-
-            }
+            // foreach ($all_products->products as $single_product) {
 
 
-            if (!empty($boothsproductsData)) {
-                $boothsproductsData = json_encode($boothsproductsData);
-            }
+            //     if ($single_product->categories[0] == 'Booths') {
+            //         $boothsproductsData[$indexProduct]['title'] = $single_product->title;
+            //         $boothsproductsData[$indexProduct]['id'] = $single_product->id;
+            //         $boothsproductsData[$indexProduct]['price'] = (int)$single_product->price;
+            //         $indexProduct++;
+            //     }
+
+            // }
+
+
+            // if (!empty($boothsproductsData)) {
+            //     $boothsproductsData = json_encode($boothsproductsData);
+            // }
 
 
         }
@@ -2044,7 +2079,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
             __FILE__,
             'FloorPlan'
         );
-        $myUpdateChecker->setBranch('master');
+        $myUpdateChecker->setBranch('Shehroze-Dev');
         $myUpdateChecker->setAuthentication($gitKey);
         $myUpdateChecker->getVcsApi()->enableReleaseAssets();
     }
