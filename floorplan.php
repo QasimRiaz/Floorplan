@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 12.12
- * @version : 12.12
+ * Version: 12.13
+ * @version : 12.13
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -1956,27 +1956,27 @@ function floorplan_shortcode($atts, $content = null)
                 'timeout' => 30,
                 'ssl_verify' => false,
             );
-            $woocommerce_object = new WC_API_Client($url, $wooconsumerkey, $wooseceretkey, $options);
-            $all_products = $woocommerce_object->products->get('', ['filter[limit]' => -1, 'filter[post_status]' => 'any']);
+            // $woocommerce_object = new WC_API_Client($url, $wooconsumerkey, $wooseceretkey, $options);
+            // $all_products = $woocommerce_object->products->get('', ['filter[limit]' => -1, 'filter[post_status]' => 'any']);
 
-            $indexProduct = 0;
+            // $indexProduct = 0;
 
-            foreach ($all_products->products as $single_product) {
-
-
-                if ($single_product->categories[0] == 'Booths') {
-                    $boothsproductsData[$indexProduct]['title'] = $single_product->title;
-                    $boothsproductsData[$indexProduct]['id'] = $single_product->id;
-                    $boothsproductsData[$indexProduct]['price'] = (int)$single_product->price;
-                    $indexProduct++;
-                }
-
-            }
+            // foreach ($all_products->products as $single_product) {
 
 
-            if (!empty($boothsproductsData)) {
-                $boothsproductsData = json_encode($boothsproductsData);
-            }
+            //     if ($single_product->categories[0] == 'Booths') {
+            //         $boothsproductsData[$indexProduct]['title'] = $single_product->title;
+            //         $boothsproductsData[$indexProduct]['id'] = $single_product->id;
+            //         $boothsproductsData[$indexProduct]['price'] = (int)$single_product->price;
+            //         $indexProduct++;
+            //     }
+
+            // }
+
+
+            // if (!empty($boothsproductsData)) {
+            //     $boothsproductsData = json_encode($boothsproductsData);
+            // }
 
 
         }

@@ -7866,7 +7866,8 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
     
                 graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
               } else {
-           
+                
+                graph.setCellStyles("fillColor", '', cellvalue);
                 graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
               }
             } else {
