@@ -2079,7 +2079,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
             __FILE__,
             'FloorPlan'
         );
-        $myUpdateChecker->setBranch('Shehroze-Dev');
+        $myUpdateChecker->setBranch('master');
         $myUpdateChecker->setAuthentication($gitKey);
         $myUpdateChecker->getVcsApi()->enableReleaseAssets();
     }
