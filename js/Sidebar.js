@@ -917,11 +917,14 @@ Sidebar.prototype.addGeneralPalette = function(expand)
             
              
             
-            this.addLegendsFunctions(graph, 'generalLegends', "Legend", false, LegendsOfObjects);  
+            this.addLegendsFunctions(graph, 'generalLegends', "Legend", true, LegendsOfObjects);  
+
          }else{
             
             this.addLegendsFunctions(graph, 'generalLegends', "Legend", true, LegendsOfObjects); 
+
          }
+
          if(BoothTagsObjects.length === 0) {
             //   console.log(LegendsOfObjects+'empty');
            this.addBoothtagsFunctions(graph, 'generalboothtags', "Booth Tags", false, BoothTagsObjects); 
@@ -3438,6 +3441,157 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
 					div.id = "leglist"
 
 					var existingElement = document.getElementById("leglist");
+
+
+					mxEvent.addListener(occupiedListItem, 'mouseenter', function(sender, evt)
+					{
+							var cells = graph.getChildVertices(graph.getDefaultParent());
+							
+							 jQuery(cells).each(function () {
+								   
+									var cell = this; //abdd[i];
+									
+									if (cell != null)
+										{
+											
+										   var usercurrentid = cell.getAttribute('legendlabels', ''); 
+										   var usercurrentid = cell.getAttribute('boothOwner', ''); 
+											console.log('on------'+usercurrentid);
+										   
+
+															if (usercurrentid != '' && usercurrentid != 'none') {
+
+																var overlays = graph.getCellOverlays(cell);
+																	if (overlays == null)
+																	{
+																		// Creates a new overlay with an image and a tooltip
+																		var overlay = new mxCellOverlay(
+																				new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
+																				'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
+
+																		// Installs a handler for clicks on the overlay							
+																		overlay.addListener(mxEvent.CLICK, function (sender, evt2)
+																		{
+																			mxUtils.alert('Overlay clicked');
+																		});
+
+																		// Sets the overlay for the cell in the graph
+																		graph.addCellOverlay(cell, overlay);
+																	}
+
+
+															}
+
+													 
+												
+										   
+											
+										}
+									
+								   
+								});
+					  
+						
+					});
+
+					mxEvent.addListener(unoccupiedListItem, 'mouseenter', function(sender, evt)
+					{
+							var cells = graph.getChildVertices(graph.getDefaultParent());
+						
+							 jQuery(cells).each(function () {
+								   
+									var cell = this; //abdd[i];
+									
+									if (cell != null)
+										{
+											
+										//    var usercurrentid = cell.getAttribute('legendlabels', ''); 
+										   var usercurrentid = cell.getAttribute('boothOwner', ''); 
+										//    console.log('un------'+usercurrentid);
+										   
+
+															if (usercurrentid == '' || usercurrentid == 'none') {
+
+																var overlays = graph.getCellOverlays(cell);
+																	if (overlays == null)
+																	{
+																		// Creates a new overlay with an image and a tooltip
+																		var overlay = new mxCellOverlay(
+																				new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
+																				'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
+
+																		// Installs a handler for clicks on the overlay							
+																		overlay.addListener(mxEvent.CLICK, function (sender, evt2)
+																		{
+																			mxUtils.alert('Overlay clicked');
+																		});
+
+																		// Sets the overlay for the cell in the graph
+																		graph.addCellOverlay(cell, overlay);
+																	}
+
+
+															}
+
+													 
+												
+										   
+											
+										}
+									
+								   
+								});
+					  
+						
+					});
+					
+					mxEvent.addListener(occupiedListItem, 'mouseleave', function()
+					{
+						var cells = graph.getChildVertices(graph.getDefaultParent());
+							
+							 jQuery(cells).each(function () {
+								   
+									var cell = this; //abdd[i];
+									
+									if (cell != null)
+										{
+
+										 graph.removeCellOverlays(cell);
+
+
+									   }
+									
+								   
+								});    
+						
+						
+					   
+					});
+
+					mxEvent.addListener(unoccupiedListItem, 'mouseleave', function()
+					{
+						var cells = graph.getChildVertices(graph.getDefaultParent());
+							
+							 jQuery(cells).each(function () {
+								   
+									var cell = this; //abdd[i];
+									
+									if (cell != null)
+										{
+						   
+											 graph.removeCellOverlays(cell);
+										   
+									   }
+									
+								   
+								});    
+						
+						
+					   
+					});
+
+
+					
 					// console.log(existingElement);
                     var boothdetailleft = "";
                     jQuery.each(LegendsOfObjects, function (key, value) {
@@ -3552,153 +3706,7 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
 					   
 					});
                  
-                      mxEvent.addListener(occupiedListItem, 'mouseenter', function(sender, evt)
-                            {
-                                    var cells = graph.getChildVertices(graph.getDefaultParent());
-                                    
-                                     jQuery(cells).each(function () {
-                                           
-                                            var cell = this; //abdd[i];
-                                            
-                                            if (cell != null)
-                                                {
-                                                    
-                                                //    var usercurrentid = cell.getAttribute('legendlabels', ''); 
-												   var usercurrentid = cell.getAttribute('boothOwner', ''); 
-												//    console.log('on------'+usercurrentid);
-                                                   
-
-                                                                    if (usercurrentid != '' && usercurrentid != 'none') {
-
-                                                                        var overlays = graph.getCellOverlays(cell);
-                                                                            if (overlays == null)
-                                                                            {
-                                                                                // Creates a new overlay with an image and a tooltip
-                                                                                var overlay = new mxCellOverlay(
-                                                                                        new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
-                                                                                        'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
-
-                                                                                // Installs a handler for clicks on the overlay							
-                                                                                overlay.addListener(mxEvent.CLICK, function (sender, evt2)
-                                                                                {
-                                                                                    mxUtils.alert('Overlay clicked');
-                                                                                });
-
-                                                                                // Sets the overlay for the cell in the graph
-                                                                                graph.addCellOverlay(cell, overlay);
-                                                                            }
-
-
-                                                                    }
-
-                                                             
-                                                        
-                                                   
-                                                    
-                                                }
-                                            
-                                           
-                                        });
-                              
-                                
-                            });
-
-							mxEvent.addListener(unoccupiedListItem, 'mouseenter', function(sender, evt)
-                            {
-                                    var cells = graph.getChildVertices(graph.getDefaultParent());
-								
-                                     jQuery(cells).each(function () {
-                                           
-                                            var cell = this; //abdd[i];
-                                            
-                                            if (cell != null)
-                                                {
-                                                    
-                                                //    var usercurrentid = cell.getAttribute('legendlabels', ''); 
-												   var usercurrentid = cell.getAttribute('boothOwner', ''); 
-												//    console.log('un------'+usercurrentid);
-                                                   
-
-                                                                    if (usercurrentid == '' || usercurrentid == 'none') {
-
-                                                                        var overlays = graph.getCellOverlays(cell);
-                                                                            if (overlays == null)
-                                                                            {
-                                                                                // Creates a new overlay with an image and a tooltip
-                                                                                var overlay = new mxCellOverlay(
-                                                                                        new mxImage(baseCurrentSiteURl + '/wp-content/plugins/floorplan/styles/arrow.png', 40, 53),
-                                                                                        'Overlay tooltip',mxConstants.ALIGN_CENTER,mxConstants.ALIGN_TOP);
-
-                                                                                // Installs a handler for clicks on the overlay							
-                                                                                overlay.addListener(mxEvent.CLICK, function (sender, evt2)
-                                                                                {
-                                                                                    mxUtils.alert('Overlay clicked');
-                                                                                });
-
-                                                                                // Sets the overlay for the cell in the graph
-                                                                                graph.addCellOverlay(cell, overlay);
-                                                                            }
-
-
-                                                                    }
-
-                                                             
-                                                        
-                                                   
-                                                    
-                                                }
-                                            
-                                           
-                                        });
-                              
-                                
-                            });
-                            
-                            mxEvent.addListener(occupiedListItem, 'mouseleave', function()
-                            {
-                                var cells = graph.getChildVertices(graph.getDefaultParent());
-                                    
-                                     jQuery(cells).each(function () {
-                                           
-                                            var cell = this; //abdd[i];
-                                            
-                                            if (cell != null)
-                                                {
-
-                                                 graph.removeCellOverlays(cell);
-
-
-                                               }
-                                            
-                                           
-                                        });    
-                                
-                                
-                               
-                            });
-
-							mxEvent.addListener(unoccupiedListItem, 'mouseleave', function()
-                            {
-                                var cells = graph.getChildVertices(graph.getDefaultParent());
-                                    
-                                     jQuery(cells).each(function () {
-                                           
-                                            var cell = this; //abdd[i];
-                                            
-                                            if (cell != null)
-                                                {
-                                   
-                                                     graph.removeCellOverlays(cell);
-                                                   
-                                               }
-                                            
-                                           
-                                        });    
-                                
-                                
-                               
-                            });
-        
+                    
                             //div.innerHTML+='<li  class="pointedonmap '+pointclassname+'"><a onmouseover="bigImg('+mxgetjosnusersData[key].exhibitorsid+','+graph+')" onclick="getallDetialuser('+mxgetjosnusersData[key].exhibitorsid+')" >'+mxgetjosnusersData[key].companyname+'</a></li>';
                             li.appendChild(anchor);
                          div.appendChild(li);
