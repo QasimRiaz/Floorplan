@@ -1186,7 +1186,6 @@ PrintDialog.prototype.create = function(graph)
 		jQuery.each(newcompanynamesArray, function(key, value) {
 			if (value.companyname != "") {
 			  var xmlDoc = jQuery.parseXML(mxFloorPlanXml);
-			  var pointclassname = "";
 			  var currentuseriD = "";
 			  var assignedBooths = [];
 	  
@@ -1196,22 +1195,12 @@ PrintDialog.prototype.create = function(graph)
 				var usercurrentid = jQuery(this).attr('boothOwner');
 	  
 				if (value.userID == usercurrentid) {
-				  currentuseriD = usercurrentid;
-				  pointclassname = 'occupied';
-	  
-				  // Collect assigned booths
-				  assignedBooths.push(jQuery(this).attr('mylabel'));
-				} else {
-				  pointclassname = 'unoccupied';
+				  	currentuseriD = usercurrentid;
 				}
 			  });
 			  
-
 			  if (value.userID == currentuseriD && assignedBooths.length > 0) {
-				// Create a new row for each company and booth
-				companyNamesArray.push(value.companyname);
-				
-				
+					companyNamesArray.push(value.companyname);
 			  }
 			}
 		  });
