@@ -1181,14 +1181,45 @@ PrintDialog.prototype.create = function(graph)
          
 		var element1 = jQuery('#pwel').hasClass('printWithOutExhibitorList');
 		var element2 = jQuery('#pwl').hasClass('printExhibitorList');
+		var companyNamesArray = [];
 
+		jQuery.each(newcompanynamesArray, function(key, value) {
+			if (value.companyname != "") {
+			  var xmlDoc = jQuery.parseXML(mxFloorPlanXml);
+			  var currentuseriD = "";
+			  var assignedBooths = [];
+	  
+			  $xml = jQuery(xmlDoc);
+	  
+			  jQuery($xml).find("MyNode").each(function() {
+				var usercurrentid = jQuery(this).attr('boothOwner');
+	  
+				if (value.userID == usercurrentid) {
+				  	currentuseriD = usercurrentid;
+				}
+			  });
+			  
+			  if (value.userID == currentuseriD && assignedBooths.length > 0) {
+					companyNamesArray.push(value.companyname);
+			  }
+			}
+		  });
 		if(element1){
 			
 		}else if(element2){	
 
+			var companyNamesCount = companyNamesArray.length;
+			var pageHeight = 0;
+		
 			preview.getCoverPages = function(w, h) {
-			
-			return [this.renderPage(w, 1200, 0, 0, mxUtils.bind(this, function(div) { 
+				
+				if(companyNamesCount > 60){
+					pageHeight = h * 1.5 ;
+				}else{
+					pageHeight = 1200;
+				}
+		
+			return [this.renderPage(w, pageHeight, 0, 0, mxUtils.bind(this, function(div) { 
 			  // Create a table for the layout
 			  var table = document.createElement('table');
 			  table.style.width = '50%';
