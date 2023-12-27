@@ -1199,7 +1199,7 @@ PrintDialog.prototype.create = function(graph)
 				}
 			  });
 			  
-			  if (value.userID == currentuseriD && assignedBooths.length > 0) {
+			  if (value.userID == currentuseriD) {
 					companyNamesArray.push(value.companyname);
 			  }
 			}
