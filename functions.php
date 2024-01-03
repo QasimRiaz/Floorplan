@@ -25,11 +25,18 @@ add_action('wp_ajax_nopriv_remove_item_from_cart', 'remove_item_from_cart');
 
 $getAllusers_data2 = json_decode(stripslashes($getAllusers_data), true);
 $getAllusers_data3 = [];
+global $wpdb;
+
+$siteprefix = $wpdb->get_blog_prefix();
 
 foreach ($getAllusers_data2 as $key => $item) {
+    
+  
+    $all_meta_for_user = get_user_meta($item['exhibitorsid']);
+    if($all_meta_for_user[$siteprefix . 'selfsignupstatus'][0] != 'Declined' && $all_meta_for_user[$siteprefix . 'selfsignupstatus'][0] != 'Pending'){
 
-    unset($item['nickname']);
-    $getAllusers_data3[$key] = $item;
+        $getAllusers_data3[$key] = $item;
+    }
 
 }
 
