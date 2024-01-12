@@ -2602,6 +2602,20 @@ function addToCart(p_id, request, price, slug) {
             
                        
                     })
+                }else if(data == 'assigned'){
+                    Swal.fire({
+                        icon: "info",
+                        title: "Already Assigned",
+                        text: boothName+" is already assigned to somone.",
+                        confirmButtonClass: " btn",
+                        confirmButtonColor: '#8cd4f5',
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                            
+                        }
+                    })
                 }else{
 
                     Swal.fire({
