@@ -1282,7 +1282,7 @@ EditorUi = function (editor, container, lightbox) {
                                         floorPlanSettings["Hide_Price"] != "Hide_Booth_price"
                                     ) {
 
-                                        console.log('discprice---------'+finalresultProduct.levelbaseddiscountedprice);
+                                        // console.log('discprice---------'+finalresultProduct.levelbaseddiscountedprice);
                                         if(finalresultProduct.levelbaseddiscountedprice !== 0){
 
                                             var productprice =
@@ -2151,15 +2151,20 @@ EditorUi = function (editor, container, lightbox) {
                                                                         if(reservedStatus != ""){
 
                                                                         }else{
+                                                                            if(boothOwner.includes(logInUser["ID"].toString()) || Array.isArray(LevelOfBooth)){
 
-                                                                            buttonsdiv =
-                                                                                '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
-                                                                                postid +
-                                                                                ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
-                                                                                postid +
-                                                                                ",'log','full'," +
-                                                                                finalresultProduct.slug +
-                                                                                ')"  >Add To Cart</a></div></div>';
+                                                                                buttonsdiv =
+                                                                                    '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
+                                                                                    postid +
+                                                                                    ' style="text-align: center;"><a class="btn btn-small btn-info "  onclick="addToCart(' +
+                                                                                    postid +
+                                                                                    ",'log','full'," +
+                                                                                    finalresultProduct.slug +
+                                                                                    ')"  >Add To Cart</a></div></div>';
+                                                                            }else{
+
+                                                                            }
+                                                                            // console.log('Arham');
                                                                         }
 
                                                                        
