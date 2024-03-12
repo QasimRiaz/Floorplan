@@ -1405,14 +1405,16 @@ EditorUi = function (editor, container, lightbox) {
                                                                 boothOwner == "" ||
                                                                 jQuery.inArray(
                                                                     logInUser["UserLevel"],
-                                                                    LevelOfBooth
+                                                                    LevelOfBooth[0]
                                                                 ) != -1) &&
                                                             (LevelOfBooth == "" ||
                                                                 LevelOfBooth[0] == "" ||
                                                                 jQuery.inArray(
                                                                     logInUser["UserLevel"],
-                                                                    LevelOfBooth
+                                                                    LevelOfBooth[0]
                                                                 ) != -1)
+                                                                || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
+
                                                         ) {
                                                             htmlforproductdetail =
                                                                 '<p  id="' +
@@ -1483,9 +1485,9 @@ EditorUi = function (editor, container, lightbox) {
                                         htmlforproductdetail +=
                                             "<p style='float:right;'><strong style='color:red'>Stock Out</strong></p>";
                                     }
-
-                                    if (finalresultProduct.productstatus == "exist") {
-                                        //if(userloggedinstatus == true){
+                                    //arham
+                                    if (finalresultProduct.productstatus == "exist" || boothOwner.includes(logInUser["ID"].toString())) {
+                                      //if(userloggedinstatus == true){
 
                                         var openhtml =
                                             '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-8" >' +
@@ -1528,7 +1530,8 @@ EditorUi = function (editor, container, lightbox) {
 
                                     //  var openhtml = '<div class="row" style="padding:30px;" ><div class="col-sm-5">'+imagesrc+''+htmlforaddress+''+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div><div class="col-sm-5">'+htmlforproductdetail+'</div></div>';
 
-                                    //if(userloggedinstatus == true){
+                                    //if(userloggedinstatus == true){       
+                                    //arham                                 
                                     if (finalresultProduct.productstatus == "exist") {
                                         // console.log("Qsaim00001");
                                         if (floorplanstatus == "unlock") {
@@ -1661,8 +1664,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                         reservedStatus == logInUser["ID"]) &&
                                                                     (boothOwner == logInUser["ID"] ||
                                                                         boothOwner == "") &&
-                                                                    (LevelOfBooth == logInUser["UserLevel"] ||
+                                                                    (LevelOfBooth[0] == logInUser["UserLevel"] ||
                                                                         LevelOfBooth[0] == "")
+                                                                      || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
                                                                 ) {
 
                                                                     // console.log("Qsaim17");
@@ -1715,13 +1719,15 @@ EditorUi = function (editor, container, lightbox) {
                                                                         boothOwner == "" ||
                                                                         jQuery.inArray(
                                                                             logInUser["UserLevel"],
-                                                                            LevelOfBooth
+                                                                            LevelOfBooth[0]
                                                                         ) == 0) &&
                                                                     (LevelOfBooth == "" ||
                                                                         jQuery.inArray(
                                                                             logInUser["UserLevel"],
-                                                                            LevelOfBooth
+                                                                            LevelOfBooth[0]
                                                                         ) == 0)
+                                                                        || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
+
                                                                 ) {
 
                                                                     // console.log("Qsaim20");
@@ -1808,13 +1814,15 @@ EditorUi = function (editor, container, lightbox) {
                                                                             reservedStatus == logInUser["ID"]))
                                                                 ) {
                                                                     // console.log("Qsaim25");
+                                                                    //arham
                                                                     if (
                                                                         (reservedStatus == "" ||
                                                                             reservedStatus == logInUser["ID"]) &&
                                                                         (boothOwner == logInUser["ID"] ||
                                                                             boothOwner == "") &&
-                                                                        (LevelOfBooth == logInUser["UserLevel"] ||
+                                                                        (LevelOfBooth[0] == logInUser["UserLevel"] ||
                                                                             LevelOfBooth[0] == "")
+                                                                        || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )   
                                                                     ) {
                                                                         // console.log("Qsaim26");
                                                                         buttonsdiv =
@@ -1871,14 +1879,17 @@ EditorUi = function (editor, container, lightbox) {
                                                                             boothOwner == "" ||
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
-                                                                                LevelOfBooth
+                                                                                LevelOfBooth[0]
                                                                             ) != -1) &&
                                                                         (LevelOfBooth == "" ||
                                                                             LevelOfBooth[0] == "" ||
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
-                                                                                LevelOfBooth
+                                                                                LevelOfBooth[0]
                                                                             ) != -1)
+                                                                            || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
+
+
                                                                     ) {
                                                                         // console.log("Qsaim28");
                                                                         buttonsdiv =
@@ -1948,14 +1959,16 @@ EditorUi = function (editor, container, lightbox) {
                                                                             boothOwner == "" ||
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
-                                                                                LevelOfBooth
+                                                                                LevelOfBooth[0]
                                                                             ) != -1) &&
                                                                         (LevelOfBooth == "" ||
                                                                             LevelOfBooth[0] == "" ||
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
-                                                                                LevelOfBooth
+                                                                                LevelOfBooth[0]
                                                                             ) != -1)
+                                                                            || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
+
                                                                     ) {
 
                                                                         // console.log("Qsaim29");
@@ -2011,14 +2024,16 @@ EditorUi = function (editor, container, lightbox) {
                                                                             boothOwner == "" ||
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
-                                                                                LevelOfBooth
+                                                                                LevelOfBooth[0]
                                                                             ) != -1) &&
                                                                         (LevelOfBooth == "" ||
                                                                             LevelOfBooth[0] == "" ||
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
-                                                                                LevelOfBooth
+                                                                                LevelOfBooth[0]
                                                                             ) != -1)
+                                                                            || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
+
                                                                     ) {
                                                                         // console.log("Qsaim30");
                                                                         buttonsdiv =
@@ -2178,7 +2193,7 @@ EditorUi = function (editor, container, lightbox) {
                                         //  console.log(logInUser["UserLevel"]);
                                         // console.log(parseInt(logInUser["priorityNum"]) + ' <= ' + TurnUsers);
 
-                                        if ((userlimit != PurchaseCount) && (jQuery.inArray(logInUser["UserLevel"], LevelOfBooth) != -1 || jQuery.inArray("", LevelOfBooth) != -1) && (parseInt(logInUser["priorityNum"]) <= TurnUsers)) {
+                                        if ((userlimit != PurchaseCount) && (jQuery.inArray(logInUser["UserLevel"], LevelOfBooth[0]) != -1 || jQuery.inArray("", LevelOfBooth[0]) != -1) && (parseInt(logInUser["priorityNum"]) <= TurnUsers)) {
 
                                             buttonsdiv =
                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
