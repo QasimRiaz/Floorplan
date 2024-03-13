@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 13.02
- * @version : 13.02
+ * Version: 13.03
+ * @version : 13.03
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -758,6 +758,7 @@ function getproductdetail($productID)
         $boothPriceBasedLevels = get_post_meta($id, 'levelbaseddiscountdata', true);
         $boothPriceBasedLevels = json_decode(json_encode($boothPriceBasedLevels),true);
         $pkgLvl = trigger2();
+        $boothProductPrice = -1;
         if(!empty($boothPriceBasedLevels)){
                
             if (is_user_logged_in()) {
