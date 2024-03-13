@@ -5896,8 +5896,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       }
     });
 
-
-    if (flag == true) {
+    //arham
+    if (flag == true && userBoothsLevel != null) {
       boothlevelnames += '<option value="" selected>All</option>';
     } else {
       boothlevelnames += '<option value="" >All</option>';
