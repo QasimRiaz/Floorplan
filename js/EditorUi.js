@@ -1283,7 +1283,7 @@ EditorUi = function (editor, container, lightbox) {
                                     ) {
 
                                         // console.log('discprice---------'+finalresultProduct.levelbaseddiscountedprice);
-                                        if(finalresultProduct.levelbaseddiscountedprice !== 0){
+                                        if(finalresultProduct.levelbaseddiscountedprice !== -1){
 
                                             var productprice =
                                             "<p><h5 ><strong>Price: </strong>" +
@@ -1304,7 +1304,7 @@ EditorUi = function (editor, container, lightbox) {
                                             flowstatus.indexOf("mood=wizard") != -1 &&
                                             floorPlanSettings["Hide_Price"] != "Hide_Booth_price"
                                         ) {
-                                            if(finalresultProduct.levelbaseddiscountedprice !== 0){
+                                            if(finalresultProduct.levelbaseddiscountedprice !== -1){
 
                                                 var productprice =
                                                 "<p><h5 ><strong>Price: </strong>" +
