@@ -1133,7 +1133,7 @@ EditorUi = function (editor, container, lightbox) {
                                 if (companynameas == null || companynameas == "") {
                                     companynameas = "";
                                 }
-                                if (floorPlanSettings["Hide_exhibitor_Details"] != null) {
+                                if (floorPlanSettings["Hide_exhibitor_Details"] != null && userloggedinstatus != '1') {
                                     companynameas = "Booth is Purchased";
                                 }
                             }
@@ -1167,7 +1167,7 @@ EditorUi = function (editor, container, lightbox) {
                                 websiteURLhtml +
                                 "</div>";
                         } else if (
-                            floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details"
+                            floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" && userloggedinstatus != '1'
                         ) {
                             var newopenhtml =
                                 '<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent" style="margin-bottom: 10px;">' +
