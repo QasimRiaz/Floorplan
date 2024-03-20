@@ -1046,8 +1046,21 @@ EditorUi = function (editor, container, lightbox) {
                                 if (companywebsite == null || companywebsite == "") {
                                     websiteURLhtml = ""; //<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" >'+boothtitle+htmlcompanydescription+'</div></div>';
                                 } else if (
-                                    floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details"
+                                    floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details" 
                                 ) {
+
+                                    
+                                    websiteURLhtml =
+                                        '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" ><a href="' +
+                                        companywebsite +
+                                        '" target="_blank">' +
+                                        companywebsite +
+                                        "</a></div></div>";
+                                }else if (
+                                    floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" && userloggedinstatus == "1"
+                                ) {
+
+                                    
                                     websiteURLhtml =
                                         '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" ><a href="' +
                                         companywebsite +
@@ -1079,6 +1092,17 @@ EditorUi = function (editor, container, lightbox) {
                                     floorPlanSettings["Hide_exhibitor_Details"] == "" ||
                                     floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details"
                                 ) {
+                                    
+                                    contactemailHTML =
+                                        '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Email:</strong></div><div class="col-sm-5">' +
+                                        contactemail +
+                                        "</div></div>";
+                                }else if (
+                                    floorPlanSettings["Hide_exhibitor_Details"] == "" ||
+                                    floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" &&
+                                    userloggedinstatus == "1"
+                                ) {
+                                    
                                     contactemailHTML =
                                         '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Email:</strong></div><div class="col-sm-5">' +
                                         contactemail +
@@ -1105,11 +1129,22 @@ EditorUi = function (editor, container, lightbox) {
                                     typeof companydescription !== "undefined" &&
                                     companydescription != null &&
                                     floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details"
+
+
                                 ) {
+                                    
                                     htmlcompanydescription =
                                         "<div >" + unescape(companydescription) + "</div>";
                                 } else {
-                                    htmlcompanydescription = "";
+
+                                    
+                                    if(floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" && userloggedinstatus != '1'){
+                                        htmlcompanydescription = "";
+                                    }else{
+                                        
+                                        htmlcompanydescription =
+                                        "<div >" + unescape(companydescription) + "</div>";
+                                    }
                                 }
 
                                 if (assignedboothname != "") {
@@ -1134,6 +1169,7 @@ EditorUi = function (editor, container, lightbox) {
                                     companynameas = "";
                                 }
                                 if (floorPlanSettings["Hide_exhibitor_Details"] != null && userloggedinstatus != '1') {
+                                  
                                     companynameas = "Booth is Purchased";
                                 }
                             }
@@ -1169,12 +1205,15 @@ EditorUi = function (editor, container, lightbox) {
                         } else if (
                             floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" && userloggedinstatus != '1'
                         ) {
+
+                   
                             var newopenhtml =
                                 '<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button></div><div id="mainprofilediv" class="tabcontent" style="margin-bottom: 10px;">' +
                                 openhtml +
                                 websiteURLhtml +
                                 "</div>";
                         } else {
+                           
                             var newopenhtml =
                                 '<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent" style="margin-bottom: 10px;">' +
                                 openhtml +
