@@ -4,6 +4,8 @@
 /**
  * Construcs a new sidebar for the given editor.
  */
+
+var floorPlanSettings = JSON.parse(floorPlanSetting);
 function Sidebar(editorUi, container)
 {
 	this.editorUi = editorUi;
@@ -3871,7 +3873,10 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                                               
                                                           }else{
                                                               
-                                                              companylogourlnew = profilelogourl;
+															if(((floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details") && userloggedinstatus == "1") || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details" && userloggedinstatus != "1"){
+
+																companylogourlnew = profilelogourl;
+															}
                                                           }
                                                         
                                                           
@@ -3884,14 +3889,20 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                                         
                                                     }else{
                                                         
-                                                         websiteURLhtml = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" ><a href="'+companywebsite+'" target="_blank">'+companywebsite+'</a></div></div>';	
+														if(((floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details") && userloggedinstatus == "1") || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details" && userloggedinstatus != "1"){
+
+															websiteURLhtml = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11" ><a href="'+companywebsite+'" target="_blank">'+companywebsite+'</a></div></div>';	
+														}
                                               
                                                         
                                                     }
                                             
                                             if(companydescription != "" && typeof companydescription !== "undefined" && companydescription != null ){
                                                 
-                                                     htmlcompanydescription = '<div >'+unescape(companydescription)+'</div>';
+												if(((floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details") && userloggedinstatus == "1") || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details" && userloggedinstatus != "1"){
+													
+													htmlcompanydescription = '<div >'+unescape(companydescription)+'</div>';
+												}
                                             
                                                 
                                             }else{
@@ -3905,7 +3916,10 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                             }
                                             if(index.address_line_1 !=""){
 
-                                                htmlforaddress = '<p>'+index.address_line_1+', '+index.usercity+', '+index.usercountry+'</p></hr>';
+												if(((floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details") && userloggedinstatus == "1") || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details" && userloggedinstatus != "1"){
+															
+													htmlforaddress = '<p>'+index.address_line_1+', '+index.usercity+', '+index.usercountry+'</p></hr>';
+												}
 
                                             }
                                              if (contactname == null || contactname == '') {
@@ -3915,8 +3929,9 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                                         
                                                     }else{
                                                         
+														if(((floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details") && userloggedinstatus == "1") || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details" && userloggedinstatus != "1"){
                                                          contactnameHTML = '<div class="row" style="margin-bottom: 10px;margin-top: 15px;"><div class="col-sm-3" ><strong>Contact Name:</strong></div><div class="col-sm-5">'+contactname+'</div></div>';	
-                                              
+														}	
                                                         
                                                     }
                                                     
@@ -3927,8 +3942,9 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                                         
                                                     }else{
                                                         
-                                                         contactphonenumberHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Phone:</strong></div><div class="col-sm-5">'+contactphonenumber+'</div></div>';	
-                                              
+														if(((floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details") && userloggedinstatus == "1") || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details" && userloggedinstatus != "1"){
+                                                         	contactphonenumberHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Phone:</strong></div><div class="col-sm-5">'+contactphonenumber+'</div></div>';	
+														}
                                                         
                                                     }
                                                     if (contactemail == null || contactemail == '') {
@@ -3937,9 +3953,9 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                               
                                                         
                                                     }else{
-                                                        
-                                                         contactemailHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Email:</strong></div><div class="col-sm-5">'+contactemail+'</div></div>';	
-                                              
+                                                        if(((floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details") && userloggedinstatus == "1") || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details" && userloggedinstatus != "1"){
+                                                         	contactemailHTML = '<div class="row" style="margin-bottom: 10px;"><div class="col-sm-3" ><strong>Contact Email:</strong></div><div class="col-sm-5">'+contactemail+'</div></div>';	
+														}
                                                         
                                                     }
                                             
