@@ -1214,8 +1214,13 @@ EditorUi = function (editor, container, lightbox) {
                                 "</div>";
                         } else {
                            
+                            if(userloggedinstatus != "1"){
+
+                                var hiddenStyleClass = 'hideElem';
+                                contactinformation = '';
+                            }
                             var newopenhtml =
-                                '<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent" style="margin-bottom: 10px;">' +
+                                '<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive '+hiddenStyleClass+'" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent" style="margin-bottom: 10px;">' +
                                 openhtml +
                                 websiteURLhtml +
                                 '</div><div  id="contactdiv" class="tabcontent" style="display:none;min-height: 130px;margin-bottom: 10px;">' +
