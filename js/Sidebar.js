@@ -3965,7 +3965,14 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                                  var openhtml = '<div class="row" style="margin-bottom: 25px;"><div class="col-sm-11" >'+boothtitle+htmlforassignedbooth+htmlcompanydescription+'</div></div>';	
                                               
                                                  //var openhtml = '<div class="maindiv" style="width:100%;min-height: 350px;"><div class="profiledive" style="width:30%;margin-top: 6%;float:left;text-align:center"><img width="200" src="'+companylogourlnew+'" /></div><div class="descrpitiondiv" style="float:right;width:68%;margin-bottom: 30px;"><h1 >'+index.companyname+'</h1>'+htmlforaddress+'<hr>'+htmlforassignedbooth+'<hr>'+htmlcompanydescription+'</div></div>';
-                                                 var contactinformation = contactnameHTML+contactphonenumberHTML+contactemailHTML;
+                                                 if(userloggedinstatus == "1"){
+
+													 var contactinformation = contactnameHTML+contactphonenumberHTML+contactemailHTML;
+												 }else{
+
+													var hiddenStyleClass = 'hideElem';
+													var contactinformation = '';
+												 }
 												 
 												 if(contactname == undefined  && contactphonenumber == undefined && contactemail == undefined ){
 													 
@@ -3973,7 +3980,7 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
 													 
 												 }else {
 													 
-													 var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent" style="margin-bottom: 10px;">'+openhtml+websiteURLhtml+'</div><div id="contactdiv" class="tabcontent" style="display:none;min-height: 130px;margin-bottom: 10px;">'+contactinformation+'</div>';
+													 var newopenhtml='<div class="tab"><button id="mainprofile" onclick="toggletabs(this)" class="tablinks" >Main Profile</button><button id="contacttab" onclick="toggletabs(this)" class="tablinks unactive '+hiddenStyleClass+'" >Contact Information</button></div><div id="mainprofilediv" class="tabcontent " style="margin-bottom: 10px;">'+openhtml+websiteURLhtml+'</div><div id="contactdiv" class="tabcontent" style="display:none;min-height: 130px;margin-bottom: 10px;">'+contactinformation+'</div>';
 													 
 												 }
 												 
