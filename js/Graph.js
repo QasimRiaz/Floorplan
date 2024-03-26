@@ -2316,6 +2316,7 @@ Graph.prototype.zoomOut = function () {
  * Overrides tooltips to show custom tooltip or metadata.
  */
 Graph.prototype.getTooltipForCell = function (cell) {
+  var floorPlanSettings = JSON.parse(floorPlanSetting);
   var tip = "";
   var cellStyle = cell.style;
   var labelvalue = cell.getAttribute("mylabel", "");
@@ -2388,7 +2389,16 @@ Graph.prototype.getTooltipForCell = function (cell) {
         boothdetail;
     }
 
-    return tip;
+    if(((floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details" || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details") && userloggedinstatus == "1") || floorPlanSettings["Hide_exhibitor_Details"] != "Hide_Details" && userloggedinstatus != "1"){
+      return tip;
+    }else{
+      tip =
+      '<img src="' +
+      companylogourll +
+      '"  width="50" /> <br />'+
+      boothlebabl;
+      return tip;
+    }
   } else {
     if (
       boothproductid != "" &&
