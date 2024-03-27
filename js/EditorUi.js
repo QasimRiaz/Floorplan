@@ -20,6 +20,8 @@ EditorUi = function (editor, container, lightbox) {
     // console.log(cartTotalCounts);
     // console.log(logInUser["priorityNum"][0]);
     var activeNumber = TurnUsers;
+    loggedInUserLevel =  logInUser["UserLevel"];
+
     // console.log(logInUser);
     // console.log(activeNumber);
     //  console.log(floorPlanSettings.Open_users);
@@ -1214,7 +1216,7 @@ EditorUi = function (editor, container, lightbox) {
                                 "</div>";
                         } else {
                            
-                            if(userloggedinstatus != "1"){
+                            if(userloggedinstatus != "1" && floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details"){
 
                                 var hiddenStyleClass = 'hideElem';
                                 contactinformation = '';

@@ -3970,8 +3970,15 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
 													 var contactinformation = contactnameHTML+contactphonenumberHTML+contactemailHTML;
 												 }else{
 
-													var hiddenStyleClass = 'hideElem';
-													var contactinformation = '';
+													if(floorPlanSettings["Hide_exhibitor_Details"] == "Hide_Details"){
+
+														var hiddenStyleClass = 'hideElem';
+														var contactinformation = '';
+													}else{
+
+														var hiddenStyleClass = '';
+														var contactinformation = contactnameHTML+contactphonenumberHTML+contactemailHTML;
+													}
 												 }
 												 
 												 if(contactname == undefined  && contactphonenumber == undefined && contactemail == undefined ){
