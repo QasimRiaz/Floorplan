@@ -30,14 +30,25 @@ global $wpdb;
 $siteprefix = $wpdb->get_blog_prefix();
 
 foreach ($getAllusers_data2 as $key => $item) {
-    
-  
-    $all_meta_for_user = get_user_meta($item['exhibitorsid']);
-    if($all_meta_for_user[$siteprefix . 'selfsignupstatus'][0] != 'Declined' && $all_meta_for_user[$siteprefix . 'selfsignupstatus'][0] != 'Pending'){
+    $userID = $item['exhibitorsid'];
+    $selfSignupStatus = get_user_meta($userID, $siteprefix . 'selfsignupstatus', true);
 
+    if ($selfSignupStatus !== 'Declined' && $selfSignupStatus !== 'Pending') {
+        if (!is_user_logged_in() && $floorPlanSettings['Hide_exhibitor_Details'] == 'Hide_Details') {
+            $fieldsToRemove = ['nickname', 'COE', 'COW', 'COD', 'prefix', 'address_line_1', 'address_line_2', 'usercity', 'userstate', 'usercountry', 'user_phone_1', 'user_phone_2', 'userzipcode'];
+            foreach ($fieldsToRemove as $field) {
+                unset($item[$field]);
+            }
+         }
+        // elseif (!is_user_logged_in() && $floorPlanSettings['Hide_exhibitor_Details'] != 'Hide_Details') {
+        //     $fieldsToRemove = ['nickname', 'COE', 'prefix', 'address_line_1', 'address_line_2', 'usercity', 'userstate', 'usercountry', 'user_phone_1', 'user_phone_2', 'userzipcode'];
+        //     foreach ($fieldsToRemove as $field) {
+        //         unset($item[$field]);
+        //     }
+        // }
+      
         $getAllusers_data3[$key] = $item;
     }
-
 }
 
 
@@ -382,9 +393,9 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
 
 
 
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=12.01"></script> 
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=13.01"></script> 
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.64"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=7.01"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=8.01"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=4.01"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.75"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=4.50"></script>
