@@ -34,8 +34,9 @@ foreach ($getAllusers_data2 as $key => $item) {
     $selfSignupStatus = get_user_meta($userID, $siteprefix . 'selfsignupstatus', true);
 
     if ($selfSignupStatus !== 'Declined' && $selfSignupStatus !== 'Pending') {
+        unset($item['nickname']);
         if (!is_user_logged_in() && $floorPlanSettings['Hide_exhibitor_Details'] == 'Hide_Details') {
-            $fieldsToRemove = ['nickname', 'COE', 'COW', 'COD', 'prefix', 'address_line_1', 'address_line_2', 'usercity', 'userstate', 'usercountry', 'user_phone_1', 'user_phone_2', 'userzipcode'];
+            $fieldsToRemove = ['COE', 'COW', 'COD', 'prefix', 'address_line_1', 'address_line_2', 'usercity', 'userstate', 'usercountry', 'user_phone_1', 'user_phone_2', 'userzipcode'];
             foreach ($fieldsToRemove as $field) {
                 unset($item[$field]);
             }
