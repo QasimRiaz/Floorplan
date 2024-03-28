@@ -7781,7 +7781,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
           if (getexhibortervalue != "none") {
             if (legendlabels != "none" && legendlabels != "") {
           
-              if (legendlabelscolorOcc == "none") {
+              if (legendlabelscolorOcc == "none" || legendlabelscolorOcc == "") {
                 graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
               } else {
                 graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
@@ -7790,8 +7790,10 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
                graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
             }
           } else {
+
             if (legendlabels != "none" && legendlabels != "") {
-              if (legendlabelscolorUn == "none") {
+              if (legendlabelscolorUn == "none" || legendlabelscolorUn == "") {
+                console.log('x-1');
                 graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
               } else {
                 graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
@@ -7862,7 +7864,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
             if (legendlabels != "none" && legendlabels != "") {
 
             
-              if (legendlabelscolorUn == "none") {
+              if (legendlabelscolorUn == "none" || legendlabelscolorUn == "") {
     
                 graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
               } else {
@@ -7901,7 +7903,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
 
         if (boothownerlastvalue != "none" && boothownerlastvalue != "") {
           if (legendlabels != "none" && legendlabels != "") {
-            if (legendlabelscolorOcc == "none") {
+            if (legendlabelscolorOcc == "none" || legendlabelscolorOcc == "") {
               graph.setCellStyles("fillColor", ss.style.occ, cellvalue);
             } else {
               graph.setCellStyles("fillColor", legendlabelscolorOcc, cellvalue);
@@ -7912,7 +7914,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
         } else {
           if (legendlabels != "none" && legendlabels != "") {
             // graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
-            if (legendlabelscolorUn == "none") {
+            if (legendlabelscolorUn == "none" || legendlabelscolorUn == "") {
               graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
             } else {
               graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
