@@ -1323,53 +1323,36 @@ EditorUi = function (editor, container, lightbox) {
                                     var htmlforproductdetail = "";
                                     var postid = "'" + boothproductid + "'";
                                     var checkouturl = baseCurrentSiteURl + "/checkout/";
+                                  
                                     if (
-                                        userloggedinstatus == true &&
-                                        floorPlanSettings["Hide_Price"] != "Hide_Booth_price"
+                                        userloggedinstatus != "1" && 
+                                        floorPlanSettings["Hide_Price"] == "Hide_Booth_price"
                                     ) {
 
-                                        // console.log('discprice---------'+finalresultProduct.levelbaseddiscountedprice);
-                                        if(finalresultProduct.levelbaseddiscountedprice !== -1){
+                                        var productprice = '';
 
-                                            var productprice =
-                                            "<p><h5 ><strong>Price: </strong>" +
-                                            finalresultProduct.currencysymbole +
-                                            finalresultProduct.price +
-                                            "  (<small><strong>Discounted Price: </strong>"+finalresultProduct.currencysymbole +
-                                            finalresultProduct.levelbaseddiscountedprice +"</small>)</h5>";
-                                        }else{
+                                    }else{     
 
-                                            var productprice =
-                                                "<p><h5 ><strong>Price: </strong>" +
-                                                finalresultProduct.currencysymbole +
-                                                finalresultProduct.price +
-                                                "</h5>";
-                                        }
-                                    } else {
-                                        if (
-                                            flowstatus.indexOf("mood=wizard") != -1 &&
-                                            floorPlanSettings["Hide_Price"] != "Hide_Booth_price"
-                                        ) {
-                                            if(finalresultProduct.levelbaseddiscountedprice !== -1){
 
-                                                var productprice =
-                                                "<p><h5 ><strong>Price: </strong>" +
-                                                finalresultProduct.currencysymbole +
-                                                finalresultProduct.price +
-                                                "  (<small><strong>Discounted Price: </strong>"+finalresultProduct.currencysymbole +
-                                                finalresultProduct.levelbaseddiscountedprice +"</small>)</h5>";
-                                            }else{
-    
-                                                var productprice =
-                                                    "<p><h5 ><strong>Price: </strong>" +
-                                                    finalresultProduct.currencysymbole +
-                                                    finalresultProduct.price +
-                                                    "</h5>";
-                                            }
-                                        } else {
-                                            var productprice = "";
-                                        }
-                                    }
+                                           // console.log('discprice---------'+finalresultProduct.levelbaseddiscountedprice);
+                                           if(finalresultProduct.levelbaseddiscountedprice !== -1){
+   
+                                               var productprice =
+                                               "<p><h5 ><strong>Price: </strong>" +
+                                               finalresultProduct.currencysymbole +
+                                               finalresultProduct.price +
+                                               "  (<small><strong>Discounted Price: </strong>"+finalresultProduct.currencysymbole +
+                                               finalresultProduct.levelbaseddiscountedprice +"</small>)</h5>";
+                                           }else{
+   
+                                               var productprice =
+                                                   "<p><h5 ><strong>Price: </strong>" +
+                                                   finalresultProduct.currencysymbole +
+                                                   finalresultProduct.price +
+                                                   "</h5>";
+                                           }
+                                      
+                                    } 
 
                                     var boothtitle =
                                         "<h5 id='boothName'><strong>Booth Number: </strong>" +
