@@ -1445,6 +1445,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
 
                                                         ) {
+                                                           
                                                             htmlforproductdetail =
                                                                 '<p  id="' +
                                                                 boothproductid +
@@ -1471,6 +1472,7 @@ EditorUi = function (editor, container, lightbox) {
                                                         }
                                                     }
                                                 } else {
+                                                    
                                                     htmlforproductdetail +=
                                                         '<p  id="' +
                                                         boothproductid +
@@ -1485,6 +1487,7 @@ EditorUi = function (editor, container, lightbox) {
                                             if (
                                                 finalresultProduct.deposit_enable_type == "optional"
                                             ) {
+                                              
                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
                                                 htmlforproductdetail =
                                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
@@ -1499,6 +1502,8 @@ EditorUi = function (editor, container, lightbox) {
                                                     finalresultProduct.slug +
                                                     ')">Pay in Full</a></div></div></div></div>';
                                             } else {
+
+                                            
                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
                                                 htmlforproductdetail =
                                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
@@ -1601,7 +1606,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                     flowstatus.indexOf("mood=wizard") != -1 &&
                                                                     reservedStatus == ""
                                                                 ) {
-
+                                                                  
                                                                     // console.log("Qsaim6");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
@@ -1633,6 +1638,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                         ' style="text-align: center;"><a class="btn btn-success btn-small" >Added</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This booth is included in your package. The price of this booth will be updated to $0 during checkout.</b></p></div></div>';
                                                                 } else if (reservedStatus == "") {
                                                                     // console.log("Qsaim11");
+                                                              
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -1654,6 +1660,7 @@ EditorUi = function (editor, container, lightbox) {
                                                             "optional" &&
                                                             reservedStatus == ""
                                                         ) {
+                                                           
                                                             // console.log("Qsaim14");
                                                             //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
                                                             buttonsdiv =
@@ -1699,6 +1706,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 ) {
 
                                                                     // console.log("Qsaim17");
+                                                                
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -1758,7 +1766,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                         || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
 
                                                                 ) {
-
+                                                         
                                                                     // console.log("Qsaim20");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display:flex;"><div class="col-sm-12" id=' +
@@ -1785,9 +1793,9 @@ EditorUi = function (editor, container, lightbox) {
                                                                             finalresultProduct.slug +
                                                                             ')"  >Reserve The Booth</a></div>';
                                                                     }
-                                                                } else if (priority == 'true') {
+                                                                } else if (priority == 'true' && (!(userlimit <= PurchaseCount && userlimit != '') && PurchaseCount != 0) && (userloggedinstatus == "1")) {
 
-
+                                                                   
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display:flex;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -1811,6 +1819,7 @@ EditorUi = function (editor, container, lightbox) {
 
                                                         if (productstatus == "alreadyexistproduct") {
                                                             // console.log("Qsaim23");
+                                                      
                                                             buttonsdiv =
                                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div style="text-align: center;display: flex;justify-content: space-evenly;" class="col-sm-12" id=' +
                                                                 postid +
@@ -1853,6 +1862,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                             LevelOfBooth[0] == "")
                                                                         || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )   
                                                                     ) {
+                                                                       
                                                                         // console.log("Qsaim26");
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;    display: flex;"><div style="text-align: center;display: flex;justify-content: space-evenly;" class="col-sm-12" id=' +
@@ -1921,6 +1931,7 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                     ) {
                                                                         // console.log("Qsaim28");
+                                                               
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div style="text-align: center;display: flex;justify-content: space-evenly;" class="col-sm-12" id=' +
                                                                             postid +
@@ -2001,6 +2012,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
 
                                                                         // console.log("Qsaim29");
+                                                                      
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
                                                                             postid +
@@ -2065,6 +2077,7 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                     ) {
                                                                         // console.log("Qsaim30");
+                                                                     
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
                                                                             postid +
@@ -2108,6 +2121,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 finalresultProduct.deposit_enable_type ==
                                                                 "optional"
                                                             ) {
+                                                         
                                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
                                                                 // console.log("Qsaim100");
                                                                 buttonsdiv =
@@ -2135,15 +2149,17 @@ EditorUi = function (editor, container, lightbox) {
                                                             } else {
                                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
                                                                 if (((userlimit <= PurchaseCount && userlimit != '') && PurchaseCount != 0) && (userloggedinstatus == "1")) {
-                                          
+
+                                                           
                                                                 } else {
 
                                                                     if (
                                                                         reservedCheck == "0" &&
                                                                         reservedStatus == ""
                                                                     ) {
-                                                                        console.log("In resereved");
+                                                                        //console.log("In resereved");
                                                                         // console.log("Qsaim30");
+                                                                
 
                                                                         buttonsdiv =
                                                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-6" id=' +
@@ -2166,7 +2182,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                        
 
                                                                     }else if(NumberOfReservedBooths != false && reservedStatus == logInUser["ID"]){
-
+                                                                       
                                                                         buttonsdiv =
                                                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                                 postid +
@@ -2181,7 +2197,7 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                         }else{
                                                                             if(boothOwner.includes(logInUser["ID"].toString()) || Array.isArray(LevelOfBooth)){
-
+                                                                               
                                                                                 buttonsdiv =
                                                                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                                     postid +
@@ -2228,7 +2244,7 @@ EditorUi = function (editor, container, lightbox) {
                                         // console.log(parseInt(logInUser["priorityNum"]) + ' <= ' + TurnUsers);
 
                                         if ((userlimit != PurchaseCount) && (jQuery.inArray(logInUser["UserLevel"], LevelOfBooth[0]) != -1 || jQuery.inArray("", LevelOfBooth[0]) != -1) && (parseInt(logInUser["priorityNum"]) <= TurnUsers)) {
-
+                                            
                                             buttonsdiv =
                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                 postid +
@@ -2239,7 +2255,7 @@ EditorUi = function (editor, container, lightbox) {
                                                 ')"  >Add To Cart</a></div></div>';
 
                                         }else if (boothOwner.includes(logInUser["ID"].toString())) {
-
+                                            
                                             buttonsdiv =
                                               '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                               postid +

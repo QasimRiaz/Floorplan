@@ -38177,8 +38177,13 @@ mxGraphModel.prototype.cellAdded = function (cell) {
     }
 
     // Makes sure IDs of deleted cells are not reused
-    if (mxUtils.isNumeric(cell.getId())) {
-      this.nextId = Math.max(this.nextId, cell.getId());
+    if (mxUtils.isNumeric(cell.getId())) { // shehroze
+
+      var cellID = parseInt(cell.getId());
+      var count = 1;
+      var getCellId = cellID + count
+      this.nextId = Math.max(parseInt(this.nextId), parseInt(getCellId));
+      
     }
 
     // Recursively processes child cells
