@@ -2234,17 +2234,14 @@ Graph.prototype.reset = function () {
  * ////////////////Code By AD ////////////////
  * ////////////////Default FloorPlan Zoom////////////////
  */
+
+console.log('Prototype');
+console.log(Graph.prototype.zoom);
 Graph.prototype.zoom = function (factor, center) {
-  factor = factor;
   var floorPlanSettings = JSON.parse(floorPlanSetting);
-  var floorPlanSettingsZoom = floorPlanSettings["zoom"];
+  // var floorPlanSettingsZoom = floorPlanSettings["zoom"];
+  //var length = factor.toString().length;
 
-  var length = factor.toString().length;
-  //console.log(factor);
-  var checkRatio = Math.min(this.view.scale * factor);
-
-  // console.log('view-scale======='+this.view.scale);
-  // console.log('checkRatio======='+checkRatio);
   if (
     floorPlanSettings["zoom"] != undefined &&
     center == undefined &&
@@ -2253,43 +2250,39 @@ Graph.prototype.zoom = function (factor, center) {
   ) {
     if (floorPlanSettings["zoom"] != "") {
 
-      console.log(parseInt(floorPlanSettings["zoom"]));
       var ratio = parseInt(floorPlanSettings["zoom"]) / 100;
+
       if (factor <= 0.1) {
         factor = ratio;
       }
 
       var ratio2 = Math.min(this.view.scale * factor, 160);
+
       if (ratio2 > ratio) {
 
         factor = Math.max(ratio, ratio2) / this.view.scale;
 
       } else {
         
-        factor = Math.max(ratio, ratio2) / this.view.scale;
-      
-      
+        if(ratio > ratio2 && ratio2 == 0.25){
+
+          factor = Math.max(ratio, ratio2) / this.view.scale;
+
+        }else{
+
+          factor = Math.min(ratio, ratio2) / this.view.scale;
+
+        }
       }
     } else {
-      factor =
-        Math.max(0.01, Math.min(this.view.scale * factor, 160)) /
-        this.view.scale;
-        
+
+          factor = Math.max(0.01, Math.min(this.view.scale * factor, 160)) / this.view.scale;
     }
   } else {
-    factor =
-      Math.max(0.01, Math.min(this.view.scale * factor, 160)) / this.view.scale;
     
+          factor = Math.max(0.01, Math.min(this.view.scale * factor, 160)) / this.view.scale;
   }
 
-  // if(factor == '1' || factor == 1){
-    
-  //   factor = checkRatio;
-    
-  // }
-  // console.log('factor======='+factor);
-  // console.log(this);
-  // console.log(arguments);
   mxGraph.prototype.zoom.apply(this, arguments);
 };
 
