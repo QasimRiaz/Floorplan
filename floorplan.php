@@ -2176,7 +2176,7 @@ function boothSelfAssignment(){
 
     $demo = new FloorPlanManager();
     $AllBoothsList = $demo->getAllbooths();
-    $id = $product_ID;
+    $id = $productID;
     $user_ID = get_current_user_id();
     $blog_id = get_current_blog_id();
     $loggedInUser = get_user_meta($user_ID);
