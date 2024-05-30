@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 14.00
- * @version : 14.00
+ * Version: 14.01
+ * @version : 14.01
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -2187,6 +2187,7 @@ function boothSelfAssignment(){
     $lastInsertId  = contentmanagerlogging('Prepaid Booth Purchased', "User Action", "", $user_ID, $user_info->user_email, "pre action");
 
     $company_name = $loggedInUser[$siteprefix.'company_name'][0];
+    $purchaseremail = $user_info->user_email;
 
     require_once('lib/woocommerce-api.php');
     $url = get_site_url();
@@ -2367,6 +2368,7 @@ function boothSelfAssignment(){
                     
                     if (!empty($prepaidboothpurchaseemailtemplate))
                     {
+                        $sendingadminemail = 'yes';
                         foreach ($recipients as $recipient) {     
                             $user = get_user_by('email', $recipient);
                             $usermeta = get_user_meta($user->ID);
@@ -2374,12 +2376,15 @@ function boothSelfAssignment(){
                             $user_email = $user->user_email;                       
                             $to[] = array('email' => $recipient, 'name' => $first_name);   
                             
-                            $recipientname = $first_name;
-                            
-                            prepaid_booth_purchase_notification_email_template($user_ID, $recipient, $recipientname, $prepaidboothpurchaseemailtemplate, $BoothName, $company_name);                 
+                            $recipientname = $first_name;                            
+                            prepaid_booth_purchase_notification_email_template($user_ID, $recipient, $recipientname, $prepaidboothpurchaseemailtemplate, $BoothName, $sendingadminemail);                 
                         }                                         
                     }
                 }
+
+                $TemplateName = 'Pre-Paid Booth Assignment Notification User';               
+                $sendingadminemail = 'no';
+                prepaid_booth_purchase_notification_email_template($user_ID, $purchaseremail, $recipientname, $TemplateName, $BoothName, $sendingadminemail);
 
             } else {
                 update_post_meta($id, 'boothStatus', 'Pending');
