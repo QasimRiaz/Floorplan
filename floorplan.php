@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 14.01
- * @version : 14.01
+ * Version: 14.02
+ * @version : 14.02
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -2382,6 +2382,11 @@ function boothSelfAssignment(){
                     }
                 }
 
+                $u = new WP_User($user_ID);
+                $boothLevel = get_post_meta($id,'productlevel',true);
+                if(!empty($boothLevel)){                    
+                    $u->set_role($boothLevel);
+                }
                 $TemplateName = 'Pre-Paid Booth Assignment Notification User';               
                 $sendingadminemail = 'no';
                 prepaid_booth_purchase_notification_email_template($user_ID, $purchaseremail, $recipientname, $TemplateName, $BoothName, $sendingadminemail);
