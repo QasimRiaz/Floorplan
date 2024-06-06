@@ -1326,7 +1326,7 @@ EditorUi = function (editor, container, lightbox) {
                                   
                                     if (
                                         userloggedinstatus != "1" && 
-                                        floorPlanSettings["Hide_Price"] == "Hide_Booth_price"
+                                        floorPlanSettings["Hide_Price"] == "Hide_Booth_price" || finalresultProduct.price == 0
                                     ) {
 
                                         var productprice = '';
