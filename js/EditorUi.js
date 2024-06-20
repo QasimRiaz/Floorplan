@@ -929,8 +929,15 @@ EditorUi = function (editor, container, lightbox) {
                     logInUser["OverrideBoothLimit"]
                 ) {
                     userlimit = logInUser["OverrideBoothLimit"];
-                } else {
-                    userlimit = floorPlanSettings["usersNum"];
+                } else {                    
+                    if(loggedInUserLevel == 'contentmanager'){
+                        userlimit = '';
+                    }
+
+                    if(logInUser["BoothPurchaseLimit"] != ''){
+                        userlimit = logInUser["BoothPurchaseLimit"];
+                    }                    
+                    else { userlimit = floorPlanSettings["usersNum"]; }
                 }
 
 
