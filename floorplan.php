@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 15.03
- * @version : 15.03
+ * Version: 15.04
+ * @version : 15.04
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -2174,19 +2174,39 @@ function boothSelfAssignment(){
    
     $userlimit = $_POST['userlimit']; 
 
+    $product = wc_get_product($productID);
+    $product_name = $product->get_name();
+
     $demo = new FloorPlanManager();
     $AllBoothsList = $demo->getAllbooths();
     $id = $productID;
     $user_ID = get_current_user_id();
     $blog_id = get_current_blog_id();
     $loggedInUser = get_user_meta($user_ID);
+    $user_info = get_userdata($user_ID);
+    $lastInsertId  = contentmanagerlogging('Prepaid Booth Purchased', "User Action", "", $user_ID, $user_info->user_email, "pre action");
+
+    $company_name = $loggedInUser[$siteprefix.'company_name'][0];
+    $purchaseremail = $user_info->user_email;
+
     require_once('lib/woocommerce-api.php');
     $url = get_site_url();
 
-    $get_product = wc_get_product($id);
+ 
+    $product_name = $_POST['boothName'];
+  
     $boFlag = false;
+
+    $recipients = get_option('prepaidboothemailsrecipients');
+    $recipients = explode(',', $recipients);
+    $recipients = array_map('trim', $recipients);
+    $recipients = array_map('strtolower', $recipients);
+    $recipients = array_unique($recipients);
+    $recipients = array_values($recipients);
+    $user_data_array = array();
+    $to = array();
+    $siteID = get_current_blog_id();    
     
-              
     $woocommerce_rest_api_keys = get_option('ContenteManager_Settings');
     $boothpurchaseenablestatus = $woocommerce_rest_api_keys['ContentManager']['boothpurchasestatus'];
     $foolrplanID = $woocommerce_rest_api_keys['ContentManager']['floorplanactiveid'];
@@ -2201,6 +2221,7 @@ function boothSelfAssignment(){
         $boothid = $cellboothlabelvalue['boothproductid'];
         if ($boothid[0] == $productID) {
             $boothowner = $cellboothlabelvalue['boothOwner'];
+            $BoothName =  $cellboothlabelvalue['mylabel'];
         }
     }
 
@@ -2338,10 +2359,49 @@ function boothSelfAssignment(){
                 update_post_meta($foolrplanID, 'floorplan_xml', json_encode($getresultforupdat));
                 update_post_meta($id, 'boothStatus', 'Completed');
                 $loggin_data['boothstatus'][] = 'Completed';
+
+                $prepaidboothnotification = get_option('prepaidboothnotification');
+
+                if($prepaidboothnotification == "checked")
+                {
+                    $prepaidboothpurchaseemailtemplate = get_option('prepaidboothpurchaseemailtemplate');
+                    
+                    if (!empty($prepaidboothpurchaseemailtemplate))
+                    {
+                        $sendingadminemail = 'yes';
+                        foreach ($recipients as $recipient) {     
+                            $user = get_user_by('email', $recipient);
+                            $usermeta = get_user_meta($user->ID);
+                            $first_name = $usermeta['wp_' . $siteID . '_first_name'][0];
+                            $user_email = $user->user_email;                       
+                            $to[] = array('email' => $recipient, 'name' => $first_name);   
+                            
+                            $recipientname = $first_name;                            
+                            prepaid_booth_purchase_notification_email_template($user_ID, $recipient, $recipientname, $prepaidboothpurchaseemailtemplate, $BoothName, $sendingadminemail);                 
+                        }                                         
+                    }
+                }
+
+                $u = new WP_User($user_ID);
+                $boothLevel = get_post_meta($id,'productlevel',true);
+                if(!empty($boothLevel)){                    
+                    $u->set_role($boothLevel);
+                }
+                $TemplateName = 'Pre-Paid Booth Assignment Notification User';               
+                $sendingadminemail = 'no';
+                prepaid_booth_purchase_notification_email_template($user_ID, $purchaseremail, $recipientname, $TemplateName, $BoothName, $sendingadminemail);
+
             } else {
                 update_post_meta($id, 'boothStatus', 'Pending');
                 $loggin_data['boothstatus'][] = 'Pending';
             }
+
+            $reponse['Booth Name'] =  $product_name;
+            $reponse['Booth Product Id'] = $id;
+            $reponse['User Id'] = $user_ID ;
+            $reponse['Assigned'] = 'Assigned';
+
+            contentmanagerlogging_file_upload($lastInsertId, $reponse);
         }
     
             //Getting Settings for Booth//
@@ -2355,9 +2415,14 @@ function boothSelfAssignment(){
                  user_pirority_Updates($get_booth_settings);
             }
          echo $result;
+            
     }else{
 
-        echo 'assigned';
-    }
-}   
+        echo 'assigned';   
+        
+        $reponse['Already Assigned'] = 'Assigned';
+
+        contentmanagerlogging_file_upload($lastInsertId, $reponse);     
+    }    
+}
 ?>
