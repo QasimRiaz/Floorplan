@@ -2235,8 +2235,8 @@ Graph.prototype.reset = function () {
  * ////////////////Default FloorPlan Zoom////////////////
  */
 
-console.log('Prototype');
-console.log(Graph.prototype.zoom);
+// console.log('Prototype');
+// console.log(Graph.prototype.zoom);
 Graph.prototype.zoom = function (factor, center) {
   var floorPlanSettings = JSON.parse(floorPlanSetting);
   // var floorPlanSettingsZoom = floorPlanSettings["zoom"];
