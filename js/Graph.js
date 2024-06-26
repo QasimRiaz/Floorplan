@@ -2234,12 +2234,13 @@ Graph.prototype.reset = function () {
  * ////////////////Code By AD ////////////////
  * ////////////////Default FloorPlan Zoom////////////////
  */
+
+// console.log('Prototype');
+// console.log(Graph.prototype.zoom);
 Graph.prototype.zoom = function (factor, center) {
   var floorPlanSettings = JSON.parse(floorPlanSetting);
-  var floorPlanSettingsZoom = floorPlanSettings["zoom"];
-
-  var length = factor.toString().length;
-  //console.log(factor);
+  // var floorPlanSettingsZoom = floorPlanSettings["zoom"];
+  //var length = factor.toString().length;
 
   if (
     floorPlanSettings["zoom"] != undefined &&
@@ -2248,25 +2249,38 @@ Graph.prototype.zoom = function (factor, center) {
     this.view.scale == 1
   ) {
     if (floorPlanSettings["zoom"] != "") {
+
       var ratio = parseInt(floorPlanSettings["zoom"]) / 100;
+
       if (factor <= 0.1) {
         factor = ratio;
       }
 
       var ratio2 = Math.min(this.view.scale * factor, 160);
+
       if (ratio2 > ratio) {
-        factor = Math.min(ratio, ratio2) / this.view.scale;
-      } else {
+
         factor = Math.max(ratio, ratio2) / this.view.scale;
+
+      } else {
+        
+        if(ratio > ratio2 && ratio2 == 0.25){
+
+          factor = Math.max(ratio, ratio2) / this.view.scale;
+
+        }else{
+
+          factor = Math.min(ratio, ratio2) / this.view.scale;
+
+        }
       }
     } else {
-      factor =
-        Math.max(0.01, Math.min(this.view.scale * factor, 160)) /
-        this.view.scale;
+
+          factor = Math.max(0.01, Math.min(this.view.scale * factor, 160)) / this.view.scale;
     }
   } else {
-    factor =
-      Math.max(0.01, Math.min(this.view.scale * factor, 160)) / this.view.scale;
+    
+          factor = Math.max(0.01, Math.min(this.view.scale * factor, 160)) / this.view.scale;
   }
 
   mxGraph.prototype.zoom.apply(this, arguments);

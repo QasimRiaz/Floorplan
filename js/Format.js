@@ -1252,7 +1252,7 @@ BaseFormatPanel.prototype.createCellColorOption = function (
             )
           );
         });
-        console.log("select2");
+        //console.log("select2");
         jQuery(".select2").select2();
       } finally {
         graph.getModel().endUpdate();
@@ -7793,7 +7793,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
 
             if (legendlabels != "none" && legendlabels != "") {
               if (legendlabelscolorUn == "none" || legendlabelscolorUn == "") {
-                console.log('x-1');
+                //console.log('x-1');
                 graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
               } else {
                 graph.setCellStyles("fillColor", legendlabelscolorUn, cellvalue);
@@ -10609,7 +10609,7 @@ function updateallboothstags() {
     success: function (data) {
       jQuery("body").css({ cursor: "default" });
 
-      if (data == "update") {
+      if (data.trim() == "update") {
         jQuery(".successmessage").append(
           "<h6 style='background: #95e87a;color: #fff;text-align: center;'>Booth tags have been updated successfully.</h6>"
         );
@@ -10722,7 +10722,7 @@ function updatealllengends() {
     success: function (data) {
       jQuery("body").css({ cursor: "default" });
 
-      if (data == "update") {
+      if (data.trim() == "update") {
         jQuery(".successmessage").append(
           "<h6 style='background: #95e87a;color: #fff;text-align: center;'>Legend labels have been updated successfully.</h6>"
         );
@@ -10806,7 +10806,7 @@ function updateallpricetegs() {
     success: function (data) {
       jQuery("body").css({ cursor: "default" });
 
-      if (data == "update") {
+      if (data.trim() == "update") {
         jQuery(".successmessage").append(
           "<h6 style='background: #95e87a;color: #fff;text-align: center;'>Price tags have been updated successfully.</h6>"
         );

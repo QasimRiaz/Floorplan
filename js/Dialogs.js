@@ -986,7 +986,7 @@ PageSetupDialog.addPageFormatPanel = function(div, namePostfix, pageFormat, page
 
 PageSetupDialog.UpdatePageSetup = function(bgW, bfH)
 {
-	console.log('UpdatePageSetup');
+	//console.log('UpdatePageSetup');
 		var newPageFormat = new mxRectangle(0, 0, parseInt(widthInput.value), parseInt(heightInput.value));
 		
 		if (paperSizeSelect.value != 'custom' && landscapeCheckBox.checked)
@@ -1307,7 +1307,7 @@ PrintDialog.prototype.create = function(graph)
 		var output = preview.open();
                  
                 
-                console.log(output);
+                //console.log(output);
 	
 		if (print)
 		{
@@ -1367,7 +1367,7 @@ PrintDialog.createPrintPreview = function(graph, scale, pf, border, x0, y0, auto
 
 	var preview = new mxPrintPreview(graph, scale, pf, border, x0, y0);
         
-        console.log(preview);
+        //console.log(preview);
 		// console.log('*******');
 		// console.log(preview.pageFormat.height);
         
@@ -1399,7 +1399,7 @@ PrintDialog.createPrintPreview = function(graph, scale, pf, border, x0, y0, auto
 		doc.writeln('</style>');
 	};
         
-	console.log(preview);
+	//console.log(preview);
 	return preview;
 };
 
@@ -2287,7 +2287,7 @@ ExportDialog.exportFile = function(editorUi, name, format, bg, s, b)
 	{       
                
                
-                console.log(mxUtils.getXml(graph.getSvg(bg, s, b)));
+               // console.log(mxUtils.getXml(graph.getSvg(bg, s, b)));
 		ExportDialog.saveLocalFile(editorUi, mxUtils.getXml(graph.getSvg(bg, s, b)), name, format);
 	}
     else

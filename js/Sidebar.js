@@ -3458,7 +3458,7 @@ Sidebar.prototype.addLegendsFunctions = function(graph, id, title, expanded, fns
 											
 										   var usercurrentid = cell.getAttribute('legendlabels', ''); 
 										   var usercurrentid = cell.getAttribute('boothOwner', ''); 
-											console.log('on------'+usercurrentid);
+											// console.log('on------'+usercurrentid);
 										   
 
 															if (usercurrentid != '' && usercurrentid != 'none') {

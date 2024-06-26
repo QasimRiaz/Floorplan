@@ -38177,8 +38177,13 @@ mxGraphModel.prototype.cellAdded = function (cell) {
     }
 
     // Makes sure IDs of deleted cells are not reused
-    if (mxUtils.isNumeric(cell.getId())) {
-      this.nextId = Math.max(this.nextId, cell.getId());
+    if (mxUtils.isNumeric(cell.getId())) { // shehroze
+
+      var cellID = parseInt(cell.getId());
+      var count = 1;
+      var getCellId = cellID + count
+      this.nextId = Math.max(parseInt(this.nextId), parseInt(getCellId));
+      
     }
 
     // Recursively processes child cells
@@ -59173,12 +59178,14 @@ mxGraph.prototype.center = function (horizontal, vertical, cx, cy) {
  * is omitted, then <centerZoom> will be used as its value.
  */
 mxGraph.prototype.zoom = function (factor, center) {
+
   center = center != null ? center : this.centerZoom;
   var scale = Math.round(this.view.scale * factor * 100) / 100;
   var state = this.view.getState(this.getSelectionCell());
   factor = scale / this.view.scale;
 
   if (this.keepSelectionVisibleOnZoom && state != null) {
+
     var rect = new mxRectangle(
       state.x * factor,
       state.y * factor,
@@ -59191,22 +59198,25 @@ mxGraph.prototype.zoom = function (factor, center) {
 
     if (!this.scrollRectToVisible(rect)) {
       this.view.revalidate();
-
       // Forces an event to be fired but does not revalidate again
       this.view.setScale(scale);
     }
   } else {
+
     var hasScrollbars = mxUtils.hasScrollbars(this.container);
 
     if (center && !hasScrollbars) {
+
       var dx = this.container.offsetWidth;
       var dy = this.container.offsetHeight;
 
       if (factor > 1) {
+
         var f = (factor - 1) / (scale * 2);
         dx *= -f;
         dy *= -f;
       } else {
+
         var f = (1 / factor - 1) / (this.view.scale * 2);
         dx *= f;
         dy *= f;
@@ -59218,6 +59228,8 @@ mxGraph.prototype.zoom = function (factor, center) {
         this.view.translate.y + dy
       );
     } else {
+
+
       // Allows for changes of translate and scrollbars during setscale
       var tx = this.view.translate.x;
       var ty = this.view.translate.y;
@@ -59231,6 +59243,7 @@ mxGraph.prototype.zoom = function (factor, center) {
         var dy = 0;
 
         if (center) {
+
           dx = (this.container.offsetWidth * (factor - 1)) / 2;
           dy = (this.container.offsetHeight * (factor - 1)) / 2;
         }

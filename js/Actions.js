@@ -470,9 +470,9 @@ Actions.prototype.init = function()
                                                              type: 'POST',
                                                              success: function(data) {
                                                                         jQuery('body').css({'cursor' : 'default'});
-                                                                         console.log(jQuery.trim(data))
+                                                                         //console.log(jQuery.trim(data))
                                                                         if(jQuery.trim(data) == 'updated'){
-                                                                            console.log(data)
+                                                                            //console.log(data)
                                                                              swal({
                                                                                  title: "Success",
                                                                                  text: "All booth products have been generated successfully.",
@@ -518,7 +518,7 @@ Actions.prototype.init = function()
         
         this.addAction('collapseexpand', function(evt)
 	{
-           console.log(ui.hsplitPosition);
+           //console.log(ui.hsplitPosition);
             if(ui.hsplitPosition == 0){
                 
                 ui.hsplitPosition = 208;
@@ -707,14 +707,14 @@ Actions.prototype.init = function()
                        mxFloorPlanXml = mxUtils.getXml(ui.editor.getGraphXml());
                        var currentbgImage = ui.editor.graph.getBackgroundImage();
                        
-                       console.log(currentbgImage);
+                       //console.log(currentbgImage);
                        if(currentbgImage == null ){
                             mxFloorBackground = "";
                         }else{
                             
                             mxFloorBackground = currentbgImage.src;
                         }
-                       console.log(mxFloorBackground);
+                       //console.log(mxFloorBackground);
                        var data = new FormData();
                        data.append('post_id', mxPostID);
                        data.append('boothTypes', JSON.stringify(ArrayOfObjects));
@@ -1292,7 +1292,7 @@ Actions.prototype.init = function()
 		{
 			this.get('pageView').funct();
 		}
-		console.log('10000');
+		//console.log('10000');
 		var fmt = graph.pageFormat;
 		var ps = graph.pageScale;
 		var cw = graph.container.clientWidth - 10;
