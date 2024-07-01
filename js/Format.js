@@ -6152,6 +6152,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       var allDataArray = [];
       var cell = graph.getSelectionCells();
       var boothprice = jQuery("#boothprice").val();
+      boothprice = (boothprice === null || boothprice === "") ? 0 : boothprice;
+
       var boothlevel = jQuery("#boothlevelvalue option:selected").val();
       //var userBooths = jQuery("#UserBooth  option:selected").val();
       var userBooths = jQuery("#UserBooth").select2("val");
@@ -6502,6 +6504,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       var allDataArray = [];
       var cell = graph.getSelectionCells();
       var boothprice = jQuery("#boothprice").val();
+      boothprice = (boothprice === null || boothprice === "") ? 0 : boothprice;
+
       var boothlevel = jQuery("#boothlevelvalue option:selected").val();
       var reservedStatus = jQuery("#reservedCheck:checked").val();
       //var userBooths = jQuery("#UserBooth  option:selected").val();
