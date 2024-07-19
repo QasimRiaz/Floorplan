@@ -627,11 +627,11 @@ function createnewfloorplan($postData)
                 $userLevel = $name['name'];
             }
         }
-        $userlimit = $all_roles[$user_info->roles[0]]['boothPurchaseLimit'];
+        $userlimit = $floorPlanSettings['usersNum'];
 
         if(empty($userlimit))
         {
-            $userlimit = $floorPlanSettings['usersNum'];
+            $userlimit = $all_roles[$user_info->roles[0]]['boothPurchaseLimit'];
         }
         $getroledata = unserialize($loggedInUser['wp_' . $blog_id . '_capabilities'][0]);
         reset($getroledata);
@@ -1788,10 +1788,10 @@ function floorplan_shortcode($atts, $content = null)
                     $userLevel = $name['name'];
                 }
             }
-            $userlimit = $all_roles[$user_info->roles[0]]['boothPurchaseLimit'];
+            $userlimit = $floorPlanSettings['usersNum'];
             if(empty($userlimit))
             {
-                $userlimit = $floorPlanSettings['usersNum'];
+                $userlimit = $all_roles[$user_info->roles[0]]['boothPurchaseLimit'];
             }
             $loggedInUsers = array(
                 'ID' => $user_ID,
@@ -1906,10 +1906,10 @@ function floorplan_shortcode($atts, $content = null)
         $rolename = key($getroledata);
         $get_all_roles_array = 'wp_' . $blog_id . '_user_roles';
         $all_roles = get_option($get_all_roles_array);
-        $userlimit = $all_roles[$user_info->roles[0]]['boothPurchaseLimit'];
+        $userlimit = $floorPlanSettings['usersNum'];
         if(empty($userlimit))
         {
-            $userlimit = $floorPlanSettings['usersNum'];
+            $userlimit = $all_roles[$user_info->roles[0]]['boothPurchaseLimit'];
         }
         $loggedInUsers = array(
             'ID' => $user_ID,
@@ -2211,10 +2211,10 @@ function boothSelfAssignment(){
     $loggedInUser = get_user_meta($user_ID);
     $user_info = get_userdata($user_ID);
 
-    $userlimit = $get_all_roles[$user_info->roles[0]]['boothPurchaseLimit'];
+    $userlimit = $_POST['userlimit']; 
     if(empty($userlimit))
     {
-        $userlimit = $_POST['userlimit']; 
+        $userlimit = $get_all_roles[$user_info->roles[0]]['boothPurchaseLimit'];
     }
 
     $lastInsertId  = contentmanagerlogging('Prepaid Booth Purchased', "User Action", "", $user_ID, $user_info->user_email, "pre action");
