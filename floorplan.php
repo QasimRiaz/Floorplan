@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 15.03
- * @version : 15.03
+ * Version: 15.04
+ * @version : 15.04
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -1995,6 +1995,7 @@ function floorplan_shortcode($atts, $content = null)
 
 
         $current_site_logo = $contentmanager_settings['ContentManager']['adminsitelogo'];
+        $levelbaseddiscountstatus = $contentmanager_settings['ContentManager']['levelbaseddiscount'];
         $current_site_name = get_bloginfo('name');
         $current_site_url = get_site_url();
         $current_floor_plan_status = $status;
@@ -2208,8 +2209,13 @@ function boothSelfAssignment(){
     $siteID = get_current_blog_id();    
     
     $woocommerce_rest_api_keys = get_option('ContenteManager_Settings');
+
+
+
+
     $boothpurchaseenablestatus = $woocommerce_rest_api_keys['ContentManager']['boothpurchasestatus'];
     $foolrplanID = $woocommerce_rest_api_keys['ContentManager']['floorplanactiveid'];
+    $levelbaseddiscountstatus = $woocommerce_rest_api_keys['ContentManager']['levelbaseddiscount'];
     $boothTypesLegend = json_decode(get_post_meta($foolrplanID, 'legendlabels', true));
     $FloorplanXml = get_post_meta($foolrplanID, 'floorplan_xml', true);
     $FloorplanXml = str_replace('"n<', '<', $FloorplanXml);

@@ -69,6 +69,8 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
             var loggedInUser = '<?php echo   json_encode($loggedInUsers)  ; ?>';
             var TurnUsers = '<?php echo   ($value) ; ?>';
             var pro = '<?php echo   json_encode($get_product)  ; ?>';
+
+            var levelbaseddiscountstatus = '<?php echo   $levelbaseddiscountstatus; ?>'; 
             // console.log(pro);
             var cartCount='<?php
                     $cartcount = WC()->cart->get_cart_contents_count();
@@ -395,7 +397,7 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
 
 
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=14.10"></script> 
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.64"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.66"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=8.01"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=4.01"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.75"></script>

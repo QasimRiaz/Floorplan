@@ -1336,6 +1336,22 @@ EditorUi = function (editor, container, lightbox) {
 
                                            // console.log('discprice---------'+finalresultProduct.levelbaseddiscountedprice);
                                            if(finalresultProduct.levelbaseddiscountedprice !== -1){
+
+
+                                                console.log(levelbaseddiscountstatus);
+
+                                              if(levelbaseddiscountstatus == 'disable'){
+
+
+                                                var productprice =
+                                                "<p><h5 ><strong>Price: </strong>" +
+                                                finalresultProduct.currencysymbole +
+                                                (finalresultProduct.price - finalresultProduct.levelbaseddiscountedprice)  +
+                                                "</h5></p>";
+
+
+
+                                              }else{
    
                                                var productprice =
                                                "<p><h5 ><strong>Price: </strong>" +
@@ -1343,6 +1359,9 @@ EditorUi = function (editor, container, lightbox) {
                                                finalresultProduct.price +
                                                "  (<small><strong>Discounted Price: </strong>"+finalresultProduct.currencysymbole +
                                                finalresultProduct.levelbaseddiscountedprice +"</small>)</h5>";
+
+                                              }
+
                                            }else{
    
                                                var productprice =
