@@ -1346,7 +1346,7 @@ EditorUi = function (editor, container, lightbox) {
                                                 var productprice =
                                                 "<p><h5 ><strong>Price: </strong>" +
                                                 finalresultProduct.currencysymbole +
-                                                (finalresultProduct.price - finalresultProduct.levelbaseddiscountedprice)  +
+                                                (finalresultProduct.levelbaseddiscountedprice)  +
                                                 "</h5></p>";
 
 
