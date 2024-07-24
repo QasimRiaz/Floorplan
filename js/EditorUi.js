@@ -929,15 +929,17 @@ EditorUi = function (editor, container, lightbox) {
                     logInUser["OverrideBoothLimit"]
                 ) {
                     userlimit = logInUser["OverrideBoothLimit"];
-                } else {                    
-                    if(loggedInUserLevel == 'contentmanager'){
+                } else {
+                    if (loggedInUserLevel == 'contentmanager') {
                         userlimit = '';
                     }
 
-                    if(logInUser["BoothPurchaseLimit"] != ''){
+                    if (logInUser["BoothPurchaseLimit"] != '') {
                         userlimit = logInUser["BoothPurchaseLimit"];
-                    }                    
-                    else { userlimit = floorPlanSettings["usersNum"]; }
+                    }
+                    else {
+                        userlimit = floorPlanSettings["usersNum"];
+                    }
                 }
 
 
