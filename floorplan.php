@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 15.07
- * @version : 15.07
+ * Version: 15.08
+ * @version : 15.08
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -1919,7 +1919,7 @@ function floorplan_shortcode($atts, $content = null)
             'Overrideprepaid' => $loggedInUser['wp_' . $blog_id . '_prePaid_checkbox'][0],
             'BoothPurchaseLimit' => $userlimit,
         );
-        
+        $user_info = get_userdata($user_ID);
         $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         if (strpos($actual_link, '/floor-plan-editor/') != false) {
 
@@ -2009,6 +2009,7 @@ function floorplan_shortcode($atts, $content = null)
 
 
         $current_site_logo = $contentmanager_settings['ContentManager']['adminsitelogo'];
+        $levelbaseddiscountstatus = $contentmanager_settings['ContentManager']['levelbaseddiscount'];
         $current_site_name = get_bloginfo('name');
         $current_site_url = get_site_url();
         $current_floor_plan_status = $status;
@@ -2258,8 +2259,12 @@ function boothSelfAssignment(){
     $siteID = get_current_blog_id();    
     
     $woocommerce_rest_api_keys = get_option('ContenteManager_Settings');
+
+
+
     $boothpurchaseenablestatus = $woocommerce_rest_api_keys['ContentManager']['boothpurchasestatus'];
     $foolrplanID = $woocommerce_rest_api_keys['ContentManager']['floorplanactiveid'];
+    $levelbaseddiscountstatus = $woocommerce_rest_api_keys['ContentManager']['levelbaseddiscount'];
     $boothTypesLegend = json_decode(get_post_meta($foolrplanID, 'legendlabels', true));
     $FloorplanXml = get_post_meta($foolrplanID, 'floorplan_xml', true);
     $FloorplanXml = str_replace('"n<', '<', $FloorplanXml);
