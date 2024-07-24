@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 15.06
- * @version : 15.06
+ * Version: 15.07
+ * @version : 15.07
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -2206,10 +2206,34 @@ function boothSelfAssignment(){
     $blog_id = get_current_blog_id();
     $loggedInUser = get_user_meta($user_ID);
     $user_info = get_userdata($user_ID);
+    $floorPlanSettingsString = 'floorPlanSettings';
+    $floorPlanSettings = get_option($floorPlanSettingsString);
 
-    $userinfo = get_userdata($user_ID);
-    $userlimit = $get_all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
-    
+    $meta_key = 'wp_' . $blog_id . '_OverrideNumberOfBooths';
+    $userlimit = get_user_meta($user_ID, $meta_key, true);
+
+    if (empty($userlimit)) {
+
+        $loggedInUser = get_user_meta($user_ID);
+        $getroledata = unserialize($loggedInUser['wp_' . $blog_id . '_capabilities'][0]);
+        reset($getroledata);
+        $rolename = key($getroledata);
+        $get_all_roles_array = 'wp_' . $blog_id . '_user_roles';
+        $all_roles = get_option($get_all_roles_array);
+        foreach ($all_roles as $key => $name) {
+            if ($rolename == $key) {
+                $userLevel = $name['name'];
+            }
+        }
+        $userinfo = get_userdata($user_ID);
+        $userlimit = $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
+
+        if (empty($userlimit)) {
+
+            $userlimit = $floorPlanSettings['usersNum'];
+        }
+    }
+
     $lastInsertId  = contentmanagerlogging('Prepaid Booth Purchased', "User Action", "", $user_ID, $user_info->user_email, "pre action");
 
     $company_name = $loggedInUser[$siteprefix.'company_name'][0];
