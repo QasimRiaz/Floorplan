@@ -922,39 +922,42 @@ EditorUi = function (editor, container, lightbox) {
 
             //var highlight = new mxCellTracker(graph, '#00FF00');
             this.editor.graph.addListener(mxEvent.CLICK, function (sender, evt) {
-                var cell = evt.getProperty("cell");
-                // console.log(cell);
-                if (
-                    logInUser["OverrideCheck"] == "checked" &&
-                    logInUser["OverrideBoothLimit"]
-                ) {
-                    userlimit = logInUser["OverrideBoothLimit"];
-                } else {
-                    if (loggedInUserLevel == 'contentmanager') {
-                        userlimit = '';
-                    }
+                var cell = evt.getProperty("cell");                 
+                if (userloggedinstatus == '') {
+                    userlimit = packageboothpurchaselimit;
+                }
+                else {
+                    if (
+                        logInUser["OverrideCheck"] == "checked" &&
+                        logInUser["OverrideBoothLimit"]
+                    ) {
+                        userlimit = logInUser["OverrideBoothLimit"];
+                    } else {
+                        if (loggedInUserLevel == 'contentmanager') {
+                            userlimit = '';
+                        }
 
-                    if (logInUser["BoothPurchaseLimit"] != '') {
-                        userlimit = logInUser["BoothPurchaseLimit"];
-                    }
-                    else {
-                        userlimit = floorPlanSettings["usersNum"];
+                        if (logInUser["BoothPurchaseLimit"] != '') {
+                            userlimit = logInUser["BoothPurchaseLimit"];
+                        }
+                        else {
+                            userlimit = floorPlanSettings["usersNum"];
+                        }
                     }
                 }
 
-
-                if(logInUser["OverrideCheck"] == "checked" &&
-                logInUser["Overrideprepaid"] == "checked"){
+                if (logInUser["OverrideCheck"] == "checked" &&
+                    logInUser["Overrideprepaid"] == "checked") {
                     prePaid = logInUser["Overrideprepaid"];
-                }else{
+                } else {
                     prePaid = floorPlanSettings["PrePaidChk"];
                 }
-         
 
                 if(prePaid == "checked"){
 
                     disableStyle = 'disabled';
                 }
+
                 // console.log(logInUser["UserLevel"]);
                 // console.log(userlimit);
                 var array = {};
