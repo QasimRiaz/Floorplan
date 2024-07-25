@@ -924,7 +924,11 @@ EditorUi = function (editor, container, lightbox) {
             this.editor.graph.addListener(mxEvent.CLICK, function (sender, evt) {
                 var cell = evt.getProperty("cell");                 
                 if (userloggedinstatus == '') {
-                    userlimit = packageboothpurchaselimit;
+                    if (packageboothpurchaselimit != '') {
+                        userlimit = packageboothpurchaselimit;
+                    } else{
+                        userlimit = '';
+                    }
                 }
                 else {
                     if (
