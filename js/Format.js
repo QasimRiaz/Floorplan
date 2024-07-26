@@ -7719,7 +7719,22 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
       var legendlabelscolorOcc = "";
       var boothtagsvalue = "";
 
-      node.setAttribute("mylabel", getboothnumber);
+      var specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/;
+
+      if (specialCharPattern.test(getboothnumber)) {
+        swal({
+          title: "Warning",
+          text: "Special characters not allowed.",
+          type: "warning",
+          confirmButtonClass: "btn-success",
+          confirmButtonText: "Ok",
+        });
+        node.setAttribute("mylabel", '');
+      } else {
+        node.setAttribute("mylabel", getboothnumber);
+      }
+
+      
       node.setAttribute("boothDetail", getdetailvalue);
       node.setAttribute("companydescripiton", currentcompanydescripiton);
 
