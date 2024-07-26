@@ -2620,7 +2620,7 @@ function addToCart(p_id, request, price, slug) {
             } else {
                 jQuery("#" + p_id).empty();
                 var div =
-                    '<div id="cart_div"><p style="  text-align: center;font-size: 16px;vertical-align: c;margin-top: 10px;"><strong style="color:red">Limit Exceeded</strong></p></div>';
+                    '<div id="cart_div"><p style="  text-align: center;font-size: 16px;vertical-align: c;margin-top: 10px;"><strong style="color:red">Booth limit exceeded</strong></p></div>';
                 jQuery("#" + p_id).append(div);
             }
         },

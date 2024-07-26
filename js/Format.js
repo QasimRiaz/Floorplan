@@ -5800,7 +5800,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         levelBasedDiscountHtml +='<div class = "col-md-3">';
 
         levelBasedDiscountHtml += '<h6><strong>Levels</strong></h6>';
-        levelBasedDiscountHtml += '<select class="form-control js-example-basic-multiple" id="levels-'+value.discountid+'" multiple="multiple" data-allow-clear="true" >';
+        levelBasedDiscountHtml += '<select class="form-control js-example-basic-multiple" id="levels-'+value.discountid+'" multiple="multiple" data-allow-clear="true" style="width:308px">';
         jQuery.each(arrayoflevelsObjects, function (rolekey, rolevalue) {
           if (rolevalue.key != 'administrator' && rolevalue.key != 'contentmanager') {
 
@@ -6068,7 +6068,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var inputValidity = 'validity.valid||(value="")';
 
     html +=
-      '<p id="messageerror"></p><script>jQuery("#depositsstatus").change(function(){if(jQuery("#depositsstatus option:selected").val() !="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">' +
+      '<p id="messageerror"></p><script>jQuery("#depositsstatus").change(function(){if(jQuery("#depositsstatus option:selected").val() !="no"){jQuery(".depositsdetail").show(); jQuery(".LevelBasedDiscount").hide(); }else{ jQuery(".depositsdetail").hide(); jQuery(".LevelBasedDiscount").show(); } });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">' +
       selectedBoothtitles +
       '</div></div><div class="row" style="margin-bottom: 1%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">' +
       currencysymbole +
@@ -6079,20 +6079,28 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea id="boothdescripition" class="form-control" rows="8">' +
       unescape(boothdescripition) +
       '</textarea></div></div>'+
-      '<hr>'+
+      '<hr>';
 
-      '<div id="level-based-discount">'+
+      if (despositeenablestatus == "no") {
+      html += '<div id="level-based-discount" class="LevelBasedDiscount" style="display:inline">'+
 
       '<div><h3>Level Based Discount</h3>'+
         levelBasedDiscountHtml+
       '</div>'+
-     
- 
+      '</div>';
+      }
 
-      '</div>'+
+      else {
+        html += '<div id="level-based-discount" class="LevelBasedDiscount" style="display:none">'+
+  
+        '<div><h3>Level Based Discount</h3>'+
+          levelBasedDiscountHtml+
+        '</div>'+
+        '</div>';
+        }
 
-      '<hr>'+
-      '<div class="row" style="margin-bottom: 1%; margin-left: 133px; color: gray"><h5 class="eg-sub-title"><strong>IF this booth is purchased, THEN</strong></h5></div><div style="margin-left: 6px;" ><div style="margin-left: 169px;margin-bottom: 11px;font-weight: bold;padding: 2px"><input type="checkbox" style="margin-right:4px;" ' +
+
+      html += '<div class="row" style="margin-bottom: 1%; margin-left: 133px; color: gray"><h5 class="eg-sub-title"><strong>IF this booth is purchased, THEN</strong></h5></div><div style="margin-left: 6px;" ><div style="margin-left: 169px;margin-bottom: 11px;font-weight: bold;padding: 2px"><input type="checkbox" style="margin-right:4px;" ' +
       overRideCheck +
       ' id="overRideCheckBox" onclick="cliker()" value="0"><span style="font-size:bold">' +
       overrideString +
@@ -6162,39 +6170,69 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       var boothtasks = jQuery("#boothtasksvalues ").val();
       var boothdescripition = escape(jQuery("#boothdescripition").val());
       var discflag = true;
+      var despositeenablestatus = jQuery("#depositsstatus option:selected").val();
+
+      if (despositeenablestatus == "no") {
+        jQuery(".html-content").each(function (index) {
+          var dataArray = {};
+
+          var discountID = jQuery(this).attr('id');
 
 
-      jQuery( ".html-content" ).each(function(index) {
-        var dataArray={};
+          dataArray['discountid'] = discountID;
+          dataArray['levels'] = jQuery('#levels-' + discountID).val();
+          dataArray['discounttype'] = jQuery('#discount_type-' + discountID).val();
+          dataArray['discountamount'] = jQuery('#amount-price-' + discountID).val();
 
-        var discountID = jQuery( this ).attr('id');
-       
-   
-        dataArray['discountid'] = discountID;
-        dataArray['levels'] = jQuery('#levels-'+discountID).val();
-        dataArray['discounttype'] = jQuery('#discount_type-'+discountID).val();
-        dataArray['discountamount'] = jQuery('#amount-price-'+discountID).val();
 
-                
-        if(jQuery('#discount_type-'+discountID).val() == 'percent' && jQuery('#amount-price-'+discountID).val() > 100){
-        
-          discflag = false;
-          jQuery(".depositeerror").empty();
-          jQuery(".depositeerror").append(
+          if (jQuery('#discount_type-' + discountID).val() == 'percent' && jQuery('#amount-price-' + discountID).val() > 100) {
+
+            discflag = false;
+            jQuery(".depositeerror").empty();
+            jQuery(".depositeerror").append(
               "<label style='margin-top: 10px;color:red'>The percentage amount cannot be greater than the price.</label>"
-          );
-      
-          jQuery("body").css("cursor", "default");
-          setTimeout(function () {
+            );
+
+            jQuery("body").css("cursor", "default");
+            setTimeout(function () {
               // reset CSS
               jQuery(".depositeerror").empty();
-          }, 5000);
+            }, 5000);
 
-          // return false;
+            // return false;
+          }
+
+          allDataArray[index] = dataArray;
+        });
+      } else {
+        jQuery(".html-content").each(function (index) {
+          var dataArray = {};
+
+          dataArray['discountid'] = "";
+          dataArray['levels'] = "";
+          dataArray['discounttype'] = "";
+          dataArray['discountamount'] = "";
+
+          // if (jQuery('#discount_type-' + discountID).val() == 'percent' && jQuery('#amount-price-' + discountID).val() > 100) {
+
+          //   discflag = false;
+          //   jQuery(".depositeerror").empty();
+          //   jQuery(".depositeerror").append(
+          //     "<label style='margin-top: 10px;color:red'>The percentage amount cannot be greater than the price.</label>"
+          //   );
+
+          //   jQuery("body").css("cursor", "default");
+          //   setTimeout(function () {
+          //     // reset CSS
+          //     jQuery(".depositeerror").empty();
+          //   }, 5000);
+
+          //   // return false;
+          // }
+
+          allDataArray[index] = dataArray;
+        });
       }
-
-        allDataArray[index] = dataArray;
-    });
     
     // console.log('1---------'+allDataArray);
    
@@ -6204,10 +6242,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       // console.log(boothdescripition);
       var depositstype = "";
       var depositsamount = "";
-      var depositestatus = "unchecked";
-      var despositeenablestatus = jQuery(
-        "#depositsstatus option:selected"
-      ).val();
+      var depositestatus = "unchecked";      
       var level = "";
 
       // console.log("In Sell New");
@@ -6788,7 +6823,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     levelBasedDiscountHtml1 +='<div class = "col-md-3">';
 
     levelBasedDiscountHtml1 += '<h6><strong>Levels</strong></h6>';
-    levelBasedDiscountHtml1 += '<select class="form-control js-example-basic-multiple" id="levels-'+discid+'" multiple="multiple" data-allow-clear="true" >';
+    levelBasedDiscountHtml1 += '<select class="form-control js-example-basic-multiple" id="levels-'+discid+'" multiple="multiple" data-allow-clear="true" style="width:308px">';
     jQuery.each(arrayoflevelsObjects, function (rolekey, rolevalue) {
       if (rolevalue.key != 'administrator' && rolevalue.key != 'contentmanager') {
 
@@ -6838,7 +6873,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var overrideString = "Override User's Existing Level";
     var inputValidity = 'validity.valid||(value="")';
     html +=
-      '<script>jQuery("#depositsstatus").change(function(){if(jQuery("#depositsstatus option:selected").val()!="no"){jQuery(".depositsdetail").show(); }else{ jQuery(".depositsdetail").hide();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">' +
+      '<script>jQuery("#depositsstatus").change(function(){if(jQuery("#depositsstatus option:selected").val()!="no"){jQuery(".depositsdetail").show(); jQuery(".LevelBasedDiscount").hide(); }else{ jQuery(".depositsdetail").hide(); jQuery(".LevelBasedDiscount").show();} });</script> <div class="row" style="margin-bottom: 2%;margin-top: 3%;"><div class="col-sm-2" style="text-align:right;"><label>Selected Booths</label></div><div class="col-sm-8">' +
       selectedBoothtitles +
       '</div></div><div class="row" style="margin-bottom: 1%;"><div class="col-sm-2" style="text-align:right;"><label>Price</label></div><div class="col-sm-3"><div class="input-group"><span style="height:20px;"class="input-group-addon"><strong style="color:#333">' +
       currencysymbole +
@@ -6852,7 +6887,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
 
       '<div><h3>Level Based Discount</h3></div>'+
 
-      '<div id="level-based-discount">'+
+      '<div id="level-based-discount" class="LevelBasedDiscount">'+
       levelBasedDiscountHtml1 +
       '</div>'+
       // '<div id="add-new-discount">'+
@@ -12742,7 +12777,7 @@ function addNewDiscount(){
   });
   var levelHtml = '';
   levelHtml += '<h6><strong>Levels</strong></h6>';
-  levelHtml += '<select class="form-control js-example-basic-multiple" id="levels-'+discountRowId+'" multiple="multiple" data-allow-clear="true" >';
+  levelHtml += '<select class="form-control js-example-basic-multiple" id="levels-'+discountRowId+'" multiple="multiple" data-allow-clear="true" style="width:308px">';
   levelHtml += levels;
   levelHtml += '</select>';
 
