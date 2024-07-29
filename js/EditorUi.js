@@ -940,12 +940,14 @@ EditorUi = function (editor, container, lightbox) {
                         if (loggedInUserLevel == 'contentmanager') {
                             userlimit = '';
                         }
-
-                        if (logInUser["BoothPurchaseLimit"] != '') {
-                            userlimit = logInUser["BoothPurchaseLimit"];
-                        }
                         else {
-                            userlimit = floorPlanSettings["usersNum"];
+
+                            if (floorPlanSettings["usersNum"] != '') {
+                                userlimit = floorPlanSettings["usersNum"];
+                            }
+                            else {
+                                userlimit = logInUser["BoothPurchaseLimit"];
+                            }
                         }
                     }
                 }

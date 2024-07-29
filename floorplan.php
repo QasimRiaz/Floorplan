@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 15.10
- * @version : 15.10
+ * Version: 15.11
+ * @version : 15.11
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -2215,23 +2215,24 @@ function boothSelfAssignment(){
 
     if (empty($userlimit)) {
 
-        $loggedInUser = get_user_meta($user_ID);
-        $getroledata = unserialize($loggedInUser['wp_' . $blog_id . '_capabilities'][0]);
-        reset($getroledata);
-        $rolename = key($getroledata);
-        $get_all_roles_array = 'wp_' . $blog_id . '_user_roles';
-        $all_roles = get_option($get_all_roles_array);
-        foreach ($all_roles as $key => $name) {
-            if ($rolename == $key) {
-                $userLevel = $name['name'];
-            }
-        }
-        $userinfo = get_userdata($user_ID);
-        $userlimit = $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
-
+        $userlimit = $floorPlanSettings['usersNum'];
+        
         if (empty($userlimit)) {
 
-            $userlimit = $floorPlanSettings['usersNum'];
+            $loggedInUser = get_user_meta($user_ID);
+            $getroledata = unserialize($loggedInUser['wp_' . $blog_id . '_capabilities'][0]);
+            reset($getroledata);
+            $rolename = key($getroledata);
+            $get_all_roles_array = 'wp_' . $blog_id . '_user_roles';
+            $all_roles = get_option($get_all_roles_array);
+            foreach ($all_roles as $key => $name) {
+                if ($rolename == $key) {
+                    $userLevel = $name['name'];
+                }
+            }
+            $userinfo = get_userdata($user_ID);
+            $userlimit = $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
+            
         }
     }
 
