@@ -922,30 +922,48 @@ EditorUi = function (editor, container, lightbox) {
 
             //var highlight = new mxCellTracker(graph, '#00FF00');
             this.editor.graph.addListener(mxEvent.CLICK, function (sender, evt) {
-                var cell = evt.getProperty("cell");
-                // console.log(cell);
-                if (
-                    logInUser["OverrideCheck"] == "checked" &&
-                    logInUser["OverrideBoothLimit"]
-                ) {
-                    userlimit = logInUser["OverrideBoothLimit"];
-                } else {
-                    userlimit = floorPlanSettings["usersNum"];
+                var cell = evt.getProperty("cell");                 
+                if (userloggedinstatus == '') {
+                    if (packageboothpurchaselimit != '') {
+                        userlimit = packageboothpurchaselimit;
+                    } else{
+                        userlimit = '';
+                    }
+                }
+                else {
+                    if (
+                        logInUser["OverrideCheck"] == "checked" &&
+                        logInUser["OverrideBoothLimit"]
+                    ) {
+                        userlimit = logInUser["OverrideBoothLimit"];
+                    } else {
+                        if (loggedInUserLevel == 'contentmanager') {
+                            userlimit = '';
+                        }
+                        else {
+
+                            if (floorPlanSettings["usersNum"] != '') {
+                                userlimit = floorPlanSettings["usersNum"];
+                            }
+                            else {
+                                userlimit = logInUser["BoothPurchaseLimit"];
+                            }
+                        }
+                    }
                 }
 
-
-                if(logInUser["OverrideCheck"] == "checked" &&
-                logInUser["Overrideprepaid"] == "checked"){
+                if (logInUser["OverrideCheck"] == "checked" &&
+                    logInUser["Overrideprepaid"] == "checked") {
                     prePaid = logInUser["Overrideprepaid"];
-                }else{
+                } else {
                     prePaid = floorPlanSettings["PrePaidChk"];
                 }
-         
 
                 if(prePaid == "checked"){
 
                     disableStyle = 'disabled';
                 }
+
                 // console.log(logInUser["UserLevel"]);
                 // console.log(userlimit);
                 var array = {};
@@ -1356,8 +1374,9 @@ EditorUi = function (editor, container, lightbox) {
                                                var productprice =
                                                "<p><h5 ><strong>Price: </strong>" +
                                                finalresultProduct.currencysymbole +
-                                               finalresultProduct.levelbaseddiscountedprice +
-                                               "</h5>";
+                                               finalresultProduct.price +
+                                               "  (<small><strong>Discounted Price: </strong>"+finalresultProduct.currencysymbole +
+                                               finalresultProduct.levelbaseddiscountedprice +"</small>)</h5>";
 
                                               }
 
@@ -2603,7 +2622,7 @@ function addToCart(p_id, request, price, slug) {
             } else {
                 jQuery("#" + p_id).empty();
                 var div =
-                    '<div id="cart_div"><p style="  text-align: center;font-size: 16px;vertical-align: c;margin-top: 10px;"><strong style="color:red">Limit Exceeded</strong></p></div>';
+                    '<div id="cart_div"><p style="  text-align: center;font-size: 16px;vertical-align: c;margin-top: 10px;"><strong style="color:red">Booth limit exceeded</strong></p></div>';
                 jQuery("#" + p_id).append(div);
             }
         },

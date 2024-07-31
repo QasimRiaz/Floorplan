@@ -88,7 +88,7 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
             pluginBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>';
             removeLegendLabel = "";
             boothTagsList = "";
-
+            var packageboothpurchaselimit = "";
             var currentslectedboothtitle = "";
 		mxBasePath = '<?php echo plugin_dir_url( __FILE__ ); ?>src';
 		mxPostID = '<?php echo $id; ?>';
@@ -99,6 +99,8 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
 		mxFloorBackground = '<?php echo $FloorBackground; ?>';
 		mxFloorPlanXml = '<?php echo $FloorplanXml[0]; ?>';
                 mxCurrentPackageBooths = '<?php echo $_SESSION['listofselectedbooths']; ?>';
+                packageboothpurchaselimit = '<?php echo $_SESSION['PackageBoothPurchaseLimit']; ?>';
+
                 mxUserentryflow = '<?php echo $userentryflow; ?>';
                 flowstatus = location.href;
                 // console.log(flowstatus)
@@ -107,6 +109,7 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
                     mxCurrentPackageBooths = JSON.parse(mxCurrentPackageBooths);
                     
                 }
+
 		mxCurrentSiteLogo = '<?php echo $current_site_logo; ?>';
 		mxCurrentSiteTitle = '<?php echo $current_site_name; ?>';
 		mxCurrentSiteUrl = '<?php echo $current_site_url; ?>';
@@ -396,14 +399,14 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
 
 
 
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=14.13"></script> 
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/EditorUi.js?v=14.268"></script> 
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Editor.js?v=2.66"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Sidebar.js?v=8.01"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Graph.js?v=4.01"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.75"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=4.50"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.77"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=10.03"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=10.055"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=3.60"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=4.60"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.78"></script>

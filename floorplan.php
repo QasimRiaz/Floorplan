@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 15.06
- * @version : 15.06
+ * Version: 15.11
+ * @version : 15.11
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -518,7 +518,7 @@ function createnewfloorplan($postData)
 
     try {
 
-
+        
         $user_ID = get_current_user_id();
         $user_info = get_userdata($user_ID);
         $lastInsertId = contentmanagerlogging('Add New Floor Plan', "Admin Action", $postData, $user_ID, $user_info->user_email, "");
@@ -628,6 +628,9 @@ function createnewfloorplan($postData)
             }
         }
 
+        $userinfo = get_userdata($user_ID);
+        $userlimit = $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
+        
         $getroledata = unserialize($loggedInUser['wp_' . $blog_id . '_capabilities'][0]);
         reset($getroledata);
         $rolename = key($getroledata);
@@ -642,6 +645,7 @@ function createnewfloorplan($postData)
             'ReservedBooth' => unserialize($loggedInUser['wp_' . $blog_id . '_userBoothReserved'][0]),
             'OverrideCheck' => ($loggedInUser['wp_' . $blog_id . '_Override_Check'][0]),
             'Overrideprepaid' => $loggedInUser['wp_' . $blog_id . '_prePaid_checkbox'][0],
+            'BoothPurchaseLimit' => $userlimit,
         );
         $legendlabel = "[";
         $legendlabel .= '{"ID":1,"colorstatus":true,"name":"Gold","colorcode":#00000},';
@@ -1782,6 +1786,10 @@ function floorplan_shortcode($atts, $content = null)
                     $userLevel = $name['name'];
                 }
             }
+            
+            $userinfo = get_userdata($user_ID);
+            $userlimit = $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
+            
             $loggedInUsers = array(
                 'ID' => $user_ID,
                 'UserLevel' => $rolename,
@@ -1791,6 +1799,7 @@ function floorplan_shortcode($atts, $content = null)
                 'OverrideBoothLimit' => $loggedInUser['wp_' . $blog_id . '_OverrideNumberOfBooths'][0],
                 'ReservedBooth' => unserialize($loggedInUser['wp_' . $blog_id . '_userBoothReserved'][0]),
                 'OverrideCheck' => ($loggedInUser['wp_' . $blog_id . '_Override_Check'][0]),
+                'BoothPurchaseLimit' => $userlimit,
             );
             $legendlabel = "[";
             $legendlabel .= '{"ID":1,"colorstatus":true,"name":"Gold","colorcode":#00000},';
@@ -1890,10 +1899,14 @@ function floorplan_shortcode($atts, $content = null)
         $getroledata = unserialize($loggedInUser['wp_' . $blog_id . '_capabilities'][0]);
         $getroledata = (array)$getroledata;
         reset($getroledata);
+        $user_info = get_userdata($user_ID);
         $rolename = key($getroledata);
         $get_all_roles_array = 'wp_' . $blog_id . '_user_roles';
-
-
+        $all_roles = get_option($get_all_roles_array);
+        
+        $userinfo = get_userdata($user_ID);
+        $userlimit = $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
+        
         $loggedInUsers = array(
             'ID' => $user_ID,
             'UserLevel' => $rolename,
@@ -1904,6 +1917,7 @@ function floorplan_shortcode($atts, $content = null)
             'ReservedBooth' => unserialize($loggedInUser['wp_' . $blog_id . '_userBoothReserved'][0]),
             'OverrideCheck' => ($loggedInUser['wp_' . $blog_id . '_Override_Check'][0]),
             'Overrideprepaid' => $loggedInUser['wp_' . $blog_id . '_prePaid_checkbox'][0],
+            'BoothPurchaseLimit' => $userlimit,
         );
         $user_info = get_userdata($user_ID);
         $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -2081,7 +2095,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
             __FILE__,
             'FloorPlan'
         );
-        $myUpdateChecker->setBranch('master');
+        $myUpdateChecker->setBranch('master-final-merge-20240731');
         $myUpdateChecker->setAuthentication($gitKey);
         $myUpdateChecker->getVcsApi()->enableReleaseAssets();
     }
@@ -2173,7 +2187,15 @@ function boothSelfAssignment(){
     $productID = $_POST['booth_productid'];
     $userloggedinstatus = $_POST['userloggedinstatus'];
    
-    $userlimit = $_POST['userlimit']; 
+    //$userlimit = $_POST['userlimit']; 
+
+    if (is_multisite()) {
+        $blog_id = get_current_blog_id();
+        $get_all_roles_array = 'wp_' . $blog_id . '_user_roles';
+    } else {
+        $get_all_roles_array = 'wp_user_roles';
+    }
+    $get_all_roles = get_option($get_all_roles_array);
 
     $product = wc_get_product($productID);
     $product_name = $product->get_name();
@@ -2185,6 +2207,35 @@ function boothSelfAssignment(){
     $blog_id = get_current_blog_id();
     $loggedInUser = get_user_meta($user_ID);
     $user_info = get_userdata($user_ID);
+    $floorPlanSettingsString = 'floorPlanSettings';
+    $floorPlanSettings = get_option($floorPlanSettingsString);
+
+    $meta_key = 'wp_' . $blog_id . '_OverrideNumberOfBooths';
+    $userlimit = get_user_meta($user_ID, $meta_key, true);
+
+    if (empty($userlimit)) {
+
+        $userlimit = $floorPlanSettings['usersNum'];
+        
+        if (empty($userlimit)) {
+
+            $loggedInUser = get_user_meta($user_ID);
+            $getroledata = unserialize($loggedInUser['wp_' . $blog_id . '_capabilities'][0]);
+            reset($getroledata);
+            $rolename = key($getroledata);
+            $get_all_roles_array = 'wp_' . $blog_id . '_user_roles';
+            $all_roles = get_option($get_all_roles_array);
+            foreach ($all_roles as $key => $name) {
+                if ($rolename == $key) {
+                    $userLevel = $name['name'];
+                }
+            }
+            $userinfo = get_userdata($user_ID);
+            $userlimit = $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
+            
+        }
+    }
+
     $lastInsertId  = contentmanagerlogging('Prepaid Booth Purchased', "User Action", "", $user_ID, $user_info->user_email, "pre action");
 
     $company_name = $loggedInUser[$siteprefix.'company_name'][0];
@@ -2209,7 +2260,6 @@ function boothSelfAssignment(){
     $siteID = get_current_blog_id();    
     
     $woocommerce_rest_api_keys = get_option('ContenteManager_Settings');
-
 
 
 
