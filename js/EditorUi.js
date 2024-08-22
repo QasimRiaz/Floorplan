@@ -2637,7 +2637,7 @@ function addToCart(p_id, request, price, slug) {
         newData.append('userlimit',userlimit);
         newData.append('purchCount',purchCount);
         newData.append('userloggedinstatus',userloggedinstatus);
-        var content = 'After clicking "Confirm" you will be immediatelly assigned to this booth and cannot be undone. To be removed from this booth you will need to contact show management.'
+        var content = 'After clicking "Confirm", you will be immediately assigned to this booth, and this cannot be undone. To be removed from this booth, you will need to contact show management.'
         jQuery('.customecloseicon').trigger('click');
 
 
