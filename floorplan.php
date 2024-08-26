@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 15.11
- * @version : 15.11
+ * Version: 16.01
+ * @version : 16.01
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -629,7 +629,7 @@ function createnewfloorplan($postData)
         }
 
         $userinfo = get_userdata($user_ID);
-        $userlimit = $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
+        $userlimit = isset($all_roles[$userinfo->roles[0]]['boothPurchaseLimit']) ? $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'] : '';
         
         $getroledata = unserialize($loggedInUser['wp_' . $blog_id . '_capabilities'][0]);
         reset($getroledata);
@@ -1788,7 +1788,7 @@ function floorplan_shortcode($atts, $content = null)
             }
             
             $userinfo = get_userdata($user_ID);
-            $userlimit = $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
+            $userlimit = isset($all_roles[$userinfo->roles[0]]['boothPurchaseLimit']) ? $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'] : '';
             
             $loggedInUsers = array(
                 'ID' => $user_ID,
@@ -1905,7 +1905,7 @@ function floorplan_shortcode($atts, $content = null)
         $all_roles = get_option($get_all_roles_array);
         
         $userinfo = get_userdata($user_ID);
-        $userlimit = $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
+        $userlimit = isset($all_roles[$userinfo->roles[0]]['boothPurchaseLimit']) ? $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'] : '';
         
         $loggedInUsers = array(
             'ID' => $user_ID,
@@ -2095,7 +2095,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
             __FILE__,
             'FloorPlan'
         );
-        $myUpdateChecker->setBranch('master-final-merge-20240731');
+        $myUpdateChecker->setBranch('master');
         $myUpdateChecker->setAuthentication($gitKey);
         $myUpdateChecker->getVcsApi()->enableReleaseAssets();
     }
@@ -2231,7 +2231,7 @@ function boothSelfAssignment(){
                 }
             }
             $userinfo = get_userdata($user_ID);
-            $userlimit = $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'];
+            $userlimit = isset($all_roles[$userinfo->roles[0]]['boothPurchaseLimit']) ? $all_roles[$userinfo->roles[0]]['boothPurchaseLimit'] : '';
             
         }
     }
