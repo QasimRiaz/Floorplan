@@ -2290,13 +2290,13 @@ function boothSelfAssignment(){
         }
     }
     $purchCount = $number;
-
+    $userlimit = empty($userlimit) ? 0 : (int)$userlimit;    
 //    echo $productID.'===='.$userloggedinstatus.'===='.$purchCount.'===='.$userlimit;
 //    exit;
     if($boothowner == 'none' || $boothowner == ''){
 
         $result = 'limitnotreached';
-        if ((($userlimit <= $purchCount && $userlimit != '') && $purchCount != 0) && ($userloggedinstatus == "1")) {
+        if ((($userlimit <= $purchCount && $userlimit != 0) && $purchCount != 0) && ($userloggedinstatus == "1")) {
     
             $result = 'limitreached';
         }
