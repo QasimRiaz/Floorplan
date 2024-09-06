@@ -1576,6 +1576,7 @@ EditorUi = function (editor, container, lightbox) {
                                     } else {
                                         var openhtml =
                                             '<div class="row customedivproductview" style="margin-bottom: 25px;"><div class="col-sm-11" >' +
+                                            productprice +
                                             boothtitle +
                                             htmlcompanydescription +
                                             "</div></div>";
