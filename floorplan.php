@@ -319,7 +319,17 @@ function trigger2()
     foreach ($item as $key => $value) {
         $dat = $value['product_id'];
         $meta = get_post_meta($dat);
-        $productLevels[] = $meta['productlevel'][0];
+        $override_check = get_post_meta($dat, "overrideCheck", true);
+        $categories = wp_get_post_terms($dat, 'product_cat', array('fields' => 'names'));     
+        
+        if (!in_array('Packages', $categories) && !in_array('Add-ons', $categories)) {            
+            if ($override_check == "0") {                          
+                $productLevels[] = $meta['productlevel'][0];
+            }
+            
+        } else {            
+            $productLevels[] = $meta['productlevel'][0];
+        }
     }
     if (is_multisite()) {
         $blog_id = get_current_blog_id();
