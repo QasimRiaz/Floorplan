@@ -2459,8 +2459,12 @@ function boothSelfAssignment(){
 
                 $u = new WP_User($user_ID);
                 $boothLevel = get_post_meta($id,'productlevel',true);
-                if(!empty($boothLevel)){                    
-                    $u->set_role($boothLevel);
+                if(!empty($boothLevel))
+                {    
+                    if (!(current_user_can('administrator') || current_user_can('contentmanager') )) 
+                    {                
+                        $u->set_role($boothLevel);
+                    }   
                 }
                 $TemplateName = 'Pre-Paid Booth Assignment Notification User';               
                 $sendingadminemail = 'no';
