@@ -7758,7 +7758,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
       var legendlabelscolorOcc = "";
       var boothtagsvalue = "";
 
-      var specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/;
+      var specialCharPattern = /[!@#$%^*(),.?":{}|\\]/;
 
       if (specialCharPattern.test(getboothnumber)) {
         swal({
