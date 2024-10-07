@@ -1471,12 +1471,18 @@ EditorUi = function (editor, container, lightbox) {
                                                                 jQuery.inArray(
                                                                     logInUser["UserLevel"],
                                                                     LevelOfBooth[0]
+                                                                ) != -1 || jQuery.inArray(
+                                                                    logInUser["UserLevel"],
+                                                                    LevelOfBooth
                                                                 ) != -1) &&
                                                             (LevelOfBooth == "" ||
                                                                 LevelOfBooth[0] == "" ||
                                                                 jQuery.inArray(
                                                                     logInUser["UserLevel"],
                                                                     LevelOfBooth[0]
+                                                                ) != -1 || jQuery.inArray(
+                                                                    logInUser["UserLevel"],
+                                                                    LevelOfBooth
                                                                 ) != -1)
                                                                 || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
 
@@ -1786,11 +1792,17 @@ EditorUi = function (editor, container, lightbox) {
                                                                         jQuery.inArray(
                                                                             logInUser["UserLevel"],
                                                                             LevelOfBooth[0]
+                                                                        ) == 0 || jQuery.inArray(
+                                                                            logInUser["UserLevel"],
+                                                                            LevelOfBooth
                                                                         ) == 0) &&
                                                                     (LevelOfBooth == "" ||
                                                                         jQuery.inArray(
                                                                             logInUser["UserLevel"],
                                                                             LevelOfBooth[0]
+                                                                        ) == 0 || jQuery.inArray(
+                                                                            logInUser["UserLevel"],
+                                                                            LevelOfBooth
                                                                         ) == 0)
                                                                         || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
 
@@ -1946,12 +1958,18 @@ EditorUi = function (editor, container, lightbox) {
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
                                                                                 LevelOfBooth[0]
+                                                                            ) != -1 || jQuery.inArray(
+                                                                                logInUser["UserLevel"],
+                                                                                LevelOfBooth
                                                                             ) != -1) &&
                                                                         (LevelOfBooth == "" ||
                                                                             LevelOfBooth[0] == "" ||
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
                                                                                 LevelOfBooth[0]
+                                                                            ) != -1 || jQuery.inArray(
+                                                                                logInUser["UserLevel"],
+                                                                                LevelOfBooth
                                                                             ) != -1)
                                                                             || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
 
@@ -2026,12 +2044,18 @@ EditorUi = function (editor, container, lightbox) {
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
                                                                                 LevelOfBooth[0]
+                                                                            ) != -1 || jQuery.inArray(
+                                                                                logInUser["UserLevel"],
+                                                                                LevelOfBooth
                                                                             ) != -1) &&
                                                                         (LevelOfBooth == "" ||
                                                                             LevelOfBooth[0] == "" ||
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
                                                                                 LevelOfBooth[0]
+                                                                            ) != -1 || jQuery.inArray(
+                                                                                logInUser["UserLevel"],
+                                                                                LevelOfBooth
                                                                             ) != -1)
                                                                             || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
 
@@ -2091,12 +2115,18 @@ EditorUi = function (editor, container, lightbox) {
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
                                                                                 LevelOfBooth[0]
+                                                                            ) != -1 || jQuery.inArray(
+                                                                                logInUser["UserLevel"],
+                                                                                LevelOfBooth
                                                                             ) != -1) &&
                                                                         (LevelOfBooth == "" ||
                                                                             LevelOfBooth[0] == "" ||
                                                                             jQuery.inArray(
                                                                                 logInUser["UserLevel"],
                                                                                 LevelOfBooth[0]
+                                                                            ) != -1 || jQuery.inArray(
+                                                                                logInUser["UserLevel"],
+                                                                                LevelOfBooth
                                                                             ) != -1)
                                                                             || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
 
@@ -2264,7 +2294,7 @@ EditorUi = function (editor, container, lightbox) {
                                         //  console.log(logInUser["UserLevel"]);
                                         // console.log(parseInt(logInUser["priorityNum"]) + ' <= ' + TurnUsers);
 
-                                        if ((userlimit != PurchaseCount) && (jQuery.inArray(logInUser["UserLevel"], LevelOfBooth[0]) != -1 || jQuery.inArray("", LevelOfBooth) != -1) && (parseInt(logInUser["priorityNum"]) <= TurnUsers)) {
+                                        if ((userlimit != PurchaseCount) && (jQuery.inArray(logInUser["UserLevel"], LevelOfBooth[0]) != -1 || jQuery.inArray(logInUser["UserLevel"], LevelOfBooth) != -1 || jQuery.inArray("", LevelOfBooth) != -1) && (parseInt(logInUser["priorityNum"]) <= TurnUsers)) {
 
                                             buttonsdiv =
                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
