@@ -6185,6 +6185,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           dataArray['levels'] = jQuery('#levels-' + discountID).val();
           dataArray['discounttype'] = jQuery('#discount_type-' + discountID).val();
           dataArray['discountamount'] = jQuery('#amount-price-' + discountID).val();
+          var boothPrice = jQuery("#boothprice").val();
 
 
           if (jQuery('#discount_type-' + discountID).val() == 'percent' && jQuery('#amount-price-' + discountID).val() > 100) {
@@ -6192,7 +6193,22 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
             discflag = false;
             jQuery(".depositeerror").empty();
             jQuery(".depositeerror").append(
-              "<label style='margin-top: 10px;color:red'>The percentage amount cannot be greater than the price.</label>"
+              "<label style='margin-top: 10px;color:red'>The percentage cannot be greater than 100.</label>"
+            );
+
+            jQuery("body").css("cursor", "default");
+            setTimeout(function () {
+              // reset CSS
+              jQuery(".depositeerror").empty();
+            }, 5000);
+
+            // return false;
+          } else if (jQuery('#discount_type-' + discountID).val() == 'fixed' && jQuery('#amount-price-' + discountID).val() > boothPrice){
+
+            discflag = false;
+            jQuery(".depositeerror").empty();
+            jQuery(".depositeerror").append(
+              "<label style='margin-top: 10px;color:red'>The amount cannot be greater than the price.</label>"
             );
 
             jQuery("body").css("cursor", "default");
@@ -6561,14 +6577,14 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         dataArray['levels'] = jQuery('#levels-'+discountID).val();
         dataArray['discounttype'] = jQuery('#discount_type-'+discountID).val();
         dataArray['discountamount'] = jQuery('#amount-price-'+discountID).val();
-
+        var boothPrice = jQuery("#boothprice").val();
                 
         if(jQuery('#discount_type-'+discountID).val() == 'percent' && jQuery('#amount-price-'+discountID).val() > 100){
         
           discflag = false;
           jQuery(".depositeerror").empty();
           jQuery(".depositeerror").append(
-              "<label style='margin-top: 10px;color:red'>The percentage amount cannot be greater than the price.</label>"
+              "<label style='margin-top: 10px;color:red'>The percentage cannot be greater than 100.</label>"
           );
       
           jQuery("body").css("cursor", "default");
@@ -6578,6 +6594,21 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           }, 5000);
 
           // return false;
+      } else if (jQuery('#discount_type-' + discountID).val() == 'fixed' && jQuery('#amount-price-' + discountID).val() > boothPrice){
+
+        discflag = false;
+        jQuery(".depositeerror").empty();
+        jQuery(".depositeerror").append(
+          "<label style='margin-top: 10px;color:red'>The amount cannot be greater than the price.</label>"
+        );
+
+        jQuery("body").css("cursor", "default");
+        setTimeout(function () {
+          // reset CSS
+          jQuery(".depositeerror").empty();
+        }, 5000);
+
+        // return false;
       }
         allDataArray[index] = dataArray;
     });
@@ -7919,7 +7950,7 @@ StyleFormatPanel.prototype.addExhibitors = function (container) {
 
             
               if (legendlabelscolorUn == "none" || legendlabelscolorUn == "") {
-    
+                graph.setCellStyles("fillColor", '', cellvalue);
                 graph.setCellStyles("fillColor", ss.style.uno, cellvalue);
               } else {
                 
@@ -10775,16 +10806,16 @@ function updatealllengends() {
     type: "POST",
     success: function (data) {
       jQuery("body").css({ cursor: "default" });
-
+      data = data.trim();
       if (data == "update") {
         jQuery(".successmessage").append(
-          "<h6 style='background: #95e87a;color: #fff;text-align: center;'>Legend labels have been updated successfully.</h6>"
+          "<h6 style='background: #166F16;color: #fff;text-align: center;'>Legend labels have been updated successfully.</h6>"
         );
       }
 
       setTimeout(function () {
         jQuery(".successmessage").empty();
-      }, 3000); // <-- time in milliseconds
+      }, 5000); // <-- time in milliseconds
     },
     error: function (xhr, ajaxOptions, thrownError) {
       swal({
