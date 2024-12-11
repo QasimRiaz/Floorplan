@@ -1487,6 +1487,10 @@ EditorUi = function (editor, container, lightbox) {
                                                                 || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )
 
                                                         ) {
+
+                                                            console.log("SuperLog199994444444");
+
+
                                                             htmlforproductdetail =
                                                                 '<p  id="' +
                                                                 boothproductid +
@@ -1513,6 +1517,8 @@ EditorUi = function (editor, container, lightbox) {
                                                         }
                                                     }
                                                 } else {
+
+                                                    console.log("SuperLog1");
                                                     htmlforproductdetail +=
                                                         '<p  id="' +
                                                         boothproductid +
@@ -1528,6 +1534,7 @@ EditorUi = function (editor, container, lightbox) {
                                                 finalresultProduct.deposit_enable_type == "optional"
                                             ) {
                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
+                                                console.log("SuperLog11");
                                                 htmlforproductdetail =
                                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                     postid +
@@ -1541,6 +1548,7 @@ EditorUi = function (editor, container, lightbox) {
                                                     finalresultProduct.slug +
                                                     ')">Pay in Full</a></div></div></div></div>';
                                             } else {
+                                                console.log("SuperLog12");
                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"><a class="btn btn-small btn-info myspecialbuttoncustomwidth"  onclick="addToCart('+postid+',\'woo\')"  >Purchase Now</a></p>';
                                                 htmlforproductdetail =
                                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
@@ -1646,6 +1654,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 ) {
 
                                                                     // console.log("Qsaim6");
+                                                                    console.log("SuperLog13");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -1676,6 +1685,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                         ' style="text-align: center;"><a class="btn btn-success btn-small" >Added</a><p style="font-size: 14px;margin-top: 10px;color: #005e00;"><b>This booth is included in your package. The price of this booth will be updated to $0 during checkout.</b></p></div></div>';
                                                                 } else if (reservedStatus == "") {
                                                                     // console.log("Qsaim11");
+                                                                    console.log("SuperLog14");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -1699,6 +1709,7 @@ EditorUi = function (editor, container, lightbox) {
                                                         ) {
                                                             // console.log("Qsaim14");
                                                             //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
+                                                            console.log("SuperLog15");
                                                             buttonsdiv =
                                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                 postid +
@@ -1742,6 +1753,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 ) {
 
                                                                     // console.log("Qsaim17");
+                                                                    console.log("SuperLog16");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -1809,6 +1821,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                 ) {
 
                                                                     // console.log("Qsaim20");
+                                                                    console.log("SuperLog17");
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display:flex;"><div class="col-sm-12" id=' +
                                                                         postid +
@@ -1836,6 +1849,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                     }
                                                                 } else if (priority == 'true') {
 
+                                                                    console.log("SuperLog18");
 
                                                                     buttonsdiv =
                                                                         '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display:flex;"><div class="col-sm-12" id=' +
@@ -1903,6 +1917,8 @@ EditorUi = function (editor, container, lightbox) {
                                                                         || ( (logInUser["UserLevel"] == 'subscriber') &&  (LevelOfBooth[0] == 'unassigned') )   
                                                                     ) {
                                                                         // console.log("Qsaim26");
+
+                                                                        console.log("SuperLog19");
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;    display: flex;"><div style="text-align: center;display: flex;justify-content: space-evenly;" class="col-sm-12" id=' +
                                                                             postid +
@@ -1976,6 +1992,7 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                     ) {
                                                                         // console.log("Qsaim28");
+                                                                        console.log("SuperLog20");
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div style="text-align: center;display: flex;justify-content: space-evenly;" class="col-sm-12" id=' +
                                                                             postid +
@@ -2062,6 +2079,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
 
                                                                         // console.log("Qsaim29");
+                                                                        console.log("SuperLog21");
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
                                                                             postid +
@@ -2132,6 +2150,7 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                     ) {
                                                                         // console.log("Qsaim30");
+                                                                        console.log("SuperLog111");
                                                                         buttonsdiv =
                                                                             '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;display: flex;"><div class="col-sm-12" id=' +
                                                                             postid +
@@ -2177,6 +2196,7 @@ EditorUi = function (editor, container, lightbox) {
                                                             ) {
                                                                 //htmlforproductdetail += '<p  id="'+boothproductid+'"></p>';
                                                                 // console.log("Qsaim100");
+                                                                console.log("SuperLog122");
                                                                 buttonsdiv =
                                                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                     postid +
@@ -2211,7 +2231,7 @@ EditorUi = function (editor, container, lightbox) {
                                                                     ) {
                                                                         console.log("In resereved");
                                                                         // console.log("Qsaim30");
-
+                                                                        console.log("SuperLog1888");
                                                                         buttonsdiv =
                                                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-6" id=' +
                                                                                 postid +
@@ -2234,6 +2254,8 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                     }else if(NumberOfReservedBooths != false && reservedStatus == logInUser["ID"]){
 
+                                                                        console.log("SuperLog18888");
+
                                                                         buttonsdiv =
                                                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
                                                                                 postid +
@@ -2248,6 +2270,8 @@ EditorUi = function (editor, container, lightbox) {
 
                                                                         }else{
                                                                             if(boothOwner.includes(logInUser["ID"].toString()) || Array.isArray(LevelOfBooth)){
+
+                                                                                console.log("SuperLog1666");
 
                                                                                 buttonsdiv =
                                                                                     '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
@@ -2294,7 +2318,11 @@ EditorUi = function (editor, container, lightbox) {
                                         //  console.log(logInUser["UserLevel"]);
                                         // console.log(parseInt(logInUser["priorityNum"]) + ' <= ' + TurnUsers);
 
-                                        if ((userlimit != PurchaseCount) && (jQuery.inArray(logInUser["UserLevel"], LevelOfBooth[0]) != -1 || jQuery.inArray(logInUser["UserLevel"], LevelOfBooth) != -1 || jQuery.inArray("", LevelOfBooth) != -1) && (parseInt(logInUser["priorityNum"]) <= TurnUsers)) {
+                                        if ((logInUser["status"] != "") && (userlimit != PurchaseCount) && (jQuery.inArray(logInUser["UserLevel"], LevelOfBooth[0]) != -1 || jQuery.inArray(logInUser["UserLevel"], LevelOfBooth) != -1 || jQuery.inArray("", LevelOfBooth) != -1) && (parseInt(logInUser["priorityNum"]) <= TurnUsers)) {
+
+
+                                            console.log("SuperLog19999");
+
 
                                             buttonsdiv =
                                                 '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
@@ -2306,6 +2334,8 @@ EditorUi = function (editor, container, lightbox) {
                                                 ')"  >Add To Cart</a></div></div>';
 
                                         }else if (boothOwner.includes(logInUser["ID"].toString())) {
+
+                                            console.log("SuperLog19999777");
 
                                             buttonsdiv =
                                               '<div class="row footerdivfloorplan" style="margin-bottom: 25px;background: #fff;"><div class="col-sm-12" id=' +
@@ -2532,7 +2562,7 @@ function removeFromCart(p_id, request, price) {
             // console.log(data);
             jQuery("#" + p_id).empty();
             jQuery("#" + p_id + "_checkout").attr("disabled", false);
-
+            console.log("SuperLog19999000000");
             var enbutton =
                 '<a  class="btn btn-primary btn-info"  onclick="addToCart( ' +
                 p_id +
