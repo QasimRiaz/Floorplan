@@ -6185,10 +6185,11 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           dataArray['levels'] = jQuery('#levels-' + discountID).val();
           dataArray['discounttype'] = jQuery('#discount_type-' + discountID).val();
           dataArray['discountamount'] = jQuery('#amount-price-' + discountID).val();
-          var boothPrice = jQuery("#boothprice").val();
+          var boothPrice = parseInt(jQuery("#boothprice").val(), 10);
+          var discount_amount = parseInt(jQuery('#amount-price-' + discountID).val(), 10);
 
 
-          if (jQuery('#discount_type-' + discountID).val() == 'percent' && jQuery('#amount-price-' + discountID).val() > 100) {
+          if (jQuery('#discount_type-' + discountID).val() == 'percent' && discount_amount > 100) {
 
             discflag = false;
             jQuery(".depositeerror").empty();
@@ -6203,7 +6204,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
             }, 5000);
 
             // return false;
-          } else if (jQuery('#discount_type-' + discountID).val() == 'fixed' && jQuery('#amount-price-' + discountID).val() > boothPrice){
+          } else if (jQuery('#discount_type-' + discountID).val() == 'fixed' && discount_amount > boothPrice){
 
             discflag = false;
             jQuery(".depositeerror").empty();
@@ -6577,9 +6578,10 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         dataArray['levels'] = jQuery('#levels-'+discountID).val();
         dataArray['discounttype'] = jQuery('#discount_type-'+discountID).val();
         dataArray['discountamount'] = jQuery('#amount-price-'+discountID).val();
-        var boothPrice = jQuery("#boothprice").val();
+        var boothPrice = parseInt(jQuery("#boothprice").val(), 10);
+        var discount_amount = parseInt(jQuery('#amount-price-' + discountID).val(), 10);
                 
-        if(jQuery('#discount_type-'+discountID).val() == 'percent' && jQuery('#amount-price-'+discountID).val() > 100){
+        if(jQuery('#discount_type-'+discountID).val() == 'percent' && discount_amount > 100){
         
           discflag = false;
           jQuery(".depositeerror").empty();
@@ -6594,7 +6596,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           }, 5000);
 
           // return false;
-      } else if (jQuery('#discount_type-' + discountID).val() == 'fixed' && jQuery('#amount-price-' + discountID).val() > boothPrice){
+      } else if (jQuery('#discount_type-' + discountID).val() == 'fixed' && discount_amount > boothPrice){
 
         discflag = false;
         jQuery(".depositeerror").empty();
