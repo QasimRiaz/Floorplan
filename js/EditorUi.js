@@ -2354,6 +2354,80 @@ EditorUi = function (editor, container, lightbox) {
 
                                     jQuery("body").css("cursor", "default");
 
+
+
+
+                                    if(userloggedinstatus == true){
+
+                                        var newopenhtml =
+                                        '<div class="tab"><button class="tablinks" >Product Info</button></div><div id="London" class="tabcontent">' +
+                                        openhtml +
+                                        "</div>" +
+                                        buttonsdiv;
+
+
+
+
+                                    }else{
+
+
+                                        let depth = 0;
+                                        let currentWindow = window;
+
+                                        // Traverse up the window hierarchy
+                                        while (currentWindow !== window.top) {
+                                            depth++;
+                                            try {
+                                                currentWindow = currentWindow.parent;
+                                            } catch (e) {
+                                                console.warn("Cross-origin restriction: Unable to access parent window.");
+                                                break;
+                                            }
+                                        }
+
+                                        console.log("Iframe A depth:", depth);
+
+                                        if (depth === 1) {
+                                            console.log("Iframe A is inside one iframe.");
+                                            
+                                            var newopenhtml =
+                                            '<div class="tab"><button class="tablinks" >Product Info</button></div><div id="London" class="tabcontent">' +
+                                            openhtml +
+                                            "</div>" ;
+
+
+                                        } else if (depth === 2) {
+                                            console.log("Iframe A is inside two iframes.");
+                                            var newopenhtml =
+                                            '<div class="tab"><button class="tablinks" >Product Info</button></div><div id="London" class="tabcontent">' +
+                                            openhtml +
+                                            "</div>" +
+                                            buttonsdiv;
+
+
+                                        } else {
+                                            console.log("Iframe A is not inside an iframe or has a different nesting level.");
+                                        }
+
+
+
+                                        // if (document.getElementById("exhibitorentryflowiframe")) {    
+                                                   
+
+                                        //     console.log("entrywizardon");
+
+
+                                         
+
+                                        // } else {
+
+                                        //     console.log("entrywizardoff");
+
+                                           
+                                        // }
+
+                                    }
+
                                     var newopenhtml =
                                         '<div class="tab"><button class="tablinks" >Product Info</button></div><div id="London" class="tabcontent">' +
                                         openhtml +
