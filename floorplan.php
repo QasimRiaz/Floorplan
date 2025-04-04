@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 17.12
- * @version : 17.12
+ * Version: 17.120
+ * @version : 17.120
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -740,6 +740,9 @@ function getproductdetail($productID)
         $woocommerce_rest_api_keys = get_option('ContenteManager_Settings');
         $wooconsumerkey = $woocommerce_rest_api_keys['ContentManager']['wooconsumerkey'];
         $wooseceretkey = $woocommerce_rest_api_keys['ContentManager']['wooseceretkey'];
+
+        $partialpaymentstatus = $woocommerce_rest_api_keys['ContentManager']['partialpaymentstatus'];
+
         $user_ID = get_current_user_id();
         $blog_id = get_current_blog_id();
         $loggedInUser = get_user_meta($user_ID);
@@ -2029,6 +2032,9 @@ function floorplan_shortcode($atts, $content = null)
 
         $current_site_logo = $contentmanager_settings['ContentManager']['adminsitelogo'];
         $levelbaseddiscountstatus = $contentmanager_settings['ContentManager']['levelbaseddiscount'];
+
+        $partialpaymentstatus = $contentmanager_settings['ContentManager']['partialpaymentstatus'];
+
         $current_site_name = get_bloginfo('name');
         $current_site_url = get_site_url();
         $current_floor_plan_status = $status;
@@ -2285,6 +2291,11 @@ function boothSelfAssignment(){
     $boothpurchaseenablestatus = $woocommerce_rest_api_keys['ContentManager']['boothpurchasestatus'];
     $foolrplanID = $woocommerce_rest_api_keys['ContentManager']['floorplanactiveid'];
     $levelbaseddiscountstatus = $woocommerce_rest_api_keys['ContentManager']['levelbaseddiscount'];
+
+    $partialpaymentstatus = $woocommerce_rest_api_keys['ContentManager']['partialpaymentstatus'];
+
+
+
     $boothTypesLegend = json_decode(get_post_meta($foolrplanID, 'legendlabels', true));
     $FloorplanXml = get_post_meta($foolrplanID, 'floorplan_xml', true);
     $FloorplanXml = str_replace('"n<', '<', $FloorplanXml);
