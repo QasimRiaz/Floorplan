@@ -3799,8 +3799,13 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
 
                             var anchor = document.createElement('a');
 							anchor.style.textAlign = "left";
+
+							let sortedNumbers = assignedBooths.sort(function(a, b) {
+								return a - b;
+							});
+
 							
-                            anchor.innerHTML = value.companyname+'  '+'<small style="font-size: 69%; color: #8e9faf !important;">('+assignedBooths.join(', ')+')</small>';
+                            anchor.innerHTML = value.companyname+'  '+'<small style="font-size: 69%; color: #8e9faf !important;">('+sortedNumbers.join(', ')+')</small>';
                             
                             mxEvent.addListener(anchor, 'click', function()
                             {
