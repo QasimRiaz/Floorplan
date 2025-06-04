@@ -3800,9 +3800,12 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                             var anchor = document.createElement('a');
 							anchor.style.textAlign = "left";
 
-							let sortedNumbers = assignedBooths.sort(function(a, b) {
-								return a - b;
-							});
+
+							assignedBooths = assignedBooths.map(String);
+
+							let sortedNumbers =  assignedBooths.sort(function(a, b) {
+								return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+								});
 
 							
                             anchor.innerHTML = value.companyname+'  '+'<small style="font-size: 69%; color: #8e9faf !important;">('+sortedNumbers.join(', ')+')</small>';
@@ -3917,7 +3920,7 @@ Sidebar.prototype.addExhibitorsFunctions = function(graph, id, title, expanded, 
                                             
                                             imagesrc = "<p style='float: right;padding: 0px 20px 0px 20px;margin-top: 10px;'><img width='150' src='"+companylogourlnew+"' /></p>";
                                             if(assignedboothname != "" ){
-                                                htmlforassignedbooth = '<h5 ><strong>Assigned Booth(s) </strong>:'+assignedboothname.replace(/,\s*$/, "")+'</h5>';
+                                                htmlforassignedbooth = '<h5 ><strong>Assigned Booth(s) </strong>:'+sortedNumbers.join(', ')+'</h5>';
                                             }
                                             if(index.address_line_1 !=""){
 
