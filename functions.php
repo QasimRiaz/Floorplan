@@ -119,11 +119,23 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
                 mxgetAllusersData = '<?php echo $getAllusers_data3; ?>';
                 mxgetallfloorplanlist = '<?php echo $listoffloorplan; ?>';
                 mxpackageboothflowstatus = '<?php echo $packageboothflow; ?>';
+                mxlistofquickbooksitems = '<?php echo $formatted_items; ?>';
+                qobnoviintgrationenabled = '<?php echo $qobnoviconnection; ?>';
                 
                 mxgetjosnusersData = JSON.parse(mxgetAllusersData);
                 
                 floorplanstatuslockunlock ='<?php echo $floorplanstatuslockunlock;?>';
                 
+
+                if(mxlistofquickbooksitems !=""){
+                   
+                    //console.log(allBoothsProductData);
+                    mxlistofquickbooksitems = JSON.parse(mxlistofquickbooksitems);
+                    
+                }else{
+                    
+                    mxlistofquickbooksitems =  [];
+                }
                 
               
                 allBoothsProductData = '<?php echo $sellboothsjson; ?>';
@@ -153,6 +165,21 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
                     indexarray.userID = key;
                     indexarray.companyname = mxgetjosnusersData[key].companyname;
                     newcompanynamesArray.push(indexarray);
+                    
+                });
+
+                mxlistofquickbooksitemsformatedlist = [];
+
+                jQuery.each(mxlistofquickbooksitems, function( key, value ) {
+                   
+                    var indexarray = {};
+
+
+                    indexarray.income_account_name = value.income_account_name;
+                    indexarray.name = value.name;
+                    indexarray.id = value.id;
+                    
+                    mxlistofquickbooksitemsformatedlist.push(indexarray);
                     
                 });
                 
@@ -409,7 +436,7 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.75"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=4.50"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.77"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=10.16"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=10.24"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=3.60"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=4.60"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.78"></script>

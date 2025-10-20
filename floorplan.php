@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 18.02
- * @version : 18.02
+ * Version: 18.03
+ * @version : 18.03
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -1176,6 +1176,8 @@ function getBoothList($postdata)
                 $defaultImage = get_site_url() . "/wp-content/plugins/floorplan/icon01.png";
                 $productpicID = floorplanBoothImage($defaultImage);
 
+               
+
 
                 $responce = $demo->createAllBoothPorducts($postdata['post_id'], $postdata['sellboothsjson'], $postdata['floorXml'], $productpicID);
 
@@ -1678,8 +1680,31 @@ function floorplan_shortcode($atts, $content = null)
     }
     if ($floorplanstatus == true) {
 
+
+        require_once plugin_dir_path(__DIR__) . 'EGPL/includes/Expointegration/class.eg.noviintegration.php';
+
+        
+
         extract(shortcode_atts(array("iid" => '', "status" => ''), $atts));
         $getAllusers_data = addslashes(json_encode(getAllusers_data()));
+        $formatted_items = "";
+
+        $settings = get_option('novi_intgration_settings', []);
+        $is_connected = !empty($settings['qbo_is_connected']);
+        $qobnoviconnection = "disabled";
+
+        if($is_connected){
+
+            $qobnoviconnection = "enabled";
+
+            $Noviintegration = new EGNoviintegrations();
+            $formatted_items = $Noviintegration->get_qbo_listof_items();
+            $formatted_items = addslashes(json_encode($formatted_items));
+
+
+        }
+
+
 
 
         if ($id == "default") {

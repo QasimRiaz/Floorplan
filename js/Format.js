@@ -5721,6 +5721,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var despositeenablestatus = "no";
     var discountType= "";
     var priceBasedLevels = "";
+    var qboitems = ""; 
 
     // console.log(allBoothsProductData);
     jQuery.each(allBoothsProductData, function (boothIndex, boothObject) {
@@ -5738,8 +5739,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         depositetype = boothObject.depositstype;
         despositeenablestatus = boothObject.despositeenablestatus;
         depositeamount = boothObject.depositsamount;
+        qboitems = boothObject.qboitems;
 
-    
         priceBasedLevels = boothObject.levelbaseddiscountdata;
 
 
@@ -5955,6 +5956,40 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var UserAssigment = "";
     var depositedetail = "";
     var companynames = "";
+    var listofquickbooksitemsinternal = "";
+
+     listofquickbooksitemsinternal += "<option></option>";
+         
+
+    jQuery.each(mxlistofquickbooksitemsformatedlist, function (key, values) {
+      
+      if(qboitems == values.id ){
+
+
+         listofquickbooksitemsinternal +=
+          '<option value="' +
+          values.id +
+          '" selected>' +
+          values.name + " ("+values.income_account_name+")"
+          "</option>";
+
+
+      }else{
+
+
+         listofquickbooksitemsinternal +=
+          '<option value="' +
+          values.id +
+          '" >' +
+          values.name + " ("+values.income_account_name+")"
+          "</option>";
+
+      }
+    
+     
+    });
+
+
     jQuery.each(newcompanynamesArray, function (rolekey, rolevalue) {
       if (jQuery.inArray(rolevalue.userID, userBooths) !== -1) {
         companynames +=
@@ -6044,6 +6079,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           '<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="UserAssigment" style="text-align:right;"><label>User Purchasability<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select  multiple="multiple"  id="UserBooth" placeholder="Select User For  Booth" class="form-control js-example-basic-multiple">' +
           companynames +
           "</select></div></div>";
+
+          
       }
 
       if (depositetype == "percent") {
@@ -6095,11 +6132,22 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         '" type="number" ><p class="depositeerror"></p></div></div>';
     }
 
+
+    var listofQuickbooksItems = "";
+    if(qobnoviintgrationenabled == 'enabled'){
+         
+      listofQuickbooksItems ='<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="quickbooksproducts" style="text-align:right;"><label>Accounting (Item*)<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="qboitems"  placeholder="Select QuickBooks Item For Booth" class="form-control">' +
+                              listofquickbooksitemsinternal +
+                              '</select></div></div>';
+      
+    }
+
     var htmlfordeposite =
       statushtml +
       reservedToggle +
       levelAssigment +
       UserAssigment +
+      listofQuickbooksItems+
       depositedetail;
     var overrideString = "Override User's Existing Level";
     var inputValidity = 'validity.valid||(value="")';
@@ -6202,6 +6250,18 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       var boothlevel = jQuery("#boothlevelvalue option:selected").val();
       //var userBooths = jQuery("#UserBooth  option:selected").val();
       var userBooths = jQuery("#UserBooth").select2("val");
+
+      var qboitems ="";
+
+      if(qobnoviintgrationenabled == "enabled"){
+  
+         var qboitems = jQuery("#qboitems option:selected").val();
+
+
+      }
+     
+
+     
       //var userBoothsLevel = jQuery("#boothlevel option:selected").val();
       var userBoothsLevel = jQuery("#boothlevel").select2("val");
       var reservedStatus = jQuery("#reservedCheck:checked").val();
@@ -6368,6 +6428,9 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           boothproductdata.depositsamount = depositsamount;
           boothproductdata.depositestatus = depositestatus;
           boothproductdata.despositeenablestatus = despositeenablestatus;
+          boothproductdata.qboitems = qboitems;
+
+          
 
           boothproductdata.levelbaseddiscountdata = allDataArray;
 
@@ -6383,6 +6446,9 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
                   allBoothsProductData[boothIndex].reservedStatus =
                     reservedStatus;
                   allBoothsProductData[boothIndex].userBooths = userBooths;
+                  allBoothsProductData[boothIndex].qboitems = qboitems;
+
+                  
                   allBoothsProductData[boothIndex].userBoothsLevel =
                     userBoothsLevel;
 
@@ -6539,6 +6605,28 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var alltaskesHtml = "";
     var classstatusshow = "";
     var discountAmount = "";
+
+    var listofquickbooksitemsinternal = "";
+
+      listofquickbooksitemsinternal += "<option></option>";
+
+     jQuery.each(mxlistofquickbooksitemsformatedlist, function (key, values) {
+      
+     
+
+         listofquickbooksitemsinternal +=
+          '<option value="' +
+          values.id +
+          '" >' +
+          values.name + " ("+values.income_account_name+")"
+          "</option>";
+
+     
+        
+     
+    });
+
+
     boothlevelname += '<option value="unassigned" >Unassigned</option>';
     // boothlevelnames += '<option value="unassigned" >Unassigned</option>';
 
@@ -6597,9 +6685,23 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
 
       var boothlevel = jQuery("#boothlevelvalue option:selected").val();
       var reservedStatus = jQuery("#reservedCheck:checked").val();
+      
       //var userBooths = jQuery("#UserBooth  option:selected").val();
       var userBooths = jQuery("#UserBooth").select2("val");
       //var userBoothsLevel = jQuery("#boothlevel option:selected").val();
+
+      var qboitems ="";
+
+      if(qobnoviintgrationenabled == "enabled"){
+
+  
+         var qboitems = jQuery("#qboitems option:selected").val();
+
+
+      }
+
+      
+
       var userBoothsLevel = jQuery("#boothlevel").select2("val");
       var overRideCheck = jQuery("#overRideCheckBox:checked").val();
       var boothdescripition = jQuery("#boothdescripition").val();
@@ -6727,6 +6829,9 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           boothproductdata.overRideCheck = overRideCheck;
           boothproductdata.boothdescripition = boothdescripition;
           boothproductdata.boothstatus = boothstatus;
+          boothproductdata.qboitems = qboitems;
+
+          
 
           boothproductdata.levelbaseddiscountdata = allDataArray;
 
@@ -6762,6 +6867,9 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
                   allBoothsProductData[boothIndex].reservedStatus =
                     reservedStatus;
                   allBoothsProductData[boothIndex].userBooths = userBooths;
+                  allBoothsProductData[boothIndex].qboitems = qboitems;
+
+                  
                   allBoothsProductData[boothIndex].userBoothsLevel =
                     userBoothsLevel;
                   allBoothsProductData[boothIndex].overRideCheck =
@@ -6946,6 +7054,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     //var overRideCheckBox = document.createElement("select");
     var overrideString = "Override User's Existing Level";
     var inputValidity = 'validity.valid||(value="")';
+   
 
 
     if(partialpaymentstatus == 'disabled'){
@@ -6970,7 +7079,17 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       boothlevelnames +
       '</select></div></div><div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="UserAssigment" style="text-align:right;"><label>User Purchasability<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="UserBooth"  multiple="multiple" placeholder="Select User For  Booth" class="form-control js-example-basic-multiple">' +
       companynames +
-      '</select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" ><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="" min="1" type="number" ><p class="depositeerror"></p></div></div>'
+      '</select></div></div>'
+      
+      if(qobnoviintgrationenabled == 'enabled'){
+      
+      html +='<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="quickbooksproducts" style="text-align:right;"><label>Accounting (Item*)<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="qboitems"  placeholder="Select QuickBooks Item For Booth" class="form-control">' +
+                              listofquickbooksitemsinternal +
+                              '</select></div></div>';
+      
+                            }
+      
+      html +='<div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposits Type <i class="far fa-question-circle" title="For the initial payment, enter either a fixed dollar amount or a percentage of the entire cost."></i></label></div><div class="col-sm-3"><select id="depositstype" class="form-control" ><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div></div><div class="row depositsdetail" style="margin-bottom: 3%;display:none;"><div class="col-sm-2" style="text-align:right;"><label>Deposit Amount <i class="far fa-question-circle" title=\'Enter dollar amount for "Fixed Amount" types, and percentage amount for "Percentage" types\'></i></label></div><div class="col-sm-3"><input style="color: #333;" id="depositamount" class="form-control" value="" min="1" type="number" ><p class="depositeerror"></p></div></div>'
       +'<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" style="text-align:right;"><label >Product Description <i class="far fa-question-circle"  title="This content will appear in the pop-up when users click this booth. Note this will no longer show after a booth is purchased."></i></label></div><div class="col-sm-8"><textarea rows="8" class="form-control" id="boothdescripition" ></textarea></div></div>'+
       '<hr>'+
 
