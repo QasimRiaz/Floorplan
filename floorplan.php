@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 18.03
- * @version : 18.03
+ * Version: 18.04
+ * @version : 18.04
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -1688,6 +1688,7 @@ function floorplan_shortcode($atts, $content = null)
         extract(shortcode_atts(array("iid" => '', "status" => ''), $atts));
         $getAllusers_data = addslashes(json_encode(getAllusers_data()));
         $formatted_items = "";
+        $formatted_classes = "";
 
         $settings = get_option('novi_intgration_settings', []);
         $is_connected = !empty($settings['qbo_is_connected']);
@@ -1699,7 +1700,11 @@ function floorplan_shortcode($atts, $content = null)
 
             $Noviintegration = new EGNoviintegrations();
             $formatted_items = $Noviintegration->get_qbo_listof_items();
+            
+            $formatted_classes = [];//$formatted_qbo_object['classes'];
+            
             $formatted_items = addslashes(json_encode($formatted_items));
+            $formatted_classes = addslashes(json_encode($formatted_classes));
 
 
         }

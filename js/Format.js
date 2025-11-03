@@ -5721,7 +5721,9 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var despositeenablestatus = "no";
     var discountType= "";
     var priceBasedLevels = "";
-    var qboitems = ""; 
+    var qboitems = "";
+    var qboclass = ""; 
+    var seatpertickts = ""; 
 
     // console.log(allBoothsProductData);
     jQuery.each(allBoothsProductData, function (boothIndex, boothObject) {
@@ -5740,6 +5742,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
         despositeenablestatus = boothObject.despositeenablestatus;
         depositeamount = boothObject.depositsamount;
         qboitems = boothObject.qboitems;
+        qboclass = boothObject.qboclass;
+        seatpertickts = boothObject.seatpertickts;
 
         priceBasedLevels = boothObject.levelbaseddiscountdata;
 
@@ -5957,8 +5961,18 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var depositedetail = "";
     var companynames = "";
     var listofquickbooksitemsinternal = "";
+    var listofquickbooksclassesinternal = "";
 
      listofquickbooksitemsinternal += "<option></option>";
+     listofquickbooksclassesinternal += "<option></option>";
+
+
+     if(seatpertickts == "" || seatpertickts == null || seatpertickts == undefined){
+
+
+       seatpertickts = 1;
+
+     }
          
 
     jQuery.each(mxlistofquickbooksitemsformatedlist, function (key, values) {
@@ -5982,6 +5996,34 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           values.id +
           '" >' +
           values.name + " ("+values.income_account_name+")"
+          "</option>";
+
+      }
+    
+     
+    });
+
+    jQuery.each(mxlistofquickbooksclassesformatedlist, function (key, values) {
+      
+      if(qboclass == values.id ){
+
+
+         listofquickbooksclassesinternal +=
+          '<option value="' +
+          values.id +
+          '" selected>' +
+          values.name +
+          "</option>";
+
+
+      }else{
+
+
+         listofquickbooksclassesinternal +=
+          '<option value="' +
+          values.id +
+          '" >' +
+          values.qboclass +
           "</option>";
 
       }
@@ -6136,9 +6178,16 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var listofQuickbooksItems = "";
     if(qobnoviintgrationenabled == 'enabled'){
          
-      listofQuickbooksItems ='<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="quickbooksproducts" style="text-align:right;"><label>Accounting (Item*)<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="qboitems"  placeholder="Select QuickBooks Item For Booth" class="form-control">' +
+      listofQuickbooksItems +='<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="quickbooksproducts" style="text-align:right;"><label>Accounting (Item*)<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="qboitems"  placeholder="Select QuickBooks Item For Booth" class="form-control">' +
                               listofquickbooksitemsinternal +
                               '</select></div></div>';
+
+       listofQuickbooksItems +='<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="quickbooksclasses" style="text-align:right;"><label>Class<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="qboclass"  placeholder="Select QuickBooks Item For Booth" class="form-control">' +
+                              listofquickbooksclassesinternal +
+                              '</select></div></div>';
+
+      listofQuickbooksItems +='<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="seatpertickte" style="text-align:right;"><label>Seat Per Ticket<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><input id="seatpertickts"  placeholder="Number of Seat Per Booth" class="form-control" min="1" value="'+seatpertickts+'" /></div></div>';
+            
       
     }
 
@@ -6252,10 +6301,14 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       var userBooths = jQuery("#UserBooth").select2("val");
 
       var qboitems ="";
+      var qboclass ="";
+      var seatpertickts ="";
 
       if(qobnoviintgrationenabled == "enabled"){
   
          var qboitems = jQuery("#qboitems option:selected").val();
+         var qboclass = jQuery("#qboclass option:selected").val();
+          var seatpertickts = jQuery("#seatpertickts").val();
 
 
       }
@@ -6429,6 +6482,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           boothproductdata.depositestatus = depositestatus;
           boothproductdata.despositeenablestatus = despositeenablestatus;
           boothproductdata.qboitems = qboitems;
+          boothproductdata.qboclass = qboclass;
+          boothproductdata.seatpertickts = seatpertickts;
 
           
 
@@ -6447,6 +6502,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
                     reservedStatus;
                   allBoothsProductData[boothIndex].userBooths = userBooths;
                   allBoothsProductData[boothIndex].qboitems = qboitems;
+                  allBoothsProductData[boothIndex].qboclass = qboclass;
+                  allBoothsProductData[boothIndex].seatpertickts = seatpertickts;
 
                   
                   allBoothsProductData[boothIndex].userBoothsLevel =
@@ -6626,6 +6683,22 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
      
     });
 
+     jQuery.each(mxlistofquickbooksclassesformatedlist, function (key, values) {
+      
+     
+
+         listofquickbooksclassesinternal +=
+          '<option value="' +
+          values.id +
+          '" >' +
+          values.qboclass +
+          "</option>";
+
+     
+        
+     
+    });
+
 
     boothlevelname += '<option value="unassigned" >Unassigned</option>';
     // boothlevelnames += '<option value="unassigned" >Unassigned</option>';
@@ -6691,11 +6764,15 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       //var userBoothsLevel = jQuery("#boothlevel option:selected").val();
 
       var qboitems ="";
+      var qboclass ="";
+      var seatpertickts ="";
 
       if(qobnoviintgrationenabled == "enabled"){
 
   
          var qboitems = jQuery("#qboitems option:selected").val();
+         var qboclass = jQuery("#qboclass option:selected").val();
+         var seatpertickts = jQuery("#seatpertickts").val();
 
 
       }
@@ -6830,6 +6907,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           boothproductdata.boothdescripition = boothdescripition;
           boothproductdata.boothstatus = boothstatus;
           boothproductdata.qboitems = qboitems;
+          boothproductdata.qboclass = qboclass;
+          boothproductdata.seatpertickts = seatpertickts;
 
           
 
@@ -6868,6 +6947,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
                     reservedStatus;
                   allBoothsProductData[boothIndex].userBooths = userBooths;
                   allBoothsProductData[boothIndex].qboitems = qboitems;
+                  allBoothsProductData[boothIndex].qboclass = qboclass;
+                  allBoothsProductData[boothIndex].seatpertickts = seatpertickts;
 
                   
                   allBoothsProductData[boothIndex].userBoothsLevel =
@@ -7086,6 +7167,14 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       html +='<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="quickbooksproducts" style="text-align:right;"><label>Accounting (Item*)<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="qboitems"  placeholder="Select QuickBooks Item For Booth" class="form-control">' +
                               listofquickbooksitemsinternal +
                               '</select></div></div>';
+
+      html +='<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="quickbooksclasses" style="text-align:right;"><label>Class<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><select id="qboclass"  placeholder="Select QuickBooks Item For Booth" class="form-control">' +
+                              listofquickbooksclassesinternal +
+                              '</select></div></div>';
+
+      html +='<div class="row" style="margin-bottom: 3%;"><div class="col-sm-2" id="seatpertickte" style="text-align:right;"><label>Seat Per Ticket<i class="far fa-question-circle" ></i></label></div><div class="col-sm-3"><input id="seatpertickts"  placeholder="Number of Seat Per Booth" class="form-control" min="1" value="'+seatpertickts+'" /></div></div>';
+                              
+                             
       
                             }
       

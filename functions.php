@@ -120,6 +120,7 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
                 mxgetallfloorplanlist = '<?php echo $listoffloorplan; ?>';
                 mxpackageboothflowstatus = '<?php echo $packageboothflow; ?>';
                 mxlistofquickbooksitems = '<?php echo $formatted_items; ?>';
+                mxlistofquickbooksclasses = '<?php echo $formatted_classes; ?>';
                 qobnoviintgrationenabled = '<?php echo $qobnoviconnection; ?>';
                 
                 mxgetjosnusersData = JSON.parse(mxgetAllusersData);
@@ -135,6 +136,16 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
                 }else{
                     
                     mxlistofquickbooksitems =  [];
+                }
+
+                  if(mxlistofquickbooksclasses !=""){
+                   
+                    //console.log(allBoothsProductData);
+                    mxlistofquickbooksclasses = JSON.parse(mxlistofquickbooksclasses);
+                    
+                }else{
+                    
+                    mxlistofquickbooksclasses =  [];
                 }
                 
               
@@ -180,6 +191,21 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
                     indexarray.id = value.id;
                     
                     mxlistofquickbooksitemsformatedlist.push(indexarray);
+                    
+                });
+
+                 mxlistofquickbooksclassesformatedlist = [];
+
+                jQuery.each(mxlistofquickbooksclasses, function( key, value ) {
+                   
+                    var indexarray = {};
+
+
+                    indexarray.qboclass = value.qboclass;
+                  
+                    indexarray.id = value.id;
+                    
+                    mxlistofquickbooksclassesformatedlist.push(indexarray);
                     
                 });
                 
@@ -436,7 +462,7 @@ $dropicon = 'data:image/gif;base64,R0lGODlhDQANAIABAHt7e////yH/C1hNUCBEYXRhWE1QP
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Shapes.js?v=2.75"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Actions.js?v=4.50"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Menus.js?v=2.77"></script>
-	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=10.24"></script>
+	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Format.js?v=10.26"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Toolbar.js?v=3.60"></script>
 	<script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/Dialogs.js?v=4.60"></script>
         <script type="text/javascript" src="<?php echo plugin_dir_url( __FILE__ ); ?>js/customefunctions.js?v=2.78"></script>
