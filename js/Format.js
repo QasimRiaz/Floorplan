@@ -6664,6 +6664,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var discountAmount = "";
 
     var listofquickbooksitemsinternal = "";
+    var listofquickbooksclassesinternal = "";
 
       listofquickbooksitemsinternal += "<option></option>";
 
@@ -6770,9 +6771,9 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
       if(qobnoviintgrationenabled == "enabled"){
 
   
-         var qboitems = jQuery("#qboitems option:selected").val();
-         var qboclass = jQuery("#qboclass option:selected").val();
-         var seatpertickts = jQuery("#seatpertickts").val();
+        qboitems = jQuery("#qboitems option:selected").val();
+        qboclass = jQuery("#qboclass option:selected").val();
+        seatpertickts = jQuery("#seatpertickts").val();
 
 
       }
@@ -6886,6 +6887,8 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           var title = cellvalue.getAttribute("mylabel", "");
           var laststatusID = boothstatus;
           selectedBoothtitles += title + " , ";
+
+         
 
           if (
             boothstatus == "" ||
@@ -7136,7 +7139,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var overrideString = "Override User's Existing Level";
     var inputValidity = 'validity.valid||(value="")';
    
-
+    var seatpertickts = 1;
 
     if(partialpaymentstatus == 'disabled'){
 
