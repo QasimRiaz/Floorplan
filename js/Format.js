@@ -6012,7 +6012,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           '<option value="' +
           values.id +
           '" selected>' +
-          values.name +
+          values.qboclass +
           "</option>";
 
 
@@ -6667,7 +6667,7 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     var listofquickbooksclassesinternal = "";
 
       listofquickbooksitemsinternal += "<option></option>";
-
+  listofquickbooksclassesinternal += "<option></option>";
      jQuery.each(mxlistofquickbooksitemsformatedlist, function (key, values) {
       
      
