@@ -5881,8 +5881,14 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
     levels += '<option value="all" >All</option>';
     boothlevelname += '<option value="" >None</option>';
 
+
+    console.log(arrayoflevelsObjects)
+    console.log(userBoothsLevel)
+     console.log('testing')
+
     jQuery.each(arrayoflevelsObjects, function (rolekey, rolevalue) {
       if (jQuery.inArray(rolevalue.key, userBoothsLevel) !== -1) {
+
         flag = false;
         // console.log(userBoothsLevel);
         boothlevelnames +=
@@ -5891,14 +5897,40 @@ StyleFormatPanel.prototype.addPricetegs = function (container) {
           '" selected>' +
           rolevalue.name +
           "</option>";
-      } else {
-        boothlevelnames +=
+
+      } else if(rolevalue.key == "unassigned"){
+
+        if (jQuery.inArray('unassigned', userBoothsLevel) !== -1 || jQuery.inArray('subscriber', userBoothsLevel) !== -1) {
+
+           flag = false;
+
+
+           boothlevelnames +=
+          '<option value="' +
+          rolevalue.key +
+          '" selected>' +
+          rolevalue.name +
+          "</option>";
+
+  
+        }
+          
+
+
+      }else{
+
+
+         boothlevelnames +=
           '<option value="' +
           rolevalue.key +
           '" >' +
           rolevalue.name +
           "</option>";
+
       }
+
+
+     
     });
 
     //arham
