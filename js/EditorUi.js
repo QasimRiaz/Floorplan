@@ -2600,9 +2600,13 @@ function removeFromCart(p_id, request, price) {
             var productcount = parseInt(
                 window.parent.jQuery("#entryflowcartcounter").text()
             );
-            // console.log(productcount + "------------------");
+            //
+            
+            console.log(productcount + "------------------");
             window.parent.jQuery("#entryflowcartcounter").empty();
             window.parent.jQuery("#entryflowcartcounter").text(productcount);
+            
+            
             jQuery("body").css("cursor", "default");
         },
     });
@@ -2616,7 +2620,7 @@ function addToCart(p_id, request, price, slug) {
     data3.append("boothproductid", p_id);
     if(prePaid != "checked" || (prePaid == "checked" && userloggedinstatus != 1) || (prePaid != "checked" && userloggedinstatus == 1)){
         
-        // console.log('boothid------------'+p_id);
+      
     
         
     jQuery.ajax({
@@ -2662,20 +2666,7 @@ function addToCart(p_id, request, price, slug) {
                     success: function (data) {
 
 
-                        // jQuery.ajax({
-                        //     url:
-                        //         baseCurrentSiteURl +
-                        //         "/wp-content/plugins/floorplan/floorplan.php?floorplanRequest=boothdiscount_price",
-                        //     data: data3,
-                        //     cache: false,
-                        //     contentType: false,
-                        //     processData: false,
-                        //     type: "POST",
-                    
-                        //     success: function (data) {
-
-                        //     }
-                        // });
+                
                         var checkouturl = baseCurrentSiteURl + "/checkout/";
                         var addONs = baseCurrentSiteURl + "/product-category/add-ons/";
                         jQuery("#" + p_id).empty();
@@ -2693,10 +2684,13 @@ function addToCart(p_id, request, price, slug) {
                             );
                             // console.log(productcount + "------------------");
                             productcount = productcount + 1;
-                            window.parent.jQuery("#entryflowcartcounter").empty();
-                            window.parent.jQuery("#entryflowcartcounter").text(productcount);
+                            //window.parent.jQuery("#entryflowcartcounter").empty();
+                            //window.parent.jQuery("#entryflowcartcounter").text(productcount);
                             // checkopenfunction.close();
-                            window.top.scrollTo({top: 0, behavior: "smooth"});
+                           
+                            fetchAndAddProduct(productcount, p_id);
+                         
+
                         } else {
                             top.window.location.href =
                                 baseCurrentSiteURl + "/exhibitor-entry/";
@@ -2815,6 +2809,181 @@ function addToCart(p_id, request, price, slug) {
    
        
     }
+}
+
+// -----------------------------------------------------------
+// 1. HELPER: Fetch Data from WooCommerce API
+// -----------------------------------------------------------
+function fetchAndAddProduct(count, productId) {
+    
+    // ---------------------------------------------------------
+    // 1. DYNAMIC URL LOGIC
+    // ---------------------------------------------------------
+    // Get the current URL: "https://newapty.expo-genie.com/masterportal/entry-wizard/"
+    var fullUrl = window.top.location.href; 
+    
+    // Split the string to remove everything after "masterportal/"
+    // This creates: "https://newapty.expo-genie.com/masterportal/"
+    var baseUrl = fullUrl.split("entry-wizard")[0];
+    
+    // Remove trailing slash if present (clean up)
+    baseUrl = baseUrl.replace(/\/$/, ""); 
+
+    // Construct API URL using "Plain Permalinks" format to avoid 404s
+    // Result: .../masterportal/index.php?rest_route=/wc/store/v1/products/12093
+    var apiUrl = baseUrl + "/index.php?rest_route=/wc/store/v1/products/" + productId;
+
+    console.log("Calculated Base URL: " + baseUrl);
+    console.log("Fetching API: " + apiUrl);
+
+    // ---------------------------------------------------------
+    // 2. FETCH DATA
+    // ---------------------------------------------------------
+    fetch(apiUrl)
+        .then(function(response) {
+            if (!response.ok) {
+                console.error("API Error: " + response.status);
+                throw new Error("Product ID " + productId + " not found.");
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            // --- Success: Extract Data ---
+            var p_name = data.name;
+            
+            // Get Image
+            var p_img = ""; 
+            if(data.images && data.images.length > 0) {
+                p_img = data.images[0].src;
+            }
+
+            // Get Price (Convert cents to dollars)
+            var p_price_display = "$0";
+            if (data.prices) {
+                var rawPrice = data.prices.price; 
+                var currencySymbol = data.prices.currency_symbol;
+                
+                // Convert 1000 cents -> 1000 (Store API usually returns int)
+                // If you want decimals: (parseInt(rawPrice) / 100).toFixed(2)
+                var priceNumber = (parseInt(rawPrice) / 100).toFixed(0); 
+                
+                // Add commas
+                p_price_display = currencySymbol + priceNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            console.log("Product Found:", p_name, p_price_display);
+
+            // --- UPDATE UI ---
+            addToCartUICustome(count, productId, p_name, p_price_display, p_img);
+
+        })
+        .catch(function(error) {
+            console.error("Fetch failed:", error);
+            // Fallback: Add row with dummy data so code doesn't break
+            addToCartUI(count, productId, "Product " + productId, "$?", "");
+        });
+}
+
+
+
+// Function to clean price strings (converts "$2,000" -> 2000)
+function parsePrice(priceStr) {
+    if (!priceStr) return 0;
+    // Remove everything except numbers and decimals
+    var clean = priceStr.toString().replace(/[^0-9.]/g, ''); 
+    return parseFloat(clean) || 0;
+}
+
+// Function to format numbers back to currency (2000 -> "$2,000")
+function formatPrice(num) {
+    // Add commas for thousands
+    var formatted = num.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return '<span class="woocommerce-Price-currencySymbol">$</span>' + formatted;
+}
+
+// -----------------------------------------------------------
+// MAIN UI UPDATER
+// -----------------------------------------------------------
+function addToCartUICustome(newCount, prdId, prdName, prdPrice, prdImage) {
+    
+    var allFrames = window.top.frames;
+    var targetFrame = null;
+
+    // 1. Find the Floor Plan Iframe
+    for (var i = 0; i < allFrames.length; i++) {
+        try {
+            if (allFrames[i].location.href.indexOf("floor-plan") > -1) {
+                targetFrame = allFrames[i];
+                break;
+            }
+        } catch(e) { }
+    }
+
+    if (targetFrame) {
+        var doc = targetFrame.document;
+
+        // --- PART A: Update Counters (Badge & Button) ---
+        var cart_buttons = doc.querySelectorAll(".cart_count");
+        if (cart_buttons.length > 0) {
+            cart_buttons.forEach(function(btn) {
+                btn.innerText = newCount + " Items"; 
+                btn.value = newCount; 
+            });
+        }
+        var red_counters = doc.querySelectorAll("#entryflowcartcounter");
+        if (red_counters.length > 0) {
+            red_counters.forEach(function(el) {
+                el.innerText = newCount;
+                el.innerHTML = newCount;
+            });
+        }
+
+        // --- PART B: Add the New Product Row ---
+        var scrollContainer = doc.querySelector(".dropdown-menu form .scroll");
+        if (scrollContainer) {
+            var newRowHtml = `
+                <div class="row d-flex align-items-center justify-content-between" style="padding: 1rem;">
+                    <div class="col-md-4"><a href="#" style="font-size: small;" class="font-weight-bold text-dark-75 font-size-lg text-hover-primary">${prdName}</a></div>
+                    <div class="col-md-3"> <span class="font-weight-bold mr-1 text-dark-75 "><span class="woocommerce-Price-amount amount"><bdi>${prdPrice}</bdi></span> </span></div>
+                    <div class="col-md-2"><i style="color: crimson; cursor: pointer;" class="hi-icon fusion-li-icon fa fa-times-circle fa-1x" onclick="removeItem(this);" id="${prdId}" title="Remove ${prdName}"></i></div>
+                    <div class="col-md-3"><a href="#" class="symbol symbol-50 flex-shrink-0"><img src="${prdImage}" title="${prdName}" alt="" style="width: 100%; height: auto;"></a></div>
+                </div>
+                <div class="separator separator-solid"></div>`;
+
+            scrollContainer.insertAdjacentHTML('beforeend', newRowHtml);
+        }
+
+        // --- PART C: UPDATE TOTAL SUM ---
+        // 1. Find the total element inside the .p-8 container
+        var totalContainer = doc.querySelector(".p-8 .woocommerce-Price-amount bdi");
+
+        if (totalContainer) {
+            // Get current Total (e.g., "$2,000") and parse it
+            var currentTotalText = totalContainer.innerText; 
+            var currentTotalVal = parsePrice(currentTotalText);
+
+            // Get new Product Price (e.g., "$1,000") and parse it
+            // Note: prdPrice usually contains HTML/Symbols, so we clean it
+            var newProductVal = parsePrice(prdPrice);
+
+            // Sum them up
+            var newSum = currentTotalVal + newProductVal;
+
+            console.log("Updating Total: " + currentTotalVal + " + " + newProductVal + " = " + newSum);
+
+            // Update HTML
+            totalContainer.innerHTML = formatPrice(newSum);
+        } else {
+            console.log("Could not find the total price element in .p-8");
+        }
+
+        console.log("SUCCESS: UI Updated");
+
+    } else {
+        console.log("ERROR: Could not find the Floor Plan iframe.");
+    }
+
+       window.top.scrollTo({top: 0, behavior: "smooth"});
 }
 
 function ReservedTheBooth(p_id, request, price, slug) {
