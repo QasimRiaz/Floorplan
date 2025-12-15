@@ -341,7 +341,7 @@ EditorUi = function (editor, container, lightbox) {
     var graphFireMouseEvent = graph.fireMouseEvent;
     graph.fireMouseEvent = function (evtName, me, sender) {
         if (evtName == mxEvent.MOUSE_DOWN) {
-            this.container.focus();
+            //this.container.focus();
         }
 
         graphFireMouseEvent.apply(this, arguments);
@@ -3381,15 +3381,32 @@ EditorUi.prototype.initCanvas = function () {
     /**
      * Returns the padding for pages in page view with scrollbars.
      */
-    graph.getPagePadding = function () {
+    // graph.getPagePadding = function () {
+    //     return new mxPoint(
+    //         Math.max(
+    //             0,
+    //             Math.round((graph.container.offsetWidth - 34) / graph.view.scale)
+    //         ),
+    //         Math.max(
+    //             0,
+    //             Math.round((graph.container.offsetHeight - 34) / graph.view.scale)
+    //         )
+    //     );
+    // };
+
+     graph.getPagePadding = function () {
         return new mxPoint(
             Math.max(
                 0,
-                Math.round((graph.container.offsetWidth - 34) / graph.view.scale)
+                Math.round(
+                    100 / graph.view.scale
+                )
             ),
             Math.max(
                 0,
-                Math.round((graph.container.offsetHeight - 34) / graph.view.scale)
+                Math.round(
+                    100 / graph.view.scale
+                )
             )
         );
     };
