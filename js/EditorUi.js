@@ -2684,8 +2684,8 @@ function addToCart(p_id, request, price, slug) {
                             );
                             // console.log(productcount + "------------------");
                             productcount = productcount + 1;
-                            //window.parent.jQuery("#entryflowcartcounter").empty();
-                            //window.parent.jQuery("#entryflowcartcounter").text(productcount);
+                            window.parent.jQuery("#entryflowcartcounter").empty();
+                            window.parent.jQuery("#entryflowcartcounter").text(productcount);
                             // checkopenfunction.close();
                            
                             fetchAndAddProduct(productcount, p_id);
@@ -2936,6 +2936,9 @@ function addToCartUICustome(newCount, prdId, prdName, prdPrice, prdImage) {
                 el.innerText = newCount;
                 el.innerHTML = newCount;
             });
+        }else{
+
+
         }
 
         // --- PART B: Add the New Product Row ---
