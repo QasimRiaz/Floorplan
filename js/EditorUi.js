@@ -3392,10 +3392,13 @@ EditorUi.prototype.initCanvas = function () {
             ),
             Math.max(
                 0,
-                Math.round((graph.container.offsetHeight - 34) / graph.view.scale)
+                Math.round(50 / graph.view.scale)
             )
         );
     };
+
+    console.log('-------offset'+(graph.container.offsetWidth - 34))
+     console.log('-------offsetHeight'+(graph.container.offsetHeight - 34))
 
     //  graph.getPagePadding = function () {
     //     return new mxPoint(
