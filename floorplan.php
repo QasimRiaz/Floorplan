@@ -4,8 +4,8 @@
  * Plugin Name: Floor Plan
  * Plugin URI: https://github.com/QasimRiaz/Floorplan
  * Description: Floor Plan.
- * Version: 18.13
- * @version : 18.13
+ * Version: 18.14
+ * @version : 18.14
  * Author: E2ESP
  * Author URI: http://expo-genie.com/
  * GitHub Plugin URI: https://github.com/QasimRiaz/Floorplan
@@ -437,17 +437,39 @@ function create_booth_discount_code($boothProductID,$boothDiscountType,$boothDis
 
 // }
 
-function productremoverequest()
-{
-    # code...
-    global $woocommerce;
-    $cart = $woocommerce->instance()->cart;
-    $id = $_POST['p_id'];
-    $cart_id = $cart->generate_cart_id($id);
-    $cart_item_id = $cart->find_product_in_cart($cart_id);
-    echo $id;
-    if ($cart_item_id) {
-        $cart->set_quantity($cart_item_id, 0);
+function productremoverequest() {
+    // 1. Get the Product ID from the request
+    $product_id = isset($_POST['p_id']) ? intval($_POST['p_id']) : 0;
+
+    if ($product_id <= 0) {
+        wp_send_json_error('Invalid Product ID');
+    }
+
+    // 2. Access the WooCommerce cart object
+    $cart = WC()->cart;
+
+    // 3. Loop through cart items to find the matching product
+    $removed = false;
+    foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
+        // Check if the Product ID or Variation ID matches
+        if ($cart_item['product_id'] == $product_id || $cart_item['variation_id'] == $product_id) {
+            $cart->remove_cart_item($cart_item_key);
+            $removed = true;
+        }
+    }
+
+    // 4. Handle response (especially important for AJAX)
+    if ($removed) {
+        // Optional: Force a recalculation
+        $cart->calculate_totals();
+        echo "Product removed successfully";
+    } else {
+        echo "Product not found in cart";
+    }
+
+    // If this is an AJAX call, you must stop execution
+    if (wp_doing_ajax()) {
+        wp_die();
     }
 }
 

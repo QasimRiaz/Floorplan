@@ -2597,14 +2597,22 @@ function removeFromCart(p_id, request, price) {
 
             jQuery("#" + p_id).append(enbutton);
 
-            var productcount = parseInt(
-                window.parent.jQuery("#entryflowcartcounter").text()
-            );
+          
             //
             
-            console.log(productcount + "------------------");
+            var productcount = parseInt(
+                                window.parent.jQuery("#entryflowcartcounter").text()
+            );
+                            // console.log(productcount + "------------------");
+            productcount = productcount - 1;
             window.parent.jQuery("#entryflowcartcounter").empty();
             window.parent.jQuery("#entryflowcartcounter").text(productcount);
+                            
+                           
+            fetchAndAddProduct(productcount, p_id);
+
+            console.log(productcount + "------------------");
+            
             
             
             jQuery("body").css("cursor", "default");
