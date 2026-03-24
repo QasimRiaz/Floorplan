@@ -2344,6 +2344,7 @@ EditorUi = function (editor, container, lightbox) {
 
                                             let depth = 0;
                                             let currentWindow = window;
+                                          
 
                                             // Traverse up the window hierarchy
                                             while (currentWindow !== window.top) {
@@ -2377,6 +2378,11 @@ EditorUi = function (editor, container, lightbox) {
 
 
                                             } else {
+                                                var newopenhtml =
+                                                '<div class="tab"><button class="tablinks" >Product Info</button></div><div id="London" class="tabcontent">' +
+                                                openhtml +
+                                                "</div>" +
+                                                buttonsdiv;
                                                 console.log("Iframe A is not inside an iframe or has a different nesting level.");
                                             }
 
