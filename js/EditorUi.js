@@ -3095,7 +3095,8 @@ EditorUi.prototype.editButtonLink = null;
  * Specifies the position of the horizontal split bar. Default is 204 or 120 for
  * screen widths <= 500px.
  */
-EditorUi.prototype.hsplitPosition = screen.width <= 500 ? 116 : 208;
+//EditorUi.prototype.hsplitPosition = screen.width <= 500 ? 116 : 208;
+EditorUi.prototype.hsplitPosition = screen.width <= 500 ? 0 : 208;
 
 /**
  * Specifies if animations are allowed in <executeLayout>. Default is true.
